@@ -4,11 +4,14 @@ import com.sun.mail.imap.IMAPFolder;
 import org.codemonkey.simplejavamail.Mailer;
 import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
+import org.jsoup.Jsoup;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.*;
@@ -18,6 +21,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 public class TestUtils {
 
@@ -105,7 +109,13 @@ public class TestUtils {
         }
     }
 
-    static List<Message> getEmails(String emailAddress, Boolean alreadyRead) {
+    static List<StaticMessage> getEmails(String emailAddress) {
+        List<StaticMessage> emails = getEmails(emailAddress, true);
+        emails.addAll(getEmails(emailAddress, false));
+        return emails;
+    }
+
+    static List<StaticMessage> getEmails(String emailAddress, Boolean alreadyRead) {
         Folder inbox = null;
         Store store = null;
 
@@ -115,7 +125,21 @@ public class TestUtils {
             store.connect(IMAP_HOST, IMAP_PORT, emailAddress, "password");
             inbox = store.getFolder("Inbox");
             inbox.open(Folder.READ_WRITE);
-            return asList(inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), alreadyRead)));
+            List<Message> messages = asList(inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), alreadyRead)));
+            messages.forEach(message -> {
+                try {
+                    message.getContent();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            return messages.stream().map(message -> {
+                try {
+                    return new StaticMessage(message);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).collect(toList());
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -182,5 +206,33 @@ public class TestUtils {
         InputStream is = TestUtils.class.getClassLoader().getResourceAsStream(scriptName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         runSqlUpdate(reader.lines().collect(Collectors.joining(System.lineSeparator())));
+    }
+
+    static String getTextFromMessage(Message message) throws MessagingException, IOException {
+        String result = "";
+        if (message.isMimeType("text/plain")) {
+            result = message.getContent().toString();
+        } else if (message.isMimeType("multipart/*")) {
+            MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
+            result = getTextFromMimeMultipart(mimeMultipart);
+        }
+        return result;
+    }
+
+    static String getTextFromMimeMultipart(MimeMultipart mimeMultipart)  throws MessagingException, IOException {
+        String result = "";
+        int count = mimeMultipart.getCount();
+        for (int i = 0; i < count; i++) {
+            BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+            if (bodyPart.isMimeType("text/plain")) {
+                result = result + "\n" + bodyPart.getContent();
+            } else if (bodyPart.isMimeType("text/html")) {
+                String html = (String) bodyPart.getContent();
+                result = result + "\n" + Jsoup.parse(html).text();
+            } else if (bodyPart.getContent() instanceof MimeMultipart) {
+                result = result + getTextFromMimeMultipart((MimeMultipart) bodyPart.getContent());
+            }
+        }
+        return result;
     }
 }

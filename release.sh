@@ -1,0 +1,1 @@
+mvn clean package install dockerfile:build -DskipTests=true && ./test.sh && docker push dockernovinet/lcag-automation
