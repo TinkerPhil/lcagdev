@@ -1,4 +1,4 @@
-package uk.co.novinet.service;
+package uk.co.novinet.service.mail;
 
 import org.apache.commons.io.IOUtils;
 import org.codemonkey.simplejavamail.Mailer;
@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import uk.co.novinet.service.member.Member;
 
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class MailSenderService {
     @Value("#{'${bccEmailRecipients}'.split(',')}")
     private List<String> bccEmailRecipients;
 
-    public void sendFollowUpEmail(ForumUser forumUser) throws Exception {
+    public void sendFollowUpEmail(Member member) throws Exception {
         Email email = new Email();
 
         email.setFromAddress(emailFromName, smtpUsername);
@@ -61,8 +62,8 @@ public class MailSenderService {
             });
         }
 
-        email.addRecipient(forumUser.getEmailAddress(), forumUser.getEmailAddress(), MimeMessage.RecipientType.TO);
-        email.setTextHTML(replaceTokens(retrieveEmailBodyHtmlFromGoogleDocs(), forumUser));
+        email.addRecipient(member.getEmailAddress(), member.getEmailAddress(), MimeMessage.RecipientType.TO);
+        email.setTextHTML(replaceTokens(retrieveEmailBodyHtmlFromGoogleDocs(), member));
         email.setSubject(emailSubject);
         byte[] pdfBytes = retrievePdfFromGoogleDrive();
 
@@ -72,9 +73,9 @@ public class MailSenderService {
             LOGGER.error("Could not get pdf bytes from google drive!");
         }
 
-        LOGGER.error("Going to try sending email to new memeber {}", forumUser.getEmailAddress());
+        LOGGER.error("Going to try sending email to new memeber {}", member.getEmailAddress());
         new Mailer(smtpHost, smtpPort, smtpUsername, smtpPassword, TransportStrategy.SMTP_TLS).sendMail(email);
-        LOGGER.error("Email successfully sent to new member {}", forumUser.getEmailAddress());
+        LOGGER.error("Email successfully sent to new member {}", member.getEmailAddress());
     }
 
     private byte[] retrievePdfFromGoogleDrive() {
@@ -87,10 +88,10 @@ public class MailSenderService {
         return null;
     }
 
-    private String replaceTokens(String emailTemplate, ForumUser forumUser) {
-        return emailTemplate.replace("$USERNAME", forumUser.getUsername())
-                .replace("$PASSWORD", forumUser.getPasswordDetails().getPassword())
-                .replace("$NAME", forumUser.getName());
+    private String replaceTokens(String emailTemplate, Member member) {
+        return emailTemplate.replace("$USERNAME", member.getUsername())
+                .replace("$PASSWORD", member.getPasswordDetails().getPassword())
+                .replace("$NAME", member.getName());
     }
 
     private String retrieveEmailBodyHtmlFromGoogleDocs() throws IOException {

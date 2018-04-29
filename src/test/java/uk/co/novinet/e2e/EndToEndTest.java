@@ -30,6 +30,8 @@ public class EndToEndTest {
             try {
                 runSqlScript("drop_user_table.sql");
                 runSqlScript("create_user_table.sql");
+                runSqlScript("create_usergroups_table.sql");
+                runSqlScript("populate_usergroups_table.sql");
                 needToRetry = false;
             } catch (Exception e) {
                 sqlRetryCounter++;

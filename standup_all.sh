@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "Removing all running containers"
 docker rm -f $(docker ps -a -q)
+
+echo "Rebuilding application docker image"
+mvn clean package install dockerfile:build -DskipTests=true
 
 echo "Standing up greenmail"
 docker run -d -t -i \
@@ -29,6 +32,8 @@ docker run -d \
 echo "Standing up lcag automation application"
 docker run -d \
     -e "SPRING_PROFILES_ACTIVE=prod" \
+    -e "DASHBOARD_USERNAME=admin" \
+    -e "DASHBOARD_PASSWORD=lcag" \
     -e "RETRIEVE_MAIL_INITIAL_DELAY_MILLISECONDS=1000" \
     -e "RETRIEVE_MAIL_REFRESH_INTERVAL_MILLISECONDS=1000" \
 	-e "SMTP_HOST=lcag-mail" \

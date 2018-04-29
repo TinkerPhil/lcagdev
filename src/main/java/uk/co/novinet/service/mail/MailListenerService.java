@@ -1,4 +1,4 @@
-package uk.co.novinet.service;
+package uk.co.novinet.service.mail;
 
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import uk.co.novinet.service.member.Member;
+import uk.co.novinet.service.member.MemberService;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
@@ -40,9 +42,6 @@ public class MailListenerService {
     @Value("${imapPassword}")
     private String imapPassword;
 
-    @Value("${forumDatabaseTablePrefix}")
-    private String forumDatabaseTablePrefix;
-
     @Value("${imapProtocol}")
     private String imapProtocol;
 
@@ -51,6 +50,9 @@ public class MailListenerService {
 
     @Autowired
     private MailSenderService mailSenderService;
+
+    @Autowired
+    private MemberService memberService;
 
     @Scheduled(initialDelayString = "${retrieveMailInitialDelayMilliseconds}", fixedRateString = "${retrieveMailIntervalMilliseconds}")
     public void retrieveMail() {
@@ -89,14 +91,14 @@ public class MailListenerService {
 
                     LOGGER.info("Found enquiry: {}", enquiry);
 
-                    ForumUser forumUser = createForumUserIfNecessary(enquiry);
+                    Member member = memberService.createForumUserIfNecessary(enquiry);
 
-                    if (forumUser == null) {
+                    if (member == null) {
                         LOGGER.info("We didn't create a forum user, so set this message to SEEN={} again", originalSeenFlagState);
                         restoreOriginalMessageFlags(message, originalSeenFlagState);
                     } else {
-                        mailSenderService.sendFollowUpEmail(forumUser);
-                        LOGGER.info(">>> " + enquiry.getName() + "\t " + forumUser.getUsername() + "\t " + enquiry.getEmailAddress() + "\t " + message.getReceivedDate());
+                        mailSenderService.sendFollowUpEmail(member);
+                        LOGGER.info(">>> " + enquiry.getName() + "\t " + member.getUsername() + "\t " + enquiry.getEmailAddress() + "\t " + message.getReceivedDate());
                     }
                 }
             }
@@ -131,103 +133,6 @@ public class MailListenerService {
         } catch (MessagingException me) {
             LOGGER.error("An error occurred while trying to set email read status to unread", me);
         }
-    }
-
-    private ForumUser createForumUserIfNecessary(Enquiry enquiry) {
-        List<ForumUser> existingForumUsers = findExistingForumUsersByEmailAddress(enquiry.getEmailAddress());
-
-        if (!existingForumUsers.isEmpty()) {
-            LOGGER.info("Already existing forum user with email address {}", enquiry.getEmailAddress());
-            LOGGER.info("Skipping");
-        } else {
-            LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
-            LOGGER.info("Going to create one");
-
-            ForumUser forumUser = new ForumUser(enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), PasswordSource.getRandomPasswordDetails());
-
-            Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
-
-            if (max == null) {
-                max = (long) 1;
-            } else {
-                max = max + 1;
-            }
-
-            String insertSql = "insert into `" + forumDatabaseTablePrefix + "users` (`uid`, `username`, `password`, `salt`, `loginkey`, `email`, `postnum`, `threadnum`, `avatar`, " +
-                    "`avatardimensions`, `avatartype`, `usergroup`, `additionalgroups`, `displaygroup`, `usertitle`, `regdate`, `lastactive`, `lastvisit`, `lastpost`, `website`, `icq`, " +
-                    "`aim`, `yahoo`, `skype`, `google`, `birthday`, `birthdayprivacy`, `signature`, `allownotices`, `hideemail`, `subscriptionmethod`, `invisible`, `receivepms`, `receivefrombuddy`, " +
-                    "`pmnotice`, `pmnotify`, `buddyrequestspm`, `buddyrequestsauto`, `threadmode`, `showimages`, `showvideos`, `showsigs`, `showavatars`, `showquickreply`, `showredirect`, `ppp`, `tpp`, " +
-                    "`daysprune`, `dateformat`, `timeformat`, `timezone`, `dst`, `dstcorrection`, `buddylist`, `ignorelist`, `style`, `away`, `awaydate`, `returndate`, `awayreason`, `pmfolders`, `notepad`, " +
-                    "`referrer`, `referrals`, `reputation`, `regip`, `lastip`, `language`, `timeonline`, `showcodebuttons`, `totalpms`, `unreadpms`, `warningpoints`, `moderateposts`, `moderationtime`, " +
-                    "`suspendposting`, `suspensiontime`, `suspendsignature`, `suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`) " +
-                    "VALUES (?, ?, ?, ?, 'lvhLksjhHGcZIWgtlwNTJNr3bjxzCE2qgZNX6SBTBPbuSLx21u', ?, 0, 0, '', '', '', 8, '', 0, '', ?, ?, ?, 0, '', '0', '', '', '', '', '', " +
-                    "'all', '', 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 'linear', 1, 1, 1, 1, 1, 1, 0, 0, 0, '', '', '', 0, 0, '', '', 0, 0, 0, '0', '', '', '', 0, 0, 0, '', '', '', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, " +
-                    "0, 0, 1, '', 0);";
-
-            LOGGER.info("Going to execute insert sql: {}", insertSql);
-
-            int result = jdbcTemplate.update(insertSql, new Object[] {
-                    max,
-                    forumUser.getUsername(),
-                    forumUser.getPasswordDetails().getPasswordHash(),
-                    forumUser.getPasswordDetails().getSalt(),
-                    forumUser.getEmailAddress(),
-                    unixTime(),
-                    unixTime(),
-                    unixTime()
-            });
-
-            LOGGER.info("Insertion result: {}", result);
-
-            return forumUser;
-        }
-
-        return null;
-    }
-
-    private long unixTime() {
-        return new Date().getTime() / 1000;
-    }
-
-    private String extractUsername(String emailAddress) {
-        String usernameCandidate = firstBitOfEmailAddress(emailAddress);
-        LOGGER.info("Candidate username: {}", usernameCandidate);
-
-        if (usernameCandidate.length() < 3 || !findExistingForumUsersByUsername(usernameCandidate).isEmpty()) {
-            do {
-                LOGGER.info("Candidate username: {} already exists! Going to try creating another one.", usernameCandidate);
-                usernameCandidate = usernameCandidate(emailAddress);
-                LOGGER.info("New candidate username: {}", usernameCandidate);
-            } while (!findExistingForumUsersByUsername(usernameCandidate).isEmpty());
-        }
-
-        LOGGER.info("Settled on username: {}", usernameCandidate);
-
-        return usernameCandidate;
-    }
-
-    private List<ForumUser> findExistingForumUsersByUsername(String username) {
-        return jdbcTemplate.query("select * from " + forumDatabaseTablePrefix + "users where username = ?", new Object[]{ username },
-                (rs, rowNum) -> new ForumUser(rs.getString("email"), rs.getString("username"), null, null)
-        );
-    }
-
-    private List<ForumUser> findExistingForumUsersByEmailAddress(String emailAddress) {
-        return jdbcTemplate.query("select * from " + forumDatabaseTablePrefix + "users where email = ?", new Object[]{ emailAddress },
-                (rs, rowNum) -> new ForumUser(rs.getString("email"), rs.getString("username"), null, null)
-        );
-    }
-
-    private String usernameCandidate(String emailAddress) {
-        return firstBitOfEmailAddress(emailAddress) + randomDigit() + randomDigit();
-    }
-
-    private char randomDigit() {
-        return String.valueOf(new Random().nextInt()).charAt(0);
-    }
-
-    private String firstBitOfEmailAddress(String emailAddress) {
-        return emailAddress.substring(0, emailAddress.indexOf("@")).replace("\\.", "_");
     }
 
     private Enquiry extractEnquiry(String emailBody) {

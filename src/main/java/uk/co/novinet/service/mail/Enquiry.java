@@ -1,4 +1,4 @@
-package uk.co.novinet.service;
+package uk.co.novinet.service.mail;
 
 public class Enquiry {
     private String emailAddress;
