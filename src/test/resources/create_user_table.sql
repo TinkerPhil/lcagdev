@@ -83,6 +83,7 @@ CREATE TABLE `i7b0_users` (
   `loginattempts` smallint(2) unsigned NOT NULL DEFAULT '1',
   `usernotes` text NOT NULL,
   `sourceeditor` tinyint(1) NOT NULL DEFAULT '0',
+  `name` varchar(200)  NOT NULL DEFAULT '',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`),
   KEY `usergroup` (`usergroup`),

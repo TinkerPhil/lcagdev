@@ -4,11 +4,13 @@ public class User {
     private int id;
     private String username;
     private String emailAddress;
+    private String name;
 
-    public User(int id, String username, String emailAddress) {
+    public User(int id, String username, String emailAddress, String name) {
         this.id = id;
         this.username = username;
         this.emailAddress = emailAddress;
+        this.name = name;
     }
 
     public int getId() {
@@ -21,5 +23,9 @@ public class User {
 
     public String getEmailAddress() {
         return emailAddress;
+    }
+
+    public String getName() {
+        return name;
     }
 }

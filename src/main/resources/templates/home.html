@@ -15,8 +15,10 @@
         <table id="grid-data" class="table table-condensed table-hover table-striped">
             <thead>
             <tr>
-                <th data-column-id="emailAddress">Email Address</th>
+                <th data-column-id="registrationDate" data-order="desc">Registration Date</th>
+                <th data-column-id="name">Name</th>
                 <th data-column-id="username">Username</th>
+                <th data-column-id="emailAddress">Email Address</th>
                 <th data-column-id="group">Group</th>
             </tr>
             </thead>
@@ -24,8 +26,10 @@
 
         <script type="text/javascript">
             $("#grid-data").bootgrid({
+                method: "GET",
                 ajax: true,
-                url: "/member"
+                url: "/member",
+                rowCount: [25, 50, 100, -1]
             });
         </script>
     </body>

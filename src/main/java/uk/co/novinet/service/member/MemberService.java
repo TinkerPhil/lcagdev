@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import uk.co.novinet.service.mail.Enquiry;
 import uk.co.novinet.service.mail.PasswordSource;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 @Service
 public class MemberService {
@@ -23,6 +23,14 @@ public class MemberService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
+        put("emailAddress", "u.email");
+        put("group", "ug.title");
+        put("username", "u.username");
+        put("name", "u.name");
+        put("registrationDate", "u.regdate");
+    }};
+
     public Member createForumUserIfNecessary(Enquiry enquiry) {
         List<Member> existingMembers = findExistingForumUsersByField("email", enquiry.getEmailAddress());
 
@@ -33,7 +41,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, PasswordSource.getRandomPasswordDetails());
+            Member member = new Member(enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), PasswordSource.getRandomPasswordDetails());
 
             Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
 
@@ -49,10 +57,10 @@ public class MemberService {
                     "`pmnotice`, `pmnotify`, `buddyrequestspm`, `buddyrequestsauto`, `threadmode`, `showimages`, `showvideos`, `showsigs`, `showavatars`, `showquickreply`, `showredirect`, `ppp`, `tpp`, " +
                     "`daysprune`, `dateformat`, `timeformat`, `timezone`, `dst`, `dstcorrection`, `buddylist`, `ignorelist`, `style`, `away`, `awaydate`, `returndate`, `awayreason`, `pmfolders`, `notepad`, " +
                     "`referrer`, `referrals`, `reputation`, `regip`, `lastip`, `language`, `timeonline`, `showcodebuttons`, `totalpms`, `unreadpms`, `warningpoints`, `moderateposts`, `moderationtime`, " +
-                    "`suspendposting`, `suspensiontime`, `suspendsignature`, `suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`) " +
+                    "`suspendposting`, `suspensiontime`, `suspendsignature`, `suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`, `name`) " +
                     "VALUES (?, ?, ?, ?, 'lvhLksjhHGcZIWgtlwNTJNr3bjxzCE2qgZNX6SBTBPbuSLx21u', ?, 0, 0, '', '', '', 8, '', 0, '', ?, ?, ?, 0, '', '0', '', '', '', '', '', " +
                     "'all', '', 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 'linear', 1, 1, 1, 1, 1, 1, 0, 0, 0, '', '', '', 0, 0, '', '', 0, 0, 0, '0', '', '', '', 0, 0, 0, '', '', '', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, " +
-                    "0, 0, 1, '', 0);";
+                    "0, 0, 1, '', 0, ?);";
 
             LOGGER.info("Going to execute insert sql: {}", insertSql);
 
@@ -62,9 +70,10 @@ public class MemberService {
                     member.getPasswordDetails().getPasswordHash(),
                     member.getPasswordDetails().getSalt(),
                     member.getEmailAddress(),
-                    unixTime(),
-                    unixTime(),
-                    unixTime()
+                    unixTime(member.getRegistrationDate()),
+                    0L,
+                    0L,
+                    member.getName()
             });
 
             LOGGER.info("Insertion result: {}", result);
@@ -77,7 +86,7 @@ public class MemberService {
 
     public List<Member> findExistingForumUsersByField(String field, String value) {
         return jdbcTemplate.query("select * from " + forumDatabaseTablePrefix + "users where " + field + " = ?", new Object[]{ value },
-                (rs, rowNum) -> new Member(rs.getString("email"), rs.getString("username"), null, null, null)
+                (rs, rowNum) -> new Member(rs.getString("email"), rs.getString("username"), null, null, dateFromMyBbRow(rs, "regdate"), null)
         );
     }
 
@@ -85,22 +94,28 @@ public class MemberService {
         return jdbcTemplate.queryForObject("select count(*) from " + forumDatabaseTablePrefix + "users", Long.class);
     }
 
-    public List<Member> getAllMembers(long offset, long itemsPerPage, String searchPhrase) {
+    public List<Member> getAllMembers(long offset, long itemsPerPage, String searchPhrase, String sortField, String sortDirection) {
         String pagination = "";
 
         if (offset > -1 && itemsPerPage > -1) {
-            pagination = " limit " + offset + ", " + itemsPerPage;
+            pagination = " limit " + offset + ", " + itemsPerPage + " ";
         }
 
         String where = "";
 
         if (searchPhrase != null && !searchPhrase.trim().equals("")) {
-            where = " where u.uid like ? or u.username like ? or u.email like ? or ug.title like ? ";
+            where = " where u.uid like ? or u.username like ? or u.name like ? or u.email like ? or ug.title like ? ";
+        }
+
+        String orderBy = "";
+
+        if (sortField != null && sortDirection != null) {
+            orderBy = " order by " + FIELD_TO_COLUMN_TRANSLATIONS.get(sortField) + " " + sortDirection + " ";
         }
 
         final boolean hasWhere = !"".equals(where);
 
-        String sql = "select u.uid, u.username, u.email, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid" + where + pagination;
+        String sql = "select u.uid, u.username, u.name, u.email, u.regdate, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid" + where + orderBy + pagination;
 
         LOGGER.info("sql: {}", sql);
 
@@ -109,19 +124,35 @@ public class MemberService {
                     "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%",
+                    "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%" } : null,
-                (rs, rowNum) -> new Member(
-                        rs.getString("email"),
-                        rs.getString("username"),
-                        null,
-                        rs.getString("group"),
-                        null
-                )
+                (rs, rowNum) -> buildMember(rs)
         );
     }
 
-    private long unixTime() {
-        return new Date().getTime() / 1000;
+    private Member buildMember(ResultSet rs) throws SQLException {
+        return new Member(
+                rs.getString("email"),
+                rs.getString("username"),
+                rs.getString("name"),
+                rs.getString("group"),
+                dateFromMyBbRow(rs, "regdate"),
+                null
+        );
+    }
+
+    private Date dateFromMyBbRow(ResultSet rs, String columnName) throws SQLException {
+        Long dateInSeconds = rs.getLong(columnName);
+
+        if (dateInSeconds != null && dateInSeconds > 0) {
+            return new Date(dateInSeconds * 1000L);
+        }
+
+        return null;
+    }
+
+    private long unixTime(Date date) {
+        return date.getTime() / 1000;
     }
 
     private String extractUsername(String emailAddress) {

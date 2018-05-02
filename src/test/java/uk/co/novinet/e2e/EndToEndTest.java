@@ -18,6 +18,7 @@ import static uk.co.novinet.e2e.TestUtils.*;
 public class EndToEndTest {
 
     private String enquirerEmailAddress;
+    private String enquirierUsername;
 
     @Before
     public void setup() throws Exception {
@@ -39,7 +40,8 @@ public class EndToEndTest {
             }
         }
 
-        enquirerEmailAddress = "enquirer" + System.currentTimeMillis() + "@victim.com";
+        enquirierUsername = "enquirer" + System.currentTimeMillis();
+        enquirerEmailAddress = enquirierUsername + "@victim.com";
     }
 
     @After
@@ -53,11 +55,15 @@ public class EndToEndTest {
         // enquirer initially has no emails
         assertEquals(0, getEmails(enquirerEmailAddress).size());
 
-        insertUser(1, "testuser", enquirerEmailAddress);
+        insertUser(1, "testuser", enquirerEmailAddress, "Testy Test");
+        assertEquals(1, getUserRows().size());
+        assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
+
         sendEnquiryEmail(enquirerEmailAddress, "Testy Test");
         sleep(1000);
         assertEquals(1, getEmails(LCAG_INBOX_EMAIL_ADDRESS).size());
         sleep(3000); //wait for lcag automation to process emails
+
         assertEquals(1, getUserRows().size());
         assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
 
@@ -77,6 +83,8 @@ public class EndToEndTest {
         sleep(3000); //wait for lcag automation to process emails
         assertEquals(1, getUserRows().size());
         assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
+        assertEquals("Testy Test", getUserRows().get(0).getName());
+        assertEquals(enquirierUsername, getUserRows().get(0).getUsername());
 
         // enquirer receives the welcome email
         List<StaticMessage> messages = getEmails(enquirerEmailAddress);
@@ -86,7 +94,7 @@ public class EndToEndTest {
         assertTrue(enquiryReply.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply.getSubject());
         assertEquals("lcag-testing@lcag.com", enquiryReply.getFrom());
-        assertTrue(enquiryReply.getContent().contains("Testy Test " + enquirerEmailAddress.substring(0, enquirerEmailAddress.indexOf("@"))));
+        assertTrue(enquiryReply.getContent().contains("Testy Test " + enquirierUsername));
     }
 
 }
