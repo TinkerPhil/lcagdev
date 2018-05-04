@@ -39,11 +39,21 @@
                 url: "/member",
                 rowCount: [25, 50, 100, -1],
                 formatters: {
-                    "action": function(column, row)
-                    {
-                        return "<button type=\"button\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + row.id + "\"><span class=\"fa fa-pencil\"></span></button> " +
-                            "<button type=\"button\" class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + row.id + "\"><span class=\"fa fa-trash-o\"></span></button>";
+                    "action": function(column, row) {
+                        var icon = "";
+                        var text = "";
 
+                        if (row.group == 'LCAG Guests') {
+                            icon = "fa-check";
+                            text = "Upgrade to <strong>Registered</strong>";
+                        } else if (row.group == 'Registered') {
+                            icon = "fa-times";
+                            text = "Revert to <strong>LCAG Guests</strong>";
+                        } else {
+                            return "";
+                        }
+
+                        return '<button type="button" class="btn btn-default toggle-membership-btn" data-group-name="' + row.group + '" data-row-id="' + row.id + '"><span class="fa ' + icon + ' fa-lg" aria-hidden="true"></span>&nbsp;' + text + '</button>';
                     }
                 },
                  requestHandler: function (request) {
@@ -61,13 +71,13 @@
                      return model;
                  },
             }).on("loaded.rs.jquery.bootgrid", function() {
-                /* Executes after data is loaded and rendered */
-                grid.find(".command-edit").on("click", function(e)
-                {
-                    alert("You pressed edit on row: " + $(this).data("row-id"));
-                }).end().find(".command-delete").on("click", function(e)
-                {
-                    alert("You pressed delete on row: " + $(this).data("row-id"));
+                grid.find(".toggle-membership-btn").on("click", function(e) {
+                    $.ajax({
+                          type: "POST",
+                          url: "/member/group",
+                          data: {"memberId": $(this).data("row-id"), group: $(this).data("group-name") == 'LCAG Guests' ? 'Registered' : 'LCAG Guests'},
+                          success: function(e) { $("#grid-data").bootgrid("reload"); }
+                        });
                 });
             });
         </script>

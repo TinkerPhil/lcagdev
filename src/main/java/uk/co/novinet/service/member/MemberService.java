@@ -32,7 +32,7 @@ public class MemberService {
     }};
 
     public void setGroup(Long memberId, String group) {
-        LOGGER.info("Going to update user group to {} for memberId {}", memberId, group);
+        LOGGER.info("Going to update user group to {} for memberId {}", group, memberId);
 
         String sql = "update `" + forumDatabaseTablePrefix + "users` u set u.usergroup = (select `gid` from `" + forumDatabaseTablePrefix + "usergroups` ug where ug.title = ?) where u.uid = ?";
 
