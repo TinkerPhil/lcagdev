@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import uk.co.novinet.service.mail.Enquiry;
 import uk.co.novinet.service.mail.PasswordSource;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -29,6 +30,12 @@ public class MemberService {
         put("username", "u.username");
         put("name", "u.name");
         put("registrationDate", "u.regdate");
+        put("hmrcLetterChecked", "u.hmrc_letter_checked");
+        put("identificationChecked", "u.identification_checked");
+        put("contributionAmount", "u.contribution_amount");
+        put("contributionDate", "u.contribution_date");
+        put("mpName", "u.mp_name");
+
     }};
 
     public void setGroup(Long memberId, String group) {
@@ -56,7 +63,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), PasswordSource.getRandomPasswordDetails());
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, BigDecimal.ZERO, null, null, PasswordSource.getRandomPasswordDetails());
 
             Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
 
@@ -117,7 +124,7 @@ public class MemberService {
         String where = "";
 
         if (searchPhrase != null && !searchPhrase.trim().equals("")) {
-            where = " where u.uid like ? or u.username like ? or u.name like ? or u.email like ? or ug.title like ? ";
+            where = " where u.uid like ? or u.username like ? or u.name like ? or u.email like ? or ug.title like ? or u.mp_name like ?";
         }
 
         String orderBy = "";
@@ -128,12 +135,13 @@ public class MemberService {
 
         final boolean hasWhere = !"".equals(where);
 
-        String sql = "select u.uid, u.username, u.name, u.email, u.regdate, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid" + where + orderBy + pagination;
+        String sql = "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.mp_name, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid" + where + orderBy + pagination;
 
         LOGGER.info("sql: {}", sql);
 
         return jdbcTemplate.query(sql,
                 hasWhere ? new Object[] {
+                    "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%",
@@ -151,6 +159,11 @@ public class MemberService {
                 rs.getString("name"),
                 rs.getString("group"),
                 dateFromMyBbRow(rs, "regdate"),
+                rs.getBoolean("hmrc_letter_checked"),
+                rs.getBoolean("identification_checked"),
+                rs.getBigDecimal("contribution_amount"),
+                dateFromMyBbRow(rs, "contribution_date"),
+                rs.getString("mp_name"),
                 null
         );
     }

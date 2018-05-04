@@ -16,6 +16,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js"></script>
 
+    <style>
+        .pagination li a, .pagination li span {
+            cursor: pointer;
+        }
+    </style>
+
 </head>
 <body>
 <table id="grid-data" class="table table-condensed table-hover table-striped">
@@ -26,6 +32,11 @@
         <th data-column-id="name">Name</th>
         <th data-column-id="username">Username</th>
         <th data-column-id="emailAddress">Email Address</th>
+        <th data-column-id="hmrcLetterChecked">HMRC Letter Checked</th>
+        <th data-column-id="identificationChecked">ID Checked</th>
+        <th data-column-id="contributionAmount">Contribution Amount</th>
+        <th data-column-id="contributionDate">Contribution Date</th>
+        <th data-column-id="mpName">MP Name</th>
         <th data-column-id="group">Group</th>
         <th data-column-id="action" data-formatter="action" data-sortable="false"></th>
     </tr>

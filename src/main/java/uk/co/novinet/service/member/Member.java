@@ -2,6 +2,7 @@ package uk.co.novinet.service.member;
 
 import uk.co.novinet.service.mail.PasswordDetails;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,6 @@ import java.util.Map;
 public class Member {
     private Map<String, Integer> STATUS_MAPPINGS = new HashMap<String, Integer>() {{
        put("Registered", 0);
-       put("LCAG Guest", 1);
        put("Administrators", 2);
     }};
 
@@ -19,14 +19,36 @@ public class Member {
     private String name;
     private String group;
     private Date registrationDate;
+    private Boolean hmrcLetterChecked;
+    private Boolean identificationChecked;
+    private BigDecimal contributionAmount;
+    private Date contributionDate;
+    private String mpName;
     private PasswordDetails passwordDetails;
 
-    public Member(Long id, String emailAddress, String username, String name, String group, Date registrationDate, PasswordDetails passwordDetails) {
+    public Member(
+            Long id,
+            String emailAddress,
+            String username,
+            String name,
+            String group,
+            Date registrationDate,
+            Boolean hmrcLetterChecked,
+            Boolean identificationChecked,
+            BigDecimal contributionAmount,
+            Date contributionDate,
+            String mpName,
+            PasswordDetails passwordDetails) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
         this.group = group;
         this.registrationDate = registrationDate;
+        this.hmrcLetterChecked = hmrcLetterChecked;
+        this.identificationChecked = identificationChecked;
+        this.contributionAmount = contributionAmount;
+        this.contributionDate = contributionDate;
+        this.mpName = mpName;
         this.passwordDetails = passwordDetails;
         this.name = name;
     }
@@ -61,5 +83,26 @@ public class Member {
 
     public Integer getStatus() {
         return STATUS_MAPPINGS.get(group);
+    }
+
+
+    public Boolean getHmrcLetterChecked() {
+        return hmrcLetterChecked;
+    }
+
+    public Boolean getIdentificationChecked() {
+        return identificationChecked;
+    }
+
+    public BigDecimal getContributionAmount() {
+        return contributionAmount;
+    }
+
+    public Date getContributionDate() {
+        return contributionDate;
+    }
+
+    public String getMpName() {
+        return mpName;
     }
 }
