@@ -55,7 +55,7 @@ public class EndToEndTest {
         // enquirer initially has no emails
         assertEquals(0, getEmails(enquirerEmailAddress).size());
 
-        insertUser(1, "testuser", enquirerEmailAddress, "Testy Test");
+        insertUser(1, "testuser", enquirerEmailAddress, "Testy Test", 8);
         assertEquals(1, getUserRows().size());
         assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
 

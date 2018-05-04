@@ -24,8 +24,14 @@ public class DataPopulator {
         }
 
         for (int i = 1; i <= 200; i++) {
-            insertUser(i, "testuser" + i, "user" + i + "@something.com", "Test Name" + i);
+            insertUser(i, "testuser" + i, "user" + i + "@something.com", "Test Name" + i, 8);
         }
+
+        for (int i = 201; i <= 210; i++) {
+            insertUser(i, "testuser" + i, "user" + i + "@something.com", "Test Name" + i, 2);
+        }
+
+        insertUser(211, "testuser" + 211, "user" + 211 + "@something.com", "Test Name" + 211, 4);
     }
 
 }

@@ -7,12 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import uk.co.novinet.service.member.MemberService;
 
-@Controller("/")
+@Controller
 public class HomeController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
-    @GetMapping
+    @GetMapping("/")
     public String get() {
         return "home";
     }

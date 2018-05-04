@@ -31,6 +31,21 @@ public class MemberService {
         put("registrationDate", "u.regdate");
     }};
 
+    public void setGroup(Long memberId, String group) {
+        LOGGER.info("Going to update user group to {} for memberId {}", memberId, group);
+
+        String sql = "update `" + forumDatabaseTablePrefix + "users` u set u.usergroup = (select `gid` from `" + forumDatabaseTablePrefix + "usergroups` ug where ug.title = ?) where u.uid = ?";
+
+        LOGGER.info("Created sql: {}", sql);
+
+        int result = jdbcTemplate.update(sql, new Object[] {
+                group,
+                memberId,
+        });
+
+        LOGGER.info("Update result: {}", result);
+    }
+
     public Member createForumUserIfNecessary(Enquiry enquiry) {
         List<Member> existingMembers = findExistingForumUsersByField("email", enquiry.getEmailAddress());
 
@@ -41,7 +56,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), PasswordSource.getRandomPasswordDetails());
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), PasswordSource.getRandomPasswordDetails());
 
             Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
 
@@ -85,9 +100,7 @@ public class MemberService {
     }
 
     public List<Member> findExistingForumUsersByField(String field, String value) {
-        return jdbcTemplate.query("select * from " + forumDatabaseTablePrefix + "users where " + field + " = ?", new Object[]{ value },
-                (rs, rowNum) -> new Member(rs.getString("email"), rs.getString("username"), null, null, dateFromMyBbRow(rs, "regdate"), null)
-        );
+        return jdbcTemplate.query("select * from " + forumDatabaseTablePrefix + "users where " + field + " = ?", new Object[]{ value }, (rs, rowNum) -> buildMember(rs));
     }
 
     public long totalCountMembers() {
@@ -132,6 +145,7 @@ public class MemberService {
 
     private Member buildMember(ResultSet rs) throws SQLException {
         return new Member(
+                rs.getLong("uid"),
                 rs.getString("email"),
                 rs.getString("username"),
                 rs.getString("name"),
