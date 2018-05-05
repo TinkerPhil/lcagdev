@@ -38,15 +38,28 @@ public class MemberService {
 
     }};
 
-    public void setGroup(Long memberId, String group) {
-        LOGGER.info("Going to update user group to {} for memberId {}", group, memberId);
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Date contributionDate, String mpName) {
+        LOGGER.info("Going to update user with id {}", memberId);
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, mpName={}", group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, mpName);
 
-        String sql = "update `" + forumDatabaseTablePrefix + "users` u set u.usergroup = (select `gid` from `" + forumDatabaseTablePrefix + "usergroups` ug where ug.title = ?) where u.uid = ?";
+        String sql = "update `" + forumDatabaseTablePrefix + "users` u " +
+                "set u.usergroup = (select `gid` from `" + forumDatabaseTablePrefix + "usergroups` ug where ug.title = ?), " +
+                "u.identification_checked = ?, " +
+                "u.hmrc_letter_checked = ?, " +
+                "u.contribution_amount = ?, " +
+                "u.contribution_date = ?, " +
+                "u.mp_name = ? " +
+                "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
 
         int result = jdbcTemplate.update(sql, new Object[] {
                 group,
+                identificationChecked,
+                hmrcLetterChecked,
+                contributionAmount,
+                unixTime(contributionDate),
+                mpName,
                 memberId,
         });
 
@@ -63,7 +76,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, BigDecimal.ZERO, null, null, PasswordSource.getRandomPasswordDetails());
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, "0", null, null, PasswordSource.getRandomPasswordDetails());
 
             Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
 
@@ -161,7 +174,7 @@ public class MemberService {
                 dateFromMyBbRow(rs, "regdate"),
                 rs.getBoolean("hmrc_letter_checked"),
                 rs.getBoolean("identification_checked"),
-                rs.getBigDecimal("contribution_amount"),
+                rs.getString("contribution_amount"),
                 dateFromMyBbRow(rs, "contribution_date"),
                 rs.getString("mp_name"),
                 null
@@ -179,6 +192,10 @@ public class MemberService {
     }
 
     private long unixTime(Date date) {
+        if (date == null) {
+            return 0;
+        }
+
         return date.getTime() / 1000;
     }
 

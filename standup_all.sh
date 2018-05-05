@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-echo "Removing all running containers"
-docker rm -f $(docker ps -a -q)
-
-echo "Rebuilding application docker image"
-mvn clean package install dockerfile:build -DskipTests=true
-
 echo "Standing up greenmail"
 docker run -d -t -i \
     --name lcag-mail \
@@ -59,3 +53,6 @@ docker run -d \
     --network lcag-automation-network \
     -p 8282:8282 \
     -t dockernovinet/lcag-automation
+
+echo "Waiting for application status url to respond with 200"
+while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8282/status)" != "200" ]]; do sleep 5; done

@@ -10,7 +10,8 @@ import java.util.Map;
 public class Member {
     private Map<String, Integer> STATUS_MAPPINGS = new HashMap<String, Integer>() {{
        put("Registered", 0);
-       put("Administrators", 2);
+       put("Administrators", 3);
+       put("Moderators", 1);
     }};
 
     private Long id;
@@ -21,7 +22,7 @@ public class Member {
     private Date registrationDate;
     private Boolean hmrcLetterChecked;
     private Boolean identificationChecked;
-    private BigDecimal contributionAmount;
+    private String contributionAmount;
     private Date contributionDate;
     private String mpName;
     private PasswordDetails passwordDetails;
@@ -35,7 +36,7 @@ public class Member {
             Date registrationDate,
             Boolean hmrcLetterChecked,
             Boolean identificationChecked,
-            BigDecimal contributionAmount,
+            String contributionAmount,
             Date contributionDate,
             String mpName,
             PasswordDetails passwordDetails) {
@@ -94,7 +95,7 @@ public class Member {
         return identificationChecked;
     }
 
-    public BigDecimal getContributionAmount() {
+    public String getContributionAmount() {
         return contributionAmount;
     }
 

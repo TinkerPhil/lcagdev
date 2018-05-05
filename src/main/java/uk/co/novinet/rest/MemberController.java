@@ -3,6 +3,7 @@ package uk.co.novinet.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.co.novinet.service.member.MemberService;
+
+import java.util.Date;
 
 @RestController
 public class MemberController {
@@ -31,9 +34,17 @@ public class MemberController {
     }
 
     @CrossOrigin
-    @PostMapping(path = "/member/group")
-    public ResponseEntity setGroup(@RequestParam("memberId") Long memberId, @RequestParam("group") String group) {
-        memberService.setGroup(memberId, group);
+    @PostMapping(path = "/member/update")
+    public ResponseEntity update(
+            @RequestParam("id") Long memberId,
+            @RequestParam(value = "identificationChecked", required = false) boolean identificationChecked,
+            @RequestParam(value = "hmrcLetterChecked", required = false) boolean hmrcLetterChecked,
+            @RequestParam(value = "contributionAmount", required = false) String contributionAmount,
+            @RequestParam(value = "contributionDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date contributionDate,
+            @RequestParam(value = "mpName", required = false) String mpName,
+            @RequestParam("group") String group
+    ) {
+        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, mpName);
         return new ResponseEntity(HttpStatus.OK);
     }
 

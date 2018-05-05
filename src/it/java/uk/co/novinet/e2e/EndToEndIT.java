@@ -3,10 +3,6 @@ package uk.co.novinet.e2e;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
-
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
 
 import java.util.List;
 
@@ -15,7 +11,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static uk.co.novinet.e2e.TestUtils.*;
 
-public class EndToEndTest {
+public class EndToEndIT {
 
     private String enquirerEmailAddress;
     private String enquirierUsername;
@@ -27,7 +23,7 @@ public class EndToEndTest {
         int sqlRetryCounter = 0;
         boolean needToRetry = true;
 
-        while (needToRetry && sqlRetryCounter < 20) {
+        while (needToRetry && sqlRetryCounter < 60) {
             try {
                 runSqlScript("drop_user_table.sql");
                 runSqlScript("create_user_table.sql");

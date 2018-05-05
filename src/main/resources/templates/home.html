@@ -12,59 +12,90 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
 
     <style>
         .pagination li a, .pagination li span {
             cursor: pointer;
         }
+        #loading-indicator {
+          position: absolute;
+          left: 10px;
+          top: 10px;
+        }
     </style>
 
 </head>
 <body>
-<table id="grid-data" class="table table-condensed table-hover table-striped">
+<i id="loading-indicator" class="fa fa-refresh fa-spin"></i>
+<table id="grid-data" class="table table-condensed table-hover table-striped table-responsive">
     <thead>
     <tr>
         <th data-column-id="id" data-visible="false" data-identifier="true">ID</th>
-        <th data-column-id="registrationDate" data-order="desc">Registration Date</th>
+        <th data-column-id="registrationDate" data-formatter="registrationDate" data-order="desc">Registration Date</th>
         <th data-column-id="name">Name</th>
         <th data-column-id="username">Username</th>
         <th data-column-id="emailAddress">Email Address</th>
-        <th data-column-id="hmrcLetterChecked">HMRC Letter Checked</th>
-        <th data-column-id="identificationChecked">ID Checked</th>
-        <th data-column-id="contributionAmount">Contribution Amount</th>
-        <th data-column-id="contributionDate">Contribution Date</th>
-        <th data-column-id="mpName">MP Name</th>
-        <th data-column-id="group">Group</th>
+        <th data-column-id="hmrcLetterChecked" data-formatter="hmrcLetterChecked">HMRC Letter Checked</th>
+        <th data-column-id="identificationChecked" data-formatter="identificationChecked">ID Checked</th>
+        <th data-column-id="contributionAmount" data-formatter="contributionAmount">Contribution Amount</th>
+        <th data-column-id="contributionDate" data-formatter="contributionDate">Contribution Date</th>
+        <th data-column-id="mpName" data-formatter="mpName">MP Name</th>
+        <th data-column-id="group" data-formatter="group">Group</th>
         <th data-column-id="action" data-formatter="action" data-sortable="false"></th>
     </tr>
     </thead>
 </table>
 
 <script type="text/javascript">
+            var urlPrefix = "";
+
             var grid = $("#grid-data").bootgrid({
                 method: "GET",
                 ajax: true,
-                url: "/member",
+                url: urlPrefix + "/member",
                 rowCount: [25, 50, 100, -1],
                 formatters: {
-                    "action": function(column, row) {
-                        var icon = "";
-                        var text = "";
-
-                        if (row.group == 'LCAG Guests') {
-                            icon = "fa-check";
-                            text = "Upgrade to <strong>Registered</strong>";
-                        } else if (row.group == 'Registered') {
-                            icon = "fa-times";
-                            text = "Revert to <strong>LCAG Guests</strong>";
-                        } else {
-                            return "";
+                    "registrationDate": function(column, row) {
+                        return moment(row.registrationDate).format("DD/MM/YYYY HH:mm");
+                    },
+                    "identificationChecked": function(column, row) {
+                        return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="identificationChecked_' + row.id + '" type="checkbox" ' + (row.identificationChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                    },
+                    "hmrcLetterChecked": function(column, row) {
+                        return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="hmrcLetterChecked_' + row.id + '" type="checkbox" ' + (row.hmrcLetterChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                    },
+                    "contributionAmount": function(column, row) {
+                        return '<div class="form-group"><div class="input-group"><div class="input-group-addon">£</div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="contributionAmount_' + row.id + '" type="text" value="' + row.contributionAmount + '" class="form-control"></div></div>';
+                    },
+                    "contributionDate": function(column, row) {
+                        var dateString = row.contributionDate == null ? "" : moment(row.contributionDate).format("DD/MM/YYYY");
+                        return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="contributionDate_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
+                    },
+                    "mpName": function(column, row) {
+                        return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpName_' + row.id + '" type="text" class="form-control" value="' + row.mpName + '"></div>';
+                    },
+                    "group": function(column, row) {
+                        if (row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators") {
+                            return '<select id="group_' + row.id + '" class="form-control"><option ' + (row.group == 'LCAG Guests' ? 'selected="selected"' : '') + '>LCAG Guests</option><option ' + (row.group == 'Registered' ? 'selected="selected"' : '') + '>Registered</option><option ' + (row.group == 'Moderators' ? 'selected="selected"' : '') + '>Moderators</option></select>';
                         }
 
-                        return '<button type="button" class="btn btn-default toggle-membership-btn" data-group-name="' + row.group + '" data-row-id="' + row.id + '"><span class="fa ' + icon + ' fa-lg" aria-hidden="true"></span>&nbsp;' + text + '</button>';
+                        return row.group;
+                    },
+                    "action": function(column, row) {
+                         if (row.status != 3) {
+                            return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button>';
+                        }
+
+                        return "";
                     }
                 },
                  requestHandler: function (request) {
@@ -82,14 +113,48 @@
                      return model;
                  },
             }).on("loaded.rs.jquery.bootgrid", function() {
-                grid.find(".toggle-membership-btn").on("click", function(e) {
+                grid.find(".update-row-btn").on("click", function(e) {
+                    var rowContext = this;
                     $.ajax({
                           type: "POST",
-                          url: "/member/group",
-                          data: {"memberId": $(this).data("row-id"), group: $(this).data("group-name") == 'LCAG Guests' ? 'Registered' : 'LCAG Guests'},
+                          url: urlPrefix + "/member/update",
+                          data: (function() {
+                            console.log("rowContext", rowContext);
+                            var id = $(rowContext).data("row-id");
+                            var contributionDate = $("#contributionDate_" + id).val();
+                            var formattedContributionDate = null;
+
+                            if (contributionDate != null && contributionDate != "") {
+                                formattedContributionDate = moment(contributionDate, "DD/MM/YYYY").format();
+                            }
+
+                            console.log("id", id);
+
+                            return {
+                                "id": id,
+                                "identificationChecked": $("#identificationChecked_" + id).prop("checked"),
+                                "hmrcLetterChecked": $("#hmrcLetterChecked_" + id).prop("checked"),
+                                "contributionAmount": $("#contributionAmount_" + id).val(),
+                                "contributionDate": formattedContributionDate,
+                                "mpName": $("#mpName_" + id).val(),
+                                "group": $("#group_" + id).val()
+                            };
+                          })(),
                           success: function(e) { $("#grid-data").bootgrid("reload"); }
                         });
                 });
+                $('.date').datepicker({
+                    autoclose: true,
+                    format: "dd/mm/yyyy"
+                });
+            });
+
+            $(document).ajaxSend(function(event, request, settings) {
+                $('#loading-indicator').show();
+            });
+
+            $(document).ajaxComplete(function(event, request, settings) {
+                $('#loading-indicator').hide();
             });
         </script>
 </body>

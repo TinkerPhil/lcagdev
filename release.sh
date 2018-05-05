@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-./test.sh && docker push dockernovinet/lcag-automation
+mvn clean verify && docker push dockernovinet/lcag-automation

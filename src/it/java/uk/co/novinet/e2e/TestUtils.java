@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 
 public class TestUtils {
 
-    static final String DB_URL = "jdbc:mysql://localhost:4306/mybb";
+    static final String DB_URL = "jdbc:mysql://127.0.0.1:4306/mybb";
     static final String DB_USERNAME = "user";
     static final String DB_PASSWORD = "p@ssword";
 
