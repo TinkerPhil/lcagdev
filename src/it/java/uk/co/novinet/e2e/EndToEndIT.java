@@ -92,5 +92,4 @@ public class EndToEndIT {
         assertEquals("lcag-testing@lcag.com", enquiryReply.getFrom());
         assertTrue(enquiryReply.getContent().contains("Testy Test " + enquirierUsername));
     }
-
 }

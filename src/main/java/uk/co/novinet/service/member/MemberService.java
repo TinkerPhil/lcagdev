@@ -120,7 +120,8 @@ public class MemberService {
     }
 
     public List<Member> findExistingForumUsersByField(String field, String value) {
-        return jdbcTemplate.query("select * from " + forumDatabaseTablePrefix + "users where " + field + " = ?", new Object[]{ value }, (rs, rowNum) -> buildMember(rs));
+        String sql = "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.mp_name, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid where u." + field + " = ?";
+        return jdbcTemplate.query(sql, new Object[]{ value }, (rs, rowNum) -> buildMember(rs));
     }
 
     public long totalCountMembers() {
