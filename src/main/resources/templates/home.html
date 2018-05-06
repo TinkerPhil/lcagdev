@@ -31,29 +31,43 @@
           left: 10px;
           top: 10px;
         }
+        .horizontal-scroll {
+        	width: 2500px;
+            white-space: nowrap;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 
 </head>
 <body>
 <i id="loading-indicator" class="fa fa-refresh fa-spin"></i>
-<table id="grid-data" class="table table-condensed table-hover table-striped table-responsive">
-    <thead>
-    <tr>
-        <th data-column-id="id" data-visible="false" data-identifier="true">ID</th>
-        <th data-column-id="registrationDate" data-formatter="registrationDate" data-order="desc">Registration Date</th>
-        <th data-column-id="name">Name</th>
-        <th data-column-id="username">Username</th>
-        <th data-column-id="emailAddress">Email Address</th>
-        <th data-column-id="hmrcLetterChecked" data-formatter="hmrcLetterChecked">HMRC Letter Checked</th>
-        <th data-column-id="identificationChecked" data-formatter="identificationChecked">ID Checked</th>
-        <th data-column-id="contributionAmount" data-formatter="contributionAmount">Contribution Amount</th>
-        <th data-column-id="contributionDate" data-formatter="contributionDate">Contribution Date</th>
-        <th data-column-id="mpName" data-formatter="mpName">MP Name</th>
-        <th data-column-id="group" data-formatter="group">Group</th>
-        <th data-column-id="action" data-formatter="action" data-sortable="false"></th>
-    </tr>
-    </thead>
-</table>
+<div class="horizontal-scroll">
+    <table id="grid-data" class="table table-condensed table-hover table-striped">
+        <thead>
+        <tr>
+            <th class="col-md-1" data-column-id="id" data-visible="false" data-identifier="true">ID</th>
+            <th data-column-id="registrationDate" data-formatter="registrationDate" data-order="desc">Registration Date</th>
+            <th data-column-id="name">Name</th>
+            <th data-column-id="username">Username</th>
+            <th data-column-id="emailAddress">Email Address</th>
+            <th class="col-md-1" data-column-id="hmrcLetterChecked" data-formatter="hmrcLetterChecked">HMRC Letter Checked</th>
+            <th data-column-id="identificationChecked" data-formatter="identificationChecked">ID Checked</th>
+            <th class="col-md-1"  data-column-id="contributionAmount" data-formatter="contributionAmount">Contribution Amount</th>
+            <th class="col-md-1" data-column-id="contributionDate" data-formatter="contributionDate">Contribution Date</th>
+            <th data-column-id="mpName" data-formatter="mpName">MP Name</th>
+            <th data-column-id="mpParty" data-formatter="mpParty">MP Party</th>
+            <th class="col-md-1" data-column-id="mpConstituency" data-formatter="mpConstituency">MP Constituency</th>
+            <th data-column-id="mpEngaged" data-formatter="mpEngaged">MP Engaged</th>
+            <th class="col-md-1" data-column-id="mpSympathetic" data-formatter="mpSympathetic">MP Sympathetic</th>
+            <th data-column-id="schemes" data-formatter="schemes">Schemes</th>
+            <th data-column-id="group" data-formatter="group">Group</th>
+            <th data-column-id="action" data-formatter="action" data-sortable="false"></th>
+        </tr>
+        </thead>
+    </table>
+</div>
 
 <script type="text/javascript">
             var urlPrefix = "";
@@ -82,6 +96,21 @@
                     },
                     "mpName": function(column, row) {
                         return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpName_' + row.id + '" type="text" class="form-control" value="' + row.mpName + '"></div>';
+                    },
+                    "mpParty": function(column, row) {
+                        return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpParty_' + row.id + '" type="text" class="form-control" value="' + row.mpParty + '"></div>';
+                    },
+                    "mpConstituency": function(column, row) {
+                        return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpConstituency_' + row.id + '" type="text" class="form-control" value="' + row.mpConstituency + '"></div>';
+                    },
+                    "mpEngaged": function(column, row) {
+                        return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpEngaged_' + row.id + '" type="checkbox" ' + (row.mpEngaged ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                    },
+                    "mpSympathetic": function(column, row) {
+                        return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpSympathetic_' + row.id + '" type="checkbox" ' + (row.mpSympathetic ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                    },
+                    "schemes": function(column, row) {
+                        return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="schemes_' + row.id + '" type="text" class="form-control" value="' + row.schemes + '"></div>';
                     },
                     "group": function(column, row) {
                         if (row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators") {
@@ -137,6 +166,11 @@
                                 "contributionAmount": $("#contributionAmount_" + id).val(),
                                 "contributionDate": formattedContributionDate,
                                 "mpName": $("#mpName_" + id).val(),
+                                "mpParty": $("#mpParty_" + id).val(),
+                                "mpConstituency": $("#mpConstituency_" + id).val(),
+                                "mpEngaged": $("#mpEngaged_" + id).prop("checked"),
+                                "mpSympathetic": $("#mpSympathetic_" + id).prop("checked"),
+                                "schemes": $("#schemes_" + id).val(),
                                 "group": $("#group_" + id).val()
                             };
                           })(),

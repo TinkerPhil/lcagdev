@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import uk.co.novinet.service.mail.Enquiry;
 import uk.co.novinet.service.mail.PasswordSource;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -35,12 +34,17 @@ public class MemberService {
         put("contributionAmount", "u.contribution_amount");
         put("contributionDate", "u.contribution_date");
         put("mpName", "u.mp_name");
+        put("mpEngaged", "u.mp_engaged");
+        put("mpSympathetic", "u.mp_sympathetic");
+        put("mpConstituency", "u.mp_constituency");
+        put("mpParty", "u.mp_party");
+        put("schemes", "u.schemes");
 
     }};
 
-    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Date contributionDate, String mpName) {
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Date contributionDate, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, mpName={}", group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, mpName);
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}", group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes);
 
         String sql = "update `" + forumDatabaseTablePrefix + "users` u " +
                 "set u.usergroup = (select `gid` from `" + forumDatabaseTablePrefix + "usergroups` ug where ug.title = ?), " +
@@ -48,7 +52,12 @@ public class MemberService {
                 "u.hmrc_letter_checked = ?, " +
                 "u.contribution_amount = ?, " +
                 "u.contribution_date = ?, " +
-                "u.mp_name = ? " +
+                "u.mp_name = ?, " +
+                "u.mp_engaged = ?, " +
+                "u.mp_sympathetic = ?, " +
+                "u.mp_constituency = ?, " +
+                "u.mp_party = ?, " +
+                "u.schemes = ? " +
                 "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -60,6 +69,11 @@ public class MemberService {
                 contributionAmount,
                 unixTime(contributionDate),
                 mpName,
+                mpEngaged,
+                mpSympathetic,
+                mpConstituency,
+                mpParty,
+                schemes,
                 memberId,
         });
 
@@ -76,7 +90,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, "0", null, null, PasswordSource.getRandomPasswordDetails());
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, "0", null, null, null, false, false, "", "", PasswordSource.getRandomPasswordDetails());
 
             Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
 
@@ -120,8 +134,11 @@ public class MemberService {
     }
 
     public List<Member> findExistingForumUsersByField(String field, String value) {
-        String sql = "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.mp_name, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid where u." + field + " = ?";
-        return jdbcTemplate.query(sql, new Object[]{ value }, (rs, rowNum) -> buildMember(rs));
+        return jdbcTemplate.query(buildUserTableSelect() + "where u." + field + " = ?", new Object[]{ value }, (rs, rowNum) -> buildMember(rs));
+    }
+
+    private String buildUserTableSelect() {
+        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid ";
     }
 
     public long totalCountMembers() {
@@ -138,7 +155,7 @@ public class MemberService {
         String where = "";
 
         if (searchPhrase != null && !searchPhrase.trim().equals("")) {
-            where = " where u.uid like ? or u.username like ? or u.name like ? or u.email like ? or ug.title like ? or u.mp_name like ?";
+            where = " where u.uid like ? or u.username like ? or u.name like ? or u.email like ? or ug.title like ? or u.mp_name like ? or u.mp_constituency like ? or u.mp_party like ? or u.schemes like ?";
         }
 
         String orderBy = "";
@@ -149,12 +166,15 @@ public class MemberService {
 
         final boolean hasWhere = !"".equals(where);
 
-        String sql = "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.mp_name, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid" + where + orderBy + pagination;
+        String sql = buildUserTableSelect() + where + orderBy + pagination;
 
         LOGGER.info("sql: {}", sql);
 
         return jdbcTemplate.query(sql,
                 hasWhere ? new Object[] {
+                    "%" + searchPhrase + "%",
+                    "%" + searchPhrase + "%",
+                    "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%",
                     "%" + searchPhrase + "%",
@@ -178,6 +198,11 @@ public class MemberService {
                 rs.getString("contribution_amount"),
                 dateFromMyBbRow(rs, "contribution_date"),
                 rs.getString("mp_name"),
+                rs.getString("schemes"),
+                rs.getBoolean("mp_engaged"),
+                rs.getBoolean("mp_sympathetic"),
+                rs.getString("mp_constituency"),
+                rs.getString("mp_party"),
                 null
         );
     }

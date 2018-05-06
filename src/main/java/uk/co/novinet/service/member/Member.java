@@ -2,7 +2,6 @@ package uk.co.novinet.service.member;
 
 import uk.co.novinet.service.mail.PasswordDetails;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +24,11 @@ public class Member {
     private String contributionAmount;
     private Date contributionDate;
     private String mpName;
+    private String schemes;
+    private Boolean mpEngaged;
+    private Boolean mpSympathetic;
+    private String mpConstituency;
+    private String mpParty;
     private PasswordDetails passwordDetails;
 
     public Member(
@@ -39,6 +43,11 @@ public class Member {
             String contributionAmount,
             Date contributionDate,
             String mpName,
+            String schemes,
+            Boolean mpEngaged,
+            Boolean mpSympathetic,
+            String mpConstituency,
+            String mpParty,
             PasswordDetails passwordDetails) {
         this.id = id;
         this.emailAddress = emailAddress;
@@ -50,6 +59,11 @@ public class Member {
         this.contributionAmount = contributionAmount;
         this.contributionDate = contributionDate;
         this.mpName = mpName;
+        this.schemes = schemes;
+        this.mpEngaged = mpEngaged;
+        this.mpSympathetic = mpSympathetic;
+        this.mpConstituency = mpConstituency;
+        this.mpParty = mpParty;
         this.passwordDetails = passwordDetails;
         this.name = name;
     }
@@ -105,5 +119,25 @@ public class Member {
 
     public String getMpName() {
         return mpName;
+    }
+
+    public String getSchemes() {
+        return schemes;
+    }
+
+    public Boolean getMpEngaged() {
+        return mpEngaged;
+    }
+
+    public Boolean getMpSympathetic() {
+        return mpSympathetic;
+    }
+
+    public String getMpConstituency() {
+        return mpConstituency;
+    }
+
+    public String getMpParty() {
+        return mpParty;
     }
 }
