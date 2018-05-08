@@ -10,11 +10,13 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/css/ui.jqgrid.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/jquery.jqgrid.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/i18n/grid.locale-en.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">
 
@@ -32,164 +34,211 @@
           top: 10px;
         }
         .horizontal-scroll {
-        	width: 2500px;
+            width: 2500px;
             white-space: nowrap;
             overflow-y: hidden;
             overflow-x: scroll;
             -webkit-overflow-scrolling: touch;
         }
+        .ui-jqgrid .ui-jqgrid-bdiv tr.ui-row-ltr>td { border-right-width: 0px; border-left-width: 0px; border-left-style: none; border-right-style: none; }
+
+        .ui-jqgrid tr.jqfoot>td, .ui-jqgrid tr.jqgroup>td, .ui-jqgrid tr.jqgrow>td {
+            padding: 15px 5px 15px 5px;
+        }
+        tr.ui-priority-secondary {
+            background-color: #f7f7f7;
+        }
+        tr.jqgrow {
+            border-top-color: #d5d5d5;
+            border-bottom-color: #d5d5d5;
+        }
+        .ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+            vertical-align: middle;
+            text-align: left;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: normal;
+        }
+        tr.ui-search-toolbar {
+            border-top-style: none;
+        }
+        .ui-jqgrid .ui-search-table { height: 30px; }
+        .ui-jqgrid .ui-search-table .ui-search-oper { height: 30px; }
+        .ui-jqgrid .ui-jqgrid-htable .ui-search-toolbar th { height: 32px; }
+        tr.jqgrow.success {
+            background-color: #dff0d8;
+        }
+        tr.jqgrow.danger {
+            background-color: #f2dede;
+        }
+        tr.jqgrow.info {
+            background-color: #d9edf7;
+        }
     </style>
 
 </head>
-<body>
-<i id="loading-indicator" class="fa fa-refresh fa-spin"></i>
-<div class="horizontal-scroll">
-    <table id="grid-data" class="table table-condensed table-hover table-striped">
-        <thead>
-        <tr>
-            <th class="col-md-1" data-column-id="id" data-visible="false" data-identifier="true">ID</th>
-            <th data-column-id="registrationDate" data-formatter="registrationDate" data-order="desc">Registration Date</th>
-            <th data-column-id="name">Name</th>
-            <th data-column-id="username">Username</th>
-            <th data-column-id="emailAddress">Email Address</th>
-            <th class="col-md-1" data-column-id="hmrcLetterChecked" data-formatter="hmrcLetterChecked">HMRC Letter Checked</th>
-            <th data-column-id="identificationChecked" data-formatter="identificationChecked">ID Checked</th>
-            <th class="col-md-1"  data-column-id="contributionAmount" data-formatter="contributionAmount">Contribution Amount</th>
-            <th class="col-md-1" data-column-id="contributionDate" data-formatter="contributionDate">Contribution Date</th>
-            <th data-column-id="mpName" data-formatter="mpName">MP Name</th>
-            <th data-column-id="mpParty" data-formatter="mpParty">MP Party</th>
-            <th class="col-md-1" data-column-id="mpConstituency" data-formatter="mpConstituency">MP Constituency</th>
-            <th data-column-id="mpEngaged" data-formatter="mpEngaged">MP Engaged</th>
-            <th class="col-md-1" data-column-id="mpSympathetic" data-formatter="mpSympathetic">MP Sympathetic</th>
-            <th data-column-id="schemes" data-formatter="schemes">Schemes</th>
-            <th data-column-id="group" data-formatter="group">Group</th>
-            <th data-column-id="action" data-formatter="action" data-sortable="false"></th>
-        </tr>
-        </thead>
-    </table>
-</div>
+    <body>
+        <div class="horizontal-scroll">
+            <table id="grid">
+            </table>
+        </div>
 
-<script type="text/javascript">
+        <script type="text/javascript">
             var urlPrefix = "";
 
-            var grid = $("#grid-data").bootgrid({
-                method: "GET",
-                ajax: true,
-                url: urlPrefix + "/member",
-                rowCount: [25, 50, 100, -1],
-                formatters: {
-                    "registrationDate": function(column, row) {
-                        return moment(row.registrationDate).format("DD/MM/YYYY HH:mm");
-                    },
-                    "identificationChecked": function(column, row) {
-                        return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="identificationChecked_' + row.id + '" type="checkbox" ' + (row.identificationChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-                    },
-                    "hmrcLetterChecked": function(column, row) {
-                        return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="hmrcLetterChecked_' + row.id + '" type="checkbox" ' + (row.hmrcLetterChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-                    },
-                    "contributionAmount": function(column, row) {
-                        return '<div class="form-group"><div class="input-group"><div class="input-group-addon">£</div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="contributionAmount_' + row.id + '" type="text" value="' + row.contributionAmount + '" class="form-control"></div></div>';
-                    },
-                    "contributionDate": function(column, row) {
-                        var dateString = row.contributionDate == null ? "" : moment(row.contributionDate).format("DD/MM/YYYY");
-                        return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="contributionDate_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
-                    },
-                    "mpName": function(column, row) {
-                        return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpName_' + row.id + '" type="text" class="form-control" value="' + row.mpName + '"></div>';
-                    },
-                    "mpParty": function(column, row) {
-                        return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpParty_' + row.id + '" type="text" class="form-control" value="' + row.mpParty + '"></div>';
-                    },
-                    "mpConstituency": function(column, row) {
-                        return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpConstituency_' + row.id + '" type="text" class="form-control" value="' + row.mpConstituency + '"></div>';
-                    },
-                    "mpEngaged": function(column, row) {
-                        return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpEngaged_' + row.id + '" type="checkbox" ' + (row.mpEngaged ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-                    },
-                    "mpSympathetic": function(column, row) {
-                        return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpSympathetic_' + row.id + '" type="checkbox" ' + (row.mpSympathetic ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-                    },
-                    "schemes": function(column, row) {
-                        return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="schemes_' + row.id + '" type="text" class="form-control" value="' + row.schemes + '"></div>';
-                    },
-                    "group": function(column, row) {
-                        if (row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators") {
-                            return '<select id="group_' + row.id + '" class="form-control"><option ' + (row.group == 'LCAG Guests' ? 'selected="selected"' : '') + '>LCAG Guests</option><option ' + (row.group == 'Registered' ? 'selected="selected"' : '') + '>Registered</option><option ' + (row.group == 'Moderators' ? 'selected="selected"' : '') + '>Moderators</option></select>';
-                        }
-
-                        return row.group;
-                    },
-                    "action": function(column, row) {
-                         if (row.status != 3) {
-                            return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button>';
-                        }
-
-                        return "";
-                    }
+            var formatters = {
+                "registrationDate": function(cellvalue, options, row) {
+                    return moment(row.registrationDate).format("DD/MM/YYYY HH:mm");
                 },
-                 requestHandler: function (request) {
-                     var model = { };
+                "identificationChecked": function(cellvalue, options, row) {
+                    return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="identificationChecked_' + row.id + '" type="checkbox" ' + (row.identificationChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                },
+                "hmrcLetterChecked": function(cellvalue, options, row) {
+                    return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="hmrcLetterChecked_' + row.id + '" type="checkbox" ' + (row.hmrcLetterChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                },
+                "contributionAmount": function(cellvalue, options, row) {
+                    return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="contributionAmount_' + row.id + '" type="text" value="' + row.contributionAmount + '" class="form-control"></div></div>';
+                },
+                "contributionDate": function(cellvalue, options, row) {
+                    var dateString = row.contributionDate == null ? "" : moment(row.contributionDate).format("DD/MM/YYYY");
+                    return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="contributionDate_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
+                },
+                "agreedToContributeButNotPaid": function(cellvalue, options, row) {
+                    return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="agreedToContributeButNotPaid_' + row.id + '" type="checkbox" ' + (row.agreedToContributeButNotPaid ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                },
+                "mpName": function(cellvalue, options, row) {
+                    return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpName_' + row.id + '" type="text" class="form-control" value="' + row.mpName + '"></div>';
+                },
+                "mpParty": function(cellvalue, options, row) {
+                    return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpParty_' + row.id + '" type="text" class="form-control" value="' + row.mpParty + '"></div>';
+                },
+                "mpConstituency": function(cellvalue, options, row) {
+                    return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpConstituency_' + row.id + '" type="text" class="form-control" value="' + row.mpConstituency + '"></div>';
+                },
+                "mpEngaged": function(cellvalue, options, row) {
+                    return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpEngaged_' + row.id + '" type="checkbox" ' + (row.mpEngaged ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                },
+                "mpSympathetic": function(cellvalue, options, row) {
+                    return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpSympathetic_' + row.id + '" type="checkbox" ' + (row.mpSympathetic ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+                },
+                "schemes": function(cellvalue, options, row) {
+                    return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="schemes_' + row.id + '" type="text" class="form-control" value="' + row.schemes + '"></div>';
+                },
+                "group": function(cellvalue, options, row) {
+                    if (row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators") {
+                        return '<select id="group_' + row.id + '" class="form-control"><option ' + (row.group == 'LCAG Guests' ? 'selected="selected"' : '') + '>LCAG Guests</option><option ' + (row.group == 'Registered' ? 'selected="selected"' : '') + '>Registered</option><option ' + (row.group == 'Moderators' ? 'selected="selected"' : '') + '>Moderators</option></select>';
+                    }
 
-                     model.current = request.current;
-                     model.rowCount = request.rowCount;
-                     model.searchPhrase = request.searchPhrase;
+                    return row.group;
+                },
+                "action": function(cellvalue, options, row) {
+                     if (row.status != 3) {
+                        return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button>';
+                    }
 
-                     for (var key in request.sort) {
-                         model.sortBy = key;
-                         model.sortDirection = request.sort[key];
-                     }
+                    return "";
+                }
+            };
 
-                     return model;
-                 },
-            }).on("loaded.rs.jquery.bootgrid", function() {
-                grid.find(".update-row-btn").on("click", function(e) {
-                    var rowContext = this;
-                    $.ajax({
-                          type: "POST",
-                          url: urlPrefix + "/member/update",
-                          data: (function() {
-                            console.log("rowContext", rowContext);
-                            var id = $(rowContext).data("row-id");
-                            var contributionDate = $("#contributionDate_" + id).val();
-                            var formattedContributionDate = null;
+            $(function () {
+                "use strict";
+                $("#grid").jqGrid({
+                    colModel: [
+                        { name: "id", label: "ID", hidden: true },
+                        { name: "registrationDate", label: "Registration Date", width: 90, align: "center", sorttype: "date", formatter: "date", formatoptions: { newformat: "d-M-Y" }, formatter: formatters.registrationDate },
+                        { name: "name", label: "Name", width: 90, template: "string", formatter: formatters.name },
+                        { name: "username", label: "Username", width: 90, template: "string" },
+                        { name: "emailAddress", label: "Email Address", width: 90, template: "string" },
+                        { name: "hmrcLetterChecked", label: "HMRC Letter Received", width: 59, formatter: formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                        { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                        { name: "contributionAmount", label: "Contribution Amount", width: 65, align: "center", formatter: formatters.contributionAmount },
+                        { name: "contributionDate", label: "Contribution Date", width: 90, align: "center", sorttype: "date", formatter: formatters.contributionDate},
+                        { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                        { name: "mpName", label: "MP Name", width: 90, formatter: formatters.mpName },
+                        { name: "mpParty", label: "MP Party", width: 90, formatter: formatters.mpParty },
+                        { name: "mpConstituency", label: "MP Constituency", width: 90, formatter: formatters.mpConstituency },
+                        { name: "mpEngaged", label: "MP Engaged", width: 59, formatter: formatters.mpEngaged, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                        { name: "mpSympathetic", label: "MP Sympathetic", width: 59, formatter: formatters.mpSympathetic, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                        { name: "schemes", label: "Schemes", width: 90, formatter: formatters.schemes },
+                        { name: "group", label: "Group", width: 90, formatter: formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators" } },
+                        { name: "action", label: "", width: 65, formatter: formatters.action, search: false }
+                    ],
+                    datatype: function(postData) {
+                            jQuery.ajax({
+                                url: urlPrefix + '/member',
+                                data: postData,
+                                dataType: "json",
+                                complete: function(response, status) {
+                                    if (status == "success") {
+                                        var grid = $("#grid")[0];
+                                        grid.addJSONData(response.responseJSON);
+                                    }
+                                }
+                            });
+                    },
+                    iconSet: "fontAwesome",
+                    sortname: "id",
+                    sortorder: "desc",
+                    threeStateSort: false,
+                    headertitles: true,
+                    pager: true,
+                    rowNum: 25,
+                    width: "2000px",
+                    altRows: true,
+                    rowattr: function (row) {
+                        if (row.group == "Registered") {
+                            return { "class": "success" };
+                        } else if (row.group == "Administrators") {
+                            return { "class": "danger" };
+                        } else if (row.group == "Moderators") {
+                            return { "class": "info" };
+                        }
+                    },
+                    viewrecords: true,
+                    gridComplete: function() {
+                        $("#grid").find(".update-row-btn").on("click", function(e) {
+                            var rowContext = this;
+                            $.ajax({
+                                  type: "POST",
+                                  url: urlPrefix + "/member/update",
+                                  data: (function() {
+                                    console.log("rowContext", rowContext);
+                                    var id = $(rowContext).data("row-id");
+                                    var contributionDate = $("#contributionDate_" + id).val();
+                                    var formattedContributionDate = null;
 
-                            if (contributionDate != null && contributionDate != "") {
-                                formattedContributionDate = moment(contributionDate, "DD/MM/YYYY").format();
-                            }
+                                    if (contributionDate != null && contributionDate != "") {
+                                        formattedContributionDate = moment(contributionDate, "DD/MM/YYYY").format();
+                                    }
 
-                            console.log("id", id);
+                                    console.log("id", id);
 
-                            return {
-                                "id": id,
-                                "identificationChecked": $("#identificationChecked_" + id).prop("checked"),
-                                "hmrcLetterChecked": $("#hmrcLetterChecked_" + id).prop("checked"),
-                                "contributionAmount": $("#contributionAmount_" + id).val(),
-                                "contributionDate": formattedContributionDate,
-                                "mpName": $("#mpName_" + id).val(),
-                                "mpParty": $("#mpParty_" + id).val(),
-                                "mpConstituency": $("#mpConstituency_" + id).val(),
-                                "mpEngaged": $("#mpEngaged_" + id).prop("checked"),
-                                "mpSympathetic": $("#mpSympathetic_" + id).prop("checked"),
-                                "schemes": $("#schemes_" + id).val(),
-                                "group": $("#group_" + id).val()
-                            };
-                          })(),
-                          success: function(e) { $("#grid-data").bootgrid("reload"); }
+                                    return {
+                                        "id": id,
+                                        "identificationChecked": $("#identificationChecked_" + id).prop("checked"),
+                                        "hmrcLetterChecked": $("#hmrcLetterChecked_" + id).prop("checked"),
+                                        "contributionAmount": $("#contributionAmount_" + id).val(),
+                                        "contributionDate": formattedContributionDate,
+                                        "agreedToContributeButNotPaid": $("#agreedToContributeButNotPaid_" + id).prop("checked"),
+                                        "mpName": $("#mpName_" + id).val(),
+                                        "mpParty": $("#mpParty_" + id).val(),
+                                        "mpConstituency": $("#mpConstituency_" + id).val(),
+                                        "mpEngaged": $("#mpEngaged_" + id).prop("checked"),
+                                        "mpSympathetic": $("#mpSympathetic_" + id).prop("checked"),
+                                        "schemes": $("#schemes_" + id).val(),
+                                        "group": $("#group_" + id).val()
+                                    };
+                                  })(),
+                                  success: function(e) { $("#grid").trigger("reloadGrid"); }
+                                });
                         });
-                });
-                $('.date').datepicker({
-                    autoclose: true,
-                    format: "dd/mm/yyyy"
-                });
-            });
-
-            $(document).ajaxSend(function(event, request, settings) {
-                $('#loading-indicator').show();
-            });
-
-            $(document).ajaxComplete(function(event, request, settings) {
-                $('#loading-indicator').hide();
+                        $('.date').datepicker({
+                            autoclose: true,
+                            format: "dd/mm/yyyy"
+                        });
+                    }
+                }).jqGrid("filterToolbar");
             });
         </script>
-</body>
+    </body>
 </html>

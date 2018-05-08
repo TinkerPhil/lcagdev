@@ -88,6 +88,7 @@ CREATE TABLE `i7b0_users` (
   `identification_checked` tinyint(1) NOT NULL DEFAULT '0',
   `contribution_amount` varchar(10) NOT NULL DEFAULT '0',
   `contribution_date` int(10) unsigned NOT NULL DEFAULT '0',
+  `agreed_to_contribute_but_not_paid` tinyint(1) NOT NULL DEFAULT '0',
   `mp_name` varchar(200) NOT NULL DEFAULT '',
   `mp_engaged` tinyint(1) NOT NULL DEFAULT '0',
   `mp_sympathetic` tinyint(1) NOT NULL DEFAULT '0',

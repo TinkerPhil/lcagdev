@@ -29,7 +29,10 @@ public class Member {
     private Boolean mpSympathetic;
     private String mpConstituency;
     private String mpParty;
+    private Boolean agreedToContributeButNotPaid;
     private PasswordDetails passwordDetails;
+
+    public Member() {}
 
     public Member(
             Long id,
@@ -48,6 +51,7 @@ public class Member {
             Boolean mpSympathetic,
             String mpConstituency,
             String mpParty,
+            Boolean agreedToContributeButNotPaid,
             PasswordDetails passwordDetails) {
         this.id = id;
         this.emailAddress = emailAddress;
@@ -64,6 +68,7 @@ public class Member {
         this.mpSympathetic = mpSympathetic;
         this.mpConstituency = mpConstituency;
         this.mpParty = mpParty;
+        this.agreedToContributeButNotPaid = agreedToContributeButNotPaid;
         this.passwordDetails = passwordDetails;
         this.name = name;
     }
@@ -139,5 +144,77 @@ public class Member {
 
     public String getMpParty() {
         return mpParty;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public void setHmrcLetterChecked(Boolean hmrcLetterChecked) {
+        this.hmrcLetterChecked = hmrcLetterChecked;
+    }
+
+    public void setIdentificationChecked(Boolean identificationChecked) {
+        this.identificationChecked = identificationChecked;
+    }
+
+    public void setContributionAmount(String contributionAmount) {
+        this.contributionAmount = contributionAmount;
+    }
+
+    public void setContributionDate(Date contributionDate) {
+        this.contributionDate = contributionDate;
+    }
+
+    public void setMpName(String mpName) {
+        this.mpName = mpName;
+    }
+
+    public void setSchemes(String schemes) {
+        this.schemes = schemes;
+    }
+
+    public void setMpEngaged(Boolean mpEngaged) {
+        this.mpEngaged = mpEngaged;
+    }
+
+    public void setMpSympathetic(Boolean mpSympathetic) {
+        this.mpSympathetic = mpSympathetic;
+    }
+
+    public void setMpConstituency(String mpConstituency) {
+        this.mpConstituency = mpConstituency;
+    }
+
+    public void setMpParty(String mpParty) {
+        this.mpParty = mpParty;
+    }
+
+    public Boolean getAgreedToContributeButNotPaid() {
+        return agreedToContributeButNotPaid;
+    }
+
+    public void setAgreedToContributeButNotPaid(Boolean agreedToContributeButNotPaid) {
+        this.agreedToContributeButNotPaid = agreedToContributeButNotPaid;
     }
 }

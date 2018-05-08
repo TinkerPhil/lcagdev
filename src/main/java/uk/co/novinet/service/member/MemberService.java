@@ -24,6 +24,7 @@ public class MemberService {
     private JdbcTemplate jdbcTemplate;
 
     private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
+        put("id", "u.uid");
         put("emailAddress", "u.email");
         put("group", "ug.title");
         put("username", "u.username");
@@ -33,6 +34,7 @@ public class MemberService {
         put("identificationChecked", "u.identification_checked");
         put("contributionAmount", "u.contribution_amount");
         put("contributionDate", "u.contribution_date");
+        put("agreedToContributeButNotPaid", "u.agreed_to_contribute_but_not_paid");
         put("mpName", "u.mp_name");
         put("mpEngaged", "u.mp_engaged");
         put("mpSympathetic", "u.mp_sympathetic");
@@ -42,9 +44,9 @@ public class MemberService {
 
     }};
 
-    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Date contributionDate, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes) {
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Date contributionDate, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}", group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes);
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}", group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes);
 
         String sql = "update `" + forumDatabaseTablePrefix + "users` u " +
                 "set u.usergroup = (select `gid` from `" + forumDatabaseTablePrefix + "usergroups` ug where ug.title = ?), " +
@@ -52,6 +54,7 @@ public class MemberService {
                 "u.hmrc_letter_checked = ?, " +
                 "u.contribution_amount = ?, " +
                 "u.contribution_date = ?, " +
+                "u.agreed_to_contribute_but_not_paid = ?, " +
                 "u.mp_name = ?, " +
                 "u.mp_engaged = ?, " +
                 "u.mp_sympathetic = ?, " +
@@ -68,6 +71,7 @@ public class MemberService {
                 hmrcLetterChecked,
                 contributionAmount,
                 unixTime(contributionDate),
+                agreedToContributeButNotPaid,
                 mpName,
                 mpEngaged,
                 mpSympathetic,
@@ -90,7 +94,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, "0", null, null, null, false, false, "", "", PasswordSource.getRandomPasswordDetails());
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, "0", null, null, null, false, false, "", "", false, PasswordSource.getRandomPasswordDetails());
 
             Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
 
@@ -138,25 +142,23 @@ public class MemberService {
     }
 
     private String buildUserTableSelect() {
-        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid ";
+        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid ";
     }
 
-    public long totalCountMembers() {
-        return jdbcTemplate.queryForObject("select count(*) from " + forumDatabaseTablePrefix + "users", Long.class);
+    public long searchCountMembers(Member member) {
+        Where where = buildWhereClause(member);
+        final boolean hasWhere = !"".equals(where.getSql());
+        return jdbcTemplate.queryForObject("select count(*) from (" + buildUserTableSelect() + where.getSql() + ") as t", hasWhere ? where.getArguments().toArray() : null, Long.class);
     }
 
-    public List<Member> getAllMembers(long offset, long itemsPerPage, String searchPhrase, String sortField, String sortDirection) {
+    public List<Member> searchMembers(long offset, long itemsPerPage, Member member, String sortField, String sortDirection) {
         String pagination = "";
 
         if (offset > -1 && itemsPerPage > -1) {
             pagination = " limit " + offset + ", " + itemsPerPage + " ";
         }
 
-        String where = "";
-
-        if (searchPhrase != null && !searchPhrase.trim().equals("")) {
-            where = " where u.uid like ? or u.username like ? or u.name like ? or u.email like ? or ug.title like ? or u.mp_name like ? or u.mp_constituency like ? or u.mp_party like ? or u.schemes like ?";
-        }
+        Where where = buildWhereClause(member);
 
         String orderBy = "";
 
@@ -164,25 +166,96 @@ public class MemberService {
             orderBy = " order by " + FIELD_TO_COLUMN_TRANSLATIONS.get(sortField) + " " + sortDirection + " ";
         }
 
-        final boolean hasWhere = !"".equals(where);
+        final boolean hasWhere = !"".equals(where.getSql());
 
-        String sql = buildUserTableSelect() + where + orderBy + pagination;
+        String sql = buildUserTableSelect() + where.getSql() + orderBy + pagination;
 
         LOGGER.info("sql: {}", sql);
 
         return jdbcTemplate.query(sql,
-                hasWhere ? new Object[] {
-                    "%" + searchPhrase + "%",
-                    "%" + searchPhrase + "%",
-                    "%" + searchPhrase + "%",
-                    "%" + searchPhrase + "%",
-                    "%" + searchPhrase + "%",
-                    "%" + searchPhrase + "%",
-                    "%" + searchPhrase + "%",
-                    "%" + searchPhrase + "%",
-                    "%" + searchPhrase + "%" } : null,
+                hasWhere ? where.getArguments().toArray() : null,
                 (rs, rowNum) -> buildMember(rs)
         );
+    }
+
+    private Where buildWhereClause(Member member) {
+        List<String> clauses = new ArrayList<>();
+        List<Object> parameters = new ArrayList<>();
+
+        if (member.getHmrcLetterChecked() != null) {
+            clauses.add("u.hmrc_letter_checked = ?");
+            parameters.add(member.getHmrcLetterChecked());
+        }
+
+        if (member.getIdentificationChecked() != null) {
+            clauses.add("u.identification_checked = ?");
+            parameters.add(member.getIdentificationChecked());
+        }
+
+        if (member.getMpEngaged() != null) {
+            clauses.add("u.mp_engaged = ?");
+            parameters.add(member.getMpEngaged());
+        }
+
+        if (member.getMpSympathetic() != null) {
+            clauses.add("u.mp_sympathetic = ?");
+            parameters.add(member.getMpSympathetic());
+        }
+
+        if (member.getAgreedToContributeButNotPaid() != null) {
+            clauses.add("u.agreed_to_contribute_but_not_paid = ?");
+            parameters.add(member.getAgreedToContributeButNotPaid());
+        }
+
+        if (member.getName() != null) {
+            clauses.add("u.name like ?");
+            parameters.add(like(member.getName()));
+        }
+
+        if (member.getEmailAddress() != null) {
+            clauses.add("u.email like ?");
+            parameters.add(like(member.getEmailAddress()));
+        }
+
+        if (member.getUsername() != null) {
+            clauses.add("u.username like ?");
+            parameters.add(like(member.getUsername()));
+        }
+
+        if (member.getMpConstituency() != null) {
+            clauses.add("u.mp_constituency like ?");
+            parameters.add(like(member.getMpConstituency()));
+        }
+
+        if (member.getGroup() != null) {
+            clauses.add("ug.title like ?");
+            parameters.add(like(member.getGroup()));
+        }
+
+        if (member.getMpName() != null) {
+            clauses.add("u.mp_name like ?");
+            parameters.add(like(member.getMpName()));
+        }
+
+        if (member.getMpParty() != null) {
+            clauses.add("u.mp_party like ?");
+            parameters.add(like(member.getMpParty()));
+        }
+
+        String sql = clauses.isEmpty() ? "" : "where ";
+
+        for (int i = 0; i < clauses.size(); i++) {
+            sql += clauses.get(i);
+            if (i < clauses.size() - 1) {
+                sql += " and ";
+            }
+        }
+
+        return new Where(sql, parameters);
+    }
+
+    private Object like(String argument) {
+        return "%" + argument + "%";
     }
 
     private Member buildMember(ResultSet rs) throws SQLException {
@@ -203,6 +276,7 @@ public class MemberService {
                 rs.getBoolean("mp_sympathetic"),
                 rs.getString("mp_constituency"),
                 rs.getString("mp_party"),
+                rs.getBoolean("agreed_to_contribute_but_not_paid"),
                 null
         );
     }
