@@ -46,9 +46,11 @@ public class MemberController {
             @RequestParam(value = "mpConstituency", required = false) String mpConstituency,
             @RequestParam(value = "mpParty", required = false) String mpParty,
             @RequestParam(value = "schemes", required = false) String schemes,
+            @RequestParam(value = "notes", required = false) String notes,
+            @RequestParam(value = "industry", required = false) String industry,
             @RequestParam("group") String group
     ) {
-        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes);
+        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry);
         return new ResponseEntity(HttpStatus.OK);
     }
 

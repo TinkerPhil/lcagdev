@@ -34,7 +34,7 @@
           top: 10px;
         }
         .horizontal-scroll {
-            width: 2500px;
+            width: 2550px;
             white-space: nowrap;
             overflow-y: hidden;
             overflow-x: scroll;
@@ -73,6 +73,9 @@
         }
         tr.jqgrow.info {
             background-color: #d9edf7;
+        }
+        input.form-control.input-large {
+            width: 250px;
         }
     </style>
 
@@ -122,7 +125,13 @@
                     return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpSympathetic_' + row.id + '" type="checkbox" ' + (row.mpSympathetic ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
                 },
                 "schemes": function(cellvalue, options, row) {
-                    return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="schemes_' + row.id + '" type="text" class="form-control" value="' + row.schemes + '"></div>';
+                    return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="schemes_' + row.id + '" type="text" class="form-control input-large" value="' + row.schemes + '"></div>';
+                },
+                "notes": function(cellvalue, options, row) {
+                    return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="notes_' + row.id + '" type="text" class="form-control input-large" value="' + row.notes + '"></div>';
+                },
+                "industry": function(cellvalue, options, row) {
+                    return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="industry_' + row.id + '" type="text" class="form-control input-large" value="' + row.industry + '"></div>';
                 },
                 "group": function(cellvalue, options, row) {
                     if (row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators") {
@@ -146,20 +155,22 @@
                     colModel: [
                         { name: "id", label: "ID", hidden: true },
                         { name: "registrationDate", label: "Registration Date", width: 90, align: "center", sorttype: "date", formatter: "date", formatoptions: { newformat: "d-M-Y" }, formatter: formatters.registrationDate },
-                        { name: "name", label: "Name", width: 90, template: "string", formatter: formatters.name },
+                        { name: "name", label: "Name", width: 110, template: "string", formatter: formatters.name },
                         { name: "username", label: "Username", width: 90, template: "string" },
-                        { name: "emailAddress", label: "Email Address", width: 90, template: "string" },
+                        { name: "emailAddress", label: "Email Address", width: 110, template: "string" },
                         { name: "hmrcLetterChecked", label: "HMRC Letter Received", width: 59, formatter: formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                         { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                         { name: "contributionAmount", label: "Contribution Amount", width: 65, align: "center", formatter: formatters.contributionAmount },
-                        { name: "contributionDate", label: "Contribution Date", width: 90, align: "center", sorttype: "date", formatter: formatters.contributionDate},
+                        { name: "contributionDate", label: "Contribution Date", width: 110, align: "center", sorttype: "date", formatter: formatters.contributionDate},
                         { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                         { name: "mpName", label: "MP Name", width: 90, formatter: formatters.mpName },
                         { name: "mpParty", label: "MP Party", width: 90, formatter: formatters.mpParty },
                         { name: "mpConstituency", label: "MP Constituency", width: 90, formatter: formatters.mpConstituency },
                         { name: "mpEngaged", label: "MP Engaged", width: 59, formatter: formatters.mpEngaged, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                         { name: "mpSympathetic", label: "MP Sympathetic", width: 59, formatter: formatters.mpSympathetic, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                        { name: "schemes", label: "Schemes", width: 90, formatter: formatters.schemes },
+                        { name: "schemes", label: "Schemes", width: 250, formatter: formatters.schemes },
+                        { name: "industry", label: "Industry", width: 250, formatter: formatters.industry },
+                        { name: "notes", label: "Notes", width: 250, formatter: formatters.notes },
                         { name: "group", label: "Group", width: 90, formatter: formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators" } },
                         { name: "action", label: "", width: 65, formatter: formatters.action, search: false }
                     ],
@@ -183,7 +194,7 @@
                     headertitles: true,
                     pager: true,
                     rowNum: 25,
-                    width: "2000px",
+                    width: "2500px",
                     altRows: true,
                     rowattr: function (row) {
                         if (row.group == "Registered") {
@@ -226,6 +237,8 @@
                                         "mpEngaged": $("#mpEngaged_" + id).prop("checked"),
                                         "mpSympathetic": $("#mpSympathetic_" + id).prop("checked"),
                                         "schemes": $("#schemes_" + id).val(),
+                                        "industry": $("#industry_" + id).val(),
+                                        "notes": $("#notes_" + id).val(),
                                         "group": $("#group_" + id).val()
                                     };
                                   })(),

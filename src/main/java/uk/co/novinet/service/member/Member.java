@@ -30,6 +30,8 @@ public class Member {
     private String mpConstituency;
     private String mpParty;
     private Boolean agreedToContributeButNotPaid;
+    private String notes;
+    private String industry;
     private PasswordDetails passwordDetails;
 
     public Member() {}
@@ -52,6 +54,8 @@ public class Member {
             String mpConstituency,
             String mpParty,
             Boolean agreedToContributeButNotPaid,
+            String notes,
+            String industry,
             PasswordDetails passwordDetails) {
         this.id = id;
         this.emailAddress = emailAddress;
@@ -69,6 +73,8 @@ public class Member {
         this.mpConstituency = mpConstituency;
         this.mpParty = mpParty;
         this.agreedToContributeButNotPaid = agreedToContributeButNotPaid;
+        this.notes = notes;
+        this.industry = industry;
         this.passwordDetails = passwordDetails;
         this.name = name;
     }
@@ -216,5 +222,21 @@ public class Member {
 
     public void setAgreedToContributeButNotPaid(Boolean agreedToContributeButNotPaid) {
         this.agreedToContributeButNotPaid = agreedToContributeButNotPaid;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 }

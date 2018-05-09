@@ -95,6 +95,8 @@ CREATE TABLE `i7b0_users` (
   `mp_constituency` varchar(200) NOT NULL DEFAULT '',
   `mp_party` varchar(200) NOT NULL DEFAULT '',
   `schemes` varchar(200) NOT NULL DEFAULT '',
+  `notes` varchar(500) NOT NULL DEFAULT '',
+  `industry` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`),
   KEY `usergroup` (`usergroup`),

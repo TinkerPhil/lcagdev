@@ -41,12 +41,15 @@ public class MemberService {
         put("mpConstituency", "u.mp_constituency");
         put("mpParty", "u.mp_party");
         put("schemes", "u.schemes");
+        put("notes", "u.notes");
+        put("industry", "u.industry");
 
     }};
 
-    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Date contributionDate, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes) {
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Date contributionDate, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}", group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes);
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}",
+                group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry);
 
         String sql = "update `" + forumDatabaseTablePrefix + "users` u " +
                 "set u.usergroup = (select `gid` from `" + forumDatabaseTablePrefix + "usergroups` ug where ug.title = ?), " +
@@ -60,7 +63,9 @@ public class MemberService {
                 "u.mp_sympathetic = ?, " +
                 "u.mp_constituency = ?, " +
                 "u.mp_party = ?, " +
-                "u.schemes = ? " +
+                "u.schemes = ?, " +
+                "u.notes = ?, " +
+                "u.industry = ? " +
                 "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -78,6 +83,8 @@ public class MemberService {
                 mpConstituency,
                 mpParty,
                 schemes,
+                notes,
+                industry,
                 memberId,
         });
 
@@ -94,7 +101,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, "0", null, null, null, false, false, "", "", false, PasswordSource.getRandomPasswordDetails());
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, "0", null, null, null, false, false, "", "", false, "", "", PasswordSource.getRandomPasswordDetails());
 
             Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
 
@@ -142,7 +149,7 @@ public class MemberService {
     }
 
     private String buildUserTableSelect() {
-        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid ";
+        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid ";
     }
 
     public long searchCountMembers(Member member) {
@@ -242,6 +249,21 @@ public class MemberService {
             parameters.add(like(member.getMpParty()));
         }
 
+        if (member.getSchemes() != null) {
+            clauses.add("lower(u.schemes) like ?");
+            parameters.add(like(member.getSchemes()));
+        }
+
+        if (member.getNotes() != null) {
+            clauses.add("lower(u.notes) like ?");
+            parameters.add(like(member.getNotes()));
+        }
+
+        if (member.getIndustry() != null) {
+            clauses.add("lower(u.industry) like ?");
+            parameters.add(like(member.getIndustry()));
+        }
+
         String sql = clauses.isEmpty() ? "" : "where ";
 
         for (int i = 0; i < clauses.size(); i++) {
@@ -277,6 +299,8 @@ public class MemberService {
                 rs.getString("mp_constituency"),
                 rs.getString("mp_party"),
                 rs.getBoolean("agreed_to_contribute_but_not_paid"),
+                rs.getString("notes"),
+                rs.getString("industry"),
                 null
         );
     }
