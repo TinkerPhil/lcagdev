@@ -237,7 +237,9 @@
                             format: "dd/mm/yyyy"
                         });
                     }
-                }).jqGrid("filterToolbar");
+                }).jqGrid("filterToolbar", {
+                    searchOnEnter: false
+                });
             });
         </script>
     </body>

@@ -208,37 +208,37 @@ public class MemberService {
         }
 
         if (member.getName() != null) {
-            clauses.add("u.name like ?");
+            clauses.add("lower(u.name) like ?");
             parameters.add(like(member.getName()));
         }
 
         if (member.getEmailAddress() != null) {
-            clauses.add("u.email like ?");
+            clauses.add("lower(u.email) like ?");
             parameters.add(like(member.getEmailAddress()));
         }
 
         if (member.getUsername() != null) {
-            clauses.add("u.username like ?");
+            clauses.add("lower(u.username) like ?");
             parameters.add(like(member.getUsername()));
         }
 
         if (member.getMpConstituency() != null) {
-            clauses.add("u.mp_constituency like ?");
+            clauses.add("lower(u.mp_constituency) like ?");
             parameters.add(like(member.getMpConstituency()));
         }
 
         if (member.getGroup() != null) {
-            clauses.add("ug.title like ?");
+            clauses.add("lower(ug.title) like ?");
             parameters.add(like(member.getGroup()));
         }
 
         if (member.getMpName() != null) {
-            clauses.add("u.mp_name like ?");
+            clauses.add("lower(u.mp_name) like ?");
             parameters.add(like(member.getMpName()));
         }
 
         if (member.getMpParty() != null) {
-            clauses.add("u.mp_party like ?");
+            clauses.add("lower(u.mp_party) like ?");
             parameters.add(like(member.getMpParty()));
         }
 
@@ -255,7 +255,7 @@ public class MemberService {
     }
 
     private Object like(String argument) {
-        return "%" + argument + "%";
+        return "%" + argument.toLowerCase() + "%";
     }
 
     private Member buildMember(ResultSet rs) throws SQLException {
