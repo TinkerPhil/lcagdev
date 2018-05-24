@@ -100,7 +100,7 @@ public class EndToEndIT {
     }
 
     @Test
-    public void createsMyBbUserWhenEmailAddressNotInUserTableAndMovedEnquiryEmailToHistoryFolder() throws Exception {
+    public void createsMyBbUserWhenEmailAddressNotInUserTableAndMovesEnquiryEmailToHistoryFolder() throws Exception {
         noEmailsSentAndNoMyBbUsersExist();
 
         sendEnquiryEmail(enquirerEmailAddress, "Testy Test");
@@ -110,6 +110,36 @@ public class EndToEndIT {
         assertEquals(1, getEmails(LCAG_INBOX_EMAIL_ADDRESS, "History").size());
 
         sleep(3000); //wait for lcag automation to process emails
+        assertEquals(1, getUserRows().size());
+        assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
+        assertEquals("Testy Test", getUserRows().get(0).getName());
+        assertEquals(enquirierUsername, getUserRows().get(0).getUsername());
+
+        // enquirer receives the welcome email
+        List<StaticMessage> messages = getEmails(enquirerEmailAddress, "Inbox");
+        assertEquals(1, messages.size());
+        StaticMessage enquiryReply = messages.get(0);
+
+        assertTrue(enquiryReply.getContentType().startsWith("multipart"));
+        assertEquals("LCAG Enquiry", enquiryReply.getSubject());
+        assertEquals("lcag-testing@lcag.com", enquiryReply.getFrom());
+        assertTrue(enquiryReply.getContent().contains("Testy Test " + enquirierUsername));
+    }
+
+    @Test
+    public void createsMyBbUserWhenEmailAddressNotInUserTableAndDoesNotMoveEnquiryEmailToHistoryFolderWhenNoHistoryFolderExists() throws Exception {
+        noEmailsSentAndNoMyBbUsersExist();
+
+        deleteMailFolder("History", LCAG_INBOX_EMAIL_ADDRESS);
+
+        sendEnquiryEmail(enquirerEmailAddress, "Testy Test");
+
+        waitForNEmailsToAppearInFolder(1, "Inbox", LCAG_INBOX_EMAIL_ADDRESS);
+
+        sleep(3000); //wait for lcag automation to process emails
+
+        assertEquals(1, getEmails(LCAG_INBOX_EMAIL_ADDRESS, "Inbox").size());
+
         assertEquals(1, getUserRows().size());
         assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
         assertEquals("Testy Test", getUserRows().get(0).getName());
