@@ -1,4 +1,4 @@
-CREATE TABLE `i7b0_users` (
+CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(120) NOT NULL DEFAULT '',
   `password` varchar(120) NOT NULL DEFAULT '',

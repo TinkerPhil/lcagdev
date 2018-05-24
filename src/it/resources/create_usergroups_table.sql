@@ -1,4 +1,4 @@
-CREATE TABLE `i7b0_usergroups` (
+CREATE TABLE IF NOT EXISTS `i7b0_usergroups` (
   `gid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `type` tinyint(1) unsigned NOT NULL DEFAULT '2',
   `title` varchar(120) NOT NULL DEFAULT '',
