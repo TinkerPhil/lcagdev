@@ -1,5 +1,6 @@
 package uk.co.novinet.service.mail;
 
+import com.sun.mail.imap.IMAPFolder;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,9 @@ public class MailListenerService {
     @Value("${imapProtocol}")
     private String imapProtocol;
 
+    @Value("${processedFolderName}")
+    private String processedFolderName;
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -58,7 +62,7 @@ public class MailListenerService {
     public void retrieveMail() {
         LOGGER.info("Checking for new mail");
 
-        Folder inbox = null;
+        IMAPFolder inbox = null;
         Store store = null;
         Message message = null;
 
@@ -66,7 +70,7 @@ public class MailListenerService {
             Session session = Session.getDefaultInstance(new Properties());
             store = session.getStore(imapProtocol);
             store.connect(imapHost, imapPort, imapUsername, imapPassword);
-            inbox = store.getFolder("Inbox");
+            inbox = (IMAPFolder) store.getFolder("Inbox");
             inbox.open(Folder.READ_WRITE);
 
             for (Boolean originalSeenFlagState : SEEN_FLAG_STATES) {
@@ -97,8 +101,16 @@ public class MailListenerService {
                         LOGGER.info("We didn't create a forum user, so set this message to SEEN={} again", originalSeenFlagState);
                         restoreOriginalMessageFlags(message, originalSeenFlagState);
                     } else {
+                        Date receivedDate = null;
+
+                        if (message != null) {
+                            receivedDate = message.getReceivedDate();
+                        }
+
                         mailSenderService.sendFollowUpEmail(member);
-                        LOGGER.info(">>> " + enquiry.getName() + "\t " + member.getUsername() + "\t " + enquiry.getEmailAddress() + "\t " + message.getReceivedDate());
+                        moveEmailToProcessedFolder(message, store, inbox);
+
+                        LOGGER.info(">>> " + enquiry.getName() + "\t " + member.getUsername() + "\t " + enquiry.getEmailAddress() + "\t " + receivedDate);
                     }
                 }
             }
@@ -120,6 +132,40 @@ public class MailListenerService {
                 } catch (MessagingException e) {
                     LOGGER.error("Error occurred trying to close store", e);
                 }
+            }
+        }
+    }
+
+    private void moveEmailToProcessedFolder(Message message, Store store, IMAPFolder inbox) {
+        LOGGER.info("Going to move message to processed folder");
+        Folder processedFolder = null;
+        try {
+            processedFolder = store.getFolder(processedFolderName);
+            if (processedFolder.exists()) {
+                LOGGER.info("Processed folder {} exists", processedFolderName);
+                processedFolder.open(Folder.READ_WRITE);
+
+                LOGGER.info("Inbox contains {} messages", inbox.getMessageCount());
+                LOGGER.info("{} contains {} messages", processedFolderName, processedFolder.getMessageCount());
+
+                LOGGER.info("Copying message to {} folder", processedFolderName);
+                inbox.copyMessages(new Message[]{message}, processedFolder);
+
+                LOGGER.info("Deleting old message from Inbox");
+                message.setFlag(Flags.Flag.DELETED, true);
+                inbox.expunge();
+            } else {
+                LOGGER.info("Could not find processed folder '{}' so going to skip this and leave the message where it was.", processedFolderName);
+            }
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (processedFolder != null && processedFolder.exists() && processedFolder.isOpen()) {
+                    processedFolder.close(true);
+                }
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
             }
         }
     }

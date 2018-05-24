@@ -145,7 +145,7 @@ public class MemberService {
     }
 
     public List<Member> findExistingForumUsersByField(String field, String value) {
-        return jdbcTemplate.query(buildUserTableSelect() + "where u." + field + " = ?", new Object[]{ value }, (rs, rowNum) -> buildMember(rs));
+        return jdbcTemplate.query(buildUserTableSelect() + "where lower(u." + field + ") = ?", new Object[] { value.toLowerCase() }, (rs, rowNum) -> buildMember(rs));
     }
 
     private String buildUserTableSelect() {
@@ -344,11 +344,11 @@ public class MemberService {
         return firstBitOfEmailAddress(emailAddress) + randomDigit() + randomDigit();
     }
 
-    private char randomDigit() {
-        return String.valueOf(new Random().nextInt()).charAt(0);
+    private String randomDigit() {
+        return String.valueOf(new Random().nextInt(9));
     }
 
     private String firstBitOfEmailAddress(String emailAddress) {
-        return emailAddress.substring(0, emailAddress.indexOf("@")).replace("\\.", "_");
+        return emailAddress.substring(0, emailAddress.indexOf("@"));
     }
 }

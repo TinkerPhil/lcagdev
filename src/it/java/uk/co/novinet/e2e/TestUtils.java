@@ -1,6 +1,7 @@
 package uk.co.novinet.e2e;
 
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPStore;
 import org.codemonkey.simplejavamail.Mailer;
 import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
@@ -15,10 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -115,23 +114,26 @@ public class TestUtils {
         }
     }
 
-    static List<StaticMessage> getEmails(String emailAddress) {
-        List<StaticMessage> emails = getEmails(emailAddress, true);
-        emails.addAll(getEmails(emailAddress, false));
+    static List<StaticMessage> getEmails(String emailAddress, String folderName) {
+        List<StaticMessage> emails = getEmails(emailAddress, folderName, true);
+        emails.addAll(getEmails(emailAddress, folderName, false));
         return emails;
     }
 
-    static List<StaticMessage> getEmails(String emailAddress, Boolean alreadyRead) {
-        Folder inbox = null;
-        Store store = null;
+    static List<StaticMessage> getEmails(String emailAddress, String folderName, Boolean alreadyRead) {
+        Folder folder = null;
+        IMAPStore store = null;
 
         try {
             Session session = Session.getDefaultInstance(new Properties());
-            store = session.getStore("imap");
+            store = (IMAPStore) session.getStore("imap");
             store.connect(IMAP_HOST, IMAP_PORT, emailAddress, "password");
-            inbox = store.getFolder("Inbox");
-            inbox.open(Folder.READ_WRITE);
-            List<Message> messages = asList(inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), alreadyRead)));
+            folder = store.getFolder(folderName);
+            if (!folder.exists()) {
+                return Collections.emptyList();
+            }
+            folder.open(Folder.READ_WRITE);
+            List<Message> messages = asList(folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), alreadyRead)));
             messages.forEach(message -> {
                 try {
                     message.getContent();
@@ -149,13 +151,73 @@ public class TestUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            if (inbox != null) {
+            if (folder != null) {
                 try {
-                    inbox.close(false);
+                    if (folder.exists()) {
+                        folder.close(false);
+                    }
                 } catch (MessagingException e) {
                     throw new RuntimeException(e);
                 }
             }
+            if (store != null) {
+                try {
+                    store.close();
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    static void createMailFolder(String folderName, String emailAddress) {
+        Store store = null;
+
+        try {
+            Session session = Session.getDefaultInstance(new Properties());
+            store = session.getStore("imap");
+            store.connect(IMAP_HOST, IMAP_PORT, emailAddress, "password");
+
+            IMAPFolder folder = (IMAPFolder) store.getFolder(folderName);
+
+            if (folder.exists()) {
+                return;
+            }
+
+            folder.create(IMAPFolder.HOLDS_MESSAGES);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (store != null) {
+                try {
+                    store.close();
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    static void deleteMailFolder(String folderName, String emailAddress) {
+        Store store = null;
+
+        try {
+            Session session = Session.getDefaultInstance(new Properties());
+            store = session.getStore("imap");
+            store.connect(IMAP_HOST, IMAP_PORT, emailAddress, "password");
+
+            IMAPFolder folder = (IMAPFolder) store.getFolder(folderName);
+
+            if (folder.exists()) {
+                if (folder.isOpen()) {
+                    folder.close(true);
+                }
+                folder.delete(true);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
             if (store != null) {
                 try {
                     store.close();

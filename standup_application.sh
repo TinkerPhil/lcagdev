@@ -21,14 +21,16 @@ docker run -d \
 	-e "MYBB_FORUM_DATABASE_PASSWORD=p@ssword" \
 	-e "EMAIL_SOURCE_URL=https://docs.google.com/document/d/1MKM84drgdaWRKWQo0HE-BV-NhZfzQH_cBF2wXvbsd4I/export?format=html" \
 	-e "EMAIL_ATTACHMENT_ID=14OA5QRGYYdKaKSmUTorEaY8h1hwu5t7j" \
+	-e "EMAIL_PROCESSED_FOLDER_NAME=History" \
 	-e "BCC_RECIPIENTS=test@bcc.com" \
 	-e "EMAIL_FROM_NAME=LCAG" \
 	-e "EMAIL_SUBJECT=LCAG Enquiry" \
 	-e "VIRTUAL_PORT=8282" \
 	-e "SERVER_PORT=8282" \
+	-e JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n" \
 	--name lcag-application \
     --network lcag-automation-network \
-    -p 8282:8282 \
+    -p 8282:8282 -p 5005:5005 \
     -t dockernovinet/lcag-automation
 
 echo "Waiting for application status url to respond with 200"

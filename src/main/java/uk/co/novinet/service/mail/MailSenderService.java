@@ -73,9 +73,9 @@ public class MailSenderService {
             LOGGER.error("Could not get pdf bytes from google drive!");
         }
 
-        LOGGER.error("Going to try sending email to new memeber {}", member.getEmailAddress());
+        LOGGER.info("Going to try sending email to new memeber {}", member.getEmailAddress());
         new Mailer(smtpHost, smtpPort, smtpUsername, smtpPassword, TransportStrategy.SMTP_TLS).sendMail(email);
-        LOGGER.error("Email successfully sent to new member {}", member.getEmailAddress());
+        LOGGER.info("Email successfully sent to new member {}", member.getEmailAddress());
     }
 
     private byte[] retrievePdfFromGoogleDrive() {
