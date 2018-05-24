@@ -146,9 +146,9 @@ public class EndToEndIT {
         assertEquals(enquirierUsername, getUserRows().get(0).getUsername());
 
         // enquirer receives the welcome email
-        List<StaticMessage> messages = getEmails(enquirerEmailAddress, "Inbox");
         waitForNEmailsToAppearInFolder(1, "Inbox", enquirerEmailAddress);
 
+        List<StaticMessage> messages = getEmails(enquirerEmailAddress, "Inbox");
         assertEquals(1, messages.size());
         StaticMessage enquiryReply = messages.get(0);
 
