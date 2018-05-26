@@ -27,7 +27,15 @@ docker run -d \
 	-e "EMAIL_SUBJECT=LCAG Enquiry" \
 	-e "VIRTUAL_PORT=8282" \
 	-e "SERVER_PORT=8282" \
-	-e JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n" \
+	-e "BANK_EXPORT_FTP_USERNAME=ftpuser" \
+	-e "BANK_EXPORT_FTP_PASSWORD=ftppassword" \
+	-e "BANK_EXPORT_FTP_HOST=lcag-ftp" \
+	-e "BANK_EXPORT_FTP_PORT=21" \
+	-e "BANK_EXPORT_FTP_TODO_PATH=/" \
+	-e "BANK_EXPORT_FTP_SUCCESS_PATH=/processed" \
+	-e "BANK_EXPORT_FTP_FAILURE_PATH=/failed" \
+	-e "POLL_BANK_EXPORT_FOLDER_INITIAL_DELAY_MILLISECONDS=1000" \
+	-e "POLL_BANK_EXPORT_FOLDER_INTERVAL_MILLISECONDS=1000" \
 	--name lcag-application \
     --network lcag-automation-network \
     -p 8282:8282 -p 5005:5005 \

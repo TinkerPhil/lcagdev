@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static uk.co.novinet.e2e.TestUtils.*;
 
-public class EndToEndIT {
+public class EnquiryIT {
 
     private String enquirerEmailAddress;
     private String enquirierUsername;
@@ -22,28 +22,12 @@ public class EndToEndIT {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        deleteAllMessages(LCAG_INBOX_EMAIL_ADDRESS);
-
-        int sqlRetryCounter = 0;
-        boolean needToRetry = true;
-
-        while (needToRetry && sqlRetryCounter < 60) {
-            try {
-                runSqlScript("create_user_table.sql");
-                runSqlScript("create_usergroups_table.sql");
-                runSqlScript("populate_usergroups_table.sql");
-                needToRetry = false;
-            } catch (Exception e) {
-                e.printStackTrace();
-                sqlRetryCounter++;
-                sleep(1000);
-            }
-        }
+        setupDatabaseSchema();
     }
 
     @Before
     public void before() {
-        runSqlScript("delete_all_users.sql");
+        runSqlScript("sql/delete_all_users.sql");
 
         duplicateEnquirerEmailAddress1 = "test@victim1" + Math.random() + ".com";
         duplicateEnquirerEmailAddress2 = "test@victim2" + Math.random() + ".com";
@@ -231,31 +215,5 @@ public class EndToEndIT {
         assertEquals("lcag-testing@lcag.com", enquiryReply2.getFrom());
         assertTrue(enquiryReply2.getContent().contains("Testy Test2 "));
         assertTrue(enquiryReply2.getContent().contains(duplicateEnquirerUsername2));
-    }
-
-    private void waitForNEmailsToAppearInFolder(int numberOfProcessedEmailsToWaitFor, String folderName, String recipientEmailAddress) throws InterruptedException {
-        int attempts = 0;
-
-        while (getEmails(recipientEmailAddress, folderName).size() < numberOfProcessedEmailsToWaitFor || attempts > 20) {
-            sleep(500); //wait for lcag automation to process emails
-            attempts++;
-        }
-
-        if (getEmails(recipientEmailAddress, folderName).size() < numberOfProcessedEmailsToWaitFor) {
-            throw new RuntimeException("Waited for " + numberOfProcessedEmailsToWaitFor + " emails to appear in [" + recipientEmailAddress + "] " + folderName + " folder, but there are still only " + getEmails(recipientEmailAddress, folderName).size() + " after 20 attempts.");
-        }
-    }
-
-    private void waitForUserRows(int numberOfRowsToWaitFor) throws InterruptedException {
-        int attempts = 0;
-
-        while (getUserRows().size() < numberOfRowsToWaitFor || attempts > 20) {
-            sleep(500); //wait for lcag automation to process emails
-            attempts++;
-        }
-
-        if (getUserRows().size() < numberOfRowsToWaitFor) {
-            throw new RuntimeException("Waited for " + numberOfRowsToWaitFor + " rows, but there are still only " + getUserRows().size() + " after 20 attempts.");
-        }
     }
 }
