@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.lang.Double.parseDouble;
+import static java.util.Arrays.asList;
 import static uk.co.novinet.service.payments.ImportOutcome.FAILURE;
 import static uk.co.novinet.service.payments.ImportOutcome.SUCCESS;
 
@@ -35,6 +36,11 @@ public class PaymentService {
             "Description:(?<description>.+)\\s*" +
             "Amount:.(?<amount>\\d+\\.\\d{2}).\\s*" +
             "Balance:.(?<balance>\\d+\\.\\d{2})"
+    );
+
+    private static final List<Pattern> DESCRIPTION_PATTERNS = asList(
+            Pattern.compile("FASTER PAYMENTS RECEIPT REF.(?<reference>.{0,18}) FROM (?<counterParty>.*)"),
+            Pattern.compile("BILL PAYMENT FROM (?<counterParty>.*), REFERENCE (?<reference>.{0,18})")
     );
 
     @Value("${bankExportFtpUsername}")
@@ -170,7 +176,15 @@ public class PaymentService {
             String amount = matcher.group("amount");
             String balance = matcher.group("balance");
             try {
-                bankTransactions.add(new BankTransaction(0L, new SimpleDateFormat("dd/MM/yyyy").parse(date), description, parseDouble(amount), parseDouble(balance), findCounterParty(description), findReference(description)));
+                bankTransactions.add(new BankTransaction(
+                        0L,
+                        new SimpleDateFormat("dd/MM/yyyy").parse(date),
+                        description,
+                        parseDouble(amount),
+                        parseDouble(balance),
+                        find(description, "counterParty"),
+                        find(description, "reference"))
+                );
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -179,11 +193,25 @@ public class PaymentService {
         return bankTransactions;
     }
 
-    private String findReference(String description) {
+    /*
+    From: 26/11/2017 to 26/05/2018
+
+Account: XXXX XXXX XXXX 0057
+
+Description:  FASTER PAYMENTS RECEIPT REF.ABC123 FROM A Smith
+Description:  FASTER PAYMENTS RECEIPT REF.BOBWINKS FROM JONES TD
+Description:  FASTER PAYMENTS RECEIPT REF.KDMP FROM WILLIAMS MICHAEL
+Description: BILL PAYMENT FROM MR JAMES ANDREW HARRISON SMYTHE, REFERENCE jim65
+     */
+
+    private String find(String description, String groupName) {
+        for (Pattern pattern : DESCRIPTION_PATTERNS) {
+            Matcher matcher = pattern.matcher(description);
+            if (matcher.find()) {
+                return matcher.group(groupName);
+            }
+        }
         return null;
     }
 
-    private String findCounterParty(String description) {
-        return null;
-    }
 }
