@@ -6,6 +6,7 @@ import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToStrin
 
 public class BankTransaction {
     private Long id;
+    private Long userId;
     private Date date;
     private String description;
     private Double amount;
@@ -13,14 +14,19 @@ public class BankTransaction {
     private String counterParty;
     private String reference;
 
-    public BankTransaction(Long id, Date date, String description, Double amount, Double runningBalance, String counterParty, String reference) {
+    public BankTransaction(Long id, Long userId, Date date, String description, Double amount, Double runningBalance, String counterParty, String reference) {
         this.id = id;
+        this.userId = userId;
         this.date = date;
         this.description = description;
         this.amount = amount;
         this.runningBalance = runningBalance;
         this.counterParty = counterParty;
         this.reference = reference;
+    }
+
+    void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
@@ -53,5 +59,9 @@ public class BankTransaction {
 
     public String toString() {
         return reflectionToString(this);
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

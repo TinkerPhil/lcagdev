@@ -52,7 +52,9 @@ public class TestUtils {
             try {
                 runSqlScript("sql/create_user_table.sql");
                 runSqlScript("sql/create_usergroups_table.sql");
+                runSqlScript("sql/create_bank_transaction_table.sql");
                 runSqlScript("sql/populate_usergroups_table.sql");
+
                 needToRetry = false;
             } catch (Exception e) {
                 e.printStackTrace();

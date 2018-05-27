@@ -1,6 +1,9 @@
 package uk.co.novinet.service.payments;
 
-import org.apache.commons.io.IOUtils;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -13,17 +16,22 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.jcraft.jsch.ChannelSftp.LsEntrySelector.BREAK;
+import static com.jcraft.jsch.ChannelSftp.LsEntrySelector.CONTINUE;
 import static java.lang.Double.parseDouble;
+import static java.nio.charset.Charset.forName;
 import static java.util.Arrays.asList;
+import static org.apache.commons.io.IOUtils.readLines;
 import static uk.co.novinet.service.payments.ImportOutcome.FAILURE;
 import static uk.co.novinet.service.payments.ImportOutcome.SUCCESS;
 
@@ -43,110 +51,87 @@ public class PaymentService {
             Pattern.compile("BILL PAYMENT FROM (?<counterParty>.*), REFERENCE (?<reference>.{0,18})")
     );
 
-    @Value("${bankExportFtpUsername}")
-    private String bankExportFtpUsername;
+    @Value("${bankExportSftpUsername}")
+    private String bankExportSftpUsername;
 
-    @Value("${bankExportFtpPassword}")
-    private String bankExportFtpPassword;
+    @Value("${bankExportSftpPassword}")
+    private String bankExportSftpPassword;
 
-    @Value("${bankExportFtpHost}")
-    private String bankExportFtpHost;
+    @Value("${bankExportSftpHost}")
+    private String bankExportSftpHost;
 
-    @Value("${bankExportFtpPort}")
-    private int bankExportFtpPort;
+    @Value("${bankExportSftpPort}")
+    private int bankExportSftpPort;
 
-    @Value("${bankExportFtpTodoPath}")
-    private String bankExportFtpTodoPath;
+    @Value("${bankExportSftpTodoPath}")
+    private String bankExportSftpTodoPath;
 
-    @Value("${bankExportFtpSuccessPath}")
-    private String bankExportFtpSuccessPath;
+    @Value("${bankExportSftpSuccessPath}")
+    private String bankExportSftpSuccessPath;
 
-    @Value("${bankExportFtpFailurePath}")
-    private String bankExportFtpFailurePath;
+    @Value("${bankExportSftpFailurePath}")
+    private String bankExportSftpFailurePath;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private PaymentDao paymentDao;
 
     @Scheduled(initialDelayString = "${pollBankExportFolderInitialDelayMilliseconds}", fixedRateString = "${pollBankExportFolderIntervalMilliseconds}")
     public void reconcileTransactions() {
         LOGGER.info("Checking for new bank transaction exports");
 
-        FTPClient ftpClient = new FTPClient();
+        JSch jsch = new JSch();
+        Session session = null;
+        ChannelSftp sftpChannel = null;
 
         try {
-            ftpClient.connect(bankExportFtpHost, bankExportFtpPort);
-            ftpClient.login(bankExportFtpUsername, bankExportFtpPassword);
-            ftpClient.enterLocalPassiveMode();
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            session = jsch.getSession(bankExportSftpUsername, bankExportSftpHost, bankExportSftpPort);
+            session.setPassword(bankExportSftpPassword);
 
-            FTPFile[] remoteTodoFiles = ftpClient.listFiles(bankExportFtpTodoPath, file -> file.isFile() && file.getName().endsWith(".txt"));
+            java.util.Properties config = new java.util.Properties();
+            config.put("StrictHostKeyChecking", "no");
+            session.setConfig(config);
+
+            session.connect();
+
+            sftpChannel = (ChannelSftp) session.openChannel("sftp");
+            sftpChannel.connect();
+
+            sftpChannel.cd(bankExportSftpTodoPath);
+
+            Vector<ChannelSftp.LsEntry> remoteTodoFiles = sftpChannel.ls(bankExportSftpTodoPath);
 
             LOGGER.info("Found these files to process: {}", remoteTodoFiles);
 
-            if (remoteTodoFiles != null && remoteTodoFiles.length > 0) {
-                ftpClient.changeWorkingDirectory(bankExportFtpTodoPath);
-                for (FTPFile ftpFile : remoteTodoFiles) {
-                    File localFile = File.createTempFile("lcag_transactions", "txt");
-                    ftpClient.retrieveFile(ftpFile.getName(), new FileOutputStream(localFile));
-                    processAndMove(ftpClient, ftpFile, localFile);
+            if (remoteTodoFiles != null && remoteTodoFiles.size() > 0) {
+                for (ChannelSftp.LsEntry lsEntry : remoteTodoFiles) {
+                    if (lsEntry.getFilename().endsWith(".txt")) {
+                        File localFile = File.createTempFile("lcag_transactions", "txt");
+                        sftpChannel.get(lsEntry.getFilename(), new FileOutputStream(localFile));
+                        processAndMove(sftpChannel, lsEntry, localFile);
+                    }
                 }
             }
-
-
-            // APPROACH #1: using retrieveFile(String, OutputStream)
-            String remoteFile1 = "/test/video.mp4";
-            File downloadFile1 = new File("D:/Downloads/video.mp4");
-            OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
-            boolean success = ftpClient.retrieveFile(remoteFile1, outputStream1);
-            outputStream1.close();
-
-            if (success) {
-                System.out.println("File #1 has been downloaded successfully.");
-            }
-
-            // APPROACH #2: using InputStream retrieveFileStream(String)
-            String remoteFile2 = "/test/song.mp3";
-            File downloadFile2 = new File("D:/Downloads/song.mp3");
-            OutputStream outputStream2 = new BufferedOutputStream(new FileOutputStream(downloadFile2));
-            InputStream inputStream = ftpClient.retrieveFileStream(remoteFile2);
-            byte[] bytesArray = new byte[4096];
-            int bytesRead = -1;
-            while ((bytesRead = inputStream.read(bytesArray)) != -1) {
-                outputStream2.write(bytesArray, 0, bytesRead);
-            }
-
-            success = ftpClient.completePendingCommand();
-            if (success) {
-                System.out.println("File #2 has been downloaded successfully.");
-            }
-            outputStream2.close();
-            inputStream.close();
-
-        } catch (IOException ex) {
-            System.out.println("Error: " + ex.getMessage());
-            ex.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
-            try {
-                if (ftpClient.isConnected()) {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            if (session.isConnected()) {
+                session.disconnect();
             }
         }
-
     }
 
-    private void processAndMove(FTPClient ftpClient, FTPFile ftpFile, File localFile) {
-        move(ftpClient, ftpFile, importTransactionsFromFile(localFile) == SUCCESS ? bankExportFtpSuccessPath : bankExportFtpFailurePath);
+    private void processAndMove(ChannelSftp channelSftp, ChannelSftp.LsEntry ftpFile, File localFile) {
+        move(channelSftp, ftpFile, importTransactionsFromFile(localFile) == SUCCESS ? bankExportSftpSuccessPath : bankExportSftpFailurePath);
     }
 
-    private void move(FTPClient ftpClient, FTPFile ftpFile, String destination) {
+    private void move(ChannelSftp channelSftp, ChannelSftp.LsEntry lsEntry, String destination) {
         try {
-            ftpClient.rename(ftpFile.getName(), destination);
-        } catch (IOException e) {
-            LOGGER.error("Could not move ftpFile {} from current directory to {}", ftpFile, destination, e);
+            channelSftp.rename("bankExportFtpTodoPath" + lsEntry.getFilename(), destination);
+        } catch (SftpException e) {
+            LOGGER.error("Could not move remote file {} from current directory to {}", lsEntry, destination, e);
             throw new RuntimeException(e);
         }
 
@@ -154,15 +139,19 @@ public class PaymentService {
 
     private ImportOutcome importTransactionsFromFile(File localFile) {
         try {
-            return importTransactions(IOUtils.readLines(new FileInputStream(localFile), Charset.forName("iso-8859-1")).stream().collect(Collectors.joining("\n")));
+            List<String> lines = readLines(new FileInputStream(localFile), forName("iso-8859-1"));
+            List<BankTransaction> bankTransactions = buildBankTransactions(lines.stream().collect(Collectors.joining("\n")));
+            for (BankTransaction bankTransaction : bankTransactions) {
+                if (paymentDao.findExistingBankTransaction(bankTransaction) == null || paymentDao.findExistingBankTransaction(bankTransaction).isEmpty()) {
+                    paymentDao.create(bankTransaction);
+                }
+            }
+
+            return SUCCESS;
         } catch (IOException e) {
             LOGGER.error("Could not read localFile {}", localFile, e);
             return FAILURE;
         }
-    }
-
-    ImportOutcome importTransactions(String transactions) {
-        return SUCCESS;
     }
 
     List<BankTransaction> buildBankTransactions(String transactions) {
@@ -178,33 +167,26 @@ public class PaymentService {
             try {
                 bankTransactions.add(new BankTransaction(
                         0L,
+                        null,
                         new SimpleDateFormat("dd/MM/yyyy").parse(date),
                         description,
                         parseDouble(amount),
                         parseDouble(balance),
-                        find(description, "counterParty"),
-                        find(description, "reference"))
+                        findInDescription(description, "counterParty"),
+                        findInDescription(description, "reference"))
                 );
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
         }
 
+        //oldest first
+        Collections.reverse(bankTransactions);
+
         return bankTransactions;
     }
 
-    /*
-    From: 26/11/2017 to 26/05/2018
-
-Account: XXXX XXXX XXXX 0057
-
-Description:  FASTER PAYMENTS RECEIPT REF.ABC123 FROM A Smith
-Description:  FASTER PAYMENTS RECEIPT REF.BOBWINKS FROM JONES TD
-Description:  FASTER PAYMENTS RECEIPT REF.KDMP FROM WILLIAMS MICHAEL
-Description: BILL PAYMENT FROM MR JAMES ANDREW HARRISON SMYTHE, REFERENCE jim65
-     */
-
-    private String find(String description, String groupName) {
+    private String findInDescription(String description, String groupName) {
         for (Pattern pattern : DESCRIPTION_PATTERNS) {
             Matcher matcher = pattern.matcher(description);
             if (matcher.find()) {

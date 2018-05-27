@@ -23,14 +23,10 @@ docker run -d \
     -e MYSQL_PASSWORD=p@ssword \
     mysql:latest
 
-echo "standing up ftp server"
+echo "standing up sftp server"
 docker run -d \
-    --name lcag-ftp \
+    --name lcag-sftp \
     --network lcag-automation-network \
-    -p 11020:20 \
-    -p 11021:21 \
-    -p 47400-47470:47400-47470 \
-    -e FTP_USER=ftpuser \
-    -e FTP_PASS=ftppassword \
-    -e PASV_ADDRESS=127.0.0.1 \
-    bogem/ftp
+    -p 2222:22 \
+    atmoz/sftp \
+    user:password:::upload

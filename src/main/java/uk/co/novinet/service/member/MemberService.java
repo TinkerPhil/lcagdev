@@ -13,6 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import static uk.co.novinet.service.PersistenceUtils.dateFromMyBbRow;
+import static uk.co.novinet.service.PersistenceUtils.unixTime;
+
 @Service
 public class MemberService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MemberService.class);
@@ -303,24 +306,6 @@ public class MemberService {
                 rs.getString("industry"),
                 null
         );
-    }
-
-    private Date dateFromMyBbRow(ResultSet rs, String columnName) throws SQLException {
-        Long dateInSeconds = rs.getLong(columnName);
-
-        if (dateInSeconds != null && dateInSeconds > 0) {
-            return new Date(dateInSeconds * 1000L);
-        }
-
-        return null;
-    }
-
-    private long unixTime(Date date) {
-        if (date == null) {
-            return 0;
-        }
-
-        return date.getTime() / 1000;
     }
 
     private String extractUsername(String emailAddress) {
