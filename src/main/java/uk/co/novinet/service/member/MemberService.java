@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.mail.Enquiry;
 import uk.co.novinet.service.mail.PasswordSource;
 
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import static uk.co.novinet.service.PersistenceUtils.dateFromMyBbRow;
+import static uk.co.novinet.service.PersistenceUtils.like;
 import static uk.co.novinet.service.PersistenceUtils.unixTime;
 
 @Service
@@ -46,7 +48,6 @@ public class MemberService {
         put("schemes", "u.schemes");
         put("notes", "u.notes");
         put("industry", "u.industry");
-
     }};
 
     public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Date contributionDate, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry) {
@@ -267,20 +268,7 @@ public class MemberService {
             parameters.add(like(member.getIndustry()));
         }
 
-        String sql = clauses.isEmpty() ? "" : "where ";
-
-        for (int i = 0; i < clauses.size(); i++) {
-            sql += clauses.get(i);
-            if (i < clauses.size() - 1) {
-                sql += " and ";
-            }
-        }
-
-        return new Where(sql, parameters);
-    }
-
-    private Object like(String argument) {
-        return "%" + argument.toLowerCase() + "%";
+        return PersistenceUtils.buildWhereClause(clauses, parameters);
     }
 
     private Member buildMember(ResultSet rs) throws SQLException {

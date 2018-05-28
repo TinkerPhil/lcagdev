@@ -29,6 +29,7 @@
     <script src="/js/lcag-common.js"></script>
     <script src="/js/lcag-statistics.js"></script>
     <script src="/js/lcag-member-grid.js"></script>
+    <script src="/js/lcag-payments-grid.js"></script>
 </head>
     <body>
         <nav class="navbar navbar-default">
@@ -63,7 +64,10 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="payments">
-                    hello
+                    <div class="horizontal-scroll">
+                        <table id="payments-grid">
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,6 +75,7 @@
         <script type="text/javascript">
             $(function () {
                 lcag.MemberGrid.initialise();
+                lcag.PaymentsGrid.initialise();
             });
         </script>
     </body>
