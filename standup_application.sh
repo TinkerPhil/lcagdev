@@ -27,15 +27,7 @@ docker run -d \
 	-e "EMAIL_SUBJECT=LCAG Enquiry" \
 	-e "VIRTUAL_PORT=8282" \
 	-e "SERVER_PORT=8282" \
-	-e "BANK_EXPORT_SFTP_USERNAME=user" \
-	-e "BANK_EXPORT_SFTP_PASSWORD=password" \
-	-e "BANK_EXPORT_SFTP_HOST=lcag-sftp" \
-	-e "BANK_EXPORT_SFTP_PORT=22" \
-	-e "BANK_EXPORT_SFTP_TODO_PATH=/" \
-	-e "BANK_EXPORT_SFTP_SUCCESS_PATH=/processed" \
-	-e "BANK_EXPORT_SFTP_FAILURE_PATH=/failed" \
-	-e "POLL_BANK_EXPORT_FOLDER_INITIAL_DELAY_MILLISECONDS=1000" \
-	-e "POLL_BANK_EXPORT_FOLDER_INTERVAL_MILLISECONDS=1000" \
+	-e "BANK_EXPORT_CHARACTER_ENCODING=iso-8859-1" \
 	--name lcag-application \
     --network lcag-automation-network \
     -p 8282:8282 -p 5005:5005 \

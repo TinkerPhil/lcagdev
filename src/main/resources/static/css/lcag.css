@@ -1,0 +1,52 @@
+.pagination li a, .pagination li span {
+    cursor: pointer;
+}
+#loading-indicator {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+.horizontal-scroll {
+    width: 2750px;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+.ui-jqgrid .ui-jqgrid-bdiv tr.ui-row-ltr>td { border-right-width: 0px; border-left-width: 0px; border-left-style: none; border-right-style: none; }
+
+.ui-jqgrid tr.jqfoot>td, .ui-jqgrid tr.jqgroup>td, .ui-jqgrid tr.jqgrow>td {
+    padding: 15px 5px 15px 5px;
+}
+tr.ui-priority-secondary {
+    background-color: #f7f7f7;
+}
+tr.jqgrow {
+    border-top-color: #d5d5d5;
+    border-bottom-color: #d5d5d5;
+}
+.ui-jqgrid .ui-jqgrid-labels th.ui-th-column {
+    vertical-align: middle;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+}
+tr.ui-search-toolbar {
+    border-top-style: none;
+}
+.ui-jqgrid .ui-search-table { height: 30px; }
+.ui-jqgrid .ui-search-table .ui-search-oper { height: 30px; }
+.ui-jqgrid .ui-jqgrid-htable .ui-search-toolbar th { height: 32px; }
+tr.jqgrow.success {
+    background-color: #dff0d8;
+}
+tr.jqgrow.danger {
+    background-color: #f2dede;
+}
+tr.jqgrow.info {
+    background-color: #d9edf7;
+}
+input.form-control.input-large {
+    width: 250px;
+}
