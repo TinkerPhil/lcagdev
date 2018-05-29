@@ -24,8 +24,8 @@ public class PaymentController {
     @Autowired
     private PaymentDao paymentDao;
 
-    @Value("${transactionFileCharacterEncoding")
-    private String transactionFileCharacterEncoding;
+    @Value("${bankExportCharacterEncoding}")
+    private String bankExportCharacterEncoding;
 
     @CrossOrigin
     @GetMapping(path = "/payments")
@@ -42,7 +42,7 @@ public class PaymentController {
     @PostMapping(path = "/paymentUpload")
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
-            ImportOutcome importOutcome = paymentService.importTransactions(IOUtils.toString(file.getInputStream(), transactionFileCharacterEncoding));
+            ImportOutcome importOutcome = paymentService.importTransactions(IOUtils.toString(file.getInputStream(), bankExportCharacterEncoding));
             return new ResponseEntity(importOutcome, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,5 +1,9 @@
 package uk.co.novinet.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 import uk.co.novinet.service.member.Where;
 
 import java.sql.ResultSet;
@@ -7,7 +11,22 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class PersistenceUtils {
+
+    private static String forumDatabaseTablePrefix;
+
+    private static JdbcTemplate jdbcTemplate;
+
+    @Value("${forumDatabaseTablePrefix}")
+    public void setForumDatabaseTablePrefix(String forumDatabaseTablePrefix) {
+        PersistenceUtils.forumDatabaseTablePrefix = forumDatabaseTablePrefix;
+    }
+
+    @Autowired
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        PersistenceUtils.jdbcTemplate = jdbcTemplate;
+    }
 
     public static long unixTime(Date date) {
         if (date == null) {
@@ -43,4 +62,30 @@ public class PersistenceUtils {
 
         return new Where(sql, parameters);
     }
+
+    public static String bankTransactionsTableName() {
+        return forumDatabaseTablePrefix + "bank_transactions";
+    }
+
+    public static String usersTableName() {
+        return forumDatabaseTablePrefix + "users";
+    }
+
+    public static String userGroupsTableName() {
+        return forumDatabaseTablePrefix + "usergroups";
+    }
+
+    public static Long findNextAvailableId(String idColumnName, String tableName) {
+        Long max = jdbcTemplate.queryForObject("select max(" + idColumnName + ") from " + tableName, Long.class);
+
+        if (max == null) {
+            max = (long) 1;
+        } else {
+            max = max + 1;
+        }
+
+        return max;
+    }
+
+
 }

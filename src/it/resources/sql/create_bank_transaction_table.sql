@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `i7b0_bank_transactions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned,
   `date` int(10) unsigned NOT NULL DEFAULT '0',
   `description` varchar(120) NOT NULL DEFAULT '',
   `amount` varchar(120) NOT NULL DEFAULT '0',

@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.member.MemberService;
@@ -19,9 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
-import static uk.co.novinet.service.PersistenceUtils.dateFromMyBbRow;
-import static uk.co.novinet.service.PersistenceUtils.like;
-import static uk.co.novinet.service.PersistenceUtils.unixTime;
+import static uk.co.novinet.service.PersistenceUtils.*;
 
 @Service
 public class PaymentDao {
@@ -44,36 +41,29 @@ public class PaymentDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public BankTransaction create(BankTransaction bankTransaction) {
+    public void create(BankTransaction bankTransaction) {
         LOGGER.info("Going to create bank transaction {}", bankTransaction);
 
-        Number id = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName(bankTransactionsTableName())
-                .executeAndReturnKey(new HashMap<String, Object>() {{
-                    put("user_id", bankTransaction.getUserId());
-                    put("date", bankTransaction.getDate());
-                    put("description", bankTransaction.getDescription());
-                    put("amount", bankTransaction.getAmount());
-                    put("running_balance", bankTransaction.getRunningBalance());
-                    put("counter_party", bankTransaction.getCounterParty());
-                    put("reference", bankTransaction.getReference());
-                }});
+        Long nextAvailableId = findNextAvailableId("id", bankTransactionsTableName());
 
-        if (id != null) {
-            bankTransaction.setId(id.longValue());
-        } else {
-            throw new RuntimeException(format("Count not persist bank transaction {}", bankTransaction));
-        }
+        bankTransaction.setId(nextAvailableId);
 
-        return bankTransaction;
-    }
+        String sql = "insert into " + bankTransactionsTableName() + " (`id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`) values (?, ?, ?, ?, ?, ?, ?)";
 
-    private String bankTransactionsTableName() {
-        return forumDatabaseTablePrefix + "bank_transactions";
-    }
+        LOGGER.info("sql: {}", sql);
 
-    private String usersTableName() {
-        return forumDatabaseTablePrefix + "users";
+        int result = jdbcTemplate.update(
+                sql,
+                nextAvailableId,
+                unixTime(bankTransaction.getDate()),
+                bankTransaction.getDescription(),
+                bankTransaction.getAmount(),
+                bankTransaction.getRunningBalance(),
+                bankTransaction.getCounterParty(),
+                bankTransaction.getReference()
+        );
+
+        LOGGER.info("Insertion result: {}", result);
     }
 
     public List<BankTransaction> findExistingBankTransaction(BankTransaction bankTransaction) {
@@ -119,7 +109,7 @@ public class PaymentDao {
     }
 
     private String buildBankTransactionTableSelect() {
-        return "select * from " + bankTransactionsTableName() + " bt inner join " + usersTableName() + " u on u.uid = bt.user_id ";
+        return "select * from " + bankTransactionsTableName() + " bt left outer join " + usersTableName() + " u on u.uid = bt.user_id ";
     }
 
     public long searchCountBankTransactions(BankTransaction bankTransaction) {

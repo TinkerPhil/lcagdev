@@ -48,10 +48,13 @@ public class PaymentService {
                 if (paymentDao.findExistingBankTransaction(bankTransaction) == null || paymentDao.findExistingBankTransaction(bankTransaction).isEmpty()) {
                     paymentDao.create(bankTransaction);
                     numberOfNewTransactions++;
+                    LOGGER.info("Persisting new bank transaction: {}", bankTransaction);
                 }
                 numberOfTransactions++;
             }
-            return new ImportOutcome(numberOfNewTransactions, numberOfTransactions);
+            ImportOutcome importOutcome = new ImportOutcome(numberOfNewTransactions, numberOfTransactions);
+            LOGGER.info("importOutcome: {}", importOutcome);
+            return importOutcome;
         } catch (Exception e) {
             LOGGER.error("Could not import transactions: {}", transactions, e);
             throw new RuntimeException(e);
@@ -79,8 +82,8 @@ public class PaymentService {
                         parseDouble(amount),
                         parseDouble(balance),
                         findInDescription(description, "counterParty"),
-                        findInDescription(description, "reference"))
-                );
+                        findInDescription(description, "reference")
+                ));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }

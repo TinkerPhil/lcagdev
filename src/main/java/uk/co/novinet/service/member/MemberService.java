@@ -14,9 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import static uk.co.novinet.service.PersistenceUtils.dateFromMyBbRow;
-import static uk.co.novinet.service.PersistenceUtils.like;
-import static uk.co.novinet.service.PersistenceUtils.unixTime;
+import static uk.co.novinet.service.PersistenceUtils.*;
 
 @Service
 public class MemberService {
@@ -55,8 +53,8 @@ public class MemberService {
         LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}",
                 group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry);
 
-        String sql = "update `" + forumDatabaseTablePrefix + "users` u " +
-                "set u.usergroup = (select `gid` from `" + forumDatabaseTablePrefix + "usergroups` ug where ug.title = ?), " +
+        String sql = "update " + usersTableName() + " u " +
+                "set u.usergroup = (select `gid` from " + userGroupsTableName() + " ug where ug.title = ?), " +
                 "u.identification_checked = ?, " +
                 "u.hmrc_letter_checked = ?, " +
                 "u.contribution_amount = ?, " +
@@ -74,7 +72,8 @@ public class MemberService {
 
         LOGGER.info("Created sql: {}", sql);
 
-        int result = jdbcTemplate.update(sql, new Object[] {
+        int result = jdbcTemplate.update(
+                sql,
                 group,
                 identificationChecked,
                 hmrcLetterChecked,
@@ -89,8 +88,8 @@ public class MemberService {
                 schemes,
                 notes,
                 industry,
-                memberId,
-        });
+                memberId
+        );
 
         LOGGER.info("Update result: {}", result);
     }
@@ -107,15 +106,9 @@ public class MemberService {
 
             Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, new Date(), false, false, "0", null, null, null, false, false, "", "", false, "", "", PasswordSource.getRandomPasswordDetails());
 
-            Long max = jdbcTemplate.queryForObject("select max(uid) from " + forumDatabaseTablePrefix + "users", Long.class);
+            Long max = findNextAvailableId("uid", usersTableName());
 
-            if (max == null) {
-                max = (long) 1;
-            } else {
-                max = max + 1;
-            }
-
-            String insertSql = "insert into `" + forumDatabaseTablePrefix + "users` (`uid`, `username`, `password`, `salt`, `loginkey`, `email`, `postnum`, `threadnum`, `avatar`, " +
+            String insertSql = "insert into " + usersTableName() + " (`uid`, `username`, `password`, `salt`, `loginkey`, `email`, `postnum`, `threadnum`, `avatar`, " +
                     "`avatardimensions`, `avatartype`, `usergroup`, `additionalgroups`, `displaygroup`, `usertitle`, `regdate`, `lastactive`, `lastvisit`, `lastpost`, `website`, `icq`, " +
                     "`aim`, `yahoo`, `skype`, `google`, `birthday`, `birthdayprivacy`, `signature`, `allownotices`, `hideemail`, `subscriptionmethod`, `invisible`, `receivepms`, `receivefrombuddy`, " +
                     "`pmnotice`, `pmnotify`, `buddyrequestspm`, `buddyrequestsauto`, `threadmode`, `showimages`, `showvideos`, `showsigs`, `showavatars`, `showquickreply`, `showredirect`, `ppp`, `tpp`, " +
@@ -128,7 +121,7 @@ public class MemberService {
 
             LOGGER.info("Going to execute insert sql: {}", insertSql);
 
-            int result = jdbcTemplate.update(insertSql, new Object[] {
+            int result = jdbcTemplate.update(insertSql,
                     max,
                     member.getUsername(),
                     member.getPasswordDetails().getPasswordHash(),
@@ -138,7 +131,7 @@ public class MemberService {
                     0L,
                     0L,
                     member.getName()
-            });
+            );
 
             LOGGER.info("Insertion result: {}", result);
 

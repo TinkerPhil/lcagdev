@@ -21,7 +21,7 @@ docker run -d \
     -e MYSQL_DATABASE=mybb \
     -e MYSQL_USER=user \
     -e MYSQL_PASSWORD=p@ssword \
-    mysql:latest
+    mysql:5.6
 
 echo "standing up sftp server"
 docker run -d \
