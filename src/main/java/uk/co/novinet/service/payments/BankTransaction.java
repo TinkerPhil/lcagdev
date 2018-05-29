@@ -1,5 +1,6 @@
 package uk.co.novinet.service.payments;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
@@ -11,12 +12,12 @@ public class BankTransaction {
     private String emailAddress;
     private Date date;
     private String description;
-    private Double amount;
-    private Double runningBalance;
+    private BigDecimal amount;
+    private BigDecimal runningBalance;
     private String counterParty;
     private String reference;
 
-    public BankTransaction(Long id, Long userId, String username, String emailAddress, Date date, String description, Double amount, Double runningBalance, String counterParty, String reference) {
+    public BankTransaction(Long id, Long userId, String username, String emailAddress, Date date, String description, BigDecimal amount, BigDecimal runningBalance, String counterParty, String reference) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -45,11 +46,11 @@ public class BankTransaction {
         return description;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public Double getRunningBalance() {
+    public BigDecimal getRunningBalance() {
         return runningBalance;
     }
 
@@ -81,11 +82,11 @@ public class BankTransaction {
         this.description = description;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public void setRunningBalance(Double runningBalance) {
+    public void setRunningBalance(BigDecimal runningBalance) {
         this.runningBalance = runningBalance;
     }
 

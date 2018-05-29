@@ -68,7 +68,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                       url: lcag.Common.urlPrefix + "/assignToMember",
                       data: { "memberId": memberId, "paymentId": paymentId }
                     }).done(function(result) {
-                        $( "div.success" ).fadeIn( 300 ).delay( 1000 ).fadeOut( 400 );
+                        lcag.Common.alertSuccess();
                     });
                 });
             }
@@ -88,9 +88,9 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
         },
         "userId": function(cellvalue, options, row) {
             if (row.userId == null) {
-                return '<select style="width: 95%;" id="userId_' + row.id + '" class="userIdSelect"></select>';
+                return '<select style="width: 100%;" id="userId_' + row.id + '" class="userIdSelect"></select>';
             }
-            return '<select style="width: 95%;" id="userId_' + row.id + '" class="userIdSelect"><option selected value="' + row.userId + '">' + row.username + ' (' + row.emailAddress + ')</option></select>';
+            return '<select style="width: 100%;" id="userId_' + row.id + '" class="userIdSelect"><option selected value="' + row.userId + '">' + row.username + ' (' + row.emailAddress + ')</option></select>';
         }
     }
 }

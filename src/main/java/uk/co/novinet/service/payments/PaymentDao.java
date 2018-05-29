@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
+import static org.codehaus.groovy.runtime.InvokerHelper.asList;
 import static uk.co.novinet.service.PersistenceUtils.*;
 
 @Service
@@ -67,14 +68,22 @@ public class PaymentDao {
     }
 
     public List<BankTransaction> findExistingBankTransaction(BankTransaction bankTransaction) {
-        return jdbcTemplate.query(buildBankTransactionTableSelect() + " where " +
-                "bt.date = ? and bt.description = ? and bt.amount = ? and bt.running_balance = ?",
-                new Object[] {
-                    unixTime(bankTransaction.getDate()),
-                    bankTransaction.getDescription(),
-                    bankTransaction.getAmount(),
-                    bankTransaction.getRunningBalance()
-                }, (rs, rowNum) -> buildBankTransaction(rs));
+        LOGGER.info("Going to try and find existing bank transaction like: {}", bankTransaction);
+
+
+        String sql = buildBankTransactionTableSelect() + " where bt.date > ? and bt.description = ? and bt.amount = ? and bt.running_balance = ?";
+
+        Object[] arguments = {
+                unixTime(bankTransaction.getDate()),
+                bankTransaction.getDescription(),
+                bankTransaction.getAmount(),
+                bankTransaction.getRunningBalance()
+        };
+
+        LOGGER.info("Going to execute sql: {}", sql);
+        LOGGER.info("With arguments: {}", asList(arguments));
+
+        return jdbcTemplate.query(sql, arguments, (rs, rowNum) -> buildBankTransaction(rs));
     }
 
     public BankTransaction findExistingBankTransaction(Long id) {
@@ -101,8 +110,8 @@ public class PaymentDao {
                 rs.getString("u.email"),
                 dateFromMyBbRow(rs, "bt.date"),
                 rs.getString("bt.description"),
-                Double.parseDouble(rs.getString("bt.amount")),
-                Double.parseDouble(rs.getString("bt.running_balance")),
+                rs.getBigDecimal("bt.amount"),
+                rs.getBigDecimal("bt.running_balance"),
                 rs.getString("bt.counter_party"),
                 rs.getString("bt.reference")
         );

@@ -96,7 +96,11 @@ lcag.MemberGrid = lcag.MemberGrid || {
                             };
                           })(),
                           success: function(e) {
-                            $( "div.success" ).fadeIn( 300 ).delay( 1000 ).fadeOut( 400 );
+                            lcag.Common.alertSuccess();
+                            $("#grid").trigger("reloadGrid");
+                          },
+                          error: function(e) {
+                            lcag.Common.alertError();
                             $("#grid").trigger("reloadGrid");
                           }
                         });

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,7 +46,8 @@ public class PaymentService {
 
         try {
             for (BankTransaction bankTransaction : buildBankTransactions(transactions)) {
-                if (paymentDao.findExistingBankTransaction(bankTransaction) == null || paymentDao.findExistingBankTransaction(bankTransaction).isEmpty()) {
+                List<BankTransaction> existingBankTransactions = paymentDao.findExistingBankTransaction(bankTransaction);
+                if (existingBankTransactions == null || existingBankTransactions.isEmpty()) {
                     paymentDao.create(bankTransaction);
                     numberOfNewTransactions++;
                     LOGGER.info("Persisting new bank transaction: {}", bankTransaction);
@@ -79,8 +81,8 @@ public class PaymentService {
                         null,
                         new SimpleDateFormat("dd/MM/yyyy").parse(date),
                         description,
-                        parseDouble(amount),
-                        parseDouble(balance),
+                        new BigDecimal(amount),
+                        new BigDecimal(balance),
                         findInDescription(description, "counterParty"),
                         findInDescription(description, "reference")
                 ));
