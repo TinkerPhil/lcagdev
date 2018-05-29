@@ -5,12 +5,14 @@ public class Statistics {
     private int totalContributors;
     private int numberOfRegisteredMembers;
     private int numberOfGuests;
+    private int totalUsers;
 
-    public Statistics(Double totalContributions, int totalContributors, int numberOfRegisteredMembers, int numberOfGuests) {
+    public Statistics(Double totalContributions, int totalContributors, int numberOfRegisteredMembers, int numberOfGuests, int totalUsers) {
         this.totalContributions = totalContributions;
         this.totalContributors = totalContributors;
         this.numberOfRegisteredMembers = numberOfRegisteredMembers;
         this.numberOfGuests = numberOfGuests;
+        this.totalUsers = totalUsers;
     }
 
     public Double getTotalContributions() {
@@ -27,5 +29,9 @@ public class Statistics {
 
     public int getNumberOfGuests() {
         return numberOfGuests;
+    }
+
+    public int getTotalUsers() {
+        return totalUsers;
     }
 }

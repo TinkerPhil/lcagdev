@@ -29,8 +29,9 @@ public class StatisticsService {
         Integer totalContributors = jdbcTemplate.queryForObject("select count(contribution_amount) from " + forumDatabaseTablePrefix + "users where contribution_amount > 0", new Object[] { }, Integer.class);
         Integer numberOfRegisteredMembers = jdbcTemplate.queryForObject("select count(u.contribution_amount) from " + forumDatabaseTablePrefix + "users u where u.usergroup in (select gid from " + forumDatabaseTablePrefix + "usergroups where title = ? or title = ?)", new Object[] { "Registered", "Moderators" }, Integer.class);
         Integer numberOfGuests = jdbcTemplate.queryForObject("select count(u.contribution_amount) from " + forumDatabaseTablePrefix + "users u where u.usergroup in (select gid from " + forumDatabaseTablePrefix + "usergroups where title = ?)", new Object[] { "LCAG Guests" }, Integer.class);
+        Integer totalUsers = numberOfRegisteredMembers + numberOfGuests;
 
-        return new Statistics(totalContributions, totalContributors, numberOfRegisteredMembers, numberOfGuests);
+        return new Statistics(totalContributions, totalContributors, numberOfRegisteredMembers, numberOfGuests, totalUsers);
     }
 
 }

@@ -10,6 +10,7 @@ lcag.Statistics = lcag.Statistics || {
             $("#totalContributors").html(result.totalContributors + " Contributors");
             $("#numberOfRegisteredMembers").html(result.numberOfRegisteredMembers + " Members");
             $("#numberOfGuests").html(result.numberOfGuests + " Guests");
+            $("#totalUsers").html(result.totalUsers + " Total");
         });
 	}
 }
