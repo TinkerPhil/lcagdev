@@ -1,31 +1,18 @@
 var lcag = lcag || {};
 
-/*
-    private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
-        put("id", "bt.id");
-        put("userId", "bt.user_id");
-        put("date", "bt.date");
-        put("description", "bt.description");
-        put("amount", "bt.amount");
-        put("runningBalance", "bt.running_balance");
-        put("counterParty", "bt.counter_party");
-        put("reference", "bt.reference");
-    }};
-*/
-
 lcag.PaymentsGrid = lcag.PaymentsGrid || {
     grid: {},
     initialise: function() {
         $("#payments-grid").jqGrid({
             colModel: [
                 { name: "id", label: "ID", hidden: true },
-                { name: "userId", label: "Member ID", width: 60, template: "string" },
-                { name: "date", label: "Transaction Date", width: 100, template: "string" },
-                { name: "description", label: "Description", width: 200, template: "string" },
-                { name: "amount", label: "Amount", width: 60, template: "string" },
-                { name: "runningBalance", label: "Running Balance", width: 60, template: "string" },
-                { name: "counterParty", label: "Counter Party", width: 90, template: "string" },
-                { name: "reference", label: "Reference", width: 90, template: "string" }
+                { name: "userId", label: "Member", width: 150, template: "string", formatter: lcag.PaymentsGrid.formatters.userId },
+                { name: "date", label: "Transaction Date", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.date, search: false },
+                { name: "description", label: "Description", width: 180, template: "string" },
+                { name: "amount", label: "Amount", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.amount },
+                { name: "runningBalance", label: "Running Balance", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },
+                { name: "counterParty", label: "Counter Party", width: 70, template: "string" },
+                { name: "reference", label: "Reference", width: 50, template: "string" },
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -47,17 +34,64 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
             headertitles: true,
             pager: true,
             rowNum: 25,
-            width: "2000px",
+            width: "1600px",
             altRows: true,
             viewrecords: true,
             gridComplete: function() {
                 lcag.Statistics.refresh();
+                $('.userIdSelect').select2({
+                  width: "resolve",
+                  ajax: {
+                    url: '/member',
+                    data: function (params) {
+                      return { username: params.term }
+                    },
+                    dataType: 'json',
+                    processResults: function (data) {
+                        var arr = []
+                        $.each(data.rows, function (index, row) {
+                            arr.push({
+                                id: row.id,
+                                text: row.username + " (" + row.emailAddress + ")"
+                            })
+                        })
+                        return {
+                            results: arr
+                        };
+                    }
+                  }
+                }).on('select2:select', function (e) {
+                    var memberId = $(this).val();
+                    var paymentId = $(this).attr("id").split("_")[1];
+                    $.ajax({
+                      method: "POST",
+                      url: lcag.Common.urlPrefix + "/assignToMember",
+                      data: { "memberId": memberId, "paymentId": paymentId }
+                    }).done(function(result) {
+                        $( "div.success" ).fadeIn( 300 ).delay( 1000 ).fadeOut( 400 );
+                    });
+                });
             }
         }).jqGrid("filterToolbar", {
             searchOnEnter: false
         });
     },
 	formatters: {
+        "amount": function(cellvalue, options, row) {
+            return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input disabled="disabled" id="amount_' + row.id + '" type="text" value="' + row.amount + '" class="form-control"></div></div>';
+        },
+        "runningBalance": function(cellvalue, options, row) {
+            return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input disabled="disabled" id="amount_' + row.id + '" type="text" value="' + row.runningBalance + '" class="form-control"></div></div>';
+        },
+        "date": function(cellvalue, options, row) {
+            return moment(row.date).format("DD/MM/YYYY");
+        },
+        "userId": function(cellvalue, options, row) {
+            if (row.userId == null) {
+                return '<select style="width: 95%;" id="userId_' + row.id + '" class="userIdSelect"></select>';
+            }
+            return '<select style="width: 95%;" id="userId_' + row.id + '" class="userIdSelect"><option selected value="' + row.userId + '">' + row.username + ' (' + row.emailAddress + ')</option></select>';
+        }
     }
 }
 

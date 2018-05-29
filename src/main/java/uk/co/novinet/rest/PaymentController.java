@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.payments.BankTransaction;
 import uk.co.novinet.service.payments.ImportOutcome;
 import uk.co.novinet.service.payments.PaymentDao;
@@ -48,6 +47,13 @@ public class PaymentController {
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/assignToMember")
+    public ResponseEntity assignToMember(AssignToMemberRequest assignToMemberRequest) {
+        paymentService.assignToMember(assignToMemberRequest.getMemberId(), assignToMemberRequest.getPaymentId());
+        return ResponseEntity.ok().build();
     }
 
     private DataContainer retrieveData(Long current, Long rowCount, String searchPhrase, String sortBy, String sortDirection, BankTransaction bankTransaction) {

@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.PersistenceUtils;
-import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
 import uk.co.novinet.service.member.Where;
 
@@ -73,8 +72,12 @@ public class PaymentDao {
         return forumDatabaseTablePrefix + "bank_transactions";
     }
 
+    private String usersTableName() {
+        return forumDatabaseTablePrefix + "users";
+    }
+
     public List<BankTransaction> findExistingBankTransaction(BankTransaction bankTransaction) {
-        return jdbcTemplate.query("select * from " + bankTransactionsTableName() + " bt where " +
+        return jdbcTemplate.query(buildBankTransactionTableSelect() + " where " +
                 "bt.date = ? and bt.description = ? and bt.amount = ? and bt.running_balance = ?",
                 new Object[] {
                     unixTime(bankTransaction.getDate()),
@@ -84,28 +87,47 @@ public class PaymentDao {
                 }, (rs, rowNum) -> buildBankTransaction(rs));
     }
 
+    public BankTransaction findExistingBankTransaction(Long id) {
+        List<BankTransaction> bankTransactions = jdbcTemplate.query(buildBankTransactionTableSelect() + " where bt.id = ?",
+                new Object[] { id }, (rs, rowNum) -> buildBankTransaction(rs));
+
+        if (bankTransactions == null || bankTransactions.isEmpty()) {
+            return null;
+        }
+
+        if (bankTransactions.size() > 1) {
+            throw new RuntimeException("More than one bank transaction found with id " + id + ": " + bankTransactions);
+        }
+
+        return bankTransactions.get(0);
+    }
+
     private BankTransaction buildBankTransaction(ResultSet rs) throws SQLException {
         String userId = rs.getString("user_id");
         return new BankTransaction(
-                rs.getLong("id"),
+                rs.getLong("bt.id"),
                 userId == null ? null : Long.parseLong(userId),
-                dateFromMyBbRow(rs, "date"),
-                rs.getString("description"),
-                Double.parseDouble(rs.getString("amount")),
-                Double.parseDouble(rs.getString("running_balance")),
-                rs.getString("counter_party"),
-                rs.getString("reference")
+                rs.getString("u.username"),
+                rs.getString("u.email"),
+                dateFromMyBbRow(rs, "bt.date"),
+                rs.getString("bt.description"),
+                Double.parseDouble(rs.getString("bt.amount")),
+                Double.parseDouble(rs.getString("bt.running_balance")),
+                rs.getString("bt.counter_party"),
+                rs.getString("bt.reference")
         );
     }
 
     private String buildBankTransactionTableSelect() {
-        return "select bt.id, bt.user_id, bt.date, bt.description, bt.amount, bt.running_balance, bt.counter_party, bt.reference from " + forumDatabaseTablePrefix + "bank_transactions bt ";
+        return "select * from " + bankTransactionsTableName() + " bt inner join " + usersTableName() + " u on u.uid = bt.user_id ";
     }
 
     public long searchCountBankTransactions(BankTransaction bankTransaction) {
         Where where = buildWhereClause(bankTransaction);
         final boolean hasWhere = !"".equals(where.getSql());
-        return jdbcTemplate.queryForObject("select count(*) from (" + buildBankTransactionTableSelect() + where.getSql() + ") as t", hasWhere ? where.getArguments().toArray() : null, Long.class);
+        String sql = "select count(*) from (" + buildBankTransactionTableSelect() + where.getSql() + ") as t";
+        LOGGER.info("sql: {}", sql);
+        return jdbcTemplate.queryForObject(sql, hasWhere ? where.getArguments().toArray() : null, Long.class);
     }
 
     public List<BankTransaction> searchBankTransactions(long offset, long itemsPerPage, BankTransaction bankTransaction, String sortField, String sortDirection) {
@@ -144,6 +166,16 @@ public class PaymentDao {
             parameters.add(bankTransaction.getId());
         }
 
+        if (bankTransaction.getUsername() != null) {
+            clauses.add("u.username like ?");
+            parameters.add(like(bankTransaction.getUsername()));
+        }
+
+        if (bankTransaction.getEmailAddress() != null) {
+            clauses.add("u.email like ?");
+            parameters.add(like(bankTransaction.getEmailAddress()));
+        }
+
         if (bankTransaction.getUserId() != null) {
             clauses.add("bt.user_id = ?");
             parameters.add(bankTransaction.getUserId());
@@ -160,13 +192,13 @@ public class PaymentDao {
         }
 
         if (bankTransaction.getAmount() != null) {
-            clauses.add("bt.amount like ?");
-            parameters.add(like(String.valueOf(bankTransaction.getAmount())));
+            clauses.add("bt.amount = ?");
+            parameters.add(bankTransaction.getAmount());
         }
 
         if (bankTransaction.getRunningBalance() != null) {
-            clauses.add("bt.running_balance like ?");
-            parameters.add(like(String.valueOf(bankTransaction.getRunningBalance())));
+            clauses.add("bt.running_balance = ?");
+            parameters.add(bankTransaction.getRunningBalance());
         }
 
         if (bankTransaction.getCounterParty() != null) {
@@ -182,7 +214,7 @@ public class PaymentDao {
         return PersistenceUtils.buildWhereClause(clauses, parameters);
     }
 
-
-
-
+    public void updateMemberId(Long paymentId, Long memberId) {
+        jdbcTemplate.update("update " + bankTransactionsTableName() + " bt set bt.user_id = ? where bt.id = ?", memberId, paymentId);
+    }
 }

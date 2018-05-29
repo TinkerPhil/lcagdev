@@ -7,6 +7,8 @@ import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToStrin
 public class BankTransaction {
     private Long id;
     private Long userId;
+    private String username;
+    private String emailAddress;
     private Date date;
     private String description;
     private Double amount;
@@ -14,9 +16,11 @@ public class BankTransaction {
     private String counterParty;
     private String reference;
 
-    public BankTransaction(Long id, Long userId, Date date, String description, Double amount, Double runningBalance, String counterParty, String reference) {
+    public BankTransaction(Long id, Long userId, String username, String emailAddress, Date date, String description, Double amount, Double runningBalance, String counterParty, String reference) {
         this.id = id;
         this.userId = userId;
+        this.username = username;
+        this.emailAddress = emailAddress;
         this.date = date;
         this.description = description;
         this.amount = amount;
@@ -63,5 +67,49 @@ public class BankTransaction {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public void setRunningBalance(Double runningBalance) {
+        this.runningBalance = runningBalance;
+    }
+
+    public void setCounterParty(String counterParty) {
+        this.counterParty = counterParty;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 }

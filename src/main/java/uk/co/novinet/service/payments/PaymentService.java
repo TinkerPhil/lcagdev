@@ -72,6 +72,8 @@ public class PaymentService {
                 bankTransactions.add(new BankTransaction(
                         0L,
                         null,
+                        null,
+                        null,
                         new SimpleDateFormat("dd/MM/yyyy").parse(date),
                         description,
                         parseDouble(amount),
@@ -100,4 +102,7 @@ public class PaymentService {
         return null;
     }
 
+    public void assignToMember(Long memberId, Long paymentId) {
+        paymentDao.updateMemberId(paymentId, memberId);
+    }
 }
