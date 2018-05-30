@@ -11,8 +11,17 @@ import static uk.co.novinet.e2e.TestUtils.*
 
 class PaymentImportIT {
 
+    static File tempTransactionFile1
+    static File tempTransactionFile2
+
     @BeforeClass
     static void beforeClass() throws Exception {
+        tempTransactionFile1 = File.createTempFile("lcagtransactions", "txt")
+        FileUtils.copyInputStreamToFile(this.getClass().getResourceAsStream("/payments/santander_transactions_1.txt"), tempTransactionFile1)
+
+        tempTransactionFile2 = File.createTempFile("lcagtransactions", "txt")
+        FileUtils.copyInputStreamToFile(this.getClass().getResourceAsStream("/payments/santander_transactions_2.txt"), tempTransactionFile2)
+
         setupDatabaseSchema()
     }
 
@@ -25,11 +34,30 @@ class PaymentImportIT {
     void importsNewBankTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        File tempFile = File.createTempFile("lcagtransactions", "txt")
-        FileUtils.copyInputStreamToFile(this.getClass().getResourceAsStream("/payments/santander_transactions.txt"), tempFile)
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile)
-        assertEquals(48, allBankTransactionRows().size())
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile1)
+        assertEquals(4, allBankTransactionRows().size())
+    }
 
+    @Test
+    void doesNotReImportDuplicateTransactions() throws Exception {
+        assertEquals(0, allBankTransactionRows().size())
+
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile1)
+        assertEquals(4, allBankTransactionRows().size())
+
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile1)
+        assertEquals(4, allBankTransactionRows().size())
+    }
+
+    @Test
+    void canImportSecondBatchOfDifferentTransactions() throws Exception {
+        assertEquals(0, allBankTransactionRows().size())
+
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile1)
+        assertEquals(4, allBankTransactionRows().size())
+
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile2)
+        assertEquals(8, allBankTransactionRows().size())
     }
 
     def allBankTransactionRows() {

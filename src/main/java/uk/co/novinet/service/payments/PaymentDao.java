@@ -71,7 +71,7 @@ public class PaymentDao {
         LOGGER.info("Going to try and find existing bank transaction like: {}", bankTransaction);
 
 
-        String sql = buildBankTransactionTableSelect() + " where bt.date > ? and bt.description = ? and bt.amount = ? and bt.running_balance = ?";
+        String sql = buildBankTransactionTableSelect() + " where bt.date = ? and bt.description = ? and bt.amount = ? and bt.running_balance = ?";
 
         Object[] arguments = {
                 unixTime(bankTransaction.getDate()),
