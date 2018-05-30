@@ -2,6 +2,14 @@ package uk.co.novinet.e2e;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.codemonkey.simplejavamail.Mailer;
 import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
@@ -11,10 +19,7 @@ import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -352,4 +357,45 @@ public class TestUtils {
             throw new RuntimeException("Waited for " + numberOfRowsToWaitFor + " rows, but there are still only " + getUserRows().size() + " after 20 attempts.");
         }
     }
+
+    static String uploadBankTransactionFile(String url, File file) throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost post = new HttpPost(url);
+        post.setHeader("Accept", "application/json");
+        post.setHeader("Authorization", "Basic " + new String(Base64.getEncoder().encode("admin:lcag".getBytes())));
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.addPart("file", new FileBody(file));
+        post.setEntity(builder.build());
+        CloseableHttpResponse response = httpclient.execute(post);
+        int httpStatus = response.getStatusLine().getStatusCode();
+
+        String responseMsg = EntityUtils.toString(response.getEntity(), "UTF-8");
+
+        if (httpStatus < 200 || httpStatus > 300) {
+            throw new IOException("HTTP " + httpStatus + " - Error during upload of file: " + responseMsg);
+        }
+
+        return responseMsg;
+    }
+
+    static String getRequest(String url) throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet get = new HttpGet(url);
+        get.setHeader("Accept", "application/json");
+        get.setHeader("Authorization", "Basic " + new String(Base64.getEncoder().encode("admin:lcag".getBytes())));
+
+        CloseableHttpResponse response = httpclient.execute(get);
+
+        int httpStatus = response.getStatusLine().getStatusCode();
+
+        String responseMsg = EntityUtils.toString(response.getEntity(), "UTF-8");
+
+        if (httpStatus < 200 || httpStatus > 300) {
+            throw new IOException(responseMsg);
+        }
+
+        return responseMsg;
+    }
+
+
 }

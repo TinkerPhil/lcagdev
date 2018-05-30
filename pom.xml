@@ -78,6 +78,7 @@
                         <configuration>
                             <sources>
                                 <source>src/it/java</source>
+                                <source>src/it/groovy</source>
                                 <source>src/test/groovy</source>
                                 <source>src/test/java</source>
                             </sources>
@@ -108,9 +109,24 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>
+                        <configuration>
+                            <testSources>
+                                <testSource>
+                                    <directory>${project.basedir}/src/test/groovy</directory>
+                                    <includes>
+                                        <include>**/*.groovy</include>
+                                    </includes>
+                                </testSource>
+                                <testSource>
+                                    <directory>${project.basedir}/src/it/groovy</directory>
+                                    <includes>
+                                        <include>**/*.groovy</include>
+                                    </includes>
+                                </testSource>
+                            </testSources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
