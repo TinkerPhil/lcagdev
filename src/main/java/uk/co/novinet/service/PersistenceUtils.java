@@ -8,11 +8,19 @@ import uk.co.novinet.service.member.Where;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class PersistenceUtils {
+
+    private static final Pattern ISO8601_DATE_PATTERN = Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?<offset>[+-]\\d{2}:\\d{2})");
 
     private static String forumDatabaseTablePrefix;
 
@@ -28,19 +36,31 @@ public class PersistenceUtils {
         PersistenceUtils.jdbcTemplate = jdbcTemplate;
     }
 
-    public static long unixTime(Date date) {
+    public static long unixTime(Instant date) {
         if (date == null) {
             return 0;
         }
 
-        return date.getTime() / 1000;
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(date, ZoneId.systemDefault());
+
+        String localDateTimeString = zonedDateTime.toOffsetDateTime().toString();
+
+        Matcher matcher = ISO8601_DATE_PATTERN.matcher(localDateTimeString);
+
+        if (matcher.find()) {
+            String originalOffset = matcher.group("offset");
+            String utcDateString = localDateTimeString.replace(originalOffset, "+00:00");
+            return ZonedDateTime.parse(utcDateString).toInstant().toEpochMilli() / 1000;
+        }
+
+        throw new RuntimeException("Could not parse date: " + localDateTimeString);
     }
 
-    public static Date dateFromMyBbRow(ResultSet rs, String columnName) throws SQLException {
+    public static Instant dateFromMyBbRow(ResultSet rs, String columnName) throws SQLException {
         Long dateInSeconds = rs.getLong(columnName);
 
         if (dateInSeconds != null && dateInSeconds > 0) {
-            return new Date(dateInSeconds * 1000L);
+            return new Date(dateInSeconds * 1000L).toInstant();
         }
 
         return null;

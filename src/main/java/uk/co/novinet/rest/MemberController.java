@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
 
+import java.time.Instant;
 import java.util.Date;
 
 @RestController
@@ -38,7 +39,7 @@ public class MemberController {
             @RequestParam(value = "identificationChecked", required = false) boolean identificationChecked,
             @RequestParam(value = "hmrcLetterChecked", required = false) boolean hmrcLetterChecked,
             @RequestParam(value = "contributionAmount", required = false) String contributionAmount,
-            @RequestParam(value = "contributionDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date contributionDate,
+            @RequestParam(value = "contributionDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Instant contributionDate,
             @RequestParam(value = "mpName", required = false) String mpName,
             @RequestParam(value = "mpEngaged", required = false) Boolean mpEngaged,
             @RequestParam(value = "mpSympathetic", required = false) Boolean mpSympathetic,

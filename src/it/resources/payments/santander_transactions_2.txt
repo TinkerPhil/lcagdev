@@ -1,23 +1,23 @@
-From: 24/05/2018 to 25/05/2018
+From: 25/05/2018 to 28/05/2018
 							
 Account: XXXX XXXX XXXX 0057
 						
-Date: 25/05/2018
+Date: 28/05/2018
 Description:  FASTER PAYMENTS RECEIPT REF.POP15 FROM B Zen                                            
 Amount: 100.00 	
 Balance: 5050.00 
 						
-Date: 24/05/2018
+Date: 27/05/2018
 Description:  FASTER PAYMENTS RECEIPT REF.JOHNCLOCK FROM CROW VD                                       
 Amount: 100.00 	
 Balance: 4950.00 
 						
-Date: 24/05/2018
+Date: 26/05/2018
 Description:  FASTER PAYMENTS RECEIPT REF.QSHJ FROM STUART PETERS                                     
 Amount: 50.00 	
 Balance: 4850.00 
 						
-Date: 24/05/2018
+Date: 25/05/2018
 Description: BILL PAYMENT FROM MR JAMES SMITH HENRY JONES, REFERENCE james45                          
 Amount: 250.00 	
 Balance: 4800.00 

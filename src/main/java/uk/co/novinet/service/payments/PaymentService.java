@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.lang.Double.parseDouble;
 import static java.util.Arrays.asList;
 
 @Service
@@ -79,7 +79,7 @@ public class PaymentService {
                         null,
                         null,
                         null,
-                        new SimpleDateFormat("dd/MM/yyyy").parse(date),
+                        new SimpleDateFormat("dd/MM/yyyy").parse(date).toInstant(),
                         description,
                         new BigDecimal(amount),
                         new BigDecimal(balance),

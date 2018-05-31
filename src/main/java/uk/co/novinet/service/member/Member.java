@@ -2,6 +2,7 @@ package uk.co.novinet.service.member;
 
 import uk.co.novinet.service.mail.PasswordDetails;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,11 +19,11 @@ public class Member {
     private String username;
     private String name;
     private String group;
-    private Date registrationDate;
+    private Instant registrationDate;
     private Boolean hmrcLetterChecked;
     private Boolean identificationChecked;
     private String contributionAmount;
-    private Date contributionDate;
+    private Instant contributionDate;
     private String mpName;
     private String schemes;
     private Boolean mpEngaged;
@@ -42,11 +43,11 @@ public class Member {
             String username,
             String name,
             String group,
-            Date registrationDate,
+            Instant registrationDate,
             Boolean hmrcLetterChecked,
             Boolean identificationChecked,
             String contributionAmount,
-            Date contributionDate,
+            Instant contributionDate,
             String mpName,
             String schemes,
             Boolean mpEngaged,
@@ -103,7 +104,7 @@ public class Member {
         return group;
     }
 
-    public Date getRegistrationDate() {
+    public Instant getRegistrationDate() {
         return registrationDate;
     }
 
@@ -124,7 +125,7 @@ public class Member {
         return contributionAmount;
     }
 
-    public Date getContributionDate() {
+    public Instant getContributionDate() {
         return contributionDate;
     }
 
@@ -172,7 +173,7 @@ public class Member {
         this.group = group;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationDate(Instant registrationDate) {
         this.registrationDate = registrationDate;
     }
 
@@ -188,7 +189,7 @@ public class Member {
         this.contributionAmount = contributionAmount;
     }
 
-    public void setContributionDate(Date contributionDate) {
+    public void setContributionDate(Instant contributionDate) {
         this.contributionDate = contributionDate;
     }
 

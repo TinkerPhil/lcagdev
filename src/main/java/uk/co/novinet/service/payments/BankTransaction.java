@@ -1,6 +1,8 @@
 package uk.co.novinet.service.payments;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
@@ -10,14 +12,14 @@ public class BankTransaction {
     private Long userId;
     private String username;
     private String emailAddress;
-    private Date date;
+    private Instant date;
     private String description;
     private BigDecimal amount;
     private BigDecimal runningBalance;
     private String counterParty;
     private String reference;
 
-    public BankTransaction(Long id, Long userId, String username, String emailAddress, Date date, String description, BigDecimal amount, BigDecimal runningBalance, String counterParty, String reference) {
+    public BankTransaction(Long id, Long userId, String username, String emailAddress, Instant date, String description, BigDecimal amount, BigDecimal runningBalance, String counterParty, String reference) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -38,7 +40,7 @@ public class BankTransaction {
         return id;
     }
 
-    public Date getDate() {
+    public Instant getDate() {
         return date;
     }
 
@@ -74,7 +76,7 @@ public class BankTransaction {
         this.userId = userId;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 

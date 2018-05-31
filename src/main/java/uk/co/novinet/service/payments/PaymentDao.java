@@ -43,7 +43,7 @@ public class PaymentDao {
     private JdbcTemplate jdbcTemplate;
 
     public void create(BankTransaction bankTransaction) {
-        LOGGER.info("Going to create bank transaction {}", bankTransaction);
+        LOGGER.info("Going to create bank transaction: {}", bankTransaction);
 
         Long nextAvailableId = findNextAvailableId("id", bankTransactionsTableName());
 
@@ -103,7 +103,8 @@ public class PaymentDao {
 
     private BankTransaction buildBankTransaction(ResultSet rs) throws SQLException {
         String userId = rs.getString("user_id");
-        return new BankTransaction(
+
+        BankTransaction bankTransaction = new BankTransaction(
                 rs.getLong("bt.id"),
                 userId == null ? null : Long.parseLong(userId),
                 rs.getString("u.username"),
@@ -115,6 +116,10 @@ public class PaymentDao {
                 rs.getString("bt.counter_party"),
                 rs.getString("bt.reference")
         );
+
+        LOGGER.info("Retrieved bank transaction: {}", bankTransaction);
+
+        return bankTransaction;
     }
 
     private String buildBankTransactionTableSelect() {
@@ -152,7 +157,11 @@ public class PaymentDao {
 
         return jdbcTemplate.query(sql,
                 hasWhere ? where.getArguments().toArray() : null,
-                (rs, rowNum) -> buildBankTransaction(rs)
+                (rs, rowNum) -> {
+                    BankTransaction bankTransactionFromDatabase = buildBankTransaction(rs);
+                    LOGGER.info("Found bankTransaction in database: {}", bankTransactionFromDatabase);
+                    return bankTransactionFromDatabase;
+                }
         );
     }
 
