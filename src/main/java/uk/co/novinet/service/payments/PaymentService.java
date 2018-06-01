@@ -5,14 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import uk.co.novinet.service.member.Member;
+import uk.co.novinet.service.member.MemberService;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +35,9 @@ public class PaymentService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private PaymentDao paymentDao;
@@ -68,24 +70,35 @@ public class PaymentService {
 
         List<BankTransaction> bankTransactions = new ArrayList<>();
 
+        Map<String, Integer> transactionsOnDayMap = new HashMap<>();
+
         while (matcher.find()) {
             String date = matcher.group("date");
             String description = matcher.group("description").replace('\u00A0',' ').trim();
             String amount = matcher.group("amount");
             String balance = matcher.group("balance");
+
+            Integer numberOfTransactions = transactionsOnDayMap.get(date);
+
+            int transactionIndexOnDay = numberOfTransactions == null ? 0 : numberOfTransactions + 1;
+
+            transactionsOnDayMap.put(date, transactionIndexOnDay);
+
             try {
+                String reference = findInDescription(description, "reference");
+                Member member = exactMatchingMember(reference);
                 bankTransactions.add(new BankTransaction(
                         0L,
-                        null,
-                        null,
-                        null,
+                        member == null ? null : member.getId(),
+                        member == null ? null : member.getUsername(),
+                        member == null ? null : member.getEmailAddress(),
                         new SimpleDateFormat("dd/MM/yyyy").parse(date).toInstant(),
                         description,
                         new BigDecimal(amount),
                         new BigDecimal(balance),
                         findInDescription(description, "counterParty"),
-                        findInDescription(description, "reference")
-                ));
+                        reference,
+                        transactionIndexOnDay));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -95,6 +108,24 @@ public class PaymentService {
         Collections.reverse(bankTransactions);
 
         return bankTransactions;
+    }
+
+    private Member exactMatchingMember(String reference) {
+        List<Member> members = memberService.findExistingForumUsersByField("username", reference);
+
+        if (members == null || members.size() == 0) {
+            LOGGER.info("No matching members found for reference: {}", reference);
+            return null;
+        }
+
+        if (members.size() == 1) {
+            Member member = members.get(0);
+            LOGGER.info("Found one member: {} for reference: {}", member, reference);
+            return member;
+        }
+
+        LOGGER.warn("Found members: {} who are potential matches for reference: {}", members, reference);
+        return null;
     }
 
     private String findInDescription(String description, String groupName) {

@@ -34,6 +34,7 @@ public class PaymentDao {
         put("runningBalance", "bt.running_balance");
         put("counterParty", "bt.counter_party");
         put("reference", "bt.reference");
+        put("transactionIndexOnDay", "bt.transaction_index_on_day");
     }};
 
     @Value("${forumDatabaseTablePrefix}")
@@ -49,19 +50,21 @@ public class PaymentDao {
 
         bankTransaction.setId(nextAvailableId);
 
-        String sql = "insert into " + bankTransactionsTableName() + " (`id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`) values (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into " + bankTransactionsTableName() + " (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         LOGGER.info("sql: {}", sql);
 
         int result = jdbcTemplate.update(
                 sql,
                 nextAvailableId,
+                bankTransaction.getUserId(),
                 unixTime(bankTransaction.getDate()),
                 bankTransaction.getDescription(),
                 bankTransaction.getAmount(),
                 bankTransaction.getRunningBalance(),
                 bankTransaction.getCounterParty(),
-                bankTransaction.getReference()
+                bankTransaction.getReference(),
+                bankTransaction.getTransactionIndexOnDay()
         );
 
         LOGGER.info("Insertion result: {}", result);
@@ -70,14 +73,14 @@ public class PaymentDao {
     public List<BankTransaction> findExistingBankTransaction(BankTransaction bankTransaction) {
         LOGGER.info("Going to try and find existing bank transaction like: {}", bankTransaction);
 
-
-        String sql = buildBankTransactionTableSelect() + " where bt.date = ? and bt.description = ? and bt.amount = ? and bt.running_balance = ?";
+        String sql = buildBankTransactionTableSelect() + " where bt.date = ? and bt.description = ? and bt.amount = ? and bt.running_balance = ? and bt.transaction_index_on_day = ?";
 
         Object[] arguments = {
                 unixTime(bankTransaction.getDate()),
                 bankTransaction.getDescription(),
                 bankTransaction.getAmount(),
-                bankTransaction.getRunningBalance()
+                bankTransaction.getRunningBalance(),
+                bankTransaction.getTransactionIndexOnDay()
         };
 
         LOGGER.info("Going to execute sql: {}", sql);
@@ -114,7 +117,8 @@ public class PaymentDao {
                 rs.getBigDecimal("bt.amount"),
                 rs.getBigDecimal("bt.running_balance"),
                 rs.getString("bt.counter_party"),
-                rs.getString("bt.reference")
+                rs.getString("bt.reference"),
+                rs.getInt("bt.transaction_index_on_day")
         );
 
         LOGGER.info("Retrieved bank transaction: {}", bankTransaction);

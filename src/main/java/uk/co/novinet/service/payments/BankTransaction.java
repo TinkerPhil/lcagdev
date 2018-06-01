@@ -1,9 +1,7 @@
 package uk.co.novinet.service.payments;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
 
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
@@ -18,8 +16,9 @@ public class BankTransaction {
     private BigDecimal runningBalance;
     private String counterParty;
     private String reference;
+    private Integer transactionIndexOnDay;
 
-    public BankTransaction(Long id, Long userId, String username, String emailAddress, Instant date, String description, BigDecimal amount, BigDecimal runningBalance, String counterParty, String reference) {
+    public BankTransaction(Long id, Long userId, String username, String emailAddress, Instant date, String description, BigDecimal amount, BigDecimal runningBalance, String counterParty, String reference, Integer transactionIndexOnDay) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -30,6 +29,7 @@ public class BankTransaction {
         this.runningBalance = runningBalance;
         this.counterParty = counterParty;
         this.reference = reference;
+        this.transactionIndexOnDay = transactionIndexOnDay;
     }
 
     void setId(Long id) {
@@ -114,5 +114,13 @@ public class BankTransaction {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public Integer getTransactionIndexOnDay() {
+        return transactionIndexOnDay;
+    }
+
+    public void setTransactionIndexOnDay(Integer transactionIndexOnDay) {
+        this.transactionIndexOnDay = transactionIndexOnDay;
     }
 }

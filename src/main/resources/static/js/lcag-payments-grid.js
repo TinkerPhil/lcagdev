@@ -8,6 +8,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 { name: "id", label: "ID", hidden: true },
                 { name: "userId", label: "Member", width: 150, template: "string", formatter: lcag.PaymentsGrid.formatters.userId },
                 { name: "date", label: "Transaction Date", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.date, search: false },
+                { name: "transactionIndexOnDay", label: "Index", width: 40, template: "string" },
                 { name: "description", label: "Description", width: 180, template: "string" },
                 { name: "amount", label: "Amount", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.amount },
                 { name: "runningBalance", label: "Running Balance", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },

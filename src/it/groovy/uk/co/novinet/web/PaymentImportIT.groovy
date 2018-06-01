@@ -15,31 +15,24 @@ import static uk.co.novinet.e2e.TestUtils.*
 
 class PaymentImportIT {
 
-    static File tempTransactionFile1
-    static File tempTransactionFile2
     static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy")
 
     @BeforeClass
     static void beforeClass() throws Exception {
-        tempTransactionFile1 = File.createTempFile("lcagtransactions", "txt")
-        FileUtils.copyInputStreamToFile(this.getClass().getResourceAsStream("/payments/santander_transactions_1.txt"), tempTransactionFile1)
-
-        tempTransactionFile2 = File.createTempFile("lcagtransactions", "txt")
-        FileUtils.copyInputStreamToFile(this.getClass().getResourceAsStream("/payments/santander_transactions_2.txt"), tempTransactionFile2)
-
         setupDatabaseSchema()
     }
 
     @Before
     void before() {
         runSqlScript("sql/delete_all_bank_transactions.sql")
+        runSqlScript("sql/delete_all_users.sql")
     }
 
     @Test
     void importsNewBankTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile1)
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
     }
 
@@ -47,10 +40,10 @@ class PaymentImportIT {
     void doesNotReImportDuplicateTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile1)
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile1)
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
     }
 
@@ -58,10 +51,10 @@ class PaymentImportIT {
     void canImportSecondBatchOfDifferentTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile1)
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempTransactionFile2)
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_2.txt"))
         assertEquals(8, allBankTransactionRows().size())
 
         def transactions = allBankTransactionRows()
@@ -155,7 +148,42 @@ class PaymentImportIT {
         assertEquals("POP15", transactions[7].reference)
     }
 
+    @Test
+    void importsBothTransactionsWhenThereAreTwoIdenticalTransactionsOnSameDay() throws Exception {
+        assertEquals(0, allBankTransactionRows().size())
+
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_2_identical_transactions.txt"))
+        assertEquals(2, allBankTransactionRows().size())
+    }
+
+    @Test
+    void matchingUserIsTiedToTransaction() {
+        insertUser(1, "roundabout23", "roundabout23@test.com", "Bert Cooper", 2)
+
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
+        assertEquals(4, allBankTransactionRows().size())
+
+        def transactions = allBankTransactionRows()
+
+        assertNotNull(transactions[0].id)
+        assertEquals(1, transactions[0].userId)
+        assertEquals("roundabout23", transactions[0].username)
+        assertEquals("roundabout23@test.com", transactions[0].emailAddress)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[0].date).epochSecond)
+        assertEquals("FASTER PAYMENTS RECEIPT REF.roundabout23 FROM COOPER B", transactions[0].description)
+        assertEquals(250.00, transactions[0].amount)
+        assertEquals(4800.00, transactions[0].runningBalance)
+        assertEquals("COOPER B", transactions[0].counterParty)
+        assertEquals("roundabout23", transactions[0].reference)
+    }
+
     def allBankTransactionRows() {
         return new JsonSlurper().parseText(getRequest("http://localhost:8282/payments?rows=1000&sidx=date&sord=asc")).rows
+    }
+
+    File tempFile(filename) {
+        File temp = File.createTempFile("lcagtransactions", "txt")
+        FileUtils.copyInputStreamToFile(this.getClass().getResourceAsStream("/payments/${filename}"), temp)
+        return temp
     }
 }
