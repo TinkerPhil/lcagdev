@@ -97,11 +97,11 @@ lcag.MemberGrid = lcag.MemberGrid || {
                           })(),
                           success: function(e) {
                             lcag.Common.alertSuccess();
-                            $("#grid").trigger("reloadGrid");
+                            lcag.MemberGrid.grid.trigger("reloadGrid");
                           },
                           error: function(e) {
                             lcag.Common.alertError();
-                            $("#grid").trigger("reloadGrid");
+                            lcag.MemberGrid.grid.trigger("reloadGrid");
                           }
                         });
                 });

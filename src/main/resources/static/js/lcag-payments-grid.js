@@ -14,6 +14,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 { name: "runningBalance", label: "Running Balance", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },
                 { name: "counterParty", label: "Counter Party", width: 70, template: "string" },
                 { name: "reference", label: "Reference", width: 50, template: "string" },
+                { name: "paymentSource", label: "Payment Source", width: 50, template: "string" }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -35,7 +36,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
             headertitles: true,
             pager: true,
             rowNum: 25,
-            width: "1600px",
+            width: "1800px",
             altRows: true,
             viewrecords: true,
             gridComplete: function() {
@@ -70,6 +71,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                       data: { "memberId": memberId, "paymentId": paymentId }
                     }).done(function(result) {
                         lcag.Common.alertSuccess();
+                        lcag.PaymentsGrid.grid.trigger("reloadGrid");
                     });
                 });
             }

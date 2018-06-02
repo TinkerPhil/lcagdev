@@ -35,6 +35,7 @@ public class PaymentDao {
         put("counterParty", "bt.counter_party");
         put("reference", "bt.reference");
         put("transactionIndexOnDay", "bt.transaction_index_on_day");
+        put("paymentSource", "bt.payment_source");
     }};
 
     @Value("${forumDatabaseTablePrefix}")
@@ -50,7 +51,7 @@ public class PaymentDao {
 
         bankTransaction.setId(nextAvailableId);
 
-        String sql = "insert into " + bankTransactionsTableName() + " (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into " + bankTransactionsTableName() + " (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         LOGGER.info("sql: {}", sql);
 
@@ -64,7 +65,8 @@ public class PaymentDao {
                 bankTransaction.getRunningBalance(),
                 bankTransaction.getCounterParty(),
                 bankTransaction.getReference(),
-                bankTransaction.getTransactionIndexOnDay()
+                bankTransaction.getTransactionIndexOnDay(),
+                String.valueOf(bankTransaction.getPaymentSource())
         );
 
         LOGGER.info("Insertion result: {}", result);
@@ -73,35 +75,21 @@ public class PaymentDao {
     public List<BankTransaction> findExistingBankTransaction(BankTransaction bankTransaction) {
         LOGGER.info("Going to try and find existing bank transaction like: {}", bankTransaction);
 
-        String sql = buildBankTransactionTableSelect() + " where bt.date = ? and bt.description = ? and bt.amount = ? and bt.running_balance = ? and bt.transaction_index_on_day = ?";
+        String sql = buildBankTransactionTableSelect() + " where bt.date = ? and bt.description = ? and bt.amount = ? and bt.running_balance = ? and bt.transaction_index_on_day = ? and bt.payment_source = ?";
 
         Object[] arguments = {
                 unixTime(bankTransaction.getDate()),
                 bankTransaction.getDescription(),
                 bankTransaction.getAmount(),
                 bankTransaction.getRunningBalance(),
-                bankTransaction.getTransactionIndexOnDay()
+                bankTransaction.getTransactionIndexOnDay(),
+                String.valueOf(bankTransaction.getPaymentSource())
         };
 
         LOGGER.info("Going to execute sql: {}", sql);
         LOGGER.info("With arguments: {}", asList(arguments));
 
         return jdbcTemplate.query(sql, arguments, (rs, rowNum) -> buildBankTransaction(rs));
-    }
-
-    public BankTransaction findExistingBankTransaction(Long id) {
-        List<BankTransaction> bankTransactions = jdbcTemplate.query(buildBankTransactionTableSelect() + " where bt.id = ?",
-                new Object[] { id }, (rs, rowNum) -> buildBankTransaction(rs));
-
-        if (bankTransactions == null || bankTransactions.isEmpty()) {
-            return null;
-        }
-
-        if (bankTransactions.size() > 1) {
-            throw new RuntimeException("More than one bank transaction found with id " + id + ": " + bankTransactions);
-        }
-
-        return bankTransactions.get(0);
     }
 
     private BankTransaction buildBankTransaction(ResultSet rs) throws SQLException {
@@ -118,7 +106,8 @@ public class PaymentDao {
                 rs.getBigDecimal("bt.running_balance"),
                 rs.getString("bt.counter_party"),
                 rs.getString("bt.reference"),
-                rs.getInt("bt.transaction_index_on_day")
+                rs.getInt("bt.transaction_index_on_day"),
+                PaymentSource.valueOf(rs.getString("bt.payment_source"))
         );
 
         LOGGER.info("Retrieved bank transaction: {}", bankTransaction);
@@ -221,6 +210,16 @@ public class PaymentDao {
         if (bankTransaction.getReference() != null) {
             clauses.add("bt.reference like ?");
             parameters.add(like(bankTransaction.getReference()));
+        }
+
+        if (bankTransaction.getTransactionIndexOnDay() != null) {
+            clauses.add("bt.transaction_index_on_day = ?");
+            parameters.add(bankTransaction.getTransactionIndexOnDay());
+        }
+
+        if (bankTransaction.getPaymentSource() != null) {
+            clauses.add("bt.payment_source like ?");
+            parameters.add(like(String.valueOf(bankTransaction.getPaymentSource())));
         }
 
         return PersistenceUtils.buildWhereClause(clauses, parameters);

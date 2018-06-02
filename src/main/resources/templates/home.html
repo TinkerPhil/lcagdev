@@ -83,6 +83,7 @@
                     url: "/paymentUpload",
                     success: function (file, response) {
                         lcag.Common.alertSuccess();
+                        lcag.PaymentsGrid.grid.trigger("reloadGrid");
                     }
                 });
             });

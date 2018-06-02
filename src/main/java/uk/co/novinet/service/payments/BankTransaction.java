@@ -17,8 +17,21 @@ public class BankTransaction {
     private String counterParty;
     private String reference;
     private Integer transactionIndexOnDay;
+    private PaymentSource paymentSource;
 
-    public BankTransaction(Long id, Long userId, String username, String emailAddress, Instant date, String description, BigDecimal amount, BigDecimal runningBalance, String counterParty, String reference, Integer transactionIndexOnDay) {
+    public BankTransaction(
+            Long id,
+            Long userId,
+            String username,
+            String emailAddress,
+            Instant date,
+            String description,
+            BigDecimal amount,
+            BigDecimal runningBalance,
+            String counterParty,
+            String reference,
+            Integer transactionIndexOnDay,
+            PaymentSource paymentSource) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -30,6 +43,7 @@ public class BankTransaction {
         this.counterParty = counterParty;
         this.reference = reference;
         this.transactionIndexOnDay = transactionIndexOnDay;
+        this.paymentSource = paymentSource;
     }
 
     void setId(Long id) {
@@ -122,5 +136,9 @@ public class BankTransaction {
 
     public void setTransactionIndexOnDay(Integer transactionIndexOnDay) {
         this.transactionIndexOnDay = transactionIndexOnDay;
+    }
+
+    public PaymentSource getPaymentSource() {
+        return paymentSource;
     }
 }

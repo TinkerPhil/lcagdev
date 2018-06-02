@@ -98,7 +98,8 @@ public class PaymentService {
                         new BigDecimal(balance),
                         findInDescription(description, "counterParty"),
                         reference,
-                        transactionIndexOnDay));
+                        transactionIndexOnDay,
+                        PaymentSource.SANTANDER));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }

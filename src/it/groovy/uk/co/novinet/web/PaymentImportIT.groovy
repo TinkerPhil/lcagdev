@@ -69,6 +69,7 @@ class PaymentImportIT {
         assertEquals(4800.00, transactions[0].runningBalance)
         assertEquals("COOPER B", transactions[0].counterParty)
         assertEquals("roundabout23", transactions[0].reference)
+        assertEquals("SANTANDER", transactions[0].paymentSource)
 
         assertNotNull(transactions[1].id)
         assertNull(transactions[1].userId)
@@ -80,6 +81,7 @@ class PaymentImportIT {
         assertEquals(4850.00, transactions[1].runningBalance)
         assertEquals("M Bowler", transactions[1].counterParty)
         assertEquals("MIKE BOWLER", transactions[1].reference)
+        assertEquals("SANTANDER", transactions[1].paymentSource)
 
         assertNotNull(transactions[2].id)
         assertNull(transactions[2].userId)
@@ -91,6 +93,7 @@ class PaymentImportIT {
         assertEquals(4950.00, transactions[2].runningBalance)
         assertEquals("FINK KITCHENS LTD", transactions[2].counterParty)
         assertEquals("FROM FINK", transactions[2].reference)
+        assertEquals("SANTANDER", transactions[2].paymentSource)
 
         assertNotNull(transactions[3].id)
         assertNull(transactions[3].userId)
@@ -102,6 +105,7 @@ class PaymentImportIT {
         assertEquals(5050.00, transactions[3].runningBalance)
         assertEquals("BOB FRENCH", transactions[3].counterParty)
         assertEquals("BOB FRENCH", transactions[3].reference)
+        assertEquals("SANTANDER", transactions[3].paymentSource)
 
         assertNotNull(transactions[4].id)
         assertNull(transactions[4].userId)
@@ -113,6 +117,7 @@ class PaymentImportIT {
         assertEquals(4800.00, transactions[4].runningBalance)
         assertEquals("MR JAMES SMITH HENRY JONES", transactions[4].counterParty)
         assertEquals("james45", transactions[4].reference)
+        assertEquals("SANTANDER", transactions[4].paymentSource)
 
         assertNotNull(transactions[5].id)
         assertNull(transactions[5].userId)
@@ -124,6 +129,7 @@ class PaymentImportIT {
         assertEquals(4850.00, transactions[5].runningBalance)
         assertEquals("STUART PETERS", transactions[5].counterParty)
         assertEquals("QSHJ", transactions[5].reference)
+        assertEquals("SANTANDER", transactions[5].paymentSource)
 
         assertNotNull(transactions[6].id)
         assertNull(transactions[6].userId)
@@ -135,6 +141,7 @@ class PaymentImportIT {
         assertEquals(4950.00, transactions[6].runningBalance)
         assertEquals("CROW VD", transactions[6].counterParty)
         assertEquals("JOHNCLOCK", transactions[6].reference)
+        assertEquals("SANTANDER", transactions[6].paymentSource)
 
         assertNotNull(transactions[7].id)
         assertNull(transactions[7].userId)
@@ -146,6 +153,7 @@ class PaymentImportIT {
         assertEquals(5050.00, transactions[7].runningBalance)
         assertEquals("B Zen", transactions[7].counterParty)
         assertEquals("POP15", transactions[7].reference)
+        assertEquals("SANTANDER", transactions[7].paymentSource)
     }
 
     @Test
