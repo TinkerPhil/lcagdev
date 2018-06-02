@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 @Service
 public class PersistenceUtils {
 
-    private static final Pattern ISO8601_DATE_PATTERN = Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?<offset>[+-]\\d{2}:\\d{2})");
+    private static final Pattern ISO8601_DATE_PATTERN = Pattern.compile("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}\\.\\d{3})?(?<offset>([+-]\\d{2}:\\d{2})|(Z))");
 
     private static String forumDatabaseTablePrefix;
 
