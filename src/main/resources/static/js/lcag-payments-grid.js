@@ -10,12 +10,12 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 { name: "date", label: "Transaction Date", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.date, search: false },
                 { name: "transactionIndexOnDay", label: "Index", width: 40, template: "string" },
                 { name: "description", label: "Description", width: 180, template: "string" },
+                { name: "emailAddress", label: "Email Address", width: 90, template: "string" },
                 { name: "amount", label: "Amount", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.amount },
                 { name: "runningBalance", label: "Running Balance", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },
                 { name: "counterParty", label: "Counter Party", width: 70, template: "string" },
                 { name: "reference", label: "Reference", width: 50, template: "string" },
-                { name: "paymentSource", label: "Payment Source", width: 50, template: "string" },
-                { name: "emailAddress", label: "Email Address", width: 90, template: "string" }
+                { name: "paymentSource", label: "Payment Source", width: 50, template: "string" }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
