@@ -2,8 +2,8 @@ package uk.co.novinet.service.member;
 
 import uk.co.novinet.service.mail.PasswordDetails;
 
+import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +22,6 @@ public class Member {
     private Instant registrationDate;
     private Boolean hmrcLetterChecked;
     private Boolean identificationChecked;
-    private String contributionAmount;
-    private Instant contributionDate;
     private String mpName;
     private String schemes;
     private Boolean mpEngaged;
@@ -34,6 +32,7 @@ public class Member {
     private String notes;
     private String industry;
     private PasswordDetails passwordDetails;
+    private BigDecimal contributionAmount;
 
     public Member() {}
 
@@ -46,8 +45,6 @@ public class Member {
             Instant registrationDate,
             Boolean hmrcLetterChecked,
             Boolean identificationChecked,
-            String contributionAmount,
-            Instant contributionDate,
             String mpName,
             String schemes,
             Boolean mpEngaged,
@@ -57,7 +54,7 @@ public class Member {
             Boolean agreedToContributeButNotPaid,
             String notes,
             String industry,
-            PasswordDetails passwordDetails) {
+            PasswordDetails passwordDetails, BigDecimal contributionAmount) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
@@ -65,8 +62,6 @@ public class Member {
         this.registrationDate = registrationDate;
         this.hmrcLetterChecked = hmrcLetterChecked;
         this.identificationChecked = identificationChecked;
-        this.contributionAmount = contributionAmount;
-        this.contributionDate = contributionDate;
         this.mpName = mpName;
         this.schemes = schemes;
         this.mpEngaged = mpEngaged;
@@ -78,6 +73,7 @@ public class Member {
         this.industry = industry;
         this.passwordDetails = passwordDetails;
         this.name = name;
+        this.contributionAmount = contributionAmount;
     }
 
     public Long getId() {
@@ -119,14 +115,6 @@ public class Member {
 
     public Boolean getIdentificationChecked() {
         return identificationChecked;
-    }
-
-    public String getContributionAmount() {
-        return contributionAmount;
-    }
-
-    public Instant getContributionDate() {
-        return contributionDate;
     }
 
     public String getMpName() {
@@ -185,14 +173,6 @@ public class Member {
         this.identificationChecked = identificationChecked;
     }
 
-    public void setContributionAmount(String contributionAmount) {
-        this.contributionAmount = contributionAmount;
-    }
-
-    public void setContributionDate(Instant contributionDate) {
-        this.contributionDate = contributionDate;
-    }
-
     public void setMpName(String mpName) {
         this.mpName = mpName;
     }
@@ -239,5 +219,13 @@ public class Member {
 
     public void setIndustry(String industry) {
         this.industry = industry;
+    }
+
+    public BigDecimal getContributionAmount() {
+        return contributionAmount;
+    }
+
+    public void setContributionAmount(BigDecimal contributionAmount) {
+        this.contributionAmount = contributionAmount;
     }
 }

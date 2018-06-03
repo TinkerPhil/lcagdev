@@ -39,8 +39,6 @@ public class MemberController {
             @RequestParam("id") Long memberId,
             @RequestParam(value = "identificationChecked", required = false) boolean identificationChecked,
             @RequestParam(value = "hmrcLetterChecked", required = false) boolean hmrcLetterChecked,
-            @RequestParam(value = "contributionAmount", required = false) String contributionAmount,
-            @RequestParam(value = "contributionDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Instant contributionDate,
             @RequestParam(value = "mpName", required = false) String mpName,
             @RequestParam(value = "mpEngaged", required = false) Boolean mpEngaged,
             @RequestParam(value = "mpSympathetic", required = false) Boolean mpSympathetic,
@@ -52,7 +50,7 @@ public class MemberController {
             @RequestParam(value = "industry", required = false) String industry,
             @RequestParam("group") String group
     ) {
-        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry);
+        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry);
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -13,7 +13,6 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "hmrcLetterChecked", label: "HMRC Letter Received", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "contributionAmount", label: "Contribution Amount", width: 90, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
-                { name: "contributionDate", label: "Contribution Date", width: 110, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.contributionDate},
                 { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: lcag.MemberGrid.formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "mpName", label: "MP Name", width: 90, formatter: lcag.MemberGrid.formatters.mpName },
                 { name: "mpParty", label: "MP Party", width: 90, formatter: lcag.MemberGrid.formatters.mpParty },
@@ -67,23 +66,12 @@ lcag.MemberGrid = lcag.MemberGrid || {
                           type: "POST",
                           url: lcag.Common.urlPrefix + "/member/update",
                           data: (function() {
-                            console.log("rowContext", rowContext);
                             var id = $(rowContext).data("row-id");
-                            var contributionDate = $("#contributionDate_" + id).val();
-                            var formattedContributionDate = null;
-
-                            if (contributionDate != null && contributionDate != "") {
-                                formattedContributionDate = moment(contributionDate, "DD/MM/YYYY").format();
-                            }
-
-                            console.log("id", id);
 
                             return {
                                 "id": id,
                                 "identificationChecked": $("#identificationChecked_" + id).prop("checked"),
                                 "hmrcLetterChecked": $("#hmrcLetterChecked_" + id).prop("checked"),
-                                "contributionAmount": $("#contributionAmount_" + id).val(),
-                                "contributionDate": formattedContributionDate,
                                 "agreedToContributeButNotPaid": $("#agreedToContributeButNotPaid_" + id).prop("checked"),
                                 "mpName": $("#mpName_" + id).val(),
                                 "mpParty": $("#mpParty_" + id).val(),
@@ -126,11 +114,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
             return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="hmrcLetterChecked_' + row.id + '" type="checkbox" ' + (row.hmrcLetterChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "contributionAmount": function(cellvalue, options, row) {
-            return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="contributionAmount_' + row.id + '" type="text" value="' + row.contributionAmount + '" class="form-control"></div></div>';
-        },
-        "contributionDate": function(cellvalue, options, row) {
-            var dateString = row.contributionDate == null ? "" : moment(row.contributionDate).format("DD/MM/YYYY");
-            return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="contributionDate_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
+            return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input disabled="disabled" id="contributionAmount_' + row.id + '" type="text" value="' + (row.contributionAmount == null ? "0.00" : parseFloat(Math.round(row.contributionAmount * 100) / 100).toFixed(2)) + '" class="form-control"></div></div>';
         },
         "agreedToContributeButNotPaid": function(cellvalue, options, row) {
             return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="agreedToContributeButNotPaid_' + row.id + '" type="checkbox" ' + (row.agreedToContributeButNotPaid ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';

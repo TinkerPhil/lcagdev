@@ -10,6 +10,7 @@ import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.mail.Enquiry;
 import uk.co.novinet.service.mail.PasswordSource;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -36,8 +37,6 @@ public class MemberService {
         put("registrationDate", "u.regdate");
         put("hmrcLetterChecked", "u.hmrc_letter_checked");
         put("identificationChecked", "u.identification_checked");
-        put("contributionAmount", "u.contribution_amount");
-        put("contributionDate", "u.contribution_date");
         put("agreedToContributeButNotPaid", "u.agreed_to_contribute_but_not_paid");
         put("mpName", "u.mp_name");
         put("mpEngaged", "u.mp_engaged");
@@ -47,19 +46,18 @@ public class MemberService {
         put("schemes", "u.schemes");
         put("notes", "u.notes");
         put("industry", "u.industry");
+        put("contributionAmount", "contribution_amount");
     }};
 
-    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, String contributionAmount, Instant contributionDate, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry) {
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, contributionAmount={}, contributionDate={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}",
-                group, identificationChecked, hmrcLetterChecked, contributionAmount, contributionDate, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry);
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}",
+                group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry);
 
         String sql = "update " + usersTableName() + " u " +
                 "set u.usergroup = (select `gid` from " + userGroupsTableName() + " ug where ug.title = ?), " +
                 "u.identification_checked = ?, " +
                 "u.hmrc_letter_checked = ?, " +
-                "u.contribution_amount = ?, " +
-                "u.contribution_date = ?, " +
                 "u.agreed_to_contribute_but_not_paid = ?, " +
                 "u.mp_name = ?, " +
                 "u.mp_engaged = ?, " +
@@ -78,8 +76,6 @@ public class MemberService {
                 group,
                 identificationChecked,
                 hmrcLetterChecked,
-                contributionAmount,
-                unixTime(contributionDate),
                 agreedToContributeButNotPaid,
                 mpName,
                 mpEngaged,
@@ -105,7 +101,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, "0", null, null, null, false, false, "", "", false, "", "", PasswordSource.getRandomPasswordDetails());
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, null, null, false, false, "", "", false, "", "", PasswordSource.getRandomPasswordDetails(), new BigDecimal("0.00"));
 
             Long max = findNextAvailableId("uid", usersTableName());
 
@@ -143,17 +139,23 @@ public class MemberService {
     }
 
     public List<Member> findExistingForumUsersByField(String field, String value) {
-        return jdbcTemplate.query(buildUserTableSelect() + "where lower(u." + field + ") = ?", new Object[] { value.toLowerCase() }, (rs, rowNum) -> buildMember(rs));
+        return jdbcTemplate.query(buildUserTableSelect() + "where lower(u." + field + ") = ?" + buildUserTableGroupBy(), new Object[] { value.toLowerCase() }, (rs, rowNum) -> buildMember(rs));
     }
 
     private String buildUserTableSelect() {
-        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid ";
+        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
+                "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
+                "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
+    }
+
+    private String buildUserTableGroupBy() {
+        return " group by u.uid ";
     }
 
     public long searchCountMembers(Member member, String operator) {
         Where where = buildWhereClause(member, operator);
         final boolean hasWhere = !"".equals(where.getSql());
-        return jdbcTemplate.queryForObject("select count(*) from (" + buildUserTableSelect() + where.getSql() + ") as t", hasWhere ? where.getArguments().toArray() : null, Long.class);
+        return jdbcTemplate.queryForObject("select count(*) from (" + buildUserTableSelect() + where.getSql() + buildUserTableGroupBy() + ") as t", hasWhere ? where.getArguments().toArray() : null, Long.class);
     }
 
     public List<Member> searchMembers(long offset, long itemsPerPage, Member member, String sortField, String sortDirection, String operator) {
@@ -173,7 +175,7 @@ public class MemberService {
 
         final boolean hasWhere = !"".equals(where.getSql());
 
-        String sql = buildUserTableSelect() + where.getSql() + orderBy + pagination;
+        String sql = buildUserTableSelect() + where.getSql() + buildUserTableGroupBy() + orderBy + pagination;
 
         LOGGER.info("sql: {}", sql);
 
@@ -262,6 +264,11 @@ public class MemberService {
             parameters.add(like(member.getIndustry()));
         }
 
+        if (member.getContributionAmount() != null) {
+            clauses.add("contribution_amount = ?");
+            parameters.add(member.getContributionAmount());
+        }
+
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
@@ -275,8 +282,6 @@ public class MemberService {
                 dateFromMyBbRow(rs, "regdate"),
                 rs.getBoolean("hmrc_letter_checked"),
                 rs.getBoolean("identification_checked"),
-                rs.getString("contribution_amount"),
-                dateFromMyBbRow(rs, "contribution_date"),
                 rs.getString("mp_name"),
                 rs.getString("schemes"),
                 rs.getBoolean("mp_engaged"),
@@ -286,8 +291,8 @@ public class MemberService {
                 rs.getBoolean("agreed_to_contribute_but_not_paid"),
                 rs.getString("notes"),
                 rs.getString("industry"),
-                null
-        );
+                null,
+                rs.getBigDecimal("contribution_amount"));
     }
 
     private String extractUsername(String emailAddress) {

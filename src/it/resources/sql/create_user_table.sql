@@ -86,8 +86,6 @@ CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `name` varchar(200)  NOT NULL DEFAULT '',
   `hmrc_letter_checked` tinyint(1) NOT NULL DEFAULT '0',
   `identification_checked` tinyint(1) NOT NULL DEFAULT '0',
-  `contribution_amount` varchar(10) NOT NULL DEFAULT '0',
-  `contribution_date` int(10) unsigned NOT NULL DEFAULT '0',
   `agreed_to_contribute_but_not_paid` tinyint(1) NOT NULL DEFAULT '0',
   `mp_name` varchar(200) NOT NULL DEFAULT '',
   `mp_engaged` tinyint(1) NOT NULL DEFAULT '0',
