@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `i7b0_bank_transactions` (
   `reference` varchar(120) NOT NULL DEFAULT '',
   `transaction_index_on_day` int(10) unsigned NOT NULL DEFAULT '0',
   `payment_source` varchar(10) NOT NULL DEFAULT '',
+  `email_address` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   FOREIGN KEY (`user_id`) REFERENCES `i7b0_user`(`uid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=194 DEFAULT CHARSET=utf8;
