@@ -14,7 +14,8 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 { name: "runningBalance", label: "Running Balance", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },
                 { name: "counterParty", label: "Counter Party", width: 70, template: "string" },
                 { name: "reference", label: "Reference", width: 50, template: "string" },
-                { name: "paymentSource", label: "Payment Source", width: 50, template: "string" }
+                { name: "paymentSource", label: "Payment Source", width: 50, template: "string" },
+                { name: "emailAddress", label: "Email Address", width: 90, template: "string" }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -46,7 +47,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                   ajax: {
                     url: '/member',
                     data: function (params) {
-                      return { username: params.term }
+                      return { username: params.term, emailAddress: params.term, name: params.term, operator: 'or' }
                     },
                     dataType: 'json',
                     processResults: function (data) {
@@ -54,7 +55,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                         $.each(data.rows, function (index, row) {
                             arr.push({
                                 id: row.id,
-                                text: row.username + " (" + row.emailAddress + ")"
+                                text: row.username + " (" + row.emailAddress + ") " + row.name
                             })
                         })
                         return {

@@ -150,20 +150,20 @@ public class MemberService {
         return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.contribution_amount, u.contribution_date, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, ug.title as `group` from " + forumDatabaseTablePrefix + "users u inner join " + forumDatabaseTablePrefix + "usergroups ug on u.usergroup = ug.gid ";
     }
 
-    public long searchCountMembers(Member member) {
-        Where where = buildWhereClause(member);
+    public long searchCountMembers(Member member, String operator) {
+        Where where = buildWhereClause(member, operator);
         final boolean hasWhere = !"".equals(where.getSql());
         return jdbcTemplate.queryForObject("select count(*) from (" + buildUserTableSelect() + where.getSql() + ") as t", hasWhere ? where.getArguments().toArray() : null, Long.class);
     }
 
-    public List<Member> searchMembers(long offset, long itemsPerPage, Member member, String sortField, String sortDirection) {
+    public List<Member> searchMembers(long offset, long itemsPerPage, Member member, String sortField, String sortDirection, String operator) {
         String pagination = "";
 
         if (offset > -1 && itemsPerPage > -1) {
             pagination = " limit " + offset + ", " + itemsPerPage + " ";
         }
 
-        Where where = buildWhereClause(member);
+        Where where = buildWhereClause(member, operator);
 
         String orderBy = "";
 
@@ -183,7 +183,7 @@ public class MemberService {
         );
     }
 
-    private Where buildWhereClause(Member member) {
+    private Where buildWhereClause(Member member, String operator) {
         List<String> clauses = new ArrayList<>();
         List<Object> parameters = new ArrayList<>();
 
@@ -262,7 +262,7 @@ public class MemberService {
             parameters.add(like(member.getIndustry()));
         }
 
-        return PersistenceUtils.buildWhereClause(clauses, parameters);
+        return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
     private Member buildMember(ResultSet rs) throws SQLException {

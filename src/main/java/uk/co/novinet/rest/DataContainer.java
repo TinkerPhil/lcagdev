@@ -6,7 +6,7 @@ public class DataContainer {
     private long page; // the 1-based number of the current page
     private long rowNum; // the page size - the maximal number of records in a page (the last page can contains less records)
     private long records; // total records (on all pages) in the grid
-    private long total;
+    private long total; // total number of pages for the grid
     private List<? extends Object> rows;
 
     public DataContainer(long page, long rowNum, long records, long total, List<? extends Object> rows) {

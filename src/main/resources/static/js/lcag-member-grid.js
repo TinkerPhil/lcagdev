@@ -34,6 +34,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                         complete: function(response, status) {
                             if (status == "success") {
                                 lcag.MemberGrid.grid = $("#member-grid")[0];
+                                console.log("jsondata:", response.responseJSON);
                                 lcag.MemberGrid.grid.addJSONData(response.responseJSON);
                             }
                         }

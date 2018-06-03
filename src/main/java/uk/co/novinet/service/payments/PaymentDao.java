@@ -119,22 +119,22 @@ public class PaymentDao {
         return "select * from " + bankTransactionsTableName() + " bt left outer join " + usersTableName() + " u on u.uid = bt.user_id ";
     }
 
-    public long searchCountBankTransactions(BankTransaction bankTransaction) {
-        Where where = buildWhereClause(bankTransaction);
+    public long searchCountBankTransactions(BankTransaction bankTransaction, String operator) {
+        Where where = buildWhereClause(bankTransaction, operator);
         final boolean hasWhere = !"".equals(where.getSql());
         String sql = "select count(*) from (" + buildBankTransactionTableSelect() + where.getSql() + ") as t";
         LOGGER.info("sql: {}", sql);
         return jdbcTemplate.queryForObject(sql, hasWhere ? where.getArguments().toArray() : null, Long.class);
     }
 
-    public List<BankTransaction> searchBankTransactions(long offset, long itemsPerPage, BankTransaction bankTransaction, String sortField, String sortDirection) {
+    public List<BankTransaction> searchBankTransactions(long offset, long itemsPerPage, BankTransaction bankTransaction, String sortField, String sortDirection, String operator) {
         String pagination = "";
 
         if (offset > -1 && itemsPerPage > -1) {
             pagination = " limit " + offset + ", " + itemsPerPage + " ";
         }
 
-        Where where = buildWhereClause(bankTransaction);
+        Where where = buildWhereClause(bankTransaction, operator);
 
         String orderBy = "";
 
@@ -158,7 +158,7 @@ public class PaymentDao {
         );
     }
 
-    private Where buildWhereClause(BankTransaction bankTransaction) {
+    private Where buildWhereClause(BankTransaction bankTransaction, String operator) {
         List<String> clauses = new ArrayList<>();
         List<Object> parameters = new ArrayList<>();
 
@@ -222,7 +222,7 @@ public class PaymentDao {
             parameters.add(like(String.valueOf(bankTransaction.getPaymentSource())));
         }
 
-        return PersistenceUtils.buildWhereClause(clauses, parameters);
+        return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
     public void updateMemberId(Long paymentId, Long memberId) {

@@ -70,13 +70,13 @@ public class PersistenceUtils {
         return "%" + argument.toLowerCase() + "%";
     }
 
-    public static Where buildWhereClause(List<String> clauses, List<Object> parameters) {
+    public static Where buildWhereClause(List<String> clauses, List<Object> parameters, String operator) {
         String sql = clauses.isEmpty() ? "" : "where ";
 
         for (int i = 0; i < clauses.size(); i++) {
             sql += clauses.get(i);
             if (i < clauses.size() - 1) {
-                sql += " and ";
+                sql += " " + operator + " ";
             }
         }
 

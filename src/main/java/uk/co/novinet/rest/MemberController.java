@@ -28,8 +28,9 @@ public class MemberController {
             @RequestParam(value = "rows", required = false) Long rowCount,
             @RequestParam(value = "searchPhrase", required = false) String searchPhrase,
             @RequestParam(value = "sidx", required = false) String sortBy,
-            @RequestParam(value = "sord", required = false) String sortDirection) {
-        return retrieveData(current, rowCount, searchPhrase, sortBy, sortDirection, member);
+            @RequestParam(value = "sord", required = false) String sortDirection,
+            @RequestParam(value = "operator", required = false) String operator) {
+        return retrieveData(current, rowCount, searchPhrase, sortBy, sortDirection, member, operator == null ? "and" : operator);
     }
 
     @CrossOrigin
@@ -55,7 +56,7 @@ public class MemberController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    private DataContainer retrieveData(Long current, Long rowCount, String searchPhrase, String sortBy, String sortDirection, Member member) {
+    private DataContainer retrieveData(Long current, Long rowCount, String searchPhrase, String sortBy, String sortDirection, Member member, String operator) {
         current = current == null ? 1 : current;
         rowCount = rowCount == null ? 25 : rowCount;
 
@@ -66,10 +67,10 @@ public class MemberController {
         LOGGER.info("sortBy: {}", sortBy);
         LOGGER.info("sortDirection: {}", sortDirection);
 
-        long totalCount = memberService.searchCountMembers(member);
+        long totalCount = memberService.searchCountMembers(member, operator);
 
         LOGGER.info("totalCount: {}", totalCount);
 
-        return new DataContainer(current, rowCount, totalCount, (long) Math.ceil(totalCount / rowCount) + 1, memberService.searchMembers((current - 1) * rowCount, rowCount, member, sortBy, sortDirection));
+        return new DataContainer(current, rowCount, totalCount, (long) Math.ceil(totalCount / rowCount) + 1, memberService.searchMembers((current - 1) * rowCount, rowCount, member, sortBy, sortDirection, operator));
     }
 }

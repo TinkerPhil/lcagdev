@@ -35,7 +35,7 @@ public class PaymentController {
                                     @RequestParam(value = "searchPhrase", required = false) String searchPhrase,
                                     @RequestParam(value = "sidx", required = false) String sortBy,
                                     @RequestParam(value = "sord", required = false) String sortDirection) {
-        return retrieveData(current, rowCount, searchPhrase, sortBy, sortDirection, bankTransaction);
+        return retrieveData(current, rowCount, searchPhrase, sortBy, sortDirection, bankTransaction, "and");
     }
 
     @CrossOrigin
@@ -56,7 +56,7 @@ public class PaymentController {
         return ResponseEntity.ok().build();
     }
 
-    private DataContainer retrieveData(Long current, Long rowCount, String searchPhrase, String sortBy, String sortDirection, BankTransaction bankTransaction) {
+    private DataContainer retrieveData(Long current, Long rowCount, String searchPhrase, String sortBy, String sortDirection, BankTransaction bankTransaction, String operator) {
         current = current == null ? 1 : current;
         rowCount = rowCount == null ? 25 : rowCount;
 
@@ -67,10 +67,10 @@ public class PaymentController {
         LOGGER.info("sortBy: {}", sortBy);
         LOGGER.info("sortDirection: {}", sortDirection);
 
-        long totalCount = paymentDao.searchCountBankTransactions(bankTransaction);
+        long totalCount = paymentDao.searchCountBankTransactions(bankTransaction, operator);
 
         LOGGER.info("totalCount: {}", totalCount);
 
-        return new DataContainer(current, rowCount, totalCount, (long) Math.ceil(totalCount / rowCount) + 1, paymentDao.searchBankTransactions((current - 1) * rowCount, rowCount, bankTransaction, sortBy, sortDirection));
+        return new DataContainer(current, rowCount, totalCount, (long) Math.ceil(totalCount / rowCount) + 1, paymentDao.searchBankTransactions((current - 1) * rowCount, rowCount, bankTransaction, sortBy, sortDirection, "operator"));
     }
 }
