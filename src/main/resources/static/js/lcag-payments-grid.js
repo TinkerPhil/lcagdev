@@ -24,8 +24,8 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                         dataType: "json",
                         complete: function(response, status) {
                             if (status == "success") {
-                                lcag.PaymentsGrid.grid = $("#payments-grid")[0];
-                                lcag.PaymentsGrid.grid.addJSONData(response.responseJSON);
+                                lcag.PaymentsGrid.grid = $("#payments-grid");
+                                lcag.PaymentsGrid.grid[0].addJSONData(response.responseJSON);
                             }
                         }
                     });

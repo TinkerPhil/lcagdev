@@ -32,9 +32,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
                         dataType: "json",
                         complete: function(response, status) {
                             if (status == "success") {
-                                lcag.MemberGrid.grid = $("#member-grid")[0];
+                                lcag.MemberGrid.grid = $("#member-grid");
                                 console.log("jsondata:", response.responseJSON);
-                                lcag.MemberGrid.grid.addJSONData(response.responseJSON);
+                                lcag.MemberGrid.grid[0].addJSONData(response.responseJSON);
                             }
                         }
                     });

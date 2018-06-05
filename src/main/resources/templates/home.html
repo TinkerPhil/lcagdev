@@ -84,6 +84,7 @@
                     success: function (file, response) {
                         lcag.Common.alertSuccess();
                         lcag.PaymentsGrid.grid.trigger("reloadGrid");
+                        lcag.MemberGrid.grid.trigger("reloadGrid");
                     }
                 });
             });
@@ -91,4 +92,4 @@
     </body>
 
 
-</html>
+</html>gi
