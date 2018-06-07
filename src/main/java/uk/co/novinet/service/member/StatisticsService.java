@@ -30,10 +30,10 @@ public class StatisticsService {
     private JdbcTemplate jdbcTemplate;
 
     public Statistics buildStatistics() {
-        Double totalContributions = jdbcTemplate.queryForObject("select sum(amount) from " + bankTransactionsTableName(), new Object[] { }, Double.class);
+        Double totalContributions = jdbcTemplate.queryForObject("select sum(amount) from " + bankTransactionsTableName() + " bt where bt.user_id is not null", new Object[] { }, Double.class);
         Integer totalContributors = jdbcTemplate.queryForObject("select count(distinct(user_id)) from " + bankTransactionsTableName(), new Object[] { }, Integer.class);
         Integer numberOfRegisteredMembers = jdbcTemplate.queryForObject("select count(u.uid) from " + usersTableName() + " u where u.usergroup in (select gid from " + userGroupsTableName() + " where title = ? or title = ?)", new Object[] { "Registered", "Moderators" }, Integer.class);
-        Integer numberOfGuests = jdbcTemplate.queryForObject("select count(u.contribution_amount) from " + usersTableName() + " u where u.usergroup in (select gid from " + userGroupsTableName() + " where title = ?)", new Object[] { "LCAG Guests" }, Integer.class);
+        Integer numberOfGuests = jdbcTemplate.queryForObject("select count(*) from " + usersTableName() + " u where u.usergroup in (select gid from " + userGroupsTableName() + " where title = ?)", new Object[] { "LCAG Guests" }, Integer.class);
         Integer totalUsers = numberOfRegisteredMembers + numberOfGuests;
 
         return new Statistics(totalContributions, totalContributors, numberOfRegisteredMembers, numberOfGuests, totalUsers);
