@@ -125,7 +125,8 @@ public class TestUtils {
                         resultSet.getInt("uid"),
                         resultSet.getString("username"),
                         resultSet.getString("email"),
-                        resultSet.getString("name"))
+                        resultSet.getString("name"),
+                        resultSet.getString("token"))
                 );
             }
 

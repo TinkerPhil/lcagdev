@@ -1,5 +1,6 @@
 package uk.co.novinet.e2e;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -98,6 +99,7 @@ public class EnquiryIT {
         assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
         assertEquals("Testy Test", getUserRows().get(0).getName());
         assertEquals(enquirierUsername, getUserRows().get(0).getUsername());
+        assertTrue(StringUtils.isNotBlank(getUserRows().get(0).getToken()));
 
         // enquirer receives the welcome email
         List<StaticMessage> messages = getEmails(enquirerEmailAddress, "Inbox");
@@ -128,6 +130,7 @@ public class EnquiryIT {
         assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
         assertEquals("Testy Test", getUserRows().get(0).getName());
         assertEquals(enquirierUsername, getUserRows().get(0).getUsername());
+        assertTrue(StringUtils.isNotBlank(getUserRows().get(0).getToken()));
 
         // enquirer receives the welcome email
         waitForNEmailsToAppearInFolder(1, "Inbox", enquirerEmailAddress);

@@ -31,6 +31,7 @@ public class Member {
     private Boolean agreedToContributeButNotPaid;
     private String notes;
     private String industry;
+    private String token;
     private PasswordDetails passwordDetails;
     private BigDecimal contributionAmount;
 
@@ -54,7 +55,9 @@ public class Member {
             Boolean agreedToContributeButNotPaid,
             String notes,
             String industry,
-            PasswordDetails passwordDetails, BigDecimal contributionAmount) {
+            String token,
+            PasswordDetails passwordDetails,
+            BigDecimal contributionAmount) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
@@ -71,6 +74,7 @@ public class Member {
         this.agreedToContributeButNotPaid = agreedToContributeButNotPaid;
         this.notes = notes;
         this.industry = industry;
+        this.token = token;
         this.passwordDetails = passwordDetails;
         this.name = name;
         this.contributionAmount = contributionAmount;
@@ -227,5 +231,13 @@ public class Member {
 
     public void setContributionAmount(BigDecimal contributionAmount) {
         this.contributionAmount = contributionAmount;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

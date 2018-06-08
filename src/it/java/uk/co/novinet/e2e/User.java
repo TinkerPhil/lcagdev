@@ -5,12 +5,14 @@ public class User {
     private String username;
     private String emailAddress;
     private String name;
+    private String token;
 
-    public User(int id, String username, String emailAddress, String name) {
+    public User(int id, String username, String emailAddress, String name, String token) {
         this.id = id;
         this.username = username;
         this.emailAddress = emailAddress;
         this.name = name;
+        this.token = token;
     }
 
     public int getId() {
@@ -27,5 +29,9 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getToken() {
+        return token;
     }
 }
