@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `notes` varchar(500) NOT NULL DEFAULT '',
   `industry` varchar(200) NOT NULL DEFAULT '',
   `token` varchar(200) NOT NULL DEFAULT '',
+  `has_completed_membership_form` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`),
   KEY `usergroup` (`usergroup`),
