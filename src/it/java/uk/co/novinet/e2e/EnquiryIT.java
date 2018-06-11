@@ -109,7 +109,8 @@ public class EnquiryIT {
         assertTrue(enquiryReply.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply.getSubject());
         assertEquals("lcag-testing@lcag.com", enquiryReply.getFrom());
-        assertTrue(enquiryReply.getContent().contains("Testy Test " + enquirierUsername));
+        assertTrue(enquiryReply.getContent().contains("name=Testy Test"));
+        assertTrue(enquiryReply.getContent().contains("username=" + enquirierUsername));
     }
 
     @Test
@@ -142,7 +143,8 @@ public class EnquiryIT {
         assertTrue(enquiryReply.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply.getSubject());
         assertEquals("lcag-testing@lcag.com", enquiryReply.getFrom());
-        assertTrue(enquiryReply.getContent().contains("Testy Test " + enquirierUsername));
+        assertTrue(enquiryReply.getContent().contains("name=Testy Test "));
+        assertTrue(enquiryReply.getContent().contains("username=" + enquirierUsername));
     }
 
     private void enquirerHasNoEmails() {
@@ -210,8 +212,10 @@ public class EnquiryIT {
         assertTrue(enquiryReply1.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply1.getSubject());
         assertEquals("lcag-testing@lcag.com", enquiryReply1.getFrom());
-        assertTrue(enquiryReply1.getContent().contains("Testy Test1 "));
-        assertTrue(enquiryReply1.getContent().contains(duplicateEnquirerUsername1));
+        assertTrue(enquiryReply1.getContent().contains("name=Testy Test1"));
+        assertTrue(enquiryReply1.getContent().contains("username=" + duplicateEnquirerUsername1));
+        assertTrue(enquiryReply1.getContent().contains("password="));
+        assertTrue(enquiryReply1.getContent().contains("token="));
 
         assertTrue(enquiryReply2.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply2.getSubject());

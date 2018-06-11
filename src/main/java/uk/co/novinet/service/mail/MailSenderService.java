@@ -89,9 +89,11 @@ public class MailSenderService {
     }
 
     private String replaceTokens(String emailTemplate, Member member) {
-        return emailTemplate.replace("$USERNAME", member.getUsername())
+        return emailTemplate
+                .replace("$USERNAME", member.getUsername())
                 .replace("$PASSWORD", member.getPasswordDetails().getPassword())
-                .replace("$NAME", member.getName());
+                .replace("$NAME", member.getName())
+                .replace("$TOKEN", member.getToken());
     }
 
     private String retrieveEmailBodyHtmlFromGoogleDocs() throws IOException {
