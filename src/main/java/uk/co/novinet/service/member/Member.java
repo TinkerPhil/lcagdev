@@ -34,6 +34,8 @@ public class Member {
     private String token;
     private PasswordDetails passwordDetails;
     private BigDecimal contributionAmount;
+    private Boolean hasCompletedMembershipForm;
+    private String howDidYouHearAboutLcag;
 
     public Member() {}
 
@@ -56,8 +58,10 @@ public class Member {
             String notes,
             String industry,
             String token,
+            Boolean hasCompletedMembershipForm,
             PasswordDetails passwordDetails,
-            BigDecimal contributionAmount) {
+            BigDecimal contributionAmount,
+            String howDidYouHearAboutLcag) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
@@ -75,9 +79,11 @@ public class Member {
         this.notes = notes;
         this.industry = industry;
         this.token = token;
+        this.hasCompletedMembershipForm = hasCompletedMembershipForm;
         this.passwordDetails = passwordDetails;
         this.name = name;
         this.contributionAmount = contributionAmount;
+        this.howDidYouHearAboutLcag = howDidYouHearAboutLcag;
     }
 
     public Long getId() {
@@ -239,5 +245,21 @@ public class Member {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Boolean getHasCompletedMembershipForm() {
+        return hasCompletedMembershipForm;
+    }
+
+    public void setHasCompletedMembershipForm(Boolean hasCompletedMembershipForm) {
+        this.hasCompletedMembershipForm = hasCompletedMembershipForm;
+    }
+
+    public String getHowDidYouHearAboutLcag() {
+        return howDidYouHearAboutLcag;
+    }
+
+    public void setHowDidYouHearAboutLcag(String howDidYouHearAboutLcag) {
+        this.howDidYouHearAboutLcag = howDidYouHearAboutLcag;
     }
 }
