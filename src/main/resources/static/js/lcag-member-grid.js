@@ -10,7 +10,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "name", label: "Name", width: 150, template: "string", formatter: lcag.MemberGrid.formatters.name },
                 { name: "username", label: "Username", width: 150, template: "string" },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "bigGroupUsername", label: "Big Group Username", width: 150, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
+                { name: "bigGroupUsername", label: "Big Group Username", width: 90, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
                 { name: "emailAddress", label: "Email Address", width: 150, template: "string" },
                 { name: "hmrcLetterChecked", label: "HMRC Letter Received", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
@@ -50,7 +50,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
             headertitles: true,
             pager: true,
             rowNum: 25,
-            width: "3000px",
+            width: "3400px",
             altRows: true,
             rowattr: function (row) {
                 if (row.group == "Registered") {
@@ -155,7 +155,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
             return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="memberOfBigGroup_' + row.id + '" type="checkbox" ' + (row.memberOfBigGroup ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "bigGroupUsername": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="bigGroupUsername_' + row.id + '" type="text" class="form-control input-large" value="' + row.bigGroupUsername + '"></div>';
+            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="bigGroupUsername_' + row.id + '" type="text" class="form-control" value="' + row.bigGroupUsername + '"></div>';
         },
         "industry": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="industry_' + row.id + '" type="text" class="form-control input-large" value="' + row.industry + '"></div>';
