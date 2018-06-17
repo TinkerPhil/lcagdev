@@ -98,6 +98,8 @@ CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `token` varchar(200) NOT NULL DEFAULT '',
   `has_completed_membership_form` tinyint(1) NOT NULL DEFAULT '0',
   `how_did_you_hear_about_lcag` varchar(200) NOT NULL DEFAULT '',
+  `member_of_big_group` tinyint(1) NOT NULL DEFAULT '0',
+  `big_group_username` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`),
   KEY `usergroup` (`usergroup`),

@@ -9,6 +9,8 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "registrationDate", label: "Registration Date", width: 90, align: "center", sorttype: "date", formatter: "date", formatoptions: { newformat: "d-M-Y" }, formatter: lcag.MemberGrid.formatters.registrationDate },
                 { name: "name", label: "Name", width: 150, template: "string", formatter: lcag.MemberGrid.formatters.name },
                 { name: "username", label: "Username", width: 150, template: "string" },
+                { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "bigGroupUsername", label: "Big Group Username", width: 150, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
                 { name: "emailAddress", label: "Email Address", width: 150, template: "string" },
                 { name: "hmrcLetterChecked", label: "HMRC Letter Received", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
@@ -23,6 +25,8 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "industry", label: "Industry", width: 250, formatter: lcag.MemberGrid.formatters.industry },
                 { name: "notes", label: "Notes", width: 250, formatter: lcag.MemberGrid.formatters.notes },
                 { name: "howDidYouHearAboutLcag", label: "How Did You Hear About LCAG", width: 250, formatter: lcag.MemberGrid.formatters.howDidYouHearAboutLcag },
+                { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "bigGroupUsername", label: "Big Group Username", width: 250, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
                 { name: "group", label: "Group", width: 90, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators" } },
                 { name: "hasCompletedMembershipForm", label: "Completed Membership Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedMembershipForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "action", label: "", width: 65, formatter: lcag.MemberGrid.formatters.action, search: false }
@@ -85,6 +89,8 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "notes": $("#notes_" + id).val(),
                                 "group": $("#group_" + id).val(),
                                 "hasCompletedMembershipForm": $("#hasCompletedMembershipForm_" + id).prop("checked"),
+                                "memberOfBigGroup": $("#memberOfBigGroup_" + id).prop("checked"),
+                                "bigGroupUsername": $("#bigGroupUsername_" + id).val(),
                                 "howDidYouHearAboutLcag": $("#howDidYouHearAboutLcag_" + id).val(),
                             };
                           })(),
@@ -146,6 +152,12 @@ lcag.MemberGrid = lcag.MemberGrid || {
         },
         "howDidYouHearAboutLcag": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="howDidYouHearAboutLcag_' + row.id + '" type="text" class="form-control input-large" value="' + row.howDidYouHearAboutLcag + '"></div>';
+        },
+        "memberOfBigGroup": function(cellvalue, options, row) {
+            return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="memberOfBigGroup_' + row.id + '" type="checkbox" ' + (row.memberOfBigGroup ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "bigGroupUsername": function(cellvalue, options, row) {
+            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="bigGroupUsername_' + row.id + '" type="text" class="form-control input-large" value="' + row.bigGroupUsername + '"></div>';
         },
         "industry": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="industry_' + row.id + '" type="text" class="form-control input-large" value="' + row.industry + '"></div>';

@@ -49,11 +49,13 @@ public class MemberService {
         put("contributionAmount", "u.contribution_amount");
         put("howDidYouHearAboutLcag", "u.how_did_you_hear_about_lcag");
         put("hasCompletedMembershipForm", "u.has_completed_membership_form");
+        put("memberOfBigGroup", "u.member_of_big_group");
+        put("bigGroupUsername", "u.big_group_username");
     }};
 
-    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag) {
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}",
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, memberOfBigGroup={}, bigGroupUsername={}",
                 group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag);
 
         String sql = "update " + usersTableName() + " u " +
@@ -70,7 +72,9 @@ public class MemberService {
                 "u.notes = ?, " +
                 "u.industry = ?, " +
                 "u.has_completed_membership_form = ?, " +
-                "u.how_did_you_hear_about_lcag = ? " +
+                "u.how_did_you_hear_about_lcag = ?, " +
+                "u.member_of_big_group = ?, " +
+                "u.big_group_username = ? " +
                 "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -91,6 +95,8 @@ public class MemberService {
                 industry,
                 hasCompletedMembershipForm,
                 howDidYouHearAboutLcag,
+                memberOfBigGroup,
+                bigGroupUsername,
                 memberId
         );
 
@@ -107,7 +113,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, null, null, false, false, "", "", false, "", "", UUID.randomUUID().toString().replace("-", ""), false, PasswordSource.getRandomPasswordDetails(), new BigDecimal("0.00"), "");
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, null, null, false, false, "", "", false, "", "", UUID.randomUUID().toString().replace("-", ""), false, PasswordSource.getRandomPasswordDetails(), new BigDecimal("0.00"), "", false, "");
 
             Long max = findNextAvailableId("uid", usersTableName());
 
@@ -151,7 +157,7 @@ public class MemberService {
     }
 
     private String buildUserTableSelect() {
-        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, u.how_did_you_hear_about_lcag, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
+        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
     }
@@ -220,6 +226,16 @@ public class MemberService {
         if (member.getAgreedToContributeButNotPaid() != null) {
             clauses.add("u.agreed_to_contribute_but_not_paid = ?");
             parameters.add(member.getAgreedToContributeButNotPaid());
+        }
+
+        if (member.getMemberOfBigGroup() != null) {
+            clauses.add("u.member_of_big_group = ?");
+            parameters.add(member.getMemberOfBigGroup());
+        }
+
+        if (member.getBigGroupUsername() != null) {
+            clauses.add("lower(u.big_group_username) like ?");
+            parameters.add(like(member.getBigGroupUsername()));
         }
 
         if (member.getName() != null) {
@@ -318,7 +334,10 @@ public class MemberService {
                 rs.getBoolean("has_completed_membership_form"),
                 null,
                 rs.getBigDecimal("contribution_amount"),
-                rs.getString("how_did_you_hear_about_lcag"));
+                rs.getString("how_did_you_hear_about_lcag"),
+                rs.getBoolean("member_of_big_group"),
+                rs.getString("big_group_username")
+        );
     }
 
     private String extractUsername(String emailAddress) {

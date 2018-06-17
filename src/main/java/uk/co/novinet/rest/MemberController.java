@@ -50,9 +50,11 @@ public class MemberController {
             @RequestParam(value = "industry", required = false) String industry,
             @RequestParam(value = "hasCompletedMembershipForm", required = false) Boolean hasCompletedMembershipForm,
             @RequestParam(value = "howDidYouHearAboutLcag", required = false) String howDidYouHearAboutLcag,
+            @RequestParam(value = "memberOfBigGroup", required = false) Boolean memberOfBigGroup,
+            @RequestParam(value = "bigGroupUsername", required = false) String bigGroupUsername,
             @RequestParam("group") String group
     ) {
-        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag);
+        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, memberOfBigGroup, bigGroupUsername);
         return new ResponseEntity(HttpStatus.OK);
     }
 

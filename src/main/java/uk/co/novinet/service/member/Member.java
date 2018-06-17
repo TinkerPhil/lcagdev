@@ -36,6 +36,8 @@ public class Member {
     private BigDecimal contributionAmount;
     private Boolean hasCompletedMembershipForm;
     private String howDidYouHearAboutLcag;
+    private Boolean memberOfBigGroup;
+    private String bigGroupUsername;
 
     public Member() {}
 
@@ -61,7 +63,8 @@ public class Member {
             Boolean hasCompletedMembershipForm,
             PasswordDetails passwordDetails,
             BigDecimal contributionAmount,
-            String howDidYouHearAboutLcag) {
+            String howDidYouHearAboutLcag,
+            Boolean memberOfBigGroup, String bigGroupUsername) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
@@ -84,6 +87,8 @@ public class Member {
         this.name = name;
         this.contributionAmount = contributionAmount;
         this.howDidYouHearAboutLcag = howDidYouHearAboutLcag;
+        this.memberOfBigGroup = memberOfBigGroup;
+        this.bigGroupUsername = bigGroupUsername;
     }
 
     public Long getId() {
@@ -261,5 +266,21 @@ public class Member {
 
     public void setHowDidYouHearAboutLcag(String howDidYouHearAboutLcag) {
         this.howDidYouHearAboutLcag = howDidYouHearAboutLcag;
+    }
+
+    public Boolean getMemberOfBigGroup() {
+        return memberOfBigGroup;
+    }
+
+    public void setMemberOfBigGroup(Boolean memberOfBigGroup) {
+        this.memberOfBigGroup = memberOfBigGroup;
+    }
+
+    public String getBigGroupUsername() {
+        return bigGroupUsername;
+    }
+
+    public void setBigGroupUsername(String bigGroupUsername) {
+        this.bigGroupUsername = bigGroupUsername;
     }
 }
