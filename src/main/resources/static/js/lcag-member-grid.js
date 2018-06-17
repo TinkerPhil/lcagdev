@@ -25,8 +25,6 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "industry", label: "Industry", width: 250, formatter: lcag.MemberGrid.formatters.industry },
                 { name: "notes", label: "Notes", width: 250, formatter: lcag.MemberGrid.formatters.notes },
                 { name: "howDidYouHearAboutLcag", label: "How Did You Hear About LCAG", width: 250, formatter: lcag.MemberGrid.formatters.howDidYouHearAboutLcag },
-                { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "bigGroupUsername", label: "Big Group Username", width: 250, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
                 { name: "group", label: "Group", width: 90, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators" } },
                 { name: "hasCompletedMembershipForm", label: "Completed Membership Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedMembershipForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "action", label: "", width: 65, formatter: lcag.MemberGrid.formatters.action, search: false }

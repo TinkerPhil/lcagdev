@@ -19,6 +19,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
     <script src="https:////cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <link rel="stylesheet" href="/css/lcag.css">
     <script src="/js/lcag-common.js"></script>
     <script src="/js/lcag-statistics.js"></script>
@@ -27,6 +28,24 @@
     <title>Loan Charge Action Group Membership Dashboard</title>
 </head>
     <body>
+    <!-- Modal -->
+    <div class="modal fade" id="emailAddressesModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="emailAddressesTitle">Email Addresses</h4>
+                </div>
+                <div class="modal-body">
+                    <pre class="prettyprint" id="emailAddressesTarget" style="white-space: pre-wrap; word-break: keep-all;"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -38,9 +57,9 @@
                     <p class="navbar-text">
                         <span id="totalContributions" class="label label-default">Total £0</span>
                         <span id="totalContributors" class="label label-primary">0 Contributors</span>
-                        <span id="numberOfRegisteredMembers" class="label label-success">0 Members</span>
-                        <span id="numberOfGuests" class="label label-info">0 Guests</span>
-                        <span id="totalUsers" class="label label-danger">0 Total</span>
+                        <span id="numberOfRegisteredMembers" class="label label-success action" data-toggle="modal" data-target="#emailAddressesModal">0 Members</span>
+                        <span id="numberOfGuests" class="label label-info action" data-toggle="modal" data-target="#emailAddressesModal">0 Guests</span>
+                        <span id="totalUsers" class="label label-danger action" data-toggle="modal" data-target="#emailAddressesModal">0 Total</span>
                     </p>
                     <ul class="nav navbar-nav">
                         <li>
@@ -74,9 +93,15 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
+    </body>
+<script type="text/javascript">
             Dropzone.autoDiscover = false;
             $(function () {
+                String.prototype.replaceAll = function(search, replacement) {
+                    var target = this;
+                    return target.split(search).join(replacement);
+                };
+
                 lcag.MemberGrid.initialise();
                 lcag.PaymentsGrid.initialise();
                 $("#dropzone-form").dropzone({
@@ -88,9 +113,42 @@
                         lcag.MemberGrid.grid.trigger("reloadGrid");
                     }
                 });
+
+                $( "#emailAddressesModal" ).on('shown.bs.modal', function(e) {
+                    console.log("e", e);
+                    var sourceButton = $(e.relatedTarget).attr('id');
+                    var groupParameter = "";
+
+                    if (sourceButton == 'numberOfRegisteredMembers') {
+                        groupParameter = "?group=Registered";
+                    } else if (sourceButton == 'numberOfGuests') {
+                        groupParameter = "?group=LCAG Guests";
+                    }
+
+                    $.ajax({
+                        method: "get",
+                        url: "/member/emailAddresses" + groupParameter
+                    }).done(function(data) {
+                        var title = "";
+
+                        if (sourceButton == "numberOfRegisteredMembers") {
+                           title = "Registered Member Email Addresses";
+                        } else if (sourceButton == "numberOfGuests") {
+                            title = "Guest Email Addresses";
+                        } else if (sourceButton == "totalUsers") {
+                            title = "All Email Addresses";
+                        }
+
+                        $("#emailAddressesTitle").text(title);
+                        $("#emailAddressesTarget").text(JSON.stringify(data).replaceAll(",", "; ").slice(1, -1).replaceAll("\"", ""));
+                    });
+                });
+
+                $( "#emailAddressesModal" ).on('hidden.bs.modal', function(e) {
+                    $("#emailAddressesTarget").text("");
+                });
             });
         </script>
-    </body>
 
 
 </html>

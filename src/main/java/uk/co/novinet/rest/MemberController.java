@@ -12,6 +12,8 @@ import uk.co.novinet.service.member.MemberService;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class MemberController {
@@ -31,6 +33,12 @@ public class MemberController {
             @RequestParam(value = "sord", required = false) String sortDirection,
             @RequestParam(value = "operator", required = false) String operator) {
         return retrieveData(current, rowCount, searchPhrase, sortBy, sortDirection, member, operator == null ? "and" : operator);
+    }
+
+    @CrossOrigin
+    @GetMapping(path = "/member/emailAddresses")
+    public List<String> getMemberEmailAddresses(Member member) {
+        return memberService.searchMembers(0, 10000, member, "emailAddress", "asc", "and").stream().map(m -> m.getEmailAddress()).collect(Collectors.toList());
     }
 
     @CrossOrigin

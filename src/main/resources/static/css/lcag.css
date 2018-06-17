@@ -1,6 +1,9 @@
 body {
     width: 2750px;
 }
+span.action {
+    cursor: pointer;
+}
 .pagination li a, .pagination li span {
     cursor: pointer;
 }
