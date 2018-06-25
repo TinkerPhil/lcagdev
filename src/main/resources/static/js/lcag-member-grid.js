@@ -27,6 +27,10 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "howDidYouHearAboutLcag", label: "How Did You Hear About LCAG", width: 250, formatter: lcag.MemberGrid.formatters.howDidYouHearAboutLcag },
                 { name: "group", label: "Group", width: 90, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators" } },
                 { name: "hasCompletedMembershipForm", label: "Completed Membership Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedMembershipForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "token", label: "Token", wwidth: 150, template: "string" },
+                { name: "verifiedOn", label: "Verified On Date", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.verifiedOn },
+                { name: "verifiedBy", label: "Verified By", width: 100, formatter: lcag.MemberGrid.formatters.verifiedBy },
+                { name: "hmrcLetterChecked", label: "HMRC Letter Received", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "action", label: "", width: 65, formatter: lcag.MemberGrid.formatters.action, search: false }
             ],
             datatype: function(postData) {
@@ -50,7 +54,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
             headertitles: true,
             pager: true,
             rowNum: 25,
-            width: "3400px",
+            width: "3500px",
             altRows: true,
             rowattr: function (row) {
                 if (row.group == "Registered") {
@@ -89,16 +93,20 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "hasCompletedMembershipForm": $("#hasCompletedMembershipForm_" + id).prop("checked"),
                                 "memberOfBigGroup": $("#memberOfBigGroup_" + id).prop("checked"),
                                 "bigGroupUsername": $("#bigGroupUsername_" + id).val(),
+                                "verifiedOn": $("#verifiedOn_" + id).val(),
+                                "verifiedBy": $("#verifiedBy_" + id).val(),
                                 "howDidYouHearAboutLcag": $("#howDidYouHearAboutLcag_" + id).val(),
                             };
                           })(),
                           success: function(e) {
                             lcag.Common.alertSuccess();
                             lcag.MemberGrid.grid.trigger("reloadGrid");
+                            lcag.VerificationGrid.grid.trigger("reloadGrid");
                           },
                           error: function(e) {
                             lcag.Common.alertError();
                             lcag.MemberGrid.grid.trigger("reloadGrid");
+                            lcag.VerificationGrid.grid.trigger("reloadGrid");
                           }
                         });
                 });
@@ -114,6 +122,13 @@ lcag.MemberGrid = lcag.MemberGrid || {
 	formatters: {
         "registrationDate": function(cellvalue, options, row) {
             return moment(row.registrationDate).format("DD/MM/YYYY HH:mm");
+        },
+        "verifiedOn": function(cellvalue, options, row) {
+            var dateString = row.verifiedOn == null ? "" : moment(row.verifiedOn).format("DD/MM/YYYY");
+            return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="verifiedOn_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
+        },
+        "verifiedBy": function(cellvalue, options, row) {
+            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="verifiedBy_' + row.id + '" type="text" class="form-control" value="' + row.verifiedBy + '"></div>';
         },
         "identificationChecked": function(cellvalue, options, row) {
             return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="identificationChecked_' + row.id + '" type="checkbox" ' + (row.identificationChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';

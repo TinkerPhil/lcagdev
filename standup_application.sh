@@ -16,6 +16,11 @@ docker run -d \
 	-e "IMAP_USERNAME=lcag-testing@lcag.com" \
 	-e 'IMAP_PASSWORD=password' \
 	-e 'IMAP_CONNECTION_PROTOCOL=imap' \
+	-e "SFTP_USERNAME=user" \
+	-e 'SFTP_PASSWORD=password' \
+    -e "SFTP_HOST=lcag-sftp" \
+	-e "SFTP_PORT=22" \
+	-e "SFTP_ROOT_DIRECTORY=/share" \
 	-e "MYBB_FORUM_DATABASE_URL=jdbc:mysql://lcag-mysql/mybb" \
 	-e "MYBB_FORUM_DATABASE_USERNAME=root" \
 	-e "MYBB_FORUM_DATABASE_PASSWORD=p@ssword" \

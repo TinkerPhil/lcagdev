@@ -7,6 +7,8 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
+
 public class Member {
     private Map<String, Integer> STATUS_MAPPINGS = new HashMap<String, Integer>() {{
        put("Registered", 0);
@@ -38,6 +40,8 @@ public class Member {
     private String howDidYouHearAboutLcag;
     private Boolean memberOfBigGroup;
     private String bigGroupUsername;
+    private String verifiedBy;
+    private Instant verifiedOn;
 
     public Member() {}
 
@@ -64,7 +68,7 @@ public class Member {
             PasswordDetails passwordDetails,
             BigDecimal contributionAmount,
             String howDidYouHearAboutLcag,
-            Boolean memberOfBigGroup, String bigGroupUsername) {
+            Boolean memberOfBigGroup, String bigGroupUsername, String verifiedBy, Instant verifiedOn) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
@@ -89,6 +93,8 @@ public class Member {
         this.howDidYouHearAboutLcag = howDidYouHearAboutLcag;
         this.memberOfBigGroup = memberOfBigGroup;
         this.bigGroupUsername = bigGroupUsername;
+        this.verifiedBy = verifiedBy;
+        this.verifiedOn = verifiedOn;
     }
 
     public Long getId() {
@@ -282,5 +288,26 @@ public class Member {
 
     public void setBigGroupUsername(String bigGroupUsername) {
         this.bigGroupUsername = bigGroupUsername;
+    }
+
+    public String getVerifiedBy() {
+        return verifiedBy;
+    }
+
+    public void setVerifiedBy(String verifiedBy) {
+        this.verifiedBy = verifiedBy;
+    }
+
+    public Instant getVerifiedOn() {
+        return verifiedOn;
+    }
+
+    public void setVerifiedOn(Instant verifiedOn) {
+        this.verifiedOn = verifiedOn;
+    }
+
+    @Override
+    public String toString() {
+        return reflectionToString(this);
     }
 }

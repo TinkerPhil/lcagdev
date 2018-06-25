@@ -9,8 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
+import uk.co.novinet.service.member.SftpDocument;
+import uk.co.novinet.service.member.SftpService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +27,9 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private SftpService sftpService;
 
     @CrossOrigin
     @GetMapping(path = "/member")
@@ -39,6 +47,23 @@ public class MemberController {
     @GetMapping(path = "/member/emailAddresses")
     public List<String> getMemberEmailAddresses(Member member) {
         return memberService.searchMembers(0, 10000, member, "emailAddress", "asc", "and").stream().map(m -> m.getEmailAddress()).collect(Collectors.toList());
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/member/verify")
+    public ResponseEntity verify(@RequestParam("id") Long memberId, @RequestParam("verifiedBy") String verifiedBy) {
+        Member member = memberService.getMemberById(memberId);
+
+        if (member == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        memberService.verify(
+                memberId,
+                verifiedBy
+        );
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -60,9 +85,11 @@ public class MemberController {
             @RequestParam(value = "howDidYouHearAboutLcag", required = false) String howDidYouHearAboutLcag,
             @RequestParam(value = "memberOfBigGroup", required = false) Boolean memberOfBigGroup,
             @RequestParam(value = "bigGroupUsername", required = false) String bigGroupUsername,
+            @RequestParam(value = "verifiedOn", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") Date verifiedOn,
+            @RequestParam(value = "verifiedBy", required = false) String verifiedBy,
             @RequestParam("group") String group
     ) {
-        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, memberOfBigGroup, bigGroupUsername);
+        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, memberOfBigGroup, bigGroupUsername, verifiedOn == null ? null : verifiedOn.toInstant(), verifiedBy);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -82,5 +109,29 @@ public class MemberController {
         LOGGER.info("totalCount: {}", totalCount);
 
         return new DataContainer(current, rowCount, totalCount, (long) Math.ceil(totalCount / rowCount) + 1, memberService.searchMembers((current - 1) * rowCount, rowCount, member, sortBy, sortDirection, operator));
+    }
+
+    @CrossOrigin
+    @GetMapping(path = "/member/documents")
+    public List<SftpDocument> getDocuments(@RequestParam("memberId") Long memberId) {
+        Member member = memberService.getMemberById(memberId);
+
+        if (member.getMemberOfBigGroup()) {
+            return Collections.emptyList();
+        }
+
+        return sftpService.getAllDocumentsForMember(member);
+    }
+
+    @CrossOrigin
+    @GetMapping(path = "/member/document/download")
+    public void downloadDocument(@RequestParam("path") String path, HttpServletResponse response) {
+        try {
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + path.substring(path.lastIndexOf("/") + 1) + "\"");
+            sftpService.downloadDocument(path, response.getOutputStream());
+            response.flushBuffer();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

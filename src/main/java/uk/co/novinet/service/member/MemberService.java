@@ -51,12 +51,14 @@ public class MemberService {
         put("hasCompletedMembershipForm", "u.has_completed_membership_form");
         put("memberOfBigGroup", "u.member_of_big_group");
         put("bigGroupUsername", "u.big_group_username");
+        put("verifiedBy", "u.verified_by");
+        put("verifiedOn", "u.verified_on");
     }};
 
-    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername) {
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername, Instant verifiedOn, String verifiedBy) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, memberOfBigGroup={}, bigGroupUsername={}",
-                group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag);
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}",
+                group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy);
 
         String sql = "update " + usersTableName() + " u " +
                 "set u.usergroup = (select `gid` from " + userGroupsTableName() + " ug where ug.title = ?), " +
@@ -74,7 +76,9 @@ public class MemberService {
                 "u.has_completed_membership_form = ?, " +
                 "u.how_did_you_hear_about_lcag = ?, " +
                 "u.member_of_big_group = ?, " +
-                "u.big_group_username = ? " +
+                "u.big_group_username = ?, " +
+                "u.verified_on = ?, " +
+                "u.verified_by = ? " +
                 "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -97,6 +101,32 @@ public class MemberService {
                 howDidYouHearAboutLcag,
                 memberOfBigGroup,
                 bigGroupUsername,
+                unixTime(verifiedOn),
+                verifiedBy,
+                memberId
+        );
+
+        LOGGER.info("Update result: {}", result);
+    }
+
+    public void verify(Long memberId, String verifiedBy) {
+        LOGGER.info("Going to verify user with id {}", memberId);
+
+        String sql = "update " + usersTableName() + " u set " +
+                "u.identification_checked = ?, " +
+                "u.hmrc_letter_checked = ?, " +
+                "u.verified_by = ?, " +
+                "u.verified_on = ? " +
+                "where u.uid = ?";
+
+        LOGGER.info("Created sql: {}", sql);
+
+        int result = jdbcTemplate.update(
+                sql,
+                true,
+                true,
+                verifiedBy,
+                unixTime(Instant.now()),
                 memberId
         );
 
@@ -113,7 +143,7 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, null, null, false, false, "", "", false, "", "", UUID.randomUUID().toString().replace("-", ""), false, PasswordSource.getRandomPasswordDetails(), new BigDecimal("0.00"), "", false, "");
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, null, null, false, false, "", "", false, "", "", UUID.randomUUID().toString().replace("-", ""), false, PasswordSource.getRandomPasswordDetails(), new BigDecimal("0.00"), "", false, "", "", null);
 
             Long max = findNextAvailableId("uid", usersTableName());
 
@@ -152,12 +182,16 @@ public class MemberService {
         return null;
     }
 
+    public Member getMemberById(Long id) {
+        return jdbcTemplate.queryForObject(buildUserTableSelect() + " where u.uid = ?", new Object[] { id }, (rs, rowNum) -> buildMember(rs));
+    }
+
     public List<Member> findExistingForumUsersByField(String field, String value) {
         return jdbcTemplate.query(buildUserTableSelect() + "where lower(u." + field + ") = ?" + buildUserTableGroupBy(), new Object[] { value.toLowerCase() }, (rs, rowNum) -> buildMember(rs));
     }
 
     private String buildUserTableSelect() {
-        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
+        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
     }
@@ -169,7 +203,9 @@ public class MemberService {
     public long searchCountMembers(Member member, String operator) {
         Where where = buildWhereClause(member, operator);
         final boolean hasWhere = !"".equals(where.getSql());
-        return jdbcTemplate.queryForObject("select count(*) from (" + buildUserTableSelect() + where.getSql() + buildUserTableGroupBy() + ") as t", hasWhere ? where.getArguments().toArray() : null, Long.class);
+        String sql = "select count(*) from (" + buildUserTableSelect() + where.getSql() + buildUserTableGroupBy() + ") as t";
+        LOGGER.info("Going to execute this sql: {}", sql);
+        return jdbcTemplate.queryForObject(sql, hasWhere ? where.getArguments().toArray() : null, Long.class);
     }
 
     public List<Member> searchMembers(long offset, long itemsPerPage, Member member, String sortField, String sortDirection, String operator) {
@@ -308,6 +344,20 @@ public class MemberService {
             parameters.add(member.getContributionAmount());
         }
 
+        if (member.getVerifiedBy() != null) {
+            if ("<NULL>".equals(member.getVerifiedBy())) {
+                clauses.add("(u.verified_by is null or u.verified_by = '')");
+            } else {
+                clauses.add("lower(u.verified_by) like ?");
+                parameters.add(like(member.getVerifiedBy()));
+            }
+        }
+
+        if (member.getToken() != null) {
+            clauses.add("lower(u.token) like ?");
+            parameters.add(like(member.getToken()));
+        }
+
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
@@ -336,8 +386,9 @@ public class MemberService {
                 rs.getBigDecimal("contribution_amount"),
                 rs.getString("how_did_you_hear_about_lcag"),
                 rs.getBoolean("member_of_big_group"),
-                rs.getString("big_group_username")
-        );
+                rs.getString("big_group_username"),
+                rs.getString("verified_by"),
+                dateFromMyBbRow(rs, "verified_on"));
     }
 
     private String extractUsername(String emailAddress) {
@@ -368,4 +419,6 @@ public class MemberService {
     private String firstBitOfEmailAddress(String emailAddress) {
         return emailAddress.substring(0, emailAddress.indexOf("@"));
     }
+
+
 }

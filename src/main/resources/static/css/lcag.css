@@ -81,3 +81,12 @@ input.form-control.input-large {
     text-align: center;
     margin-top: 8px;
 }
+.highlight-error {
+    border-style: solid;
+    border-color: #f00;
+    border-width: 2px;
+}
+.nav-tabs>li.active>a.has-items, .nav-tabs>li.active>a.has-items:focus, .nav-tabs>li.active>a.has-items:hover, .nav-tabs>li>a.has-items {
+    font-weight: bold;
+    color: #f00;
+}
