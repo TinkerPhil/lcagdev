@@ -59,7 +59,7 @@ public class MemberController {
         }
 
         memberService.verify(
-                memberId,
+                member,
                 verifiedBy
         );
 

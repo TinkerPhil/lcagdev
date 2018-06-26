@@ -3,11 +3,13 @@ package uk.co.novinet.service.member;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -34,6 +36,69 @@ public class SftpService {
     @Value("${sftpRootDirectory}")
     private String sftpRootDirectory;
 
+    public void removeAllDocsForMember(Member member) {
+        LOGGER.info("Going to try and remove all documents for member {}", member);
+
+        JSch jsch = new JSch();
+        Session session = null;
+        ChannelSftp sftpChannel = null;
+
+        try {
+            session = jsch.getSession(sftpUsername, sftpHost, sftpPort);
+            session.setPassword(sftpPassword);
+
+            java.util.Properties config = new java.util.Properties();
+            config.put("StrictHostKeyChecking", "no");
+            session.setConfig(config);
+
+            session.connect();
+
+            sftpChannel = (ChannelSftp) session.openChannel("sftp");
+            sftpChannel.connect();
+
+            String memberSftpRootDirectory = memberRootDirectory(member);
+
+            LOGGER.info("Going to delete member root directory: {}", memberSftpRootDirectory);
+
+            recursiveDirectoryDelete(sftpChannel, memberSftpRootDirectory + "/");
+        } catch (Exception e) {
+            LOGGER.error("Unable to retrieve documents for member: " + member, e);
+            throw new RuntimeException(e);
+        } finally {
+            if (session.isConnected()) {
+                session.disconnect();
+            }
+        }
+    }
+
+    public void recursiveDirectoryDelete(ChannelSftp channelSftp, String remoteDir) {
+        try {
+            if (isDirectory(channelSftp, remoteDir)) {
+                Vector<ChannelSftp.LsEntry> dirList = channelSftp.ls(remoteDir);
+
+                for (ChannelSftp.LsEntry entry : dirList) {
+                    if (!(entry.getFilename().equals(".") || entry.getFilename().equals(".."))) {
+                        if (entry.getAttrs().isDir()) {
+                            recursiveDirectoryDelete(channelSftp, remoteDir + entry.getFilename() + File.separator);
+                        } else {
+                            channelSftp.rm(remoteDir + entry.getFilename());
+                        }
+                    }
+                }
+
+                channelSftp.cd("..");
+                channelSftp.rmdir(remoteDir);
+            }
+        } catch (SftpException e) {
+            LOGGER.error("Could not remove member sftp directory: " + remoteDir, e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean isDirectory(ChannelSftp channelSftp, String remoteDirectory) throws SftpException {
+        return channelSftp.stat(remoteDirectory).isDir();
+    }
+
     public List<SftpDocument> getAllDocumentsForMember(Member member) {
         LOGGER.info("Going to try and retrieve all documents for member {}", member);
 
@@ -55,7 +120,7 @@ public class SftpService {
             sftpChannel = (ChannelSftp) session.openChannel("sftp");
             sftpChannel.connect();
 
-            String memberSftpRootDirectory = sftpRootDirectory + "/" + sanitisedEmailAddress(member.getEmailAddress());
+            String memberSftpRootDirectory = memberRootDirectory(member);
 
             LOGGER.info("Going to list timestamp dirs in member sftp root directory: {}", memberSftpRootDirectory);
 
@@ -86,6 +151,10 @@ public class SftpService {
                 session.disconnect();
             }
         }
+    }
+
+    private String memberRootDirectory(Member member) {
+        return sftpRootDirectory + "/" + sanitisedEmailAddress(member.getEmailAddress());
     }
 
     private String sanitisedEmailAddress(String emailAddress) {

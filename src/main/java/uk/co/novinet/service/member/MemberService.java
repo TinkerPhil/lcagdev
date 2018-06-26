@@ -28,6 +28,9 @@ public class MemberService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private SftpService sftpService;
+
     private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
         put("id", "u.uid");
         put("emailAddress", "u.email");
@@ -109,8 +112,8 @@ public class MemberService {
         LOGGER.info("Update result: {}", result);
     }
 
-    public void verify(Long memberId, String verifiedBy) {
-        LOGGER.info("Going to verify user with id {}", memberId);
+    public void verify(Member member, String verifiedBy) {
+        LOGGER.info("Going to verify user with id {}", member.getId());
 
         String sql = "update " + usersTableName() + " u set " +
                 "u.identification_checked = ?, " +
@@ -127,10 +130,14 @@ public class MemberService {
                 true,
                 verifiedBy,
                 unixTime(Instant.now()),
-                memberId
+                member.getId()
         );
 
         LOGGER.info("Update result: {}", result);
+
+        sftpService.removeAllDocsForMember(member);
+
+
     }
 
     public Member createForumUserIfNecessary(Enquiry enquiry) {
