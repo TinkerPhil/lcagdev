@@ -2,6 +2,11 @@ var lcag = lcag || {};
 
 lcag.VerificationGrid = lcag.VerificationGrid || {
     grid: {},
+    clearCurrentVerificationState: function() {
+        console.log("Clearing current verification state");
+        $("#documentVerificationTarget").children().remove();
+        $('#verifiedBy').val("");
+    },
     currentMemberId: {},
     initialise: function() {
         $("#verification-grid").jqGrid({
@@ -67,7 +72,7 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
             }).done(function(data) {
                 if (data.length > 1) {
                     var tableHtml = "";
-                    tableHtml += '<table id="documentVerificationModal" class="table"><thead><tr><th>Filename</th><th>Upload Date</th></tr></thead><tbody>';
+                    tableHtml += '<table class="table"><thead><tr><th>Filename</th><th>Upload Date</th></tr></thead><tbody>';
                     for (var i = 0; i < data.length; i++) {
                         tableHtml +=
                             '<tr>' +
@@ -77,12 +82,14 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
                     }
                     tableHtml += '</tbody></table>';
                     $("#documentVerificationTarget").append(tableHtml);
+                } else {
+                    $("#documentVerificationTarget").append('<p>No documents found for this member</p>');
                 }
             });
         });
 
         $("#documentVerificationModal" ).on('hidden.bs.modal', function(e) {
-            clearCurrentVerificationState();
+            lcag.VerificationGrid.clearCurrentVerificationState();
         });
 
         $("#verify-confirm-btn").on("click", function(e) {
@@ -116,7 +123,8 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
                     };
                   })(),
                   success: function(e) {
-                    clearCurrentVerificationState();
+                    lcag.VerificationGrid.clearCurrentVerificationState();
+                    $('#documentVerificationModal').modal('toggle');
                     lcag.VerificationGrid.currentMemberId = null;
                     lcag.Common.alertSuccess();
                     lcag.VerificationGrid.grid.trigger("reloadGrid");
@@ -128,12 +136,6 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
                     lcag.MemberGrid.grid.trigger("reloadGrid");
                   }
             });
-
-            function clearCurrentVerificationState() {
-                $('#documentVerificationModal').modal('toggle');
-                $("#documentVerificationTarget").children().remove();
-                $('#verifiedBy').val("");
-            }
         });
     },
 	formatters: {

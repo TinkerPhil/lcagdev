@@ -90,8 +90,7 @@ public class SftpService {
                 channelSftp.rmdir(remoteDir);
             }
         } catch (SftpException e) {
-            LOGGER.error("Could not remove member sftp directory: " + remoteDir, e);
-            throw new RuntimeException(e);
+            LOGGER.warn("Could not remove member sftp directory: " + remoteDir, e);
         }
     }
 
@@ -124,7 +123,14 @@ public class SftpService {
 
             LOGGER.info("Going to list timestamp dirs in member sftp root directory: {}", memberSftpRootDirectory);
 
-            Vector<ChannelSftp.LsEntry> memberTimestampDirectories = sftpChannel.ls(memberSftpRootDirectory);
+            Vector<ChannelSftp.LsEntry> memberTimestampDirectories = null;
+
+            try {
+                memberTimestampDirectories = sftpChannel.ls(memberSftpRootDirectory);
+            } catch (SftpException e) {
+                LOGGER.warn("Directory {} not found. Cound not find documents for member: {}", memberSftpRootDirectory, member);
+                return sftpDocuments;
+            }
 
             LOGGER.info("Found memberTimestampDirectories: {}", memberTimestampDirectories);
 

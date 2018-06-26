@@ -26,6 +26,8 @@ docker run -d \
 	-e "MYBB_FORUM_DATABASE_PASSWORD=p@ssword" \
 	-e "EMAIL_SOURCE_URL=https://docs.google.com/document/d/1MKM84drgdaWRKWQo0HE-BV-NhZfzQH_cBF2wXvbsd4I/export?format=html" \
 	-e "EMAIL_ATTACHMENT_ID=14OA5QRGYYdKaKSmUTorEaY8h1hwu5t7j" \
+	-e "VERIFICATION_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1yK5m3fDBRPIS-qGjnTpOLEaQc-iALl5au62RJcQCuJI/export?format=html" \
+	-e "PAYMENT_RECEIVED_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1s7Z_sERtYiaYWxU-pH3YjzmEPMTgelJd_aB9ZnaGjOM/export?format=html" \
 	-e "EMAIL_PROCESSED_FOLDER_NAME=History" \
 	-e "BCC_RECIPIENTS=test@bcc.com" \
 	-e "EMAIL_FROM_NAME=LCAG" \

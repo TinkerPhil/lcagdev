@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.PersistenceUtils;
+import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
 import uk.co.novinet.service.member.Where;
 
@@ -70,6 +71,10 @@ public class PaymentDao {
         );
 
         LOGGER.info("Insertion result: {}", result);
+    }
+
+    public BankTransaction getBankTransactionById(Long id) {
+        return jdbcTemplate.queryForObject(buildBankTransactionTableSelect() + " where bt.uid = ?", new Object[] { id }, (rs, rowNum) -> buildBankTransaction(rs));
     }
 
     public List<BankTransaction> findExistingBankTransaction(BankTransaction bankTransaction) {

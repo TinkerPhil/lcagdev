@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import uk.co.novinet.service.mail.MailSenderService;
 import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
 
@@ -40,6 +41,9 @@ public class PaymentService {
     private MemberService memberService;
 
     @Autowired
+    private MailSenderService mailSenderService;
+
+    @Autowired
     private PaymentDao paymentDao;
 
     public ImportOutcome importTransactions(String transactions) {
@@ -51,6 +55,12 @@ public class PaymentService {
                 List<BankTransaction> existingBankTransactions = paymentDao.findExistingBankTransaction(bankTransaction);
                 if (existingBankTransactions == null || existingBankTransactions.isEmpty()) {
                     paymentDao.create(bankTransaction);
+
+                    if (bankTransaction.getUserId() != null) {
+                        Member member = memberService.getMemberById(bankTransaction.getUserId());
+                        mailSenderService.sendBankTransactionAssignmentEmail(member);
+                    }
+
                     numberOfNewTransactions++;
                     LOGGER.info("Persisting new bank transaction: {}", bankTransaction);
                 }
@@ -141,5 +151,6 @@ public class PaymentService {
 
     public void assignToMember(Long memberId, Long paymentId) {
         paymentDao.updateMemberId(paymentId, memberId);
+        mailSenderService.sendBankTransactionAssignmentEmail(memberService.getMemberById(memberId));
     }
 }

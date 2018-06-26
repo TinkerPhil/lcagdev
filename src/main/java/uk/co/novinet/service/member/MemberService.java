@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.mail.Enquiry;
+import uk.co.novinet.service.mail.MailSenderService;
 import uk.co.novinet.service.mail.PasswordSource;
 
 import java.math.BigDecimal;
@@ -30,6 +31,9 @@ public class MemberService {
 
     @Autowired
     private SftpService sftpService;
+
+    @Autowired
+    private MailSenderService mailSenderService;
 
     private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
         put("id", "u.uid");
@@ -137,7 +141,7 @@ public class MemberService {
 
         sftpService.removeAllDocsForMember(member);
 
-
+        mailSenderService.sendVerificationEmail(member);
     }
 
     public Member createForumUserIfNecessary(Enquiry enquiry) {
