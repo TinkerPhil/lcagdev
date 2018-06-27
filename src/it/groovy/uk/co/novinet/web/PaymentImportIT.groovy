@@ -15,8 +15,6 @@ import static uk.co.novinet.e2e.TestUtils.*
 
 class PaymentImportIT {
 
-    static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy")
-
     @BeforeClass
     static void beforeClass() throws Exception {
         setupDatabaseSchema()

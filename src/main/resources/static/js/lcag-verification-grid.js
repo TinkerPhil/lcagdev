@@ -101,12 +101,12 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
             console.log("verifiedBy", verifiedBy);
 
             if (verifiedBy == null || verifiedBy == "") {
-               var jElement = $("#verifiedBy");
-               jElement.addClass('highlight-error');
-               setTimeout(
-                   function() { jElement.removeClass('highlight-error'); },
-                   2000
-               );
+                var jElement = $("#verifiedBy");
+                jElement.addClass('highlight-error');
+                setTimeout(
+                    function() { jElement.removeClass('highlight-error'); },
+                    2000
+                );
                 lcag.Common.alertError("Please enter your initials in the 'Verified By' input field");
                 return;
             }

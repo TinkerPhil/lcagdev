@@ -132,6 +132,12 @@ public class PaymentService {
         if (members.size() == 1) {
             Member member = members.get(0);
             LOGGER.info("Found one member: {} for reference: {}", member, reference);
+
+            if (member.getUsername().length() < 5) {
+                LOGGER.info("Member username is not at least 5 characters in length, so certainty of match is not good enough. Returning no match.");
+                return null;
+            }
+
             return member;
         }
 
