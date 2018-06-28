@@ -167,7 +167,7 @@ public class TestUtils {
         return emails;
     }
 
-    static List<StaticMessage> getEmails(String emailAddress, String folderName, Boolean alreadyRead) {
+    public static List<StaticMessage> getEmails(String emailAddress, String folderName, Boolean alreadyRead) {
         Folder folder = null;
         IMAPStore store = null;
 

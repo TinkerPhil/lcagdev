@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import uk.co.novinet.e2e.TestUtils
 
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -24,6 +25,7 @@ class PaymentImportIT {
     void before() {
         runSqlScript("sql/delete_all_bank_transactions.sql")
         runSqlScript("sql/delete_all_users.sql")
+        deleteAllMessages("roundabout23@test.com")
     }
 
     @Test
@@ -164,6 +166,8 @@ class PaymentImportIT {
 
     @Test
     void matchingUserIsTiedToTransaction() {
+        assertEquals(0, TestUtils.getEmails("roundabout23@test.com", "Inbox").size())
+
         insertUser(1, "roundabout23", "roundabout23@test.com", "Bert Cooper", 2)
 
         uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
@@ -181,6 +185,9 @@ class PaymentImportIT {
         assertEquals(4800.00, transactions[0].runningBalance)
         assertEquals("COOPER B", transactions[0].counterParty)
         assertEquals("roundabout23", transactions[0].reference)
+
+        assertEquals(1, TestUtils.getEmails("roundabout23@test.com", "Inbox").size())
+        assertEquals("Dear Bert Cooper, Your payment has now been received. Thank you, Richard Horsley Membership Team", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getContent().trim())
     }
 
     def allBankTransactionRows() {

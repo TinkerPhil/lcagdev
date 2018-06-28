@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
 import static uk.co.novinet.e2e.TestUtils.*
 import static uk.co.novinet.web.GebTestUtils.*
 
-class DashboardIT extends GebSpec {
+class GuestVerificationIT extends GebSpec {
 
     static def GUEST_EMAIL_ADDRESS = "newguest@test.com"
     static TestSftpService testSftpService;
