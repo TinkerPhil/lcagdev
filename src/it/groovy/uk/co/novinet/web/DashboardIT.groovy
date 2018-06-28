@@ -9,14 +9,18 @@ import static uk.co.novinet.web.GebTestUtils.*
 
 class DashboardIT extends GebSpec {
 
+    static def GUEST_EMAIL_ADDRESS = "newguest@test.com"
+
     def setup() {
         setupDatabaseSchema()
+        deleteAllMessages(GUEST_EMAIL_ADDRESS);
         runSqlScript("sql/delete_all_users.sql");
     }
 
     def "guest member verification flow when guest has no docs"() {
         given:
-            insertUser(1, "newguest", "newguest@test.com", "John Smith", 8, true)
+            assert getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 0
+            insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
             go("http://admin:lcag@localhost:8282")
             at DashboardPage
 
@@ -61,5 +65,9 @@ class DashboardIT extends GebSpec {
             checkboxValue(memberGridIdentityCheckedTds[0].find("input")) == true
             memberGridVerifiedOnTds[0].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
             memberGridVerifiedByTds[0].find("input").value() == "RG"
+
+        and: "new member receives email saying their docs have been verified"
+            waitFor { getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 1 }
+            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation. Once we have confirmed receipt of your payment we will move you over to full membership. Richard Horsley Membership Team.")
     }
 }
