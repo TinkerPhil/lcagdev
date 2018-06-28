@@ -28,4 +28,8 @@ class GebTestUtils {
 
         return true
     }
+
+    public static boolean checkboxValue(Object checkboxElement) {
+        return checkboxElement.value() == "on"
+    }
 }

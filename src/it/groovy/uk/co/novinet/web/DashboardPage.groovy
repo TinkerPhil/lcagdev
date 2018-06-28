@@ -25,8 +25,9 @@ class DashboardPage extends Page {
 
         memberGridNameTds { memberGrid.find("td[aria-describedby=member-grid_name]") }
         memberGridHmrcLetterCheckedTds { memberGrid.find("td[aria-describedby=member-grid_hmrcLetterChecked]") }
-        memberIdentityCheckedTds { memberGrid.find("td[aria-describedby=member-grid_identificationChecked]") }
-        memberVerifiedByTds { memberGrid.find("td[aria-describedby=member-grid_verifiedBy]") }
-        memberVerifiedOnTds { memberGrid.find("td[aria-describedby=member-grid_verifiedOn]") }
+        memberGridIdentityCheckedTds { memberGrid.find("td[aria-describedby=member-grid_identificationChecked]") }
+        memberGridVerifiedByTds { memberGrid.find("td[aria-describedby=member-grid_verifiedBy]") }
+        memberGridVerifiedOnTds { memberGrid.find("td[aria-describedby=member-grid_verifiedOn]") }
+
     }
 }

@@ -4,11 +4,8 @@ import geb.spock.GebSpec
 
 import java.text.SimpleDateFormat
 
-import static uk.co.novinet.e2e.TestUtils.insertUser
-import static uk.co.novinet.e2e.TestUtils.runSqlScript
-import static uk.co.novinet.e2e.TestUtils.setupDatabaseSchema
-import static uk.co.novinet.web.GebTestUtils.switchToGuestVerificationTabIfNecessaryAndAssertGridHasNRows
-import static uk.co.novinet.web.GebTestUtils.switchToMemberTabIfNecessaryAndAssertGridHasNRows
+import static uk.co.novinet.e2e.TestUtils.*
+import static uk.co.novinet.web.GebTestUtils.*
 
 class DashboardIT extends GebSpec {
 
@@ -60,9 +57,9 @@ class DashboardIT extends GebSpec {
         and: "the guest is now a verified member"
             switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
             memberGridNameTds[0].attr("title") == "John Smith"
-            memberGridHmrcLetterCheckedTds[0].find("input").value() == true
-            memberGridIdentificationCheckedTds[0].find("input").value() == true
-            memberGridVerifiedOnTds[0].find("input").text() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
-            memberGridVerifiedByTds[0].find("input").text() == "RG"
+            checkboxValue(memberGridHmrcLetterCheckedTds[0].find("input")) == true
+            checkboxValue(memberGridIdentityCheckedTds[0].find("input")) == true
+            memberGridVerifiedOnTds[0].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
+            memberGridVerifiedByTds[0].find("input").value() == "RG"
     }
 }
