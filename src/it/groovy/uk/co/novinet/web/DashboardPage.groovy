@@ -18,6 +18,7 @@ class DashboardPage extends Page {
         gridVerificationButtons { verificationGrid.find("td[aria-describedby=verification-grid_action] .update-row-btn") }
         documentVerificationModal { $("#documentVerificationModal") }
         documentVerificationTarget { $("#documentVerificationTarget") }
+        documentLinksToVerify { documentVerificationTarget.find("a.document-download-link") }
         verifiedByInput { $("#verifiedBy") }
         confirmVerifyButton { $("#verify-confirm-btn") }
         toastError { $("#toast-container div.toast.toast-error div.toast-message") }

@@ -20,7 +20,7 @@ docker run -d \
 	-e 'SFTP_PASSWORD=password' \
     -e "SFTP_HOST=lcag-sftp" \
 	-e "SFTP_PORT=22" \
-	-e "SFTP_ROOT_DIRECTORY=/share" \
+	-e "SFTP_ROOT_DIRECTORY=/upload" \
 	-e "MYBB_FORUM_DATABASE_URL=jdbc:mysql://lcag-mysql/mybb" \
 	-e "MYBB_FORUM_DATABASE_USERNAME=root" \
 	-e "MYBB_FORUM_DATABASE_PASSWORD=p@ssword" \
