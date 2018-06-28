@@ -11,6 +11,8 @@ class DashboardPage extends Page {
         memberTab { $(".nav.nav-tabs li a")[0] }
         guestsAwaitingVerificationTab { $(".nav.nav-tabs li a")[1] }
         paymentsTab { $(".nav.nav-tabs li a")[2] }
+        paymentsGrid { $("#payments-grid") }
+        paymentsGridRows { paymentsGrid.find("tr") }
         memberGrid { $("#member-grid") }
         memberGridRows { $("#member-grid tr") }
         verificationGrid { $("#verification-grid") }
@@ -24,11 +26,17 @@ class DashboardPage extends Page {
         toastError { $("#toast-container div.toast.toast-error div.toast-message") }
         toastSuccess { $("#toast-container div.toast.toast-success div.toast-message") }
 
+        // member grid
         memberGridNameTds { memberGrid.find("td[aria-describedby=member-grid_name]") }
         memberGridHmrcLetterCheckedTds { memberGrid.find("td[aria-describedby=member-grid_hmrcLetterChecked]") }
         memberGridIdentityCheckedTds { memberGrid.find("td[aria-describedby=member-grid_identificationChecked]") }
         memberGridVerifiedByTds { memberGrid.find("td[aria-describedby=member-grid_verifiedBy]") }
         memberGridVerifiedOnTds { memberGrid.find("td[aria-describedby=member-grid_verifiedOn]") }
+        memberGridContributionAmountTds { memberGrid.find("td[aria-describedby=member-grid_contributionAmount]") }
+
+        // payments grid
+        paymentsGridMemberTds { paymentsGrid.find("td[aria-describedby=payments-grid_userId]") }
+        select2FirstMemberChoice { $("li.select2-results__option.select2-results__option--highlighted") }
 
     }
 }

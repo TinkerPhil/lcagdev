@@ -187,7 +187,7 @@ class PaymentImportIT {
         assertEquals("roundabout23", transactions[0].reference)
 
         assertEquals(1, TestUtils.getEmails("roundabout23@test.com", "Inbox").size())
-        assertEquals("Dear Bert Cooper, Your payment has now been received. Thank you, Richard Horsley Membership Team", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getContent().trim())
+        assertEquals("Dear Bert Cooper, Your payment of £250 has now been received. Thank you, Richard Horsley Membership Team", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getContent().trim())
     }
 
     def allBankTransactionRows() {

@@ -29,7 +29,17 @@ class GebTestUtils {
         return true
     }
 
-    public static boolean checkboxValue(Object checkboxElement) {
+    static boolean switchToPaymentsTabIfNecessaryAndAssertGridHasNRows(Browser browser, int expectedNumberOfRows) {
+        if (!browser.paymentsTab.displayed) {
+            browser.waitFor { browser.paymentsTab.click() }
+        }
+
+        browser.waitFor { browser.paymentsGridRows.size() == expectedNumberOfRows + 1 }
+
+        return true
+    }
+
+    static boolean checkboxValue(Object checkboxElement) {
         return checkboxElement.value() == "on"
     }
 }

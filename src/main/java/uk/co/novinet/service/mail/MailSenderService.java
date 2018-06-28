@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
+
+import static java.text.NumberFormat.getNumberInstance;
+import static java.util.Locale.UK;
 
 @Service
 public class MailSenderService {
@@ -59,17 +61,17 @@ public class MailSenderService {
 
     public void sendFollowUpEmail(Member member) {
         LOGGER.info("Going to send initial follow up email to member: {}", member);
-        sendEmail(member, emailSourceUrl, new GoogleDriveMailAttachment(emailAttachmentId, "Response for Membership Request.pdf", "application/pdf"));
+        sendEmail(member, null, emailSourceUrl, new GoogleDriveMailAttachment(emailAttachmentId, "Response for Membership Request.pdf", "application/pdf"));
     }
 
     public void sendVerificationEmail(Member member) {
         LOGGER.info("Going to send document verification email to member: {}", member);
-        sendEmail(member, verificationEmailSourceUrl, null);
+        sendEmail(member, null, verificationEmailSourceUrl, null);
     }
 
-    public void sendBankTransactionAssignmentEmail(Member member) {
+    public void sendBankTransactionAssignmentEmail(Member member, BankTransaction bankTransaction) {
         LOGGER.info("Going to send payment received email to member: {}", member);
-        sendEmail(member, paymentReceivedEmailSourceUrl, null);
+        sendEmail(member, bankTransaction, paymentReceivedEmailSourceUrl, null);
     }
 
     private byte[] retrievePdfFromGoogleDrive(String googleDriveAttachmentId) {
@@ -82,7 +84,7 @@ public class MailSenderService {
         return null;
     }
 
-    private void sendEmail(Member member, String emailSourceUrl, GoogleDriveMailAttachment googleDriveMailAttachment) {
+    private void sendEmail(Member member, BankTransaction bankTransaction, String emailSourceUrl, GoogleDriveMailAttachment googleDriveMailAttachment) {
         try {
             Email email = new Email();
 
@@ -97,7 +99,7 @@ public class MailSenderService {
             }
 
             email.addRecipient(member.getEmailAddress(), member.getEmailAddress(), MimeMessage.RecipientType.TO);
-            email.setTextHTML(replaceTokens(retrieveEmailBodyHtmlFromGoogleDocs(emailSourceUrl), member));
+            email.setTextHTML(replaceTokens(retrieveEmailBodyHtmlFromGoogleDocs(emailSourceUrl), member, bankTransaction));
             email.setSubject(emailSubject);
 
             if (googleDriveMailAttachment != null) {
@@ -118,12 +120,18 @@ public class MailSenderService {
         }
     }
 
-    private String replaceTokens(String emailTemplate, Member member) {
-        return emailTemplate
+    private String replaceTokens(String emailTemplate, Member member, BankTransaction bankTransaction) {
+        String substitutedMemberTokens = emailTemplate
                 .replace("$USERNAME", member.getUsername())
                 .replace("$PASSWORD", member.getPasswordDetails() == null ? "" : member.getPasswordDetails().getPassword())
                 .replace("$NAME", member.getName())
                 .replace("$TOKEN", member.getToken());
+
+        if (bankTransaction != null) {
+            return substitutedMemberTokens.replace("$AMOUNT", getNumberInstance(UK).format(bankTransaction.getAmount()));
+        }
+
+        return substitutedMemberTokens;
     }
 
     private String retrieveEmailBodyHtmlFromGoogleDocs(String emailSourceUrl) throws IOException {

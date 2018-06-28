@@ -58,7 +58,7 @@ public class PaymentService {
 
                     if (bankTransaction.getUserId() != null) {
                         Member member = memberService.getMemberById(bankTransaction.getUserId());
-                        mailSenderService.sendBankTransactionAssignmentEmail(member);
+                        mailSenderService.sendBankTransactionAssignmentEmail(member, bankTransaction);
                     }
 
                     numberOfNewTransactions++;
@@ -157,6 +157,6 @@ public class PaymentService {
 
     public void assignToMember(Long memberId, Long paymentId) {
         paymentDao.updateMemberId(paymentId, memberId);
-        mailSenderService.sendBankTransactionAssignmentEmail(memberService.getMemberById(memberId));
+        mailSenderService.sendBankTransactionAssignmentEmail(memberService.getMemberById(memberId), paymentDao.getBankTransactionById(paymentId));
     }
 }

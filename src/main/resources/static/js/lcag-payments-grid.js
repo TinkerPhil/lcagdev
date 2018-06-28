@@ -73,6 +73,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                     }).done(function(result) {
                         lcag.Common.alertSuccess();
                         lcag.PaymentsGrid.grid.trigger("reloadGrid");
+                        lcag.MemberGrid.grid.trigger("reloadGrid");
                     });
                 });
             }
