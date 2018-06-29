@@ -30,7 +30,7 @@ docker run -d \
 	-e "VERIFICATION_EMAIL_SUBJECT=Your identification has been verified" \
 	-e "PAYMENT_RECEIVED_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1s7Z_sERtYiaYWxU-pH3YjzmEPMTgelJd_aB9ZnaGjOM/export?format=html" \
 	-e "PAYMENT_RECEIVED_EMAIL_SUBJECT=Your payment has been received" \
-	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1Ul_fpNid324swOOCGEdo9EMFaRqufXwN7T173nngIyI//export?format=html" \
+	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1Ul_fpNid324swOOCGEdo9EMFaRqufXwN7T173nngIyI/export?format=html" \
 	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SUBJECT=You are now a full member" \
 	-e "EMAIL_PROCESSED_FOLDER_NAME=History" \
 	-e "BCC_RECIPIENTS=test@bcc.com" \
