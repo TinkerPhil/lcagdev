@@ -109,8 +109,9 @@ public class EnquiryIT {
         assertTrue(enquiryReply.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply.getSubject());
         assertEquals("lcag-testing@lcag.com", enquiryReply.getFrom());
-        assertTrue(enquiryReply.getContent().contains("name=Testy Test"));
-        assertTrue(enquiryReply.getContent().contains("username=" + enquirierUsername));
+        System.out.println(enquiryReply.getContent());
+        assertTrue(enquiryReply.getContent().contains("Dear Testy Test"));
+        assertTrue(enquiryReply.getContent().contains("https://membership.hmrcloancharge.info/?token=" + getUserRows().get(0).getToken()));
     }
 
     @Test
@@ -143,8 +144,9 @@ public class EnquiryIT {
         assertTrue(enquiryReply.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply.getSubject());
         assertEquals("lcag-testing@lcag.com", enquiryReply.getFrom());
-        assertTrue(enquiryReply.getContent().contains("name=Testy Test "));
-        assertTrue(enquiryReply.getContent().contains("username=" + enquirierUsername));
+        assertTrue(enquiryReply.getContent().contains("Dear Testy Test "));
+        assertTrue(enquiryReply.getContent().contains("Username: " + enquirierUsername));
+        assertTrue(enquiryReply.getContent().contains("https://membership.hmrcloancharge.info/?token=" + getUserRows().get(0).getToken()));
     }
 
     private void enquirerHasNoEmails() {
@@ -212,15 +214,15 @@ public class EnquiryIT {
         assertTrue(enquiryReply1.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply1.getSubject());
         assertEquals("lcag-testing@lcag.com", enquiryReply1.getFrom());
-        assertTrue(enquiryReply1.getContent().contains("name=Testy Test1"));
-        assertTrue(enquiryReply1.getContent().contains("username=" + duplicateEnquirerUsername1));
-        assertTrue(enquiryReply1.getContent().contains("password="));
-        assertTrue(enquiryReply1.getContent().contains("token="));
+        assertTrue(enquiryReply1.getContent().contains("Dear Testy Test1"));
+        assertTrue(enquiryReply1.getContent().contains("Username: " + duplicateEnquirerUsername1));
+        assertTrue(enquiryReply1.getContent().contains("https://membership.hmrcloancharge.info/?token=" + getUserRows().get(0).getToken()));
 
         assertTrue(enquiryReply2.getContentType().startsWith("multipart"));
         assertEquals("LCAG Enquiry", enquiryReply2.getSubject());
         assertEquals("lcag-testing@lcag.com", enquiryReply2.getFrom());
-        assertTrue(enquiryReply2.getContent().contains("Testy Test2 "));
-        assertTrue(enquiryReply2.getContent().contains(duplicateEnquirerUsername2));
+        assertTrue(enquiryReply2.getContent().contains("Dear Testy Test2"));
+        assertTrue(enquiryReply2.getContent().contains("Username: " + duplicateEnquirerUsername2));
+        assertTrue(enquiryReply2.getContent().contains("https://membership.hmrcloancharge.info/?token=" + getUserRows().get(1).getToken()));
     }
 }

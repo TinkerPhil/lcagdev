@@ -24,8 +24,7 @@ docker run -d \
 	-e "MYBB_FORUM_DATABASE_URL=jdbc:mysql://lcag-mysql/mybb" \
 	-e "MYBB_FORUM_DATABASE_USERNAME=root" \
 	-e "MYBB_FORUM_DATABASE_PASSWORD=p@ssword" \
-	-e "EMAIL_SOURCE_URL=https://docs.google.com/document/d/1MKM84drgdaWRKWQo0HE-BV-NhZfzQH_cBF2wXvbsd4I/export?format=html" \
-	-e "EMAIL_ATTACHMENT_ID=14OA5QRGYYdKaKSmUTorEaY8h1hwu5t7j" \
+	-e "EMAIL_SOURCE_URL=https://docs.google.com/document/d/1ESy7IwM_mEuUQDP3xnx2We9aRwVcN_XdCAs4bF23ceI/export?format=html" \
 	-e "VERIFICATION_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1yK5m3fDBRPIS-qGjnTpOLEaQc-iALl5au62RJcQCuJI/export?format=html" \
 	-e "VERIFICATION_EMAIL_SUBJECT=Your identification has been verified" \
 	-e "PAYMENT_RECEIVED_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1s7Z_sERtYiaYWxU-pH3YjzmEPMTgelJd_aB9ZnaGjOM/export?format=html" \
