@@ -72,7 +72,7 @@ class GuestVerificationIT extends GebSpec {
 
         and: "new member receives email saying their docs have been verified"
             waitFor { getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 1 }
-            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation. Once we have confirmed receipt of your payment we will move you over to full membership. Richard Horsley Membership Team.")
+            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). Richard Horsley Membership Team.")
     }
 
     def "guest member verification flow when guest has 2 docs"() {
@@ -123,7 +123,7 @@ class GuestVerificationIT extends GebSpec {
 
         and: "new member receives email saying their docs have been verified"
             waitFor { getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 1 }
-            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation. Once we have confirmed receipt of your payment we will move you over to full membership. Richard Horsley Membership Team.")
+            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). Richard Horsley Membership Team.")
 
         and: "the docs have been deleted"
             assert testSftpService.getAllDocumentsForEmailAddress(GUEST_EMAIL_ADDRESS).size() == 0

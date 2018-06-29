@@ -44,8 +44,14 @@ public class MailSenderService {
     @Value("${verificationEmailSourceUrl}")
     private String verificationEmailSourceUrl;
 
+    @Value("${verificationEmailSubject}")
+    private String verificationEmailSubject;
+
     @Value("${paymentReceivedEmailSourceUrl}")
     private String paymentReceivedEmailSourceUrl;
+
+    @Value("${paymentReceivedEmailSubject}")
+    private String paymentReceivedEmailSubject;
 
     @Value("${emailAttachmentId}")
     private String emailAttachmentId;
@@ -61,17 +67,17 @@ public class MailSenderService {
 
     public void sendFollowUpEmail(Member member) {
         LOGGER.info("Going to send initial follow up email to member: {}", member);
-        sendEmail(member, null, emailSourceUrl, new GoogleDriveMailAttachment(emailAttachmentId, "Response for Membership Request.pdf", "application/pdf"));
+        sendEmail(member, null, emailSubject, emailSourceUrl, new GoogleDriveMailAttachment(emailAttachmentId, "Response for Membership Request.pdf", "application/pdf"));
     }
 
     public void sendVerificationEmail(Member member) {
         LOGGER.info("Going to send document verification email to member: {}", member);
-        sendEmail(member, null, verificationEmailSourceUrl, null);
+        sendEmail(member, null, verificationEmailSubject, verificationEmailSourceUrl, null);
     }
 
     public void sendBankTransactionAssignmentEmail(Member member, BankTransaction bankTransaction) {
         LOGGER.info("Going to send payment received email to member: {}", member);
-        sendEmail(member, bankTransaction, paymentReceivedEmailSourceUrl, null);
+        sendEmail(member, bankTransaction, paymentReceivedEmailSubject, paymentReceivedEmailSourceUrl, null);
     }
 
     private byte[] retrievePdfFromGoogleDrive(String googleDriveAttachmentId) {
@@ -84,7 +90,7 @@ public class MailSenderService {
         return null;
     }
 
-    private void sendEmail(Member member, BankTransaction bankTransaction, String emailSourceUrl, GoogleDriveMailAttachment googleDriveMailAttachment) {
+    private void sendEmail(Member member, BankTransaction bankTransaction, String subject, String emailSourceUrl, GoogleDriveMailAttachment googleDriveMailAttachment) {
         try {
             Email email = new Email();
 
@@ -100,7 +106,7 @@ public class MailSenderService {
 
             email.addRecipient(member.getEmailAddress(), member.getEmailAddress(), MimeMessage.RecipientType.TO);
             email.setTextHTML(replaceTokens(retrieveEmailBodyHtmlFromGoogleDocs(emailSourceUrl), member, bankTransaction));
-            email.setSubject(emailSubject);
+            email.setSubject(subject);
 
             if (googleDriveMailAttachment != null) {
                 byte[] pdfBytes = retrievePdfFromGoogleDrive(googleDriveMailAttachment.getGoogleDriveAttachmentId());

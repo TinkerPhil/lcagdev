@@ -31,7 +31,9 @@ public class PaymentService {
 
     private static final List<Pattern> DESCRIPTION_PATTERNS = asList(
             Pattern.compile("FASTER PAYMENTS RECEIPT REF.(?<reference>.{0,18}) FROM (?<counterParty>.*)"),
-            Pattern.compile("BILL PAYMENT FROM (?<counterParty>.*), REFERENCE (?<reference>.{0,18})")
+            Pattern.compile("BILL PAYMENT FROM (?<counterParty>.*), REFERENCE (?<reference>.{0,18})"),
+            Pattern.compile("FASTER PAYMENTS RECEIPT  FROM (?<counterParty>.*)")
+
     );
 
     @Autowired
@@ -122,6 +124,12 @@ public class PaymentService {
     }
 
     private Member exactMatchingMember(String reference) {
+        LOGGER.info("exactMatchingMember called for reference: {}", reference);
+
+        if (reference == null) {
+            return null;
+        }
+
         List<Member> members = memberService.findExistingForumUsersByField("username", reference);
 
         if (members == null || members.size() == 0) {
@@ -146,13 +154,18 @@ public class PaymentService {
     }
 
     private String findInDescription(String description, String groupName) {
-        for (Pattern pattern : DESCRIPTION_PATTERNS) {
-            Matcher matcher = pattern.matcher(description);
-            if (matcher.find()) {
-                return matcher.group(groupName);
+        try {
+            for (Pattern pattern : DESCRIPTION_PATTERNS) {
+                Matcher matcher = pattern.matcher(description);
+                if (matcher.find()) {
+                    return matcher.group(groupName);
+                }
             }
+        } catch (IllegalArgumentException e) {
+            LOGGER.warn("Description: '" + description + "' does not contain groupName: " + groupName);
         }
-        return null;
+
+        return "";
     }
 
     public void assignToMember(Long memberId, Long paymentId) {

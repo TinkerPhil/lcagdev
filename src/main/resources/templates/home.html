@@ -126,23 +126,27 @@
         </div>
     </body>
     <script type="text/javascript">
-            Dropzone.autoDiscover = false;
-            $(function () {
-                lcag.MemberGrid.initialise();
-                lcag.PaymentsGrid.initialise();
-                lcag.VerificationGrid.initialise();
-                $("#dropzone-form").dropzone({
-                    maxFiles: 2000,
-                    url: "/paymentUpload",
-                    success: function (file, response) {
-                        lcag.Common.alertSuccess();
-                        lcag.PaymentsGrid.grid.trigger("reloadGrid");
-                        lcag.MemberGrid.grid.trigger("reloadGrid");
-                        lcag.VerificationGrid.grid.trigger("reloadGrid");
-                    }
-                });
+        Dropzone.autoDiscover = false;
+        $(function () {
+            lcag.MemberGrid.initialise();
+            lcag.PaymentsGrid.initialise();
+            lcag.VerificationGrid.initialise();
+            $("#dropzone-form").dropzone({
+                maxFiles: 2000,
+                url: "/paymentUpload",
+                success: function (file, response) {
+                    lcag.Common.alertSuccess();
+                    lcag.PaymentsGrid.grid.trigger("reloadGrid");
+                    lcag.MemberGrid.grid.trigger("reloadGrid");
+                    lcag.VerificationGrid.grid.trigger("reloadGrid");
+                }
             });
-        </script>
 
-
+            $(document).ajaxStart(function() {
+                lcag.Common.alertPleaseWait();
+            }).ajaxStop(function() {
+                lcag.Common.hidePleaseWait();
+            });
+        });
+    </script>
 </html>

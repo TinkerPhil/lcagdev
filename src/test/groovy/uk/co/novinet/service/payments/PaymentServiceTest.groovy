@@ -30,6 +30,11 @@ Date: 24/05/2018
 Description: BILL PAYMENT FROM MR JAMES ANDREW HARRISON SMYTHE, REFERENCE jim65                          
 Amount: 250.00 \t
 Balance: 4800.00 
+\t\t\t\t\t\t
+Date: 23/05/2018
+Description: FASTER PAYMENTS RECEIPT  FROM MR L D STEVENS                          
+Amount: 250.00 \t
+Balance: 4550.00 
 """
 
     PaymentService testObj = new PaymentService()
@@ -44,39 +49,47 @@ Balance: 4800.00 
         List<BankTransaction> bankTransactions = testObj.buildBankTransactions(transactions)
 
         expect:
-        bankTransactions.size() == 4
+        bankTransactions.size() == 5
 
-        bankTransactions[0].date.toEpochMilli() == time("24/05/2018")
-        bankTransactions[0].description == "BILL PAYMENT FROM MR JAMES ANDREW HARRISON SMYTHE, REFERENCE jim65"
+        bankTransactions[0].date.toEpochMilli() == time("23/05/2018")
+        bankTransactions[0].description == "FASTER PAYMENTS RECEIPT  FROM MR L D STEVENS"
         bankTransactions[0].amount == 250.00d
-        bankTransactions[0].runningBalance == 4800.00d
-        bankTransactions[0].counterParty == "MR JAMES ANDREW HARRISON SMYTHE"
-        bankTransactions[0].reference == "jim65"
-        bankTransactions[0].transactionIndexOnDay == 2
+        bankTransactions[0].runningBalance == 4550.00d
+        bankTransactions[0].counterParty == "MR L D STEVENS"
+        bankTransactions[0].reference == ""
+        bankTransactions[0].transactionIndexOnDay == 0
 
         bankTransactions[1].date.toEpochMilli() == time("24/05/2018")
-        bankTransactions[1].description == "FASTER PAYMENTS RECEIPT REF.KDMP FROM WILLIAMS MICHAEL"
-        bankTransactions[1].amount == 50.00d
-        bankTransactions[1].runningBalance == 4850.00d
-        bankTransactions[1].counterParty == "WILLIAMS MICHAEL"
-        bankTransactions[1].reference == "KDMP"
-        bankTransactions[1].transactionIndexOnDay == 1
+        bankTransactions[1].description == "BILL PAYMENT FROM MR JAMES ANDREW HARRISON SMYTHE, REFERENCE jim65"
+        bankTransactions[1].amount == 250.00d
+        bankTransactions[1].runningBalance == 4800.00d
+        bankTransactions[1].counterParty == "MR JAMES ANDREW HARRISON SMYTHE"
+        bankTransactions[1].reference == "jim65"
+        bankTransactions[1].transactionIndexOnDay == 2
 
         bankTransactions[2].date.toEpochMilli() == time("24/05/2018")
-        bankTransactions[2].description == "FASTER PAYMENTS RECEIPT REF.BOBWINKS FROM JONES TD"
-        bankTransactions[2].amount == 100.00d
-        bankTransactions[2].runningBalance == 4950.00d
-        bankTransactions[2].counterParty == "JONES TD"
-        bankTransactions[2].reference == "BOBWINKS"
-        bankTransactions[2].transactionIndexOnDay == 0
+        bankTransactions[2].description == "FASTER PAYMENTS RECEIPT REF.KDMP FROM WILLIAMS MICHAEL"
+        bankTransactions[2].amount == 50.00d
+        bankTransactions[2].runningBalance == 4850.00d
+        bankTransactions[2].counterParty == "WILLIAMS MICHAEL"
+        bankTransactions[2].reference == "KDMP"
+        bankTransactions[2].transactionIndexOnDay == 1
 
-        bankTransactions[3].date.toEpochMilli() == time("25/05/2018")
-        bankTransactions[3].description == "FASTER PAYMENTS RECEIPT REF.ABC123 FROM A Smith"
+        bankTransactions[3].date.toEpochMilli() == time("24/05/2018")
+        bankTransactions[3].description == "FASTER PAYMENTS RECEIPT REF.BOBWINKS FROM JONES TD"
         bankTransactions[3].amount == 100.00d
-        bankTransactions[3].runningBalance == 5050.00d
-        bankTransactions[3].counterParty == "A Smith"
-        bankTransactions[3].reference == "ABC123"
+        bankTransactions[3].runningBalance == 4950.00d
+        bankTransactions[3].counterParty == "JONES TD"
+        bankTransactions[3].reference == "BOBWINKS"
         bankTransactions[3].transactionIndexOnDay == 0
+
+        bankTransactions[4].date.toEpochMilli() == time("25/05/2018")
+        bankTransactions[4].description == "FASTER PAYMENTS RECEIPT REF.ABC123 FROM A Smith"
+        bankTransactions[4].amount == 100.00d
+        bankTransactions[4].runningBalance == 5050.00d
+        bankTransactions[4].counterParty == "A Smith"
+        bankTransactions[4].reference == "ABC123"
+        bankTransactions[4].transactionIndexOnDay == 0
     }
 
     private long time(String dateString) {

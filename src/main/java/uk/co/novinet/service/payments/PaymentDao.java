@@ -61,11 +61,11 @@ public class PaymentDao {
                 nextAvailableId,
                 bankTransaction.getUserId(),
                 unixTime(bankTransaction.getDate()),
-                bankTransaction.getDescription(),
+                bankTransaction.getDescription() == null ? "" : bankTransaction.getDescription(),
                 bankTransaction.getAmount(),
                 bankTransaction.getRunningBalance(),
-                bankTransaction.getCounterParty(),
-                bankTransaction.getReference(),
+                bankTransaction.getCounterParty() == null ? "" : bankTransaction.getCounterParty(),
+                bankTransaction.getReference() == null ? "" : bankTransaction.getReference(),
                 bankTransaction.getTransactionIndexOnDay(),
                 String.valueOf(bankTransaction.getPaymentSource())
         );
@@ -74,7 +74,7 @@ public class PaymentDao {
     }
 
     public BankTransaction getBankTransactionById(Long id) {
-        return jdbcTemplate.queryForObject(buildBankTransactionTableSelect() + " where bt.uid = ?", new Object[] { id }, (rs, rowNum) -> buildBankTransaction(rs));
+        return jdbcTemplate.queryForObject(buildBankTransactionTableSelect() + " where bt.id = ?", new Object[] { id }, (rs, rowNum) -> buildBankTransaction(rs));
     }
 
     public List<BankTransaction> findExistingBankTransaction(BankTransaction bankTransaction) {

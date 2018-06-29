@@ -32,6 +32,8 @@ docker run -d \
 	-e "BCC_RECIPIENTS=test@bcc.com" \
 	-e "EMAIL_FROM_NAME=LCAG" \
 	-e "EMAIL_SUBJECT=LCAG Enquiry" \
+	-e "PAYMENT_RECEIVED_EMAIL_SUBJECT=Your payment has been received" \
+	-e "VERIFICATION_EMAIL_SUBJECT=Your identification has been verified" \
 	-e "VIRTUAL_PORT=8282" \
 	-e "SERVER_PORT=8282" \
 	-e "BANK_EXPORT_CHARACTER_ENCODING=iso-8859-1" \
