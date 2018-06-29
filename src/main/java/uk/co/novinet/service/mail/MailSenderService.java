@@ -53,6 +53,12 @@ public class MailSenderService {
     @Value("${paymentReceivedEmailSubject}")
     private String paymentReceivedEmailSubject;
 
+    @Value("${upgradedToFullMembershipEmailSourceUrl}")
+    private String upgradedToFullMembershipEmailSourceUrl;
+
+    @Value("${upgradedToFullMembershipEmailSubject}")
+    private String upgradedToFullMembershipEmailSubject;
+
     @Value("${emailAttachmentId}")
     private String emailAttachmentId;
 
@@ -78,6 +84,11 @@ public class MailSenderService {
     public void sendBankTransactionAssignmentEmail(Member member, BankTransaction bankTransaction) {
         LOGGER.info("Going to send payment received email to member: {}", member);
         sendEmail(member, bankTransaction, paymentReceivedEmailSubject, paymentReceivedEmailSourceUrl, null);
+    }
+
+    public void sendUpgradedToFullMembershipEmail(Member member) {
+        LOGGER.info("Going to send upgraded to full membership email to member: {}", member);
+        sendEmail(member, null, upgradedToFullMembershipEmailSubject, upgradedToFullMembershipEmailSourceUrl, null);
     }
 
     private byte[] retrievePdfFromGoogleDrive(String googleDriveAttachmentId) {

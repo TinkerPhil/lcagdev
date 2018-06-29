@@ -27,13 +27,15 @@ docker run -d \
 	-e "EMAIL_SOURCE_URL=https://docs.google.com/document/d/1MKM84drgdaWRKWQo0HE-BV-NhZfzQH_cBF2wXvbsd4I/export?format=html" \
 	-e "EMAIL_ATTACHMENT_ID=14OA5QRGYYdKaKSmUTorEaY8h1hwu5t7j" \
 	-e "VERIFICATION_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1yK5m3fDBRPIS-qGjnTpOLEaQc-iALl5au62RJcQCuJI/export?format=html" \
+	-e "VERIFICATION_EMAIL_SUBJECT=Your identification has been verified" \
 	-e "PAYMENT_RECEIVED_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1s7Z_sERtYiaYWxU-pH3YjzmEPMTgelJd_aB9ZnaGjOM/export?format=html" \
+	-e "PAYMENT_RECEIVED_EMAIL_SUBJECT=Your payment has been received" \
+	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1Ul_fpNid324swOOCGEdo9EMFaRqufXwN7T173nngIyI//export?format=html" \
+	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SUBJECT=You are now a full member" \
 	-e "EMAIL_PROCESSED_FOLDER_NAME=History" \
 	-e "BCC_RECIPIENTS=test@bcc.com" \
 	-e "EMAIL_FROM_NAME=LCAG" \
 	-e "EMAIL_SUBJECT=LCAG Enquiry" \
-	-e "PAYMENT_RECEIVED_EMAIL_SUBJECT=Your payment has been received" \
-	-e "VERIFICATION_EMAIL_SUBJECT=Your identification has been verified" \
 	-e "VIRTUAL_PORT=8282" \
 	-e "SERVER_PORT=8282" \
 	-e "BANK_EXPORT_CHARACTER_ENCODING=iso-8859-1" \

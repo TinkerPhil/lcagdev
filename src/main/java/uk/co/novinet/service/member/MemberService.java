@@ -67,6 +67,10 @@ public class MemberService {
         LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}",
                 group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy);
 
+        Member existingMember = getMemberById(memberId);
+
+        boolean shouldSendFullMembershipEmail = "LCAG Guests".equals(existingMember.getGroup()) && "Registered".equals(group);
+
         String sql = "update " + usersTableName() + " u " +
                 "set u.usergroup = (select `gid` from " + userGroupsTableName() + " ug where ug.title = ?), " +
                 "u.identification_checked = ?, " +
@@ -112,6 +116,10 @@ public class MemberService {
                 verifiedBy,
                 memberId
         );
+
+        if (result == 1 && shouldSendFullMembershipEmail) {
+            mailSenderService.sendUpgradedToFullMembershipEmail(existingMember);
+        }
 
         LOGGER.info("Update result: {}", result);
     }
