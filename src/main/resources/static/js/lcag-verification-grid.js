@@ -76,7 +76,7 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
                     for (var i = 0; i < data.length; i++) {
                         tableHtml +=
                             '<tr>' +
-                                '<td><a href="/member/document/download?path=' + data[i].path + '" class="document-download-link" data-sftp-path="' + data[i].path + '">' + data[i].filename + '</a></td>' +
+                                '<td><a href="/member/document/download?path=' + encodeURIComponent(data[i].path) + '" class="document-download-link" data-sftp-path="' + data[i].path + '">' + data[i].filename + '</a></td>' +
                                 '<td>' + moment(data[i].uploadDate).format("DD/MM/YYYY HH:mm") + '</td>' +
                             '</tr>';
                     }
