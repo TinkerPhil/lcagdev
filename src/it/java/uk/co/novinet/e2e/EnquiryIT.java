@@ -55,7 +55,7 @@ public class EnquiryIT {
     }
 
     @Test
-    public void doesNotCreateMyBbUserWhenEmailAddressAlreadyInUserTableAndLeavesEnquiryEmailInInboxFolder() throws Exception {
+    public void doesNotCreateMyBbUserWhenEmailAddressAlreadyInUserTable() throws Exception {
         noEmailsSentAndNoMyBbUsersExist();
 
         insertUser(1, "testuser", enquirerEmailAddress, "Testy Test", 8);
@@ -68,14 +68,16 @@ public class EnquiryIT {
 
         sleep(3000); //should have finished processing by now
 
-        assertEquals(1, getEmails(LCAG_INBOX_EMAIL_ADDRESS, "Inbox").size());
-        assertEquals(0, getEmails(LCAG_INBOX_EMAIL_ADDRESS, "History").size());
+        assertEquals(0, getEmails(LCAG_INBOX_EMAIL_ADDRESS, "Inbox").size());
+        assertEquals(1, getEmails(LCAG_INBOX_EMAIL_ADDRESS, "History").size());
 
         assertEquals(1, getUserRows().size());
         assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
 
-        //enquirer does not receive an email
-        assertEquals(0, getEmails(enquirerEmailAddress, "Inbox").size());
+        //enquirer receives an email saying they already have a forum account
+        assertEquals(1, getEmails(enquirerEmailAddress, "Inbox").size());
+        assertTrue(getEmails(enquirerEmailAddress, "Inbox").get(0).getContent().contains("Dear Testy Test, Thank you for completing the Loan Charge Action Group sign up form. It looks like you already have a Loan Charge Action Group account. If you can’t remember your account details, please use the forgotten password facility on the forum and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw Thank you, Richard Horsley Membership Team"));
+        assertEquals("Thank you for registering your interest in The Loan Charge Action Group", getEmails(enquirerEmailAddress, "Inbox").get(0).getSubject());
     }
 
     private void noEmailsSentAndNoMyBbUsersExist() {
@@ -138,6 +140,9 @@ public class EnquiryIT {
         waitForNEmailsToAppearInFolder(1, "Inbox", enquirerEmailAddress);
 
         List<StaticMessage> messages = getEmails(enquirerEmailAddress, "Inbox");
+
+        System.out.println(messages);
+
         assertEquals(1, messages.size());
         StaticMessage enquiryReply = messages.get(0);
 

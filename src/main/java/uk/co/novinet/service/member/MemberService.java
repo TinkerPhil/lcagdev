@@ -60,6 +60,7 @@ public class MemberService {
         put("bigGroupUsername", "u.big_group_username");
         put("verifiedBy", "u.verified_by");
         put("verifiedOn", "u.verified_on");
+        put("alreadyHaveAnLcagAccountEmailSent", "u.already_have_an_lcag_account_email_sent");
     }};
 
     public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername, Instant verifiedOn, String verifiedBy) {
@@ -152,19 +153,38 @@ public class MemberService {
         mailSenderService.sendVerificationEmail(member);
     }
 
-    public Member createForumUserIfNecessary(Enquiry enquiry) {
+    public void markAsAlreadyHaveAnLcagAccountEmailSent(Member member) {
+        LOGGER.info("Going to markAsAlreadyHaveAnLcagAccountEmailSent for member {}", member);
+
+        String sql = "update " + usersTableName() + " u set " +
+                "u.already_have_an_lcag_account_email_sent = ? " +
+                "where u.uid = ?";
+
+        LOGGER.info("Created sql: {}", sql);
+
+        int result = jdbcTemplate.update(
+                sql,
+                true,
+                member.getId()
+        );
+
+        LOGGER.info("Update result: {}", result);
+    }
+
+    public MemberCreationResult createForumUserIfNecessary(Enquiry enquiry) {
         List<Member> existingMembers = findExistingForumUsersByField("email", enquiry.getEmailAddress());
 
         if (!existingMembers.isEmpty()) {
             LOGGER.info("Already existing forum user with email address {}", enquiry.getEmailAddress());
             LOGGER.info("Skipping");
+            return new MemberCreationResult(true, existingMembers.get(0));
         } else {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, null, null, false, false, "", "", false, "", "", UUID.randomUUID().toString().replace("-", ""), false, PasswordSource.getRandomPasswordDetails(), new BigDecimal("0.00"), "", false, "", "", null);
+            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, null, null, false, false, "", "", false, "", "", UUID.randomUUID().toString().replace("-", ""), false, PasswordSource.getRandomPasswordDetails(), new BigDecimal("0.00"), "", false, "", "", null, false);
 
-            Long max = findNextAvailableId("uid", usersTableName());
+            Long nextAvailableId = findNextAvailableId("uid", usersTableName());
 
             String insertSql = "insert into " + usersTableName() + " (`uid`, `username`, `password`, `salt`, `loginkey`, `email`, `postnum`, `threadnum`, `avatar`, " +
                     "`avatardimensions`, `avatartype`, `usergroup`, `additionalgroups`, `displaygroup`, `usertitle`, `regdate`, `lastactive`, `lastvisit`, `lastpost`, `website`, `icq`, " +
@@ -180,7 +200,7 @@ public class MemberService {
             LOGGER.info("Going to execute insert sql: {}", insertSql);
 
             int result = jdbcTemplate.update(insertSql,
-                    max,
+                    nextAvailableId,
                     member.getUsername(),
                     member.getPasswordDetails().getPasswordHash(),
                     member.getPasswordDetails().getSalt(),
@@ -193,12 +213,12 @@ public class MemberService {
                     false
             );
 
+            member.setId(nextAvailableId);
+
             LOGGER.info("Insertion result: {}", result);
 
-            return member;
+            return new MemberCreationResult(false, member);
         }
-
-        return null;
     }
 
     public Member getMemberById(Long id) {
@@ -210,7 +230,7 @@ public class MemberService {
     }
 
     private String buildUserTableSelect() {
-        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
+        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
     }
@@ -358,6 +378,11 @@ public class MemberService {
             parameters.add(member.getHasCompletedMembershipForm());
         }
 
+        if (member.getHasCompletedMembershipForm() != null) {
+            clauses.add("u.already_have_an_lcag_account_email_sent = ?");
+            parameters.add(member.alreadyHaveAnLcagAccountEmailSent());
+        }
+
         if (member.getContributionAmount() != null) {
             clauses.add("contribution_amount = ?");
             parameters.add(member.getContributionAmount());
@@ -407,7 +432,9 @@ public class MemberService {
                 rs.getBoolean("member_of_big_group"),
                 rs.getString("big_group_username"),
                 rs.getString("verified_by"),
-                dateFromMyBbRow(rs, "verified_on"));
+                dateFromMyBbRow(rs, "verified_on"),
+                rs.getBoolean("already_have_an_lcag_account_email_sent")
+        );
     }
 
     private String extractUsername(String emailAddress) {

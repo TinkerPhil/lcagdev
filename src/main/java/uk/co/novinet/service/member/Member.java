@@ -42,6 +42,7 @@ public class Member {
     private String bigGroupUsername;
     private String verifiedBy;
     private Instant verifiedOn;
+    private Boolean alreadyHaveAnLcagAccountEmailSent;
 
     public Member() {}
 
@@ -68,7 +69,11 @@ public class Member {
             PasswordDetails passwordDetails,
             BigDecimal contributionAmount,
             String howDidYouHearAboutLcag,
-            Boolean memberOfBigGroup, String bigGroupUsername, String verifiedBy, Instant verifiedOn) {
+            Boolean memberOfBigGroup,
+            String bigGroupUsername,
+            String verifiedBy,
+            Instant verifiedOn,
+            Boolean alreadyHaveAnLcagAccountEmailSent) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
@@ -95,6 +100,7 @@ public class Member {
         this.bigGroupUsername = bigGroupUsername;
         this.verifiedBy = verifiedBy;
         this.verifiedOn = verifiedOn;
+        this.alreadyHaveAnLcagAccountEmailSent = alreadyHaveAnLcagAccountEmailSent;
     }
 
     public Long getId() {
@@ -309,5 +315,9 @@ public class Member {
     @Override
     public String toString() {
         return reflectionToString(this);
+    }
+
+    public Boolean alreadyHaveAnLcagAccountEmailSent() {
+        return alreadyHaveAnLcagAccountEmailSent;
     }
 }

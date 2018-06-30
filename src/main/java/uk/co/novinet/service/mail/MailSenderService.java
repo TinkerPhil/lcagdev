@@ -59,6 +59,12 @@ public class MailSenderService {
     @Value("${upgradedToFullMembershipEmailSubject}")
     private String upgradedToFullMembershipEmailSubject;
 
+    @Value("${alreadyHaveAnLcagAccountEmailSourceUrl}")
+    private String alreadyHaveAnLcagAccountEmailSourceUrl;
+
+    @Value("${alreadyHaveAnLcagAccountEmailSubject}")
+    private String alreadyHaveAnLcagAccountEmailSubject;
+
     @Value("${emailSubject}")
     private String emailSubject;
 
@@ -71,6 +77,11 @@ public class MailSenderService {
     public void sendFollowUpEmail(Member member) {
         LOGGER.info("Going to send initial follow up email to member: {}", member);
         sendEmail(member, null, emailSubject, emailSourceUrl, null);
+    }
+
+    public void sendAccountAlreadyExistsEmail(Member member) {
+        LOGGER.info("Going to send account already exists email to member: {}", member);
+        sendEmail(member, null, alreadyHaveAnLcagAccountEmailSubject, alreadyHaveAnLcagAccountEmailSourceUrl, null);
     }
 
     public void sendVerificationEmail(Member member) {

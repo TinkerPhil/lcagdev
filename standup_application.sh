@@ -31,6 +31,8 @@ docker run -d \
 	-e "PAYMENT_RECEIVED_EMAIL_SUBJECT=Your payment has been received" \
 	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1Ul_fpNid324swOOCGEdo9EMFaRqufXwN7T173nngIyI/export?format=html" \
 	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SUBJECT=You are now a full member" \
+	-e "ALREADY_HAVE_AN_LCAG_ACCOUNT_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1ghlZmfMY07ZS7s374CPJAerbmpAxkQ7JTNIdNJiCRBU/export?format=html" \
+	-e "ALREADY_HAVE_AN_LCAG_ACCOUNT_EMAIL_SUBJECT=Thank you for registering your interest in The Loan Charge Action Group" \
 	-e "EMAIL_PROCESSED_FOLDER_NAME=History" \
 	-e "BCC_RECIPIENTS=test@bcc.com" \
 	-e "EMAIL_FROM_NAME=LCAG" \

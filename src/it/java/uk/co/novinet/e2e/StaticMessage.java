@@ -1,5 +1,7 @@
 package uk.co.novinet.e2e;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -35,5 +37,10 @@ public class StaticMessage {
 
     public String getFrom() {
         return from;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

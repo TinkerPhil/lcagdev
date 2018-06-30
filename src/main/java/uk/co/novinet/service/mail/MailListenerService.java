@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.member.Member;
+import uk.co.novinet.service.member.MemberCreationResult;
 import uk.co.novinet.service.member.MemberService;
 
 import javax.mail.*;
@@ -95,23 +96,29 @@ public class MailListenerService {
 
                     LOGGER.info("Found enquiry: {}", enquiry);
 
-                    Member member = memberService.createForumUserIfNecessary(enquiry);
+                    MemberCreationResult memberCreationResult = memberService.createForumUserIfNecessary(enquiry);
+                    Member member = memberCreationResult.getMember();
 
-                    if (member == null) {
-                        LOGGER.info("We didn't create a forum user, so set this message to SEEN={} again", originalSeenFlagState);
-                        restoreOriginalMessageFlags(message, originalSeenFlagState);
-                    } else {
-                        Date receivedDate = null;
+                    Date receivedDate = null;
 
-                        if (message != null) {
-                            receivedDate = message.getReceivedDate();
-                        }
-
-                        mailSenderService.sendFollowUpEmail(member);
-                        moveEmailToProcessedFolder(message, store, inbox);
-
-                        LOGGER.info(">>> " + enquiry.getName() + "\t " + member.getUsername() + "\t " + enquiry.getEmailAddress() + "\t " + receivedDate);
+                    if (message != null) {
+                        receivedDate = message.getReceivedDate();
                     }
+
+                    if (memberCreationResult.memberAlreadyExisted() && !member.alreadyHaveAnLcagAccountEmailSent()) {
+                        LOGGER.info("We already have a member with email address: {} and we haven't already sent them the chaser email. Going to send accountAlreadyExistsEmail...", enquiry.getEmailAddress());
+                        mailSenderService.sendAccountAlreadyExistsEmail(member);
+                        memberService.markAsAlreadyHaveAnLcagAccountEmailSent(member);
+                        moveEmailToProcessedFolder(message, store, inbox, member);
+                    } else if (!memberCreationResult.memberAlreadyExisted()) {
+                        LOGGER.info("We created a new member with email address: {}. Going to send followUpEmail...", enquiry.getEmailAddress());
+                        mailSenderService.sendFollowUpEmail(member);
+                        moveEmailToProcessedFolder(message, store, inbox, member);
+                    } else {
+                        LOGGER.info("Skipping email from: {} as they already have an account and we've already sent them the alreadyHaveAnLcagAccountEmail", enquiry.getEmailAddress());
+                    }
+
+                    LOGGER.info(">>> " + enquiry.getName() + "\t " + member.getUsername() + "\t " + enquiry.getEmailAddress() + "\t " + receivedDate);
                 }
             }
 
@@ -136,7 +143,7 @@ public class MailListenerService {
         }
     }
 
-    private void moveEmailToProcessedFolder(Message message, Store store, IMAPFolder inbox) {
+    private void moveEmailToProcessedFolder(Message message, Store store, IMAPFolder inbox, Member member) {
         LOGGER.info("Going to move message to processed folder");
         Folder processedFolder = null;
         try {
@@ -155,7 +162,8 @@ public class MailListenerService {
                 message.setFlag(Flags.Flag.DELETED, true);
                 inbox.expunge();
             } else {
-                LOGGER.info("Could not find processed folder '{}' so going to skip this and leave the message where it was.", processedFolderName);
+                LOGGER.info("Could not find processed folder '{}' so going to skip this and leave the message where it was. Also setting the alreadyHaveAnLcagAccountEmailSent flag to true", processedFolderName);
+                memberService.markAsAlreadyHaveAnLcagAccountEmailSent(member);
             }
         } catch (MessagingException e) {
             throw new RuntimeException(e);
