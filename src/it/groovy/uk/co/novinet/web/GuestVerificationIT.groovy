@@ -21,6 +21,46 @@ class GuestVerificationIT extends GebSpec {
         testSftpService.removeAllDocsForEmailAddress(GUEST_EMAIL_ADDRESS)
     }
 
+    def "add note"() {
+        given:
+            insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
+            go("http://admin:lcag@localhost:8282")
+            at DashboardPage
+
+        when: "when we click on the verification tab we can see the guest we're waiting to verify"
+            switchToGuestVerificationTabIfNecessaryAndAssertGridHasNRows(browser, 1)
+
+        and: "when we click on the first grid verification button"
+            gridVerificationButtons.click()
+
+        then: "document verification modal appears, guest has uploaded no docs"
+            waitFor { documentVerificationModal.displayed }
+
+        when: "when i click on the add note button without entering a note value"
+            addNoteButton.click()
+
+        then: "we get a validation error and modal is still displayed"
+            waitFor { toastError.displayed }
+            assert toastError.text() == "Please enter a note"
+            documentVerificationModal.displayed
+
+        when: "we enter a note and click the add note button"
+            notesInput.value("some note about something")
+            addNoteButton.click()
+
+        then: "we get a toast success message"
+            waitFor { toastSuccess.text() == "Updated successfully" }
+
+        and: "modal closes"
+            waitFor { documentVerificationModal.displayed == false }
+
+        and: "the guest is still in the 'to verify' grid"
+            waitFor { verificationGridRows.size() == 2 }
+
+        and: "the note appears alongside the user in the grid"
+            waitFor { verificationGridNotesTds[0].text() == "some note about something" }
+    }
+
     def "guest member verification flow when guest has no docs"() {
         given:
             assert getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 0

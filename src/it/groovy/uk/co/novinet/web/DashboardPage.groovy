@@ -18,13 +18,20 @@ class DashboardPage extends Page {
         verificationGrid { $("#verification-grid") }
         verificationGridRows { $("#verification-grid tr") }
         gridVerificationButtons { verificationGrid.find("td[aria-describedby=verification-grid_action] .update-row-btn") }
+        toastError { $("#toast-container div.toast.toast-error div.toast-message") }
+        toastSuccess { $("#toast-container div.toast.toast-success div.toast-message") }
+
+        // document verification modal
         documentVerificationModal { $("#documentVerificationModal") }
         documentVerificationTarget { $("#documentVerificationTarget") }
         documentLinksToVerify { documentVerificationTarget.find("a.document-download-link") }
         verifiedByInput { $("#verifiedBy") }
         confirmVerifyButton { $("#verify-confirm-btn") }
-        toastError { $("#toast-container div.toast.toast-error div.toast-message") }
-        toastSuccess { $("#toast-container div.toast.toast-success div.toast-message") }
+        notesInput { $("#notes") }
+        addNoteButton { $("#verify-add-note-btn") }
+
+        // verification grid
+        verificationGridNotesTds { verificationGrid.find("td[aria-describedby=verification-grid_notes]") }
 
         // member grid
         memberGridNameTds { memberGrid.find("td[aria-describedby=member-grid_name]") }

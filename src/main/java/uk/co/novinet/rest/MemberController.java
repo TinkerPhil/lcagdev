@@ -50,6 +50,23 @@ public class MemberController {
     }
 
     @CrossOrigin
+    @PostMapping(path = "/member/addNote")
+    public ResponseEntity addNote(@RequestParam("id") Long memberId, @RequestParam("notes") String notes) {
+        Member member = memberService.getMemberById(memberId);
+
+        if (member == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        memberService.addNote(
+                member,
+                notes
+        );
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @PostMapping(path = "/member/verify")
     public ResponseEntity verify(@RequestParam("id") Long memberId, @RequestParam("verifiedBy") String verifiedBy) {
         Member member = memberService.getMemberById(memberId);
@@ -113,14 +130,9 @@ public class MemberController {
 
     @CrossOrigin
     @GetMapping(path = "/member/documents")
-    public List<SftpDocument> getDocuments(@RequestParam("memberId") Long memberId) {
+    public MemberDocuments getDocuments(@RequestParam("memberId") Long memberId) {
         Member member = memberService.getMemberById(memberId);
-
-        if (member.getMemberOfBigGroup()) {
-            return Collections.emptyList();
-        }
-
-        return sftpService.getAllDocumentsForMember(member);
+        return new MemberDocuments(member, sftpService.getAllDocumentsForMember(member));
     }
 
     @CrossOrigin

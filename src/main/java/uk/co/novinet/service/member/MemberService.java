@@ -153,6 +153,24 @@ public class MemberService {
         mailSenderService.sendVerificationEmail(member);
     }
 
+    public void addNote(Member member, String notes) {
+        LOGGER.info("Going to add note for member {}", member);
+
+        String sql = "update " + usersTableName() + " u set " +
+                "u.notes = ? " +
+                "where u.uid = ?";
+
+        LOGGER.info("Created sql: {}", sql);
+
+        int result = jdbcTemplate.update(
+                sql,
+                notes,
+                member.getId()
+        );
+
+        LOGGER.info("Update result: {}", result);
+    }
+
     public void markAsAlreadyHaveAnLcagAccountEmailSent(Member member) {
         LOGGER.info("Going to markAsAlreadyHaveAnLcagAccountEmailSent for member {}", member);
 
@@ -378,7 +396,7 @@ public class MemberService {
             parameters.add(member.getHasCompletedMembershipForm());
         }
 
-        if (member.getHasCompletedMembershipForm() != null) {
+        if (member.alreadyHaveAnLcagAccountEmailSent() != null) {
             clauses.add("u.already_have_an_lcag_account_email_sent = ?");
             parameters.add(member.alreadyHaveAnLcagAccountEmailSent());
         }
@@ -465,6 +483,4 @@ public class MemberService {
     private String firstBitOfEmailAddress(String emailAddress) {
         return emailAddress.substring(0, emailAddress.indexOf("@"));
     }
-
-
 }
