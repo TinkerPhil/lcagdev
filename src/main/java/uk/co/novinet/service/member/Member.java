@@ -43,6 +43,10 @@ public class Member {
     private String verifiedBy;
     private Instant verifiedOn;
     private Boolean alreadyHaveAnLcagAccountEmailSent;
+    private Boolean registeredForClaim;
+    private Boolean hasCompletedClaimParticipantForm;
+    private Boolean hasBeenSentClaimConfirmationEmail;
+    private String claimToken;
 
     public Member() {}
 
@@ -73,7 +77,11 @@ public class Member {
             String bigGroupUsername,
             String verifiedBy,
             Instant verifiedOn,
-            Boolean alreadyHaveAnLcagAccountEmailSent) {
+            Boolean alreadyHaveAnLcagAccountEmailSent,
+            Boolean registeredForClaim,
+            Boolean hasCompletedClaimParticipantForm,
+            Boolean hasBeenSentClaimConfirmationEmail,
+            String claimToken) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
@@ -101,6 +109,10 @@ public class Member {
         this.verifiedBy = verifiedBy;
         this.verifiedOn = verifiedOn;
         this.alreadyHaveAnLcagAccountEmailSent = alreadyHaveAnLcagAccountEmailSent;
+        this.registeredForClaim = registeredForClaim;
+        this.hasCompletedClaimParticipantForm = hasCompletedClaimParticipantForm;
+        this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
+        this.claimToken = claimToken;
     }
 
     public Long getId() {
@@ -319,5 +331,37 @@ public class Member {
 
     public Boolean alreadyHaveAnLcagAccountEmailSent() {
         return alreadyHaveAnLcagAccountEmailSent;
+    }
+
+    public Boolean getRegisteredForClaim() {
+        return registeredForClaim;
+    }
+
+    public void setRegisteredForClaim(Boolean registeredForClaim) {
+        this.registeredForClaim = registeredForClaim;
+    }
+
+    public Boolean getHasCompletedClaimParticipantForm() {
+        return hasCompletedClaimParticipantForm;
+    }
+
+    public void setHasCompletedClaimParticipantForm(Boolean hasCompletedClaimParticipantForm) {
+        this.hasCompletedClaimParticipantForm = hasCompletedClaimParticipantForm;
+    }
+
+    public Boolean getHasBeenSentClaimConfirmationEmail() {
+        return hasBeenSentClaimConfirmationEmail;
+    }
+
+    public void setHasBeenSentClaimConfirmationEmail(Boolean hasBeenSentClaimConfirmationEmail) {
+        this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
+    }
+
+    public String getClaimToken() {
+        return claimToken;
+    }
+
+    public void setClaimToken(String claimToken) {
+        this.claimToken = claimToken;
     }
 }

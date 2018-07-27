@@ -64,9 +64,7 @@ public class EnquiryIT {
 
         sendEnquiryEmail(enquirerEmailAddress, "Testy Test");
 
-        waitForNEmailsToAppearInFolder(1, "Inbox", LCAG_INBOX_EMAIL_ADDRESS);
-
-        sleep(3000); //should have finished processing by now
+        waitForNEmailsToAppearInFolder(1, "History", LCAG_INBOX_EMAIL_ADDRESS);
 
         assertEquals(0, getEmails(LCAG_INBOX_EMAIL_ADDRESS, "Inbox").size());
         assertEquals(1, getEmails(LCAG_INBOX_EMAIL_ADDRESS, "History").size());
@@ -76,7 +74,10 @@ public class EnquiryIT {
 
         //enquirer receives an email saying they already have a forum account
         assertEquals(1, getEmails(enquirerEmailAddress, "Inbox").size());
-        assertTrue(getEmails(enquirerEmailAddress, "Inbox").get(0).getContent().contains("Dear Testy Test, Thank you for completing the Loan Charge Action Group sign up form. It looks like you already have a Loan Charge Action Group account. If you can’t remember your account details, please use the forgotten password facility on the forum and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw Thank you, Richard Horsley Membership Team"));
+
+        System.out.println(getEmails(enquirerEmailAddress, "Inbox").get(0).getContent());
+
+        assertTrue(getEmails(enquirerEmailAddress, "Inbox").get(0).getContent().contains("Dear Testy Test, Thank you for completing the Loan Charge Action Group sign up form. It looks like you already have a Loan Charge Action Group account set up. If you haven’t already done so, can you please complete the new member on-boarding form here: https://membership.hmrcloancharge.info/?token=" + getUserRows().get(0).getToken() + " Once we have verified your ID and scheme documents and confirmed receipt of your joining fee, we will move you over to full membership. If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw Thank you, Richard Horsley Membership Team"));
         assertEquals("Thank you for registering your interest in The Loan Charge Action Group", getEmails(enquirerEmailAddress, "Inbox").get(0).getSubject());
     }
 

@@ -61,6 +61,10 @@ public class MemberService {
         put("verifiedBy", "u.verified_by");
         put("verifiedOn", "u.verified_on");
         put("alreadyHaveAnLcagAccountEmailSent", "u.already_have_an_lcag_account_email_sent");
+        put("registeredForClaim", "u.registered_for_claim");
+        put("hasCompletedClaimParticipantForm", "u.has_completed_claim_participant_form");
+        put("hasBeenSentClaimConfirmationEmail", "u.has_been_sent_claim_confirmation_email");
+        put("claimToken", "u.claim_token");
     }};
 
     public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername, Instant verifiedOn, String verifiedBy) {
@@ -200,7 +204,39 @@ public class MemberService {
             LOGGER.info("No existing forum user found with email address: {}", enquiry.getEmailAddress());
             LOGGER.info("Going to create one");
 
-            Member member = new Member(null, enquiry.getEmailAddress(), extractUsername(enquiry.getEmailAddress()), enquiry.getName(), null, Instant.now(), false, false, null, null, false, false, "", "", false, "", "", UUID.randomUUID().toString().replace("-", ""), false, PasswordSource.getRandomPasswordDetails(), new BigDecimal("0.00"), "", false, "", "", null, false);
+            Member member = new Member(
+                    null,
+                    enquiry.getEmailAddress(),
+                    extractUsername(enquiry.getEmailAddress()),
+                    enquiry.getName(),
+                    null,
+                    Instant.now(),
+                    false,
+                    false,
+                    null,
+                    null,
+                    false,
+                    false,
+                    "",
+                    "",
+                    false,
+                    "",
+                    "",
+                    guid(),
+                    false,
+                    PasswordSource.getRandomPasswordDetails(),
+                    new BigDecimal("0.00"),
+                    "",
+                    false,
+                    "",
+                    "",
+                    null,
+                    false,
+                    false,
+                    false,
+                    false,
+                    guid()
+            );
 
             Long nextAvailableId = findNextAvailableId("uid", usersTableName());
 
@@ -210,10 +246,10 @@ public class MemberService {
                     "`pmnotice`, `pmnotify`, `buddyrequestspm`, `buddyrequestsauto`, `threadmode`, `showimages`, `showvideos`, `showsigs`, `showavatars`, `showquickreply`, `showredirect`, `ppp`, `tpp`, " +
                     "`daysprune`, `dateformat`, `timeformat`, `timezone`, `dst`, `dstcorrection`, `buddylist`, `ignorelist`, `style`, `away`, `awaydate`, `returndate`, `awayreason`, `pmfolders`, `notepad`, " +
                     "`referrer`, `referrals`, `reputation`, `regip`, `lastip`, `language`, `timeonline`, `showcodebuttons`, `totalpms`, `unreadpms`, `warningpoints`, `moderateposts`, `moderationtime`, " +
-                    "`suspendposting`, `suspensiontime`, `suspendsignature`, `suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`, `name`, `token`, `has_completed_membership_form`) " +
+                    "`suspendposting`, `suspensiontime`, `suspendsignature`, `suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`, `name`, `token`, `has_completed_membership_form`, `claim_token`) " +
                     "VALUES (?, ?, ?, ?, 'lvhLksjhHGcZIWgtlwNTJNr3bjxzCE2qgZNX6SBTBPbuSLx21u', ?, 0, 0, '', '', '', 8, '', 0, '', ?, ?, ?, 0, '', '0', '', '', '', '', '', " +
                     "'all', '', 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 'linear', 1, 1, 1, 1, 1, 1, 0, 0, 0, '', '', '', 0, 0, '', '', 0, 0, 0, '0', '', '', '', 0, 0, 0, '', '', '', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, " +
-                    "0, 0, 1, '', 0, ?, ?, ?);";
+                    "0, 0, 1, '', 0, ?, ?, ?, ?);";
 
             LOGGER.info("Going to execute insert sql: {}", insertSql);
 
@@ -228,7 +264,8 @@ public class MemberService {
                     0L,
                     member.getName(),
                     member.getToken(),
-                    false
+                    false,
+                    member.getClaimToken()
             );
 
             member.setId(nextAvailableId);
@@ -237,6 +274,10 @@ public class MemberService {
 
             return new MemberCreationResult(false, member);
         }
+    }
+
+    private String guid() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 
     public Member getMemberById(Long id) {
@@ -248,7 +289,10 @@ public class MemberService {
     }
 
     private String buildUserTableSelect() {
-        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
+        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, " +
+                "u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, " +
+                "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
+                "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
     }
@@ -420,6 +464,26 @@ public class MemberService {
             parameters.add(like(member.getToken()));
         }
 
+        if (member.getClaimToken() != null) {
+            clauses.add("lower(u.claim_token) like ?");
+            parameters.add(like(member.getClaimToken()));
+        }
+
+        if (member.getRegisteredForClaim() != null) {
+            clauses.add("u.registered_for_claim = ?");
+            parameters.add(member.getRegisteredForClaim());
+        }
+
+        if (member.getHasCompletedClaimParticipantForm() != null) {
+            clauses.add("u.has_completed_claim_participant_form = ?");
+            parameters.add(member.getHasCompletedClaimParticipantForm());
+        }
+
+        if (member.getHasBeenSentClaimConfirmationEmail() != null) {
+            clauses.add("u.has_been_sent_claim_confirmation_email = ?");
+            parameters.add(member.getHasBeenSentClaimConfirmationEmail());
+        }
+
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
@@ -451,7 +515,11 @@ public class MemberService {
                 rs.getString("big_group_username"),
                 rs.getString("verified_by"),
                 dateFromMyBbRow(rs, "verified_on"),
-                rs.getBoolean("already_have_an_lcag_account_email_sent")
+                rs.getBoolean("already_have_an_lcag_account_email_sent"),
+                rs.getBoolean("registered_for_claim"),
+                rs.getBoolean("has_completed_claim_participant_form"),
+                rs.getBoolean("has_been_sent_claim_confirmation_email"),
+                rs.getString("claim_token")
         );
     }
 

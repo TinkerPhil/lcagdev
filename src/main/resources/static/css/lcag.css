@@ -1,5 +1,5 @@
 body {
-    width: 2750px;
+    width: 3000px;
 }
 span.action {
     cursor: pointer;
@@ -13,7 +13,7 @@ span.action {
   top: 10px;
 }
 .horizontal-scroll {
-    width: 2750px;
+    width: 3000px;
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;

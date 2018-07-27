@@ -12,9 +12,6 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "bigGroupUsername", label: "Big Group Username", width: 90, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
                 { name: "emailAddress", label: "Email Address", width: 150, template: "string" },
-                { name: "hmrcLetterChecked", label: "HMRC Letter Checked", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "contributionAmount", label: "Contribution Amount", width: 90, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
                 { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: lcag.MemberGrid.formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "mpName", label: "MP Name", width: 90, formatter: lcag.MemberGrid.formatters.mpName },
                 { name: "mpParty", label: "MP Party", width: 90, formatter: lcag.MemberGrid.formatters.mpParty },
@@ -25,11 +22,18 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "industry", label: "Industry", width: 250, formatter: lcag.MemberGrid.formatters.industry },
                 { name: "notes", label: "Notes", width: 250, formatter: lcag.MemberGrid.formatters.notes },
                 { name: "howDidYouHearAboutLcag", label: "How Did You Hear About LCAG", width: 250, formatter: lcag.MemberGrid.formatters.howDidYouHearAboutLcag },
-                { name: "group", label: "Group", width: 90, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators" } },
                 { name: "hasCompletedMembershipForm", label: "Completed Membership Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedMembershipForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "token", label: "Token", wwidth: 150, template: "string" },
+                { name: "token", label: "Membership Token", width: 150, template: "string" },
+                { name: "claimToken", label: "Claim Token", width: 150, template: "string" },
+                { name: "registeredForClaim", label: "Registered For Claim", width: 59, formatter: lcag.MemberGrid.formatters.registeredForClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "hasCompletedClaimParticipantForm", label: "Completed Claim Participant Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedClaimParticipantForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "hasBeenSentClaimConfirmationEmail", label: "Has Been Sent Claim Confirmation Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentClaimConfirmationEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "hmrcLetterChecked", label: "HMRC Letter Checked", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "verifiedOn", label: "Verified On Date", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.verifiedOn },
                 { name: "verifiedBy", label: "Verified By", width: 100, formatter: lcag.MemberGrid.formatters.verifiedBy },
+                { name: "contributionAmount", label: "Contribution Amount", width: 90, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
+                { name: "group", label: "Group", width: 90, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators" } },
                 { name: "action", label: "", width: 65, formatter: lcag.MemberGrid.formatters.action, search: false }
             ],
             datatype: function(postData) {
@@ -53,7 +57,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
             headertitles: true,
             pager: true,
             rowNum: 25,
-            width: "3500px",
+            width: "5400px",
             altRows: true,
             rowattr: function (row) {
                 if (row.group == "Registered") {
@@ -95,6 +99,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "verifiedOn": $("#verifiedOn_" + id).val(),
                                 "verifiedBy": $("#verifiedBy_" + id).val(),
                                 "howDidYouHearAboutLcag": $("#howDidYouHearAboutLcag_" + id).val(),
+                                "registeredForClaim": $("#registeredForClaim_" + id).prop("checked"),
+                                "hasCompletedClaimParticipantForm": $("#hasCompletedClaimParticipantForm_" + id).prop("checked"),
+                                "hasBeenSentClaimConfirmationEmail": $("#hasBeenSentClaimConfirmationEmail_" + id).prop("checked"),
                             };
                           })(),
                           success: function(e) {
@@ -184,11 +191,19 @@ lcag.MemberGrid = lcag.MemberGrid || {
         "hasCompletedMembershipForm": function(cellvalue, options, row) {
             return '<input id="hasCompletedMembershipForm_' + row.id + '" type="checkbox" ' + (row.hasCompletedMembershipForm ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
+        "registeredForClaim": function(cellvalue, options, row) {
+            return '<input id="registeredForClaim_' + row.id + '" type="checkbox" ' + (row.registeredForClaim ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "hasCompletedClaimParticipantForm": function(cellvalue, options, row) {
+            return '<input id="hasCompletedClaimParticipantForm_' + row.id + '" type="checkbox" ' + (row.hasCompletedClaimParticipantForm ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "hasBeenSentClaimConfirmationEmail": function(cellvalue, options, row) {
+            return '<input id="hasBeenSentClaimConfirmationEmail_' + row.id + '" type="checkbox" ' + (row.hasBeenSentClaimConfirmationEmail ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
         "action": function(cellvalue, options, row) {
             if (row.status != 3) {
                 return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button>';
             }
-
             return "";
         }
     }
