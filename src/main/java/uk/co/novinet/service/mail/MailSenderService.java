@@ -137,7 +137,7 @@ public class MailSenderService {
                 }
             }
 
-            LOGGER.info("Going to try sending email with sourceUrl: {} to memeber {}", emailSourceUrl, member.getEmailAddress());
+            LOGGER.info("Going to try sending email with sourceUrl: {} to member {}", emailSourceUrl, member.getEmailAddress());
             new Mailer(smtpHost, smtpPort, smtpUsername, smtpPassword, TransportStrategy.SMTP_TLS).sendMail(email);
             LOGGER.info("Email successfully sent to member {}", member.getEmailAddress());
         } catch (Exception e) {
@@ -150,7 +150,8 @@ public class MailSenderService {
                 .replace("$USERNAME", member.getUsername())
                 .replace("$PASSWORD", member.getPasswordDetails() == null ? "" : member.getPasswordDetails().getPassword())
                 .replace("$NAME", member.getName())
-                .replace("$TOKEN", member.getToken());
+                .replace("$TOKEN", member.getToken())
+                .replace("$CLAIM_TOKEN", member.getClaimToken());
 
         if (bankTransaction != null) {
             return substitutedMemberTokens.replace("$AMOUNT", getNumberInstance(UK).format(bankTransaction.getAmount()));

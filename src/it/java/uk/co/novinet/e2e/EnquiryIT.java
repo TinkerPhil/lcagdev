@@ -11,6 +11,7 @@ import java.util.List;
 import static java.lang.Thread.sleep;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static uk.co.novinet.e2e.TestUtils.*;
 
 public class EnquiryIT {
@@ -77,7 +78,9 @@ public class EnquiryIT {
 
         System.out.println(getEmails(enquirerEmailAddress, "Inbox").get(0).getContent());
 
-        assertTrue(getEmails(enquirerEmailAddress, "Inbox").get(0).getContent().contains("Dear Testy Test, Thank you for completing the Loan Charge Action Group sign up form. It looks like you already have a Loan Charge Action Group account set up. If you haven’t already done so, can you please complete the new member on-boarding form here: https://membership.hmrcloancharge.info/?token=" + getUserRows().get(0).getToken() + " Once we have verified your ID and scheme documents and confirmed receipt of your joining fee, we will move you over to full membership. If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw Thank you, Richard Horsley Membership Team"));
+        assertNotNull(getUserRows().get(0).getToken());
+        assertTrue(getUserRows().get(0).getToken().length() > 10);
+        assertTrue(getEmails(enquirerEmailAddress, "Inbox").get(0).getContent().contains("Dear Testy Test, Thank you for completing the Loan Charge Action Group sign up form. It looks like you already have a Loan Charge Action Group account set up. If you haven’t already done so, can you please complete the new member on-boarding form here: https://membership.hmrcloancharge.info/?token=" + getUserRows().get(0).getToken() + " Once we have verified your ID and scheme documents and confirmed receipt of your joining fee, we will move you over to full membership. If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw Your forum username is: " + getUserRows().get(0).getUsername() + " Thank you, Richard Horsley Membership Team"));
         assertEquals("Thank you for registering your interest in The Loan Charge Action Group", getEmails(enquirerEmailAddress, "Inbox").get(0).getSubject());
     }
 

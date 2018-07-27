@@ -45,7 +45,7 @@ class UpgradeToFullMembershipIT extends GebSpec {
             memberGridVerifiedOnTds[0].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
             memberGridVerifiedByTds[0].find("input").value() == "RG"
             waitFor { getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 1 }
-            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith, You have now been upgraded to full membership. Thank you, Richard Horsley Membership Team")
+            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith, You have now been upgraded to full membership. You should now have full access to the LCAG members forum: https://forum.hmrcloancharge.info Your forum username is: newguest If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw For information about the forthcoming misselling legal action, please visit the ‘Misselling Legal Action’ forum area: https://forum.hmrcloancharge.info/showthread.php?tid=191 Thank you, Richard Horsley Membership Team")
             getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].subject.contains("You are now a full member")
     }
 
