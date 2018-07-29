@@ -104,9 +104,12 @@ public class MemberController {
             @RequestParam(value = "bigGroupUsername", required = false) String bigGroupUsername,
             @RequestParam(value = "verifiedOn", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") Date verifiedOn,
             @RequestParam(value = "verifiedBy", required = false) String verifiedBy,
+            @RequestParam(value = "registeredForClaim", required = false) Boolean registeredForClaim,
+            @RequestParam(value = "hasCompletedClaimParticipantForm", required = false) Boolean hasCompletedClaimParticipantForm,
+            @RequestParam(value = "hasBeenSentClaimConfirmationEmail", required = false) Boolean hasBeenSentClaimConfirmationEmail,
             @RequestParam("group") String group
     ) {
-        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, memberOfBigGroup, bigGroupUsername, verifiedOn == null ? null : verifiedOn.toInstant(), verifiedBy);
+        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, memberOfBigGroup, bigGroupUsername, verifiedOn == null ? null : verifiedOn.toInstant(), verifiedBy, registeredForClaim, hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail);
         return new ResponseEntity(HttpStatus.OK);
     }
 

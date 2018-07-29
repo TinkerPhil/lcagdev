@@ -67,10 +67,10 @@ public class MemberService {
         put("claimToken", "u.claim_token");
     }};
 
-    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername, Instant verifiedOn, String verifiedBy) {
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername, Instant verifiedOn, String verifiedBy, Boolean registeredForClaim, Boolean hasCompletedClaimParticipantForm, Boolean hasBeenSentClaimConfirmationEmail) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}",
-                group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy);
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, hasBeenSentClaimConfirmationEmail={}",
+                group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim, hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail);
 
         Member existingMember = getMemberById(memberId);
 
@@ -95,6 +95,9 @@ public class MemberService {
                 "u.big_group_username = ?, " +
                 "u.verified_on = ?, " +
                 "u.verified_by = ? " +
+                "u.registered_for_claim = ? " +
+                "u.has_completed_claim_participant_form = ? " +
+                "u.has_been_sent_claim_confirmation_email = ? " +
                 "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -119,6 +122,9 @@ public class MemberService {
                 bigGroupUsername,
                 unixTime(verifiedOn),
                 verifiedBy,
+                registeredForClaim,
+                hasCompletedClaimParticipantForm,
+                hasBeenSentClaimConfirmationEmail,
                 memberId
         );
 
