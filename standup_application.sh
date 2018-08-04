@@ -7,11 +7,11 @@ docker run -d \
     -e "DASHBOARD_PASSWORD=lcag" \
     -e "RETRIEVE_MAIL_INITIAL_DELAY_MILLISECONDS=1000" \
     -e "RETRIEVE_MAIL_REFRESH_INTERVAL_MILLISECONDS=1000" \
-	-e "SMTP_HOST=lcag-enquiry" \
+	-e "SMTP_HOST=lcag-mail" \
 	-e "SMTP_PORT=3025" \
 	-e "SMTP_USERNAME=lcag-testing@lcag.com" \
 	-e 'SMTP_PASSWORD=password' \
-	-e "IMAP_HOST=lcag-enquiry" \
+	-e "IMAP_HOST=lcag-mail" \
 	-e "IMAP_PORT=3143" \
 	-e "IMAP_USERNAME=lcag-testing@lcag.com" \
 	-e 'IMAP_PASSWORD=password' \
