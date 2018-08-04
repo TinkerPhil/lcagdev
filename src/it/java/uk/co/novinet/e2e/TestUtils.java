@@ -58,6 +58,7 @@ public class TestUtils {
         while (needToRetry && sqlRetryCounter < 60) {
             try {
                 runSqlScript("sql/create_user_table.sql");
+                runSqlScript("sql/create_enquiry_table.sql");
                 runSqlScript("sql/create_usergroups_table.sql");
                 runSqlScript("sql/create_bank_transaction_table.sql");
                 runSqlScript("sql/populate_usergroups_table.sql");
@@ -134,7 +135,7 @@ public class TestUtils {
     }
 
     static void runSqlUpdate(String sql) {
-        System.out.println("sql: " + sql);
+//        System.out.println("sql: " + sql);
         Connection connection = null;
         Statement statement = null;
 

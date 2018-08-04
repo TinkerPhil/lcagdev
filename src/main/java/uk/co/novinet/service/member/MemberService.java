@@ -273,16 +273,16 @@ public class MemberService {
                     member.getToken(),
                     false,
                     member.getClaimToken(),
-                    enquiry.getMpName(),
-                    enquiry.getMpConstituency(),
-                    enquiry.getMpParty(),
+                    emptyStringIfNull(enquiry.getMpName()),
+                    emptyStringIfNull(enquiry.getMpConstituency()),
+                    emptyStringIfNull(enquiry.getMpParty()),
                     enquiry.getMpEngaged(),
                     enquiry.getMpSympathetic(),
-                    enquiry.getSchemes(),
-                    enquiry.getIndustry(),
-                    enquiry.getHowDidYouHearAboutLcag(),
+                    emptyStringIfNull(enquiry.getSchemes()),
+                    emptyStringIfNull(enquiry.getIndustry()),
+                    emptyStringIfNull(enquiry.getHowDidYouHearAboutLcag()),
                     enquiry.getMemberOfBigGroup(),
-                    enquiry.getBigGroupUsername() == null ? "" : enquiry.getBigGroupUsername()
+                    emptyStringIfNull(enquiry.getBigGroupUsername())
             );
 
             member.setId(nextAvailableId);
@@ -291,6 +291,10 @@ public class MemberService {
 
             return new MemberCreationResult(false, member);
         }
+    }
+
+    private String emptyStringIfNull(String string) {
+        return string == null ? "" : string;
     }
 
     private String guid() {
