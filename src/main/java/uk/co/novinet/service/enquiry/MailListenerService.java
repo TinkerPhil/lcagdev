@@ -1,4 +1,4 @@
-package uk.co.novinet.service.mail;
+package uk.co.novinet.service.enquiry;
 
 import com.sun.mail.imap.IMAPFolder;
 import org.jsoup.Jsoup;
@@ -59,9 +59,14 @@ public class MailListenerService {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private EnquiryTableListenerService enquiryTableListenerService;
+
     @Scheduled(initialDelayString = "${retrieveMailInitialDelayMilliseconds}", fixedRateString = "${retrieveMailIntervalMilliseconds}")
     public void retrieveMail() {
-        LOGGER.info("Checking for new mail");
+        enquiryTableListenerService.processNewEnquiryTableRows();
+
+        LOGGER.info("Checking for new enquiry");
 
         IMAPFolder inbox = null;
         Store store = null;
@@ -122,7 +127,7 @@ public class MailListenerService {
                 }
             }
 
-            LOGGER.info("Finished checking mail. Going back to sleep now.");
+            LOGGER.info("Finished checking enquiry. Going back to sleep now.");
         } catch (Exception e) {
             LOGGER.error("An error occurred while trying to read emails", e);
         } finally {

@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static uk.co.novinet.e2e.TestUtils.*;
 
-public class EnquiryIT {
+public class EmailEnquiryIT {
 
     private String enquirerEmailAddress;
     private String enquirierUsername;

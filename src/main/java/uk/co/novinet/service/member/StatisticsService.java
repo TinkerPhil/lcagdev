@@ -7,13 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.rest.Statistics;
-import uk.co.novinet.service.PersistenceUtils;
-import uk.co.novinet.service.mail.Enquiry;
-import uk.co.novinet.service.mail.PasswordSource;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
 
 import static uk.co.novinet.service.PersistenceUtils.bankTransactionsTableName;
 import static uk.co.novinet.service.PersistenceUtils.userGroupsTableName;

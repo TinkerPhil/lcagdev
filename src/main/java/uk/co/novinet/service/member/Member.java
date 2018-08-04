@@ -1,6 +1,6 @@
 package uk.co.novinet.service.member;
 
-import uk.co.novinet.service.mail.PasswordDetails;
+import uk.co.novinet.service.enquiry.PasswordDetails;
 
 import java.math.BigDecimal;
 import java.time.Instant;

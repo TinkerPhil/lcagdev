@@ -1,4 +1,4 @@
-package uk.co.novinet.service.mail;
+package uk.co.novinet.service.enquiry;
 
 import org.apache.commons.io.IOUtils;
 import org.codemonkey.simplejavamail.Mailer;

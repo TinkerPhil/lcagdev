@@ -13,7 +13,9 @@ public class DataPopulator {
         while (needToRetry && sqlRetryCounter < 20) {
             try {
                 runSqlScript("sql/drop_user_table.sql");
+                runSqlScript("sql/drop_enquiry_table.sql");
                 runSqlScript("sql/create_user_table.sql");
+                runSqlScript("sql/create_enquiry_table.sql");
                 runSqlScript("sql/create_usergroups_table.sql");
                 runSqlScript("sql/populate_usergroups_table.sql");
                 runSqlScript("sql/create_bank_transaction_table.sql");

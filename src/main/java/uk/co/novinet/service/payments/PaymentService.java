@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import uk.co.novinet.service.mail.MailSenderService;
+import uk.co.novinet.service.enquiry.MailSenderService;
 import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
 

@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.PersistenceUtils;
-import uk.co.novinet.service.mail.Enquiry;
-import uk.co.novinet.service.mail.MailSenderService;
-import uk.co.novinet.service.mail.PasswordSource;
+import uk.co.novinet.service.enquiry.Enquiry;
+import uk.co.novinet.service.enquiry.MailSenderService;
+import uk.co.novinet.service.enquiry.PasswordSource;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -94,9 +94,9 @@ public class MemberService {
                 "u.member_of_big_group = ?, " +
                 "u.big_group_username = ?, " +
                 "u.verified_on = ?, " +
-                "u.verified_by = ? " +
-                "u.registered_for_claim = ? " +
-                "u.has_completed_claim_participant_form = ? " +
+                "u.verified_by = ?, " +
+                "u.registered_for_claim = ?, " +
+                "u.has_completed_claim_participant_form = ?, " +
                 "u.has_been_sent_claim_confirmation_email = ? " +
                 "where u.uid = ?";
 
@@ -219,22 +219,22 @@ public class MemberService {
                     Instant.now(),
                     false,
                     false,
-                    null,
-                    null,
+                    enquiry.getMpName(),
+                    enquiry.getSchemes(),
+                    enquiry.getMpEngaged(),
+                    enquiry.getMpSympathetic(),
+                    enquiry.getMpConstituency(),
+                    enquiry.getMpParty(),
                     false,
-                    false,
                     "",
-                    "",
-                    false,
-                    "",
-                    "",
+                    enquiry.getIndustry(),
                     guid(),
                     false,
                     PasswordSource.getRandomPasswordDetails(),
                     new BigDecimal("0.00"),
-                    "",
-                    false,
-                    "",
+                    enquiry.getHowDidYouHearAboutLcag(),
+                    enquiry.getMemberOfBigGroup(),
+                    enquiry.getBigGroupUsername(),
                     "",
                     null,
                     false,
@@ -252,10 +252,11 @@ public class MemberService {
                     "`pmnotice`, `pmnotify`, `buddyrequestspm`, `buddyrequestsauto`, `threadmode`, `showimages`, `showvideos`, `showsigs`, `showavatars`, `showquickreply`, `showredirect`, `ppp`, `tpp`, " +
                     "`daysprune`, `dateformat`, `timeformat`, `timezone`, `dst`, `dstcorrection`, `buddylist`, `ignorelist`, `style`, `away`, `awaydate`, `returndate`, `awayreason`, `pmfolders`, `notepad`, " +
                     "`referrer`, `referrals`, `reputation`, `regip`, `lastip`, `language`, `timeonline`, `showcodebuttons`, `totalpms`, `unreadpms`, `warningpoints`, `moderateposts`, `moderationtime`, " +
-                    "`suspendposting`, `suspensiontime`, `suspendsignature`, `suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`, `name`, `token`, `has_completed_membership_form`, `claim_token`) " +
+                    "`suspendposting`, `suspensiontime`, `suspendsignature`, `suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`, `name`, `token`, `has_completed_membership_form`, `claim_token`, " +
+                    "`mp_name`, `mp_constituency`, `mp_party`, `mp_engaged`, `mp_sympathetic`, `schemes`, `industry`, `how_did_you_hear_about_lcag`, `member_of_big_group`, `big_group_username`) " +
                     "VALUES (?, ?, ?, ?, 'lvhLksjhHGcZIWgtlwNTJNr3bjxzCE2qgZNX6SBTBPbuSLx21u', ?, 0, 0, '', '', '', 8, '', 0, '', ?, ?, ?, 0, '', '0', '', '', '', '', '', " +
                     "'all', '', 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 'linear', 1, 1, 1, 1, 1, 1, 0, 0, 0, '', '', '', 0, 0, '', '', 0, 0, 0, '0', '', '', '', 0, 0, 0, '', '', '', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, " +
-                    "0, 0, 1, '', 0, ?, ?, ?, ?);";
+                    "0, 0, 1, '', 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
             LOGGER.info("Going to execute insert sql: {}", insertSql);
 
@@ -271,7 +272,17 @@ public class MemberService {
                     member.getName(),
                     member.getToken(),
                     false,
-                    member.getClaimToken()
+                    member.getClaimToken(),
+                    enquiry.getMpName(),
+                    enquiry.getMpConstituency(),
+                    enquiry.getMpParty(),
+                    enquiry.getMpEngaged(),
+                    enquiry.getMpSympathetic(),
+                    enquiry.getSchemes(),
+                    enquiry.getIndustry(),
+                    enquiry.getHowDidYouHearAboutLcag(),
+                    enquiry.getMemberOfBigGroup(),
+                    enquiry.getBigGroupUsername() == null ? "" : enquiry.getBigGroupUsername()
             );
 
             member.setId(nextAvailableId);

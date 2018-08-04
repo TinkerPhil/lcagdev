@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `has_completed_claim_participant_form` tinyint(1) NOT NULL DEFAULT '0',
   `has_been_sent_claim_confirmation_email` tinyint(1) NOT NULL DEFAULT '0',
   `claim_token` varchar(200) NOT NULL DEFAULT '',
+  `opted_out_of_claim` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`),
   KEY `usergroup` (`usergroup`),

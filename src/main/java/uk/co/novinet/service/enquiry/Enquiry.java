@@ -1,36 +1,46 @@
-package uk.co.novinet.e2e;
+package uk.co.novinet.service.enquiry;
 
-public class User {
-    private int id;
-    private String username;
-    private String emailAddress;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+public class Enquiry {
+    private Long id;
     private String name;
-    private String token;
+    private String emailAddress;
     private String mpName;
     private String mpConstituency;
     private String mpParty;
-    private Boolean mpEngaged;
-    private Boolean mpSympathetic;
+    private Boolean mpEngaged = false;
+    private Boolean mpSympathetic = false;
     private String schemes;
     private String industry;
     private String howDidYouHearAboutLcag;
-    private Boolean memberOfBigGroup;
+    private Boolean memberOfBigGroup = false;
     private String bigGroupUsername;
+    private Boolean processed;
 
-    public User(int id, String username, String emailAddress, String name, String token) {
-        this.id = id;
-        this.username = username;
+    public Enquiry(String emailAddress, String name) {
         this.emailAddress = emailAddress;
         this.name = name;
-        this.token = token;
     }
 
-    public User(int id, String username, String emailAddress, String name, String token, String mpName, String mpConstituency, String mpParty, Boolean mpEngaged, Boolean mpSympathetic, String schemes, String industry, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername) {
+    public Enquiry(
+            Long id,
+            String emailAddress,
+            String name,
+            String mpName,
+            String mpConstituency,
+            String mpParty,
+            Boolean mpEngaged,
+            Boolean mpSympathetic,
+            String schemes,
+            String industry,
+            String howDidYouHearAboutLcag,
+            Boolean memberOfBigGroup,
+            String bigGroupUsername,
+            Boolean processed) {
         this.id = id;
-        this.username = username;
         this.emailAddress = emailAddress;
         this.name = name;
-        this.token = token;
         this.mpName = mpName;
         this.mpConstituency = mpConstituency;
         this.mpParty = mpParty;
@@ -41,14 +51,7 @@ public class User {
         this.howDidYouHearAboutLcag = howDidYouHearAboutLcag;
         this.memberOfBigGroup = memberOfBigGroup;
         this.bigGroupUsername = bigGroupUsername;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
+        this.processed = processed;
     }
 
     public String getEmailAddress() {
@@ -59,8 +62,9 @@ public class User {
         return name;
     }
 
-    public String getToken() {
-        return token;
+
+    public Long getId() {
+        return id;
     }
 
     public String getMpName() {
@@ -101,5 +105,14 @@ public class User {
 
     public String getBigGroupUsername() {
         return bigGroupUsername;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    public Boolean getProcessed() {
+        return processed;
     }
 }

@@ -14,6 +14,7 @@ import org.codemonkey.simplejavamail.Mailer;
 import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
 import org.jsoup.Jsoup;
+import uk.co.novinet.service.enquiry.Enquiry;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static java.lang.Thread.sleep;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -82,7 +84,6 @@ public class TestUtils {
         new Mailer(SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, TransportStrategy.SMTP_PLAIN).sendMail(email);
     }
 
-
     public static void insertUser(int id, String username, String emailAddress, String name, int group) {
         insertUser(id, username, emailAddress, name, group, false);
     }
@@ -104,11 +105,36 @@ public class TestUtils {
                 "1, '', 0, '" + name + "', '" + (hasCompletedMembershipForm ? "1" : "0") + "', 'aaaaaaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbb');");
     }
 
+    public static void insertEnqiry(
+            int id,
+            String name,
+            String emailAddress,
+            String mpName,
+            String mpConstituency,
+            String mpParty,
+            Boolean mpEngaged,
+            Boolean mpSympethetic,
+            String schemes,
+            String industry,
+            String howDidYouFindOutAboutLcag,
+            Boolean memberOfBigGroup,
+            String bigGroupUsername) {
+
+        runSqlUpdate(format("INSERT INTO `i7b0_enquiry` (" +
+                "`id`, `name`, `email_address`, `mp_name`, `mp_constituency`, `mp_party`, `mp_engaged`, " +
+                "`mp_sympathetic`, `schemes`, `industry`, `how_did_you_hear_about_lcag`, `member_of_big_group`, " +
+                "`big_group_username`) " +
+                "VALUES (%s, '%s', '%s', '%s', '%s', '%s', %s, %s, '%s', '%s', '%s', %s, '%s');",
+                id, name, emailAddress, mpName, mpConstituency, mpParty, mpEngaged ? "1" : "0", mpSympethetic ? "1" : "0",
+                schemes, industry, howDidYouFindOutAboutLcag, memberOfBigGroup ? "1" : "0", bigGroupUsername));
+    }
+
     private static long unixTime() {
         return new Date().getTime() / 1000;
     }
 
     static void runSqlUpdate(String sql) {
+        System.out.println("sql: " + sql);
         Connection connection = null;
         Statement statement = null;
 
@@ -144,11 +170,65 @@ public class TestUtils {
                         resultSet.getString("username"),
                         resultSet.getString("email"),
                         resultSet.getString("name"),
-                        resultSet.getString("token"))
+                        resultSet.getString("token"),
+                        resultSet.getString("mp_name"),
+                        resultSet.getString("mp_constituency"),
+                        resultSet.getString("mp_party"),
+                        resultSet.getBoolean("mp_engaged"),
+                        resultSet.getBoolean("mp_sympathetic"),
+                        resultSet.getString("schemes"),
+                        resultSet.getString("industry"),
+                        resultSet.getString("how_did_you_hear_about_lcag"),
+                        resultSet.getBoolean("member_of_big_group"),
+                        resultSet.getString("big_group_username")
+                    )
                 );
             }
 
             return users;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (statement != null) connection.close();
+            } catch (SQLException ignored) { }
+            try {
+                if (connection != null) connection.close();
+            } catch (SQLException ignored) { }
+        }
+    }
+
+    static List<Enquiry> getEnquiryRows() {
+        Connection connection = null;
+        Statement statement = null;
+
+        try {
+            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from i7b0_enquiry");
+            List<Enquiry> enquiries = new ArrayList<>();
+
+            while (resultSet.next()) {
+                enquiries.add(new Enquiry(
+                        resultSet.getLong("id"),
+                        resultSet.getString("email_address"),
+                        resultSet.getString("name"),
+                        resultSet.getString("mp_name"),
+                        resultSet.getString("mp_constituency"),
+                        resultSet.getString("mp_party"),
+                        resultSet.getBoolean("mp_engaged"),
+                        resultSet.getBoolean("mp_sympathetic"),
+                        resultSet.getString("schemes"),
+                        resultSet.getString("industry"),
+                        resultSet.getString("how_did_you_hear_about_lcag"),
+                        resultSet.getBoolean("member_of_big_group"),
+                        resultSet.getString("big_group_username"),
+                        resultSet.getBoolean("has_been_processed")
+                    )
+                );
+            }
+
+            return enquiries;
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -349,6 +429,20 @@ public class TestUtils {
             }
         }
         return result;
+    }
+
+
+    static void waitUntilEnquiryRowProcessed() throws InterruptedException {
+        int attempts = 0;
+
+        while (getEnquiryRows().get(0).getProcessed() == false && attempts < 20) {
+            sleep(500); //wait for lcag automation to process emails
+            attempts++;
+        }
+
+        if (getEnquiryRows().get(0).getProcessed() == false) {
+            throw new RuntimeException("Waited for first enquiry row to be processed but it was still unprocessed after 20 attempts.");
+        }
     }
 
     static void waitForNEmailsToAppearInFolder(int numberOfProcessedEmailsToWaitFor, String folderName, String recipientEmailAddress) throws InterruptedException {

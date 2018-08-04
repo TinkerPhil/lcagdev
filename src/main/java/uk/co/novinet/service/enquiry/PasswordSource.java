@@ -1,4 +1,4 @@
-package uk.co.novinet.service.mail;
+package uk.co.novinet.service.enquiry;
 
 import java.util.Arrays;
 import java.util.List;

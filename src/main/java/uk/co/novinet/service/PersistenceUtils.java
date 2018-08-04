@@ -87,6 +87,10 @@ public class PersistenceUtils {
         return forumDatabaseTablePrefix + "bank_transactions";
     }
 
+    public static String enquiryTableName() {
+        return forumDatabaseTablePrefix + "enquiry";
+    }
+
     public static String usersTableName() {
         return forumDatabaseTablePrefix + "users";
     }
