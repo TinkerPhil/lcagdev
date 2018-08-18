@@ -28,6 +28,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "registeredForClaim", label: "Registered For Claim", width: 59, formatter: lcag.MemberGrid.formatters.registeredForClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "hasCompletedClaimParticipantForm", label: "Completed Claim Participant Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedClaimParticipantForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "hasBeenSentClaimConfirmationEmail", label: "Has Been Sent Claim Confirmation Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentClaimConfirmationEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "hasOptedOutOfClaim", label: "Has Opted Out Of Claim", width: 59, formatter: lcag.MemberGrid.formatters.hasOptedOutOfClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "hmrcLetterChecked", label: "HMRC Letter Checked", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "verifiedOn", label: "Verified On Date", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.verifiedOn },
@@ -57,7 +58,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
             headertitles: true,
             pager: true,
             rowNum: 25,
-            width: "5400px",
+            width: "5500px",
             altRows: true,
             rowattr: function (row) {
                 if (row.group == "Registered") {
@@ -102,6 +103,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "registeredForClaim": $("#registeredForClaim_" + id).prop("checked"),
                                 "hasCompletedClaimParticipantForm": $("#hasCompletedClaimParticipantForm_" + id).prop("checked"),
                                 "hasBeenSentClaimConfirmationEmail": $("#hasBeenSentClaimConfirmationEmail_" + id).prop("checked"),
+                                "hasOptedOutOfClaim": $("#hasOptedOutOfClaim_" + id).prop("checked")
                             };
                           })(),
                           success: function(e) {
@@ -199,6 +201,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
         },
         "hasBeenSentClaimConfirmationEmail": function(cellvalue, options, row) {
             return '<input id="hasBeenSentClaimConfirmationEmail_' + row.id + '" type="checkbox" ' + (row.hasBeenSentClaimConfirmationEmail ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "hasOptedOutOfClaim": function(cellvalue, options, row) {
+            return '<input id="hasOptedOutOfClaim_' + row.id + '" type="checkbox" ' + (row.hasOptedOutOfClaim ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "action": function(cellvalue, options, row) {
             if (row.status != 3) {

@@ -64,13 +64,14 @@ public class MemberService {
         put("registeredForClaim", "u.registered_for_claim");
         put("hasCompletedClaimParticipantForm", "u.has_completed_claim_participant_form");
         put("hasBeenSentClaimConfirmationEmail", "u.has_been_sent_claim_confirmation_email");
+        put("hasOptedOutOfClaim", "u.opted_out_of_claim");
         put("claimToken", "u.claim_token");
     }};
 
-    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername, Instant verifiedOn, String verifiedBy, Boolean registeredForClaim, Boolean hasCompletedClaimParticipantForm, Boolean hasBeenSentClaimConfirmationEmail) {
+    public void update(Long memberId, String group, boolean identificationChecked, boolean hmrcLetterChecked, Boolean agreedToContributeButNotPaid, String mpName, Boolean mpEngaged, Boolean mpSympathetic, String mpConstituency, String mpParty, String schemes, String notes, String industry, Boolean hasCompletedMembershipForm, String howDidYouHearAboutLcag, Boolean memberOfBigGroup, String bigGroupUsername, Instant verifiedOn, String verifiedBy, Boolean registeredForClaim, Boolean hasCompletedClaimParticipantForm, Boolean hasBeenSentClaimConfirmationEmail, Boolean hasOptedOutOfClaim) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, hasBeenSentClaimConfirmationEmail={}",
-                group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim, hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail);
+        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}",
+                group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim, hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim);
 
         Member existingMember = getMemberById(memberId);
 
@@ -97,7 +98,8 @@ public class MemberService {
                 "u.verified_by = ?, " +
                 "u.registered_for_claim = ?, " +
                 "u.has_completed_claim_participant_form = ?, " +
-                "u.has_been_sent_claim_confirmation_email = ? " +
+                "u.has_been_sent_claim_confirmation_email = ?, " +
+                "u.opted_out_of_claim = ? " +
                 "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -125,6 +127,7 @@ public class MemberService {
                 registeredForClaim,
                 hasCompletedClaimParticipantForm,
                 hasBeenSentClaimConfirmationEmail,
+                hasOptedOutOfClaim,
                 memberId
         );
 
@@ -241,6 +244,7 @@ public class MemberService {
                     false,
                     false,
                     false,
+                    false,
                     guid()
             );
 
@@ -313,7 +317,7 @@ public class MemberService {
         return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, " +
                 "u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, " +
                 "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
-                "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount` " +
+                "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount` " +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
     }
@@ -505,6 +509,11 @@ public class MemberService {
             parameters.add(member.getHasBeenSentClaimConfirmationEmail());
         }
 
+        if (member.getHasOptedOutOfClaim() != null) {
+            clauses.add("u.opted_out_of_claim = ?");
+            parameters.add(member.getHasOptedOutOfClaim());
+        }
+
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
@@ -540,6 +549,7 @@ public class MemberService {
                 rs.getBoolean("registered_for_claim"),
                 rs.getBoolean("has_completed_claim_participant_form"),
                 rs.getBoolean("has_been_sent_claim_confirmation_email"),
+                rs.getBoolean("opted_out_of_claim"),
                 rs.getString("claim_token")
         );
     }

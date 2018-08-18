@@ -46,6 +46,7 @@ public class Member {
     private Boolean registeredForClaim;
     private Boolean hasCompletedClaimParticipantForm;
     private Boolean hasBeenSentClaimConfirmationEmail;
+    private Boolean hasOptedOutOfClaim;
     private String claimToken;
 
     public Member() {}
@@ -81,6 +82,7 @@ public class Member {
             Boolean registeredForClaim,
             Boolean hasCompletedClaimParticipantForm,
             Boolean hasBeenSentClaimConfirmationEmail,
+            Boolean hasOptedOutOfClaim,
             String claimToken) {
         this.id = id;
         this.emailAddress = emailAddress;
@@ -112,6 +114,7 @@ public class Member {
         this.registeredForClaim = registeredForClaim;
         this.hasCompletedClaimParticipantForm = hasCompletedClaimParticipantForm;
         this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
+        this.hasOptedOutOfClaim = hasOptedOutOfClaim;
         this.claimToken = claimToken;
     }
 
@@ -363,5 +366,13 @@ public class Member {
 
     public void setClaimToken(String claimToken) {
         this.claimToken = claimToken;
+    }
+
+    public Boolean getHasOptedOutOfClaim() {
+        return hasOptedOutOfClaim;
+    }
+
+    public void setHasOptedOutOfClaim(Boolean hasOptedOutOfClaim) {
+        this.hasOptedOutOfClaim = hasOptedOutOfClaim;
     }
 }
