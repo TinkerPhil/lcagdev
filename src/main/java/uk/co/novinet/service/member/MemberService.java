@@ -53,7 +53,7 @@ public class MemberService {
         put("schemes", "u.schemes");
         put("notes", "u.notes");
         put("industry", "u.industry");
-        put("contributionAmount", "u.contribution_amount");
+        put("contributionAmount", "contribution_amount");
         put("howDidYouHearAboutLcag", "u.how_did_you_hear_about_lcag");
         put("hasCompletedMembershipForm", "u.has_completed_membership_form");
         put("memberOfBigGroup", "u.member_of_big_group");
@@ -313,7 +313,7 @@ public class MemberService {
         return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, " +
                 "u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, " +
                 "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
-                "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
+                "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount` " +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
     }

@@ -17,20 +17,26 @@ import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
+import static java.util.Arrays.asList;
 
 @Service
 public class MailListenerService {
-    private static final List<Boolean> SEEN_FLAG_STATES = Arrays.asList(TRUE, FALSE);
+    private static final List<Boolean> SEEN_FLAG_STATES = asList(TRUE, FALSE);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MailListenerService.class);
 
-    private static final Pattern ENQUIRY_PATTERN = Pattern.compile("Message Details: Email (?<emailAddress>.*) Name (?<name>.*) Subject");
+    private static final List<Pattern> ENQUIRY_PATTERNS = asList(
+            Pattern.compile("Message Details: Email (?<emailAddress>.*) Name (?<name>.*) Subject"),
+            Pattern.compile("---------------------------\\s+Name:\\s+(?<name>.*)\\s+Email:\\s+(?<emailAddress>.*)")
+    );
 
     @Value("${imapHost}")
     private String imapHost;
@@ -195,10 +201,12 @@ public class MailListenerService {
     }
 
     private Enquiry extractEnquiry(String emailBody) {
-        Matcher matcher = ENQUIRY_PATTERN.matcher(emailBody);
+        for (Pattern enquiryPattern : ENQUIRY_PATTERNS) {
+            Matcher matcher = enquiryPattern.matcher(emailBody);
 
-        if (matcher.find()) {
-            return new Enquiry(matcher.group("emailAddress"), matcher.group("name"));
+            if (matcher.find()) {
+                return new Enquiry(matcher.group("emailAddress"), matcher.group("name"));
+            }
         }
 
         return null;

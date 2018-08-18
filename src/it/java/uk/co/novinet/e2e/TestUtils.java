@@ -85,6 +85,36 @@ public class TestUtils {
         new Mailer(SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, TransportStrategy.SMTP_PLAIN).sendMail(email);
     }
 
+    static void sendNewsletterEmail(String emailAddress, String name) {
+        String messageBody = "Testy Test has completed the Newsletter Form and their details are listed below.\n" +
+                "\n" +
+                "---------------------------\n" +
+                "\n" +
+                "Name:\n" +
+                name + "\n" +
+                "\n" +
+                "Email:\n" +
+                emailAddress + "\n" +
+                "\n" +
+                "Terms acceptance:\n" +
+                "Consented: I agree to the use of my data as specified in the Privacy Policy\n" +
+                "\n" +
+                "---------------------------\n" +
+                "\n" +
+                "This e-mail was sent from the Contact Form on the LCAG website.";
+
+        Email email = new Email();
+
+        email.setFromAddress(WIX_ENQUIRY_FROM_ADDRESS, WIX_ENQUIRY_FROM_ADDRESS);
+        email.addRecipient(LCAG_INBOX_EMAIL_ADDRESS, LCAG_INBOX_EMAIL_ADDRESS, MimeMessage.RecipientType.TO);
+        email.setText(messageBody);
+        email.setSubject("Subject");
+
+        new Mailer(SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, TransportStrategy.SMTP_PLAIN).sendMail(email);
+    }
+
+
+
     public static void insertUser(int id, String username, String emailAddress, String name, int group) {
         insertUser(id, username, emailAddress, name, group, false);
     }
