@@ -53,19 +53,24 @@ public class PaymentService {
         int numberOfNewTransactions = 0;
 
         try {
+            BankTransaction mostRecentDbBankTransaction = paymentDao.getMostRecentBankTransaction();
+
             for (BankTransaction bankTransaction : buildBankTransactions(transactions)) {
-                List<BankTransaction> existingBankTransactions = paymentDao.findExistingBankTransaction(bankTransaction);
-                if (existingBankTransactions == null || existingBankTransactions.isEmpty()) {
-                    paymentDao.create(bankTransaction);
+                if (bankTransaction.getDate().isAfter(mostRecentDbBankTransaction.getDate())) {
+                    List<BankTransaction> existingBankTransactions = paymentDao.findExistingBankTransaction(bankTransaction);
+                    if (existingBankTransactions == null || existingBankTransactions.isEmpty()) {
+                        paymentDao.create(bankTransaction);
 
-                    if (bankTransaction.getUserId() != null) {
-                        Member member = memberService.getMemberById(bankTransaction.getUserId());
-                        mailSenderService.sendBankTransactionAssignmentEmail(member, bankTransaction);
+                        if (bankTransaction.getUserId() != null) {
+                            Member member = memberService.getMemberById(bankTransaction.getUserId());
+                            mailSenderService.sendBankTransactionAssignmentEmail(member, bankTransaction);
+                        }
+
+                        numberOfNewTransactions++;
+                        LOGGER.info("Persisting new bank transaction: {}", bankTransaction);
                     }
-
-                    numberOfNewTransactions++;
-                    LOGGER.info("Persisting new bank transaction: {}", bankTransaction);
                 }
+
                 numberOfTransactions++;
             }
             ImportOutcome importOutcome = new ImportOutcome(numberOfNewTransactions, numberOfTransactions);

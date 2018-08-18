@@ -97,6 +97,22 @@ public class PaymentDao {
         return jdbcTemplate.query(sql, arguments, (rs, rowNum) -> buildBankTransaction(rs));
     }
 
+    public BankTransaction getMostRecentBankTransaction() {
+        LOGGER.info("Finding most recent bank transaction");
+
+        String sql = buildBankTransactionTableSelect() + " order by `date` desc limit 1";
+
+        LOGGER.info("Going to execute sql: {}", sql);
+
+        List<BankTransaction> results = jdbcTemplate.query(sql, (rs, rowNum) -> buildBankTransaction(rs));
+
+        if (results == null || results.isEmpty()) {
+            return null;
+        }
+
+        return results.get(0);
+    }
+
     private BankTransaction buildBankTransaction(ResultSet rs) throws SQLException {
         String userId = rs.getString("user_id");
 
