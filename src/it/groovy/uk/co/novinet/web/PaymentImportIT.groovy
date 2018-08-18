@@ -191,6 +191,91 @@ class PaymentImportIT {
         assertEquals("Your payment has been received", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getSubject().trim())
     }
 
+    @Test
+    void canImportTransactionFilesWithPartiallyOverlappingDates() throws Exception {
+        assertEquals(0, allBankTransactionRows().size())
+
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_overlapping_transaction_dates_1.txt"))
+        assertEquals(4, allBankTransactionRows().size())
+
+        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_overlapping_transaction_dates_2.txt"))
+        assertEquals(6, allBankTransactionRows().size())
+
+        def transactions = allBankTransactionRows()
+
+        assertNotNull(transactions[0].id)
+        assertNull(transactions[0].userId)
+        assertNull(transactions[0].username)
+        assertNull(transactions[0].emailAddress)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[0].date).epochSecond)
+        assertEquals("FASTER PAYMENTS RECEIPT REF.roundabout23 FROM COOPER B", transactions[0].description)
+        assertEquals(250.00, transactions[0].amount)
+        assertEquals(4800.00, transactions[0].runningBalance)
+        assertEquals("COOPER B", transactions[0].counterParty)
+        assertEquals("roundabout23", transactions[0].reference)
+        assertEquals("SANTANDER", transactions[0].paymentSource)
+
+        assertNotNull(transactions[1].id)
+        assertNull(transactions[1].userId)
+        assertNull(transactions[1].username)
+        assertNull(transactions[1].emailAddress)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[1].date).epochSecond)
+        assertEquals("FASTER PAYMENTS RECEIPT REF.MIKE BOWLER FROM M Bowler", transactions[1].description)
+        assertEquals(50.00, transactions[1].amount)
+        assertEquals(4850.00, transactions[1].runningBalance)
+        assertEquals("M Bowler", transactions[1].counterParty)
+        assertEquals("MIKE BOWLER", transactions[1].reference)
+        assertEquals("SANTANDER", transactions[1].paymentSource)
+
+        assertNotNull(transactions[2].id)
+        assertNull(transactions[2].userId)
+        assertNull(transactions[2].username)
+        assertNull(transactions[2].emailAddress)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[2].date).epochSecond)
+        assertEquals("FASTER PAYMENTS RECEIPT REF.FROM FINK FROM FINK KITCHENS LTD", transactions[2].description)
+        assertEquals(100.00, transactions[2].amount)
+        assertEquals(4950.00, transactions[2].runningBalance)
+        assertEquals("FINK KITCHENS LTD", transactions[2].counterParty)
+        assertEquals("FROM FINK", transactions[2].reference)
+        assertEquals("SANTANDER", transactions[2].paymentSource)
+
+        assertNotNull(transactions[3].id)
+        assertNull(transactions[3].userId)
+        assertNull(transactions[3].username)
+        assertNull(transactions[3].emailAddress)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[3].date).epochSecond)
+        assertEquals("FASTER PAYMENTS RECEIPT REF.BOB FRENCH FROM BOB FRENCH", transactions[3].description)
+        assertEquals(100.00, transactions[3].amount)
+        assertEquals(5050.00, transactions[3].runningBalance)
+        assertEquals("BOB FRENCH", transactions[3].counterParty)
+        assertEquals("BOB FRENCH", transactions[3].reference)
+        assertEquals("SANTANDER", transactions[3].paymentSource)
+
+        assertNotNull(transactions[4].id)
+        assertNull(transactions[4].userId)
+        assertNull(transactions[4].username)
+        assertNull(transactions[4].emailAddress)
+        assertEquals(ZonedDateTime.parse("2018-05-22T00:00:00Z").toEpochSecond(), Instant.parse(transactions[4].date).epochSecond)
+        assertEquals("FASTER PAYMENTS RECEIPT REF.FROM FINK FROM FINK KITCHENS LTD", transactions[4].description)
+        assertEquals(100.00, transactions[4].amount)
+        assertEquals(4950.00, transactions[4].runningBalance)
+        assertEquals("FINK KITCHENS LTD", transactions[4].counterParty)
+        assertEquals("FROM FINK", transactions[4].reference)
+        assertEquals("SANTANDER", transactions[4].paymentSource)
+
+        assertNotNull(transactions[5].id)
+        assertNull(transactions[5].userId)
+        assertNull(transactions[5].username)
+        assertNull(transactions[5].emailAddress)
+        assertEquals(ZonedDateTime.parse("2018-05-22T00:00:00Z").toEpochSecond(), Instant.parse(transactions[5].date).epochSecond)
+        assertEquals("FASTER PAYMENTS RECEIPT REF.BOB FRENCH FROM BOB FRENCH", transactions[5].description)
+        assertEquals(100.00, transactions[5].amount)
+        assertEquals(5050.00, transactions[5].runningBalance)
+        assertEquals("BOB FRENCH", transactions[5].counterParty)
+        assertEquals("BOB FRENCH", transactions[5].reference)
+        assertEquals("SANTANDER", transactions[5].paymentSource)
+    }
+
     def allBankTransactionRows() {
         return new JsonSlurper().parseText(getRequest("http://localhost:8282/payments?rows=1000&sidx=date&sord=asc")).rows
     }

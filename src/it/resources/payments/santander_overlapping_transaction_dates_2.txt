@@ -1,0 +1,23 @@
+From: 21/05/2018 to 24/05/2018
+							
+Account: XXXX XXXX XXXX 0057
+						
+Date: 22/05/2018
+Description:  FASTER PAYMENTS RECEIPT REF.BOB FRENCH FROM BOB FRENCH                                            
+Amount: 100.00 	
+Balance: 5050.00 
+						
+Date: 22/05/2018
+Description:  FASTER PAYMENTS RECEIPT REF.FROM FINK FROM FINK KITCHENS LTD                                       
+Amount: 100.00 	
+Balance: 4950.00 
+						
+Date: 21/05/2018
+Description:  FASTER PAYMENTS RECEIPT REF.MIKE BOWLER FROM M Bowler                                     
+Amount: 50.00 	
+Balance: 4850.00 
+						
+Date: 21/05/2018
+Description: FASTER PAYMENTS RECEIPT REF.roundabout23 FROM COOPER B                          
+Amount: 250.00 	
+Balance: 4800.00 

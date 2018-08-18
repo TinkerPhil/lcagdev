@@ -56,7 +56,7 @@ public class PaymentService {
             BankTransaction mostRecentDbBankTransaction = paymentDao.getMostRecentBankTransaction();
 
             for (BankTransaction bankTransaction : buildBankTransactions(transactions)) {
-                if (bankTransaction.getDate().isAfter(mostRecentDbBankTransaction.getDate())) {
+                if (mostRecentDbBankTransaction == null || bankTransaction.getDate().isAfter(mostRecentDbBankTransaction.getDate())) {
                     List<BankTransaction> existingBankTransactions = paymentDao.findExistingBankTransaction(bankTransaction);
                     if (existingBankTransactions == null || existingBankTransactions.isEmpty()) {
                         paymentDao.create(bankTransaction);
