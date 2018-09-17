@@ -196,9 +196,11 @@ class PaymentImportIT {
         assertEquals(0, allBankTransactionRows().size())
 
         uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_overlapping_transaction_dates_1.txt"))
+        sleep(2000)
         assertEquals(4, allBankTransactionRows().size())
 
         uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_overlapping_transaction_dates_2.txt"))
+        sleep(2000)
         assertEquals(6, allBankTransactionRows().size())
 
         def transactions = allBankTransactionRows()

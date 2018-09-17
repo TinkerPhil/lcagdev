@@ -108,9 +108,10 @@ public class MemberController {
             @RequestParam(value = "hasCompletedClaimParticipantForm", required = false) Boolean hasCompletedClaimParticipantForm,
             @RequestParam(value = "hasBeenSentClaimConfirmationEmail", required = false) Boolean hasBeenSentClaimConfirmationEmail,
             @RequestParam(value = "hasOptedOutOfClaim", required = false) Boolean hasOptedOutOfClaim,
+            @RequestParam(value = "attendingMassLobbyingDay", required = false) Boolean attendingMassLobbyingDay,
             @RequestParam("group") String group
     ) {
-        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, memberOfBigGroup, bigGroupUsername, verifiedOn == null ? null : verifiedOn.toInstant(), verifiedBy, registeredForClaim, hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim);
+        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, memberOfBigGroup, bigGroupUsername, verifiedOn == null ? null : verifiedOn.toInstant(), verifiedBy, registeredForClaim, hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim, attendingMassLobbyingDay);
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -29,6 +29,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "hasCompletedClaimParticipantForm", label: "Completed Claim Participant Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedClaimParticipantForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "hasBeenSentClaimConfirmationEmail", label: "Has Been Sent Claim Confirmation Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentClaimConfirmationEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "hasOptedOutOfClaim", label: "Has Opted Out Of Claim", width: 59, formatter: lcag.MemberGrid.formatters.hasOptedOutOfClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "attendingMassLobbyingDay", label: "Attending Mass Lobbying Day", width: 59, formatter: lcag.MemberGrid.formatters.attendingMassLobbyingDay, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "hmrcLetterChecked", label: "HMRC Letter Checked", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "verifiedOn", label: "Verified On Date", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.verifiedOn },
@@ -103,7 +104,8 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "registeredForClaim": $("#registeredForClaim_" + id).prop("checked"),
                                 "hasCompletedClaimParticipantForm": $("#hasCompletedClaimParticipantForm_" + id).prop("checked"),
                                 "hasBeenSentClaimConfirmationEmail": $("#hasBeenSentClaimConfirmationEmail_" + id).prop("checked"),
-                                "hasOptedOutOfClaim": $("#hasOptedOutOfClaim_" + id).prop("checked")
+                                "hasOptedOutOfClaim": $("#hasOptedOutOfClaim_" + id).prop("checked"),
+                                "attendingMassLobbyingDay": $("#attendingMassLobbyingDay_" + id).prop("checked")
                             };
                           })(),
                           success: function(e) {
@@ -204,6 +206,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
         },
         "hasOptedOutOfClaim": function(cellvalue, options, row) {
             return '<input id="hasOptedOutOfClaim_' + row.id + '" type="checkbox" ' + (row.hasOptedOutOfClaim ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "attendingMassLobbyingDay": function(cellvalue, options, row) {
+            return '<input id="attendingMassLobbyingDay_' + row.id + '" type="checkbox" ' + (row.attendingMassLobbyingDay ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "action": function(cellvalue, options, row) {
             if (row.status != 3) {

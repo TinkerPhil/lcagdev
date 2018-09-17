@@ -78,10 +78,6 @@ public class BankTransaction {
         return reference;
     }
 
-    public String toString() {
-        return reflectionToString(this);
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -141,4 +137,9 @@ public class BankTransaction {
     public PaymentSource getPaymentSource() {
         return paymentSource;
     }
+
+    public String toString() {
+        return reflectionToString(this);
+    }
+
 }

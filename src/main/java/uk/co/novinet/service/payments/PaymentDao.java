@@ -100,7 +100,7 @@ public class PaymentDao {
     public BankTransaction getMostRecentBankTransaction() {
         LOGGER.info("Finding most recent bank transaction");
 
-        String sql = buildBankTransactionTableSelect() + " order by `date` desc limit 1";
+        String sql = buildBankTransactionTableSelect() + " order by `date`, `transaction_index_on_day` desc limit 1";
 
         LOGGER.info("Going to execute sql: {}", sql);
 

@@ -12,6 +12,9 @@ import uk.co.novinet.service.member.MemberService;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,14 +52,26 @@ public class PaymentService {
     private PaymentDao paymentDao;
 
     public ImportOutcome importTransactions(String transactions) {
+        LOGGER.info("importTransactions called for: {}", transactions);
+
         int numberOfTransactions = 0;
         int numberOfNewTransactions = 0;
 
         try {
             BankTransaction mostRecentDbBankTransaction = paymentDao.getMostRecentBankTransaction();
+            LOGGER.info("mostRecentDbBankTransaction: {}", mostRecentDbBankTransaction);
 
             for (BankTransaction bankTransaction : buildBankTransactions(transactions)) {
-                if (mostRecentDbBankTransaction == null || bankTransaction.getDate().isAfter(mostRecentDbBankTransaction.getDate())) {
+                LOGGER.info("Comparing most recent bank transaction to: {}", bankTransaction);
+
+                if (mostRecentDbBankTransaction != null) {
+                    LOGGER.info("bankTransaction.getDate().equals(mostRecentDbBankTransaction.getDate()): {}", bankTransaction.getDate().equals(mostRecentDbBankTransaction.getDate()));
+                    LOGGER.info("bankTransaction.getDate().isAfter(mostRecentDbBankTransaction.getDate()): {}", bankTransaction.getDate().isAfter(mostRecentDbBankTransaction.getDate()));
+                }
+
+                if (mostRecentDbBankTransaction == null ||
+                        bankTransaction.getDate().isBefore(Instant.now().minus(1, ChronoUnit.DAYS)) && (bankTransaction.getTransactionIndexOnDay() > mostRecentDbBankTransaction.getTransactionIndexOnDay() &&
+                                (bankTransaction.getDate().equals(mostRecentDbBankTransaction.getDate())) || bankTransaction.getDate().isAfter(mostRecentDbBankTransaction.getDate()))) {
                     List<BankTransaction> existingBankTransactions = paymentDao.findExistingBankTransaction(bankTransaction);
                     if (existingBankTransactions == null || existingBankTransactions.isEmpty()) {
                         paymentDao.create(bankTransaction);

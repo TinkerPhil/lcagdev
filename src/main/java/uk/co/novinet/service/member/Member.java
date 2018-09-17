@@ -47,6 +47,7 @@ public class Member {
     private Boolean hasCompletedClaimParticipantForm;
     private Boolean hasBeenSentClaimConfirmationEmail;
     private Boolean hasOptedOutOfClaim;
+    private Boolean attendingMassLobbyingDay;
     private String claimToken;
 
     public Member() {}
@@ -83,6 +84,7 @@ public class Member {
             Boolean hasCompletedClaimParticipantForm,
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
+            Boolean attendingMassLobbyingDay,
             String claimToken) {
         this.id = id;
         this.emailAddress = emailAddress;
@@ -115,6 +117,7 @@ public class Member {
         this.hasCompletedClaimParticipantForm = hasCompletedClaimParticipantForm;
         this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
+        this.attendingMassLobbyingDay = attendingMassLobbyingDay;
         this.claimToken = claimToken;
     }
 
@@ -374,5 +377,13 @@ public class Member {
 
     public void setHasOptedOutOfClaim(Boolean hasOptedOutOfClaim) {
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
+    }
+
+    public Boolean getAttendingMassLobbyingDay() {
+        return attendingMassLobbyingDay;
+    }
+
+    public void setAttendingMassLobbyingDay(Boolean attendingMassLobbyingDay) {
+        this.attendingMassLobbyingDay = attendingMassLobbyingDay;
     }
 }
