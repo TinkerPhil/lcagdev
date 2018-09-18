@@ -109,9 +109,44 @@ public class MemberController {
             @RequestParam(value = "hasBeenSentClaimConfirmationEmail", required = false) Boolean hasBeenSentClaimConfirmationEmail,
             @RequestParam(value = "hasOptedOutOfClaim", required = false) Boolean hasOptedOutOfClaim,
             @RequestParam(value = "attendingMassLobbyingDay", required = false) Boolean attendingMassLobbyingDay,
+            @RequestParam(value = "hasBeenSentInitialMassLobbyingEmail", required = false) Boolean hasBeenSentInitialMassLobbyingEmail,
+            @RequestParam(value = "lobbyingDayHasSentMpTemplateLetter", required = false) Boolean lobbyingDayHasSentMpTemplateLetter,
+            @RequestParam(value = "lobbyingDayHasReceivedMpResponse", required = false) Boolean lobbyingDayHasReceivedMpResponse,
+            @RequestParam(value = "lobbyingDayMpHasConfirmedAttendance", required = false) Boolean lobbyingDayMpHasConfirmedAttendance,
+            @RequestParam(value = "lobbyingDayMpIsMinister", required = false) Boolean lobbyingDayMpIsMinister,
             @RequestParam("group") String group
     ) {
-        memberService.update(memberId, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty, schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, memberOfBigGroup, bigGroupUsername, verifiedOn == null ? null : verifiedOn.toInstant(), verifiedBy, registeredForClaim, hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim, attendingMassLobbyingDay);
+        memberService.update(
+                memberId,
+                group,
+                identificationChecked,
+                hmrcLetterChecked,
+                agreedToContributeButNotPaid,
+                mpName,
+                mpEngaged,
+                mpSympathetic,
+                mpConstituency,
+                mpParty,
+                schemes,
+                notes,
+                industry,
+                hasCompletedMembershipForm,
+                howDidYouHearAboutLcag,
+                memberOfBigGroup,
+                bigGroupUsername,
+                verifiedOn == null ? null : verifiedOn.toInstant(),
+                verifiedBy,
+                registeredForClaim,
+                hasCompletedClaimParticipantForm,
+                hasBeenSentClaimConfirmationEmail,
+                hasOptedOutOfClaim,
+                attendingMassLobbyingDay,
+                hasBeenSentInitialMassLobbyingEmail,
+                lobbyingDayHasSentMpTemplateLetter,
+                lobbyingDayHasReceivedMpResponse,
+                lobbyingDayMpHasConfirmedAttendance,
+                lobbyingDayMpIsMinister
+        );
         return new ResponseEntity(HttpStatus.OK);
     }
 

@@ -48,6 +48,11 @@ public class Member {
     private Boolean hasBeenSentClaimConfirmationEmail;
     private Boolean hasOptedOutOfClaim;
     private Boolean attendingMassLobbyingDay;
+    private Boolean hasBeenSentInitialMassLobbyingEmail;
+    private Boolean lobbyingDayHasSentMpTemplateLetter;
+    private Boolean lobbyingDayHasReceivedMpResponse;
+    private Boolean lobbyingDayMpHasConfirmedAttendance;
+    private Boolean lobbyingDayMpIsMinister;
     private String claimToken;
 
     public Member() {}
@@ -85,6 +90,11 @@ public class Member {
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
             Boolean attendingMassLobbyingDay,
+            Boolean hasBeenSentInitialMassLobbyingEmail,
+            Boolean lobbyingDayHasSentMpTemplateLetter,
+            Boolean lobbyingDayHasReceivedMpResponse,
+            Boolean lobbyingDayMpHasConfirmedAttendance,
+            Boolean lobbyingDayMpIsMinister,
             String claimToken) {
         this.id = id;
         this.emailAddress = emailAddress;
@@ -118,6 +128,11 @@ public class Member {
         this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
         this.attendingMassLobbyingDay = attendingMassLobbyingDay;
+        this.hasBeenSentInitialMassLobbyingEmail = hasBeenSentInitialMassLobbyingEmail;
+        this.lobbyingDayHasSentMpTemplateLetter = lobbyingDayHasSentMpTemplateLetter;
+        this.lobbyingDayHasReceivedMpResponse = lobbyingDayHasReceivedMpResponse;
+        this.lobbyingDayMpHasConfirmedAttendance = lobbyingDayMpHasConfirmedAttendance;
+        this.lobbyingDayMpIsMinister = lobbyingDayMpIsMinister;
         this.claimToken = claimToken;
     }
 
@@ -385,5 +400,45 @@ public class Member {
 
     public void setAttendingMassLobbyingDay(Boolean attendingMassLobbyingDay) {
         this.attendingMassLobbyingDay = attendingMassLobbyingDay;
+    }
+
+    public Boolean getHasBeenSentInitialMassLobbyingEmail() {
+        return hasBeenSentInitialMassLobbyingEmail;
+    }
+
+    public void setHasBeenSentInitialMassLobbyingEmail(Boolean hasBeenSentInitialMassLobbyingEmail) {
+        this.hasBeenSentInitialMassLobbyingEmail = hasBeenSentInitialMassLobbyingEmail;
+    }
+
+    public Boolean getLobbyingDayHasSentMpTemplateLetter() {
+        return lobbyingDayHasSentMpTemplateLetter;
+    }
+
+    public void setLobbyingDayHasSentMpTemplateLetter(Boolean lobbyingDayHasSentMpTemplateLetter) {
+        this.lobbyingDayHasSentMpTemplateLetter = lobbyingDayHasSentMpTemplateLetter;
+    }
+
+    public Boolean getLobbyingDayHasReceivedMpResponse() {
+        return lobbyingDayHasReceivedMpResponse;
+    }
+
+    public void setLobbyingDayHasReceivedMpResponse(Boolean lobbyingDayHasReceivedMpResponse) {
+        this.lobbyingDayHasReceivedMpResponse = lobbyingDayHasReceivedMpResponse;
+    }
+
+    public Boolean getLobbyingDayMpHasConfirmedAttendance() {
+        return lobbyingDayMpHasConfirmedAttendance;
+    }
+
+    public void setLobbyingDayMpHasConfirmedAttendance(Boolean lobbyingDayMpHasConfirmedAttendance) {
+        this.lobbyingDayMpHasConfirmedAttendance = lobbyingDayMpHasConfirmedAttendance;
+    }
+
+    public Boolean getLobbyingDayMpIsMinister() {
+        return lobbyingDayMpIsMinister;
+    }
+
+    public void setLobbyingDayMpIsMinister(Boolean lobbyingDayMpIsMinister) {
+        this.lobbyingDayMpIsMinister = lobbyingDayMpIsMinister;
     }
 }

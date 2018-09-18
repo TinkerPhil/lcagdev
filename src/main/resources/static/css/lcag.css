@@ -93,3 +93,21 @@ input.form-control.input-large {
 
 .loader {
 }
+
+.mass-lobbying-day {
+    background-color: #d9edf7;
+}
+
+.ui-jqgrid .ui-jqgrid-bdiv tr.ui-row-ltr>td.mass-lobbying-day.first {
+    border-left: solid;
+    border-left-color: #bce8f1;
+    border-left-width: 1px;
+    border-left-style: solid;
+}
+
+.ui-jqgrid .ui-jqgrid-bdiv tr.ui-row-ltr>td.mass-lobbying-day.last {
+    border-right: solid;
+    border-right-color: #bce8f1;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
