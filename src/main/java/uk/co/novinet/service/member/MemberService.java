@@ -72,6 +72,8 @@ public class MemberService {
         put("lobbyingDayHasReceivedMpResponse", "u.lobbying_day_has_received_mp_response");
         put("lobbyingDayMpHasConfirmedAttendance", "u.lobbying_day_mp_has_confirmed_attendance");
         put("lobbyingDayMpIsMinister", "u.lobbying_day_mp_is_minister");
+        put("lobbyingDayNotes", "u.lobbying_day_notes");
+        put("lobbyingDayAttending", "u.lobbying_day_attending");
     }};
 
     public void update(
@@ -98,22 +100,25 @@ public class MemberService {
             Boolean hasCompletedClaimParticipantForm,
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
-            Boolean attendingMassLobbyingDay,
             Boolean hasBeenSentInitialMassLobbyingEmail,
             Boolean lobbyingDayHasSentMpTemplateLetter,
             Boolean lobbyingDayHasReceivedMpResponse,
             Boolean lobbyingDayMpHasConfirmedAttendance,
-            Boolean lobbyingDayMpIsMinister) {
+            Boolean lobbyingDayMpIsMinister,
+            String lobbyingDayNotes,
+            LobbyingDayAttendance lobbyingDayAttending) {
         LOGGER.info("Going to update user with id {}", memberId);
         LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, " +
                         "mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, " +
                         "memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, " +
-                        "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}, attendingMassLobbyingDay={}, hasBeenSentInitialMassLobbyingEmail={}, " +
-                        "lobbyingDayHasSentMpTemplateLetter={}, lobbyingDayHasReceivedMpResponse={}, lobbyingDayMpHasConfirmedAttendance={}, lobbyingDayMpIsMinister={}",
+                        "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}, hasBeenSentInitialMassLobbyingEmail={}, " +
+                        "lobbyingDayHasSentMpTemplateLetter={}, lobbyingDayHasReceivedMpResponse={}, lobbyingDayMpHasConfirmedAttendance={}, lobbyingDayMpIsMinister={}," +
+                        "lobbyingDayNotes={}, lobbyingDayAttending={}",
                 group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
                 schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim,
-                hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim, attendingMassLobbyingDay, hasBeenSentInitialMassLobbyingEmail,
-                lobbyingDayHasSentMpTemplateLetter, lobbyingDayHasReceivedMpResponse, lobbyingDayMpHasConfirmedAttendance, lobbyingDayMpIsMinister
+                hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim, hasBeenSentInitialMassLobbyingEmail,
+                lobbyingDayHasSentMpTemplateLetter, lobbyingDayHasReceivedMpResponse, lobbyingDayMpHasConfirmedAttendance, lobbyingDayMpIsMinister, lobbyingDayNotes,
+                lobbyingDayAttending
         );
 
         Member existingMember = getMemberById(memberId);
@@ -143,12 +148,13 @@ public class MemberService {
                 "u.has_completed_claim_participant_form = ?, " +
                 "u.has_been_sent_claim_confirmation_email = ?, " +
                 "u.opted_out_of_claim = ?, " +
-                "u.attending_mass_lobbying_day = ?, " +
                 "u.has_been_sent_initial_mass_lobbying_email = ?, " +
                 "u.lobbying_day_has_sent_mp_template_letter = ?, " +
                 "u.lobbying_day_has_received_mp_response = ?, " +
                 "u.lobbying_day_mp_has_confirmed_attendance = ?, " +
-                "u.lobbying_day_mp_is_minister = ? " +
+                "u.lobbying_day_mp_is_minister = ?, " +
+                "u.lobbying_day_notes = ?, " +
+                "u.lobbying_day_attending = ? " +
                 "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -177,12 +183,13 @@ public class MemberService {
                 hasCompletedClaimParticipantForm,
                 hasBeenSentClaimConfirmationEmail,
                 hasOptedOutOfClaim,
-                attendingMassLobbyingDay,
                 hasBeenSentInitialMassLobbyingEmail,
                 lobbyingDayHasSentMpTemplateLetter,
                 lobbyingDayHasReceivedMpResponse,
                 lobbyingDayMpHasConfirmedAttendance,
                 lobbyingDayMpIsMinister,
+                lobbyingDayNotes,
+                lobbyingDayAttending.toString(),
                 memberId
         );
 
@@ -305,7 +312,8 @@ public class MemberService {
                     false,
                     false,
                     false,
-                    false,
+                    "",
+                    LobbyingDayAttendance.UNSET,
                     guid()
             );
 
@@ -381,7 +389,7 @@ public class MemberService {
                 "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, u.attending_mass_lobbying_day, " +
                 "u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`, " +
                 "u.has_been_sent_initial_mass_lobbying_email, u.lobbying_day_has_sent_mp_template_letter, u.lobbying_day_has_received_mp_response, " +
-                "u.lobbying_day_mp_has_confirmed_attendance, u.lobbying_day_mp_is_minister " +
+                "u.lobbying_day_mp_has_confirmed_attendance, u.lobbying_day_mp_is_minister, u.lobbying_day_notes, u.lobbying_day_attending " +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
     }
@@ -578,11 +586,6 @@ public class MemberService {
             parameters.add(member.getHasOptedOutOfClaim());
         }
 
-        if (member.getAttendingMassLobbyingDay() != null) {
-            clauses.add("u.attending_mass_lobbying_day = ?");
-            parameters.add(member.getAttendingMassLobbyingDay());
-        }
-
         if (member.getHasBeenSentInitialMassLobbyingEmail() != null) {
             clauses.add("u.has_been_sent_initial_mass_lobbying_email = ?");
             parameters.add(member.getHasBeenSentInitialMassLobbyingEmail());
@@ -606,6 +609,16 @@ public class MemberService {
         if (member.getLobbyingDayMpIsMinister() != null) {
             clauses.add("u.lobbying_day_mp_is_minister = ?");
             parameters.add(member.getLobbyingDayMpIsMinister());
+        }
+
+        if (member.getLobbyingDayNotes() != null) {
+            clauses.add("lower(u.lobbying_day_notes) like ?");
+            parameters.add(like(member.getLobbyingDayNotes()));
+        }
+
+        if (member.getLobbyingDayAttending() != null) {
+            clauses.add("lower(u.lobbying_day_attending) like ?");
+            parameters.add(like(member.getLobbyingDayAttending().toString()));
         }
 
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
@@ -644,12 +657,13 @@ public class MemberService {
                 rs.getBoolean("has_completed_claim_participant_form"),
                 rs.getBoolean("has_been_sent_claim_confirmation_email"),
                 rs.getBoolean("opted_out_of_claim"),
-                rs.getBoolean("attending_mass_lobbying_day"),
                 rs.getBoolean("has_been_sent_initial_mass_lobbying_email"),
                 rs.getBoolean("lobbying_day_has_sent_mp_template_letter"),
                 rs.getBoolean("lobbying_day_has_received_mp_response"),
                 rs.getBoolean("lobbying_day_mp_has_confirmed_attendance"),
                 rs.getBoolean("lobbying_day_mp_is_minister"),
+                rs.getString("lobbying_day_notes"),
+                LobbyingDayAttendance.valueOf(rs.getString("lobbying_day_attending")),
                 rs.getString("claim_token")
         );
     }

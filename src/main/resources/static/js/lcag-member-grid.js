@@ -24,17 +24,18 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "howDidYouHearAboutLcag", label: "How Did You Hear About LCAG", width: 250, formatter: lcag.MemberGrid.formatters.howDidYouHearAboutLcag },
                 { name: "hasCompletedMembershipForm", label: "Completed Membership Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedMembershipForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "token", label: "Membership Token", width: 150, template: "string" },
-                { name: "claimToken", label: "Claim Token", width: 150, template: "string" },
-                { name: "registeredForClaim", label: "Registered For Claim", width: 59, formatter: lcag.MemberGrid.formatters.registeredForClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "hasCompletedClaimParticipantForm", label: "Completed Claim Participant Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedClaimParticipantForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "hasBeenSentClaimConfirmationEmail", label: "Has Been Sent Claim Confirmation Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentClaimConfirmationEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "hasOptedOutOfClaim", label: "Has Opted Out Of Claim", width: 59, formatter: lcag.MemberGrid.formatters.hasOptedOutOfClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "hasBeenSentInitialMassLobbyingEmail", label: "Has Been Sent Initial Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentInitialMassLobbyingEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "attendingMassLobbyingDay", label: "Attending Mass Lobbying Day", width: 59, formatter: lcag.MemberGrid.formatters.attendingMassLobbyingDay, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day first" },
+                { name: "claimToken", label: "Claim Token", width: 150, template: "string", classes: "claim first" },
+                { name: "registeredForClaim", label: "Registered For Claim", width: 59, formatter: lcag.MemberGrid.formatters.registeredForClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "claim" },
+                { name: "hasCompletedClaimParticipantForm", label: "Completed Claim Participant Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedClaimParticipantForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "claim" },
+                { name: "hasBeenSentClaimConfirmationEmail", label: "Has Been Sent Claim Confirmation Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentClaimConfirmationEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "claim" },
+                { name: "hasOptedOutOfClaim", label: "Has Opted Out Of Claim", width: 59, formatter: lcag.MemberGrid.formatters.hasOptedOutOfClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "claim last" },
+                { name: "hasBeenSentInitialMassLobbyingEmail", label: "Has Been Sent Initial Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentInitialMassLobbyingEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day first" },
+                { name: "lobbyingDayAttending", label: "Attending", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayAttending, classes: "mass-lobbying-day ", stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;UNSET:Unset;YES:Yes;NO:No;MAYBE:Maybe" } },
                 { name: "lobbyingDayHasSentMpTemplateLetter", label: "Has Sent MP Template Letter", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayHasSentMpTemplateLetter, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
                 { name: "lobbyingDayHasReceivedMpResponse", label: "Has Received MP Response", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayHasReceivedMpResponse, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
                 { name: "lobbyingDayMpHasConfirmedAttendance", label: "MP Has Confirmed Attendance", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayMpHasConfirmedAttendance, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
-                { name: "lobbyingDayMpIsMinister", label: "MP Is Minister", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayMpIsMinister, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day last" },
+                { name: "lobbyingDayMpIsMinister", label: "MP Is Minister", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayMpIsMinister, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
+                { name: "lobbyingDayNotes", label: "Notes", width: 200, formatter: lcag.MemberGrid.formatters.lobbyingDayNotes, classes: "mass-lobbying-day last" },
                 { name: "hmrcLetterChecked", label: "HMRC Letter Checked", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "identificationChecked", label: "Identification Checked", width: 59, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "verifiedOn", label: "Verified On Date", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.verifiedOn },
@@ -110,12 +111,13 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "hasCompletedClaimParticipantForm": $("#hasCompletedClaimParticipantForm_" + id).prop("checked"),
                                 "hasBeenSentClaimConfirmationEmail": $("#hasBeenSentClaimConfirmationEmail_" + id).prop("checked"),
                                 "hasOptedOutOfClaim": $("#hasOptedOutOfClaim_" + id).prop("checked"),
-                                "attendingMassLobbyingDay": $("#attendingMassLobbyingDay_" + id).prop("checked"),
                                 "hasBeenSentInitialMassLobbyingEmail": $("#hasBeenSentInitialMassLobbyingEmail_" + id).prop("checked"),
+                                "lobbyingDayAttending": $("#lobbyingDayAttending_" + id).val(),
                                 "lobbyingDayHasSentMpTemplateLetter": $("#lobbyingDayHasSentMpTemplateLetter_" + id).prop("checked"),
                                 "lobbyingDayHasReceivedMpResponse": $("#lobbyingDayHasReceivedMpResponse_" + id).prop("checked"),
                                 "lobbyingDayMpHasConfirmedAttendance": $("#lobbyingDayMpHasConfirmedAttendance_" + id).prop("checked"),
-                                "lobbyingDayMpIsMinister": $("#lobbyingDayMpIsMinister_" + id).prop("checked")
+                                "lobbyingDayMpIsMinister": $("#lobbyingDayMpIsMinister_" + id).prop("checked"),
+                                "lobbyingDayNotes": $("#lobbyingDayNotes_" + id).val()
                             };
                           })(),
                           success: function(e) {
@@ -142,7 +144,8 @@ lcag.MemberGrid = lcag.MemberGrid || {
         $("#member-grid").jqGrid('setGroupHeaders', {
             useColSpanStyle: false,
             groupHeaders: [
-                { startColumnName: 'hasBeenSentInitialMassLobbyingEmail', numberOfColumns: 6, titleText: 'Mass Lobbying Day' }
+                { startColumnName: 'hasBeenSentInitialMassLobbyingEmail', numberOfColumns: 7, titleText: 'Mass Lobbying Day' },
+                { startColumnName: 'claimToken', numberOfColumns: 5, titleText: 'Claim' }
             ]
         });
     },
@@ -209,6 +212,11 @@ lcag.MemberGrid = lcag.MemberGrid || {
 
             return row.group;
         },
+        "lobbyingDayAttending": function(cellvalue, options, row) {
+            var disabled = !(row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators");
+            console.log("row.group", row.group);
+            return '<select id="lobbyingDayAttending_' + row.id + '" class="form-control" ' + (disabled ? 'disabled="disabled" ' : '') + '><option value="UNSET"' + (row.lobbyingDayAttending == 'UNSET ' ? 'selected="selected"' : '') + '>Unset</option><option value="YES" ' + (row.lobbyingDayAttending == 'YES' ? 'selected="selected"' : '') + '>Yes</option><option value="NO" ' + (row.lobbyingDayAttending == 'NO' ? 'selected="selected"' : '') + '>No</option><option value="MAYBE" ' + (row.lobbyingDayAttending == 'MAYBE' ? 'selected="selected"' : '') + '>Maybe</option></select>';
+        },
         "hasCompletedMembershipForm": function(cellvalue, options, row) {
             return '<input id="hasCompletedMembershipForm_' + row.id + '" type="checkbox" ' + (row.hasCompletedMembershipForm ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
@@ -224,9 +232,6 @@ lcag.MemberGrid = lcag.MemberGrid || {
         "hasOptedOutOfClaim": function(cellvalue, options, row) {
             return '<input id="hasOptedOutOfClaim_' + row.id + '" type="checkbox" ' + (row.hasOptedOutOfClaim ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
-        "attendingMassLobbyingDay": function(cellvalue, options, row) {
-            return '<input id="attendingMassLobbyingDay_' + row.id + '" type="checkbox" ' + (row.attendingMassLobbyingDay ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-        },
         "lobbyingDayMpIsMinister": function(cellvalue, options, row) {
             return '<input id="lobbyingDayMpIsMinister_' + row.id + '" type="checkbox" ' + (row.lobbyingDayMpIsMinister ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
@@ -241,6 +246,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
         },
         "hasBeenSentInitialMassLobbyingEmail": function(cellvalue, options, row) {
             return '<input id="hasBeenSentInitialMassLobbyingEmail_' + row.id + '" type="checkbox" ' + (row.hasBeenSentInitialMassLobbyingEmail ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "lobbyingDayNotes": function(cellvalue, options, row) {
+            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="lobbyingDayNotes_' + row.id + '" type="text" class="form-control input-large" value="' + row.lobbyingDayNotes + '"></div>';
         },
         "action": function(cellvalue, options, row) {
             if (row.status != 3) {

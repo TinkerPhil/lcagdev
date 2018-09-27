@@ -47,12 +47,13 @@ public class Member {
     private Boolean hasCompletedClaimParticipantForm;
     private Boolean hasBeenSentClaimConfirmationEmail;
     private Boolean hasOptedOutOfClaim;
-    private Boolean attendingMassLobbyingDay;
     private Boolean hasBeenSentInitialMassLobbyingEmail;
     private Boolean lobbyingDayHasSentMpTemplateLetter;
     private Boolean lobbyingDayHasReceivedMpResponse;
     private Boolean lobbyingDayMpHasConfirmedAttendance;
     private Boolean lobbyingDayMpIsMinister;
+    private String lobbyingDayNotes;
+    private LobbyingDayAttendance lobbyingDayAttending;
     private String claimToken;
 
     public Member() {}
@@ -89,12 +90,13 @@ public class Member {
             Boolean hasCompletedClaimParticipantForm,
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
-            Boolean attendingMassLobbyingDay,
             Boolean hasBeenSentInitialMassLobbyingEmail,
             Boolean lobbyingDayHasSentMpTemplateLetter,
             Boolean lobbyingDayHasReceivedMpResponse,
             Boolean lobbyingDayMpHasConfirmedAttendance,
             Boolean lobbyingDayMpIsMinister,
+            String lobbyingDayNotes,
+            LobbyingDayAttendance lobbyingDayAttending,
             String claimToken) {
         this.id = id;
         this.emailAddress = emailAddress;
@@ -127,12 +129,13 @@ public class Member {
         this.hasCompletedClaimParticipantForm = hasCompletedClaimParticipantForm;
         this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
-        this.attendingMassLobbyingDay = attendingMassLobbyingDay;
         this.hasBeenSentInitialMassLobbyingEmail = hasBeenSentInitialMassLobbyingEmail;
         this.lobbyingDayHasSentMpTemplateLetter = lobbyingDayHasSentMpTemplateLetter;
         this.lobbyingDayHasReceivedMpResponse = lobbyingDayHasReceivedMpResponse;
         this.lobbyingDayMpHasConfirmedAttendance = lobbyingDayMpHasConfirmedAttendance;
         this.lobbyingDayMpIsMinister = lobbyingDayMpIsMinister;
+        this.lobbyingDayNotes = lobbyingDayNotes;
+        this.lobbyingDayAttending = lobbyingDayAttending;
         this.claimToken = claimToken;
     }
 
@@ -394,14 +397,6 @@ public class Member {
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
     }
 
-    public Boolean getAttendingMassLobbyingDay() {
-        return attendingMassLobbyingDay;
-    }
-
-    public void setAttendingMassLobbyingDay(Boolean attendingMassLobbyingDay) {
-        this.attendingMassLobbyingDay = attendingMassLobbyingDay;
-    }
-
     public Boolean getHasBeenSentInitialMassLobbyingEmail() {
         return hasBeenSentInitialMassLobbyingEmail;
     }
@@ -440,5 +435,21 @@ public class Member {
 
     public void setLobbyingDayMpIsMinister(Boolean lobbyingDayMpIsMinister) {
         this.lobbyingDayMpIsMinister = lobbyingDayMpIsMinister;
+    }
+
+    public String getLobbyingDayNotes() {
+        return lobbyingDayNotes;
+    }
+
+    public void setLobbyingDayNotes(String lobbyingDayNotes) {
+        this.lobbyingDayNotes = lobbyingDayNotes;
+    }
+
+    public LobbyingDayAttendance getLobbyingDayAttending() {
+        return lobbyingDayAttending;
+    }
+
+    public void setLobbyingDayAttending(LobbyingDayAttendance lobbyingDayAttending) {
+        this.lobbyingDayAttending = lobbyingDayAttending;
     }
 }

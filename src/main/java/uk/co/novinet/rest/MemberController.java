@@ -7,10 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uk.co.novinet.service.member.Member;
-import uk.co.novinet.service.member.MemberService;
-import uk.co.novinet.service.member.SftpDocument;
-import uk.co.novinet.service.member.SftpService;
+import uk.co.novinet.service.member.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -108,12 +105,13 @@ public class MemberController {
             @RequestParam(value = "hasCompletedClaimParticipantForm", required = false) Boolean hasCompletedClaimParticipantForm,
             @RequestParam(value = "hasBeenSentClaimConfirmationEmail", required = false) Boolean hasBeenSentClaimConfirmationEmail,
             @RequestParam(value = "hasOptedOutOfClaim", required = false) Boolean hasOptedOutOfClaim,
-            @RequestParam(value = "attendingMassLobbyingDay", required = false) Boolean attendingMassLobbyingDay,
             @RequestParam(value = "hasBeenSentInitialMassLobbyingEmail", required = false) Boolean hasBeenSentInitialMassLobbyingEmail,
             @RequestParam(value = "lobbyingDayHasSentMpTemplateLetter", required = false) Boolean lobbyingDayHasSentMpTemplateLetter,
             @RequestParam(value = "lobbyingDayHasReceivedMpResponse", required = false) Boolean lobbyingDayHasReceivedMpResponse,
             @RequestParam(value = "lobbyingDayMpHasConfirmedAttendance", required = false) Boolean lobbyingDayMpHasConfirmedAttendance,
             @RequestParam(value = "lobbyingDayMpIsMinister", required = false) Boolean lobbyingDayMpIsMinister,
+            @RequestParam(value = "lobbyingDayNotes", required = false) String lobbyingDayNotes,
+            @RequestParam(value = "lobbyingDayAttending", required = false) String lobbyingDayAttending,
             @RequestParam("group") String group
     ) {
         memberService.update(
@@ -140,12 +138,13 @@ public class MemberController {
                 hasCompletedClaimParticipantForm,
                 hasBeenSentClaimConfirmationEmail,
                 hasOptedOutOfClaim,
-                attendingMassLobbyingDay,
                 hasBeenSentInitialMassLobbyingEmail,
                 lobbyingDayHasSentMpTemplateLetter,
                 lobbyingDayHasReceivedMpResponse,
                 lobbyingDayMpHasConfirmedAttendance,
-                lobbyingDayMpIsMinister
+                lobbyingDayMpIsMinister,
+                lobbyingDayNotes,
+                lobbyingDayAttending == null ? LobbyingDayAttendance.UNSET : LobbyingDayAttendance.valueOf(lobbyingDayAttending)
         );
         return new ResponseEntity(HttpStatus.OK);
     }
