@@ -48,6 +48,7 @@ public class Member {
     private Boolean hasBeenSentClaimConfirmationEmail;
     private Boolean hasOptedOutOfClaim;
     private Boolean hasBeenSentInitialMassLobbyingEmail;
+    private Boolean lobbyingDayHasBeenSentMpTemplate;
     private Boolean lobbyingDayHasSentMpTemplateLetter;
     private Boolean lobbyingDayHasReceivedMpResponse;
     private Boolean lobbyingDayMpHasConfirmedAttendance;
@@ -91,7 +92,7 @@ public class Member {
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
             Boolean hasBeenSentInitialMassLobbyingEmail,
-            Boolean lobbyingDayHasSentMpTemplateLetter,
+            Boolean lobbyingDayHasBeenSentMpTemplate, Boolean lobbyingDayHasSentMpTemplateLetter,
             Boolean lobbyingDayHasReceivedMpResponse,
             Boolean lobbyingDayMpHasConfirmedAttendance,
             Boolean lobbyingDayMpIsMinister,
@@ -130,6 +131,7 @@ public class Member {
         this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
         this.hasBeenSentInitialMassLobbyingEmail = hasBeenSentInitialMassLobbyingEmail;
+        this.lobbyingDayHasBeenSentMpTemplate = lobbyingDayHasBeenSentMpTemplate;
         this.lobbyingDayHasSentMpTemplateLetter = lobbyingDayHasSentMpTemplateLetter;
         this.lobbyingDayHasReceivedMpResponse = lobbyingDayHasReceivedMpResponse;
         this.lobbyingDayMpHasConfirmedAttendance = lobbyingDayMpHasConfirmedAttendance;
@@ -451,5 +453,13 @@ public class Member {
 
     public void setLobbyingDayAttending(LobbyingDayAttendance lobbyingDayAttending) {
         this.lobbyingDayAttending = lobbyingDayAttending;
+    }
+
+    public Boolean getLobbyingDayHasBeenSentMpTemplate() {
+        return lobbyingDayHasBeenSentMpTemplate;
+    }
+
+    public void setLobbyingDayHasBeenSentMpTemplate(Boolean lobbyingDayHasBeenSentMpTemplate) {
+        this.lobbyingDayHasBeenSentMpTemplate = lobbyingDayHasBeenSentMpTemplate;
     }
 }

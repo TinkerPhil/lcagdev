@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberCreationResult;
 import uk.co.novinet.service.member.MemberService;
+import uk.co.novinet.service.member.MpDetailsUpdaterService;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
@@ -66,11 +67,15 @@ public class MailListenerService {
     private MemberService memberService;
 
     @Autowired
+    private MpDetailsUpdaterService mpDetailsUpdaterService;
+
+    @Autowired
     private EnquiryTableListenerService enquiryTableListenerService;
 
     @Scheduled(initialDelayString = "${retrieveMailInitialDelayMilliseconds}", fixedRateString = "${retrieveMailIntervalMilliseconds}")
     public void retrieveMail() {
         enquiryTableListenerService.processNewEnquiryTableRows();
+        mpDetailsUpdaterService.updateMpDetails();
 
         LOGGER.info("Checking for new enquiry");
 

@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `opted_out_of_claim` tinyint(1) NOT NULL DEFAULT '0',
   `attending_mass_lobbying_day` tinyint(1) NOT NULL DEFAULT '0',
   `has_been_sent_initial_mass_lobbying_email` tinyint(1) NOT NULL DEFAULT '0',
+  `lobbying_day_has_been_sent_mp_template` tinyint(1) NOT NULL DEFAULT '0',
   `lobbying_day_has_sent_mp_template_letter` tinyint(1) NOT NULL DEFAULT '0',
   `lobbying_day_has_received_mp_response` tinyint(1) NOT NULL DEFAULT '0',
   `lobbying_day_mp_is_minister` tinyint(1) NOT NULL DEFAULT '0',

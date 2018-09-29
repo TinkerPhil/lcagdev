@@ -11,6 +11,7 @@ import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
 import uk.co.novinet.service.member.Where;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -75,6 +76,23 @@ public class PaymentDao {
 
     public BankTransaction getBankTransactionById(Long id) {
         return jdbcTemplate.queryForObject(buildBankTransactionTableSelect() + " where bt.id = ?", new Object[] { id }, (rs, rowNum) -> buildBankTransaction(rs));
+    }
+
+    public List<FfcContribution> getFfcContributions() {
+        return jdbcTemplate.query("select * from " + ffcContributionsTableName() + " where status = 'AUTHORIZED'", (rs, rowNum) -> buildFfcContribution(rs));
+    }
+
+    public BigDecimal getFfcTotalContributions() {
+        return jdbcTemplate.queryForObject("select sum((gross_amount * 0.983) - 0.2) from " + ffcContributionsTableName() + " where status = 'AUTHORIZED'", BigDecimal.class);
+    }
+
+
+    private FfcContribution buildFfcContribution(ResultSet rs) {
+        try {
+            return new FfcContribution(dateFromMyBbRow(rs, "payment_received"), new BigDecimal((rs.getDouble("gross_amount") * 0.983) - 0.20));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<BankTransaction> findExistingBankTransaction(BankTransaction bankTransaction) {

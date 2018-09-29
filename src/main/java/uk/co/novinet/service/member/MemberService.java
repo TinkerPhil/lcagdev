@@ -68,6 +68,7 @@ public class MemberService {
         put("claimToken", "u.claim_token");
         put("attendingMassLobbyingDay", "u.attending_mass_lobbying_day");
         put("hasBeenSentInitialMassLobbyingEmail", "u.has_been_sent_initial_mass_lobbying_email");
+        put("lobbyingDayHasBeenSentMpTemplate", "u.lobbying_day_has_been_sent_mp_template");
         put("lobbyingDayHasSentMpTemplateLetter", "u.lobbying_day_has_sent_mp_template_letter");
         put("lobbyingDayHasReceivedMpResponse", "u.lobbying_day_has_received_mp_response");
         put("lobbyingDayMpHasConfirmedAttendance", "u.lobbying_day_mp_has_confirmed_attendance");
@@ -101,6 +102,7 @@ public class MemberService {
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
             Boolean hasBeenSentInitialMassLobbyingEmail,
+            Boolean lobbyingDayHasBeenSentMpTemplate,
             Boolean lobbyingDayHasSentMpTemplateLetter,
             Boolean lobbyingDayHasReceivedMpResponse,
             Boolean lobbyingDayMpHasConfirmedAttendance,
@@ -111,12 +113,12 @@ public class MemberService {
         LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, " +
                         "mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, " +
                         "memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, " +
-                        "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}, hasBeenSentInitialMassLobbyingEmail={}, " +
+                        "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}, hasBeenSentInitialMassLobbyingEmail={}, lobbyingDayHasBeenSentMpTemplate={}" +
                         "lobbyingDayHasSentMpTemplateLetter={}, lobbyingDayHasReceivedMpResponse={}, lobbyingDayMpHasConfirmedAttendance={}, lobbyingDayMpIsMinister={}," +
                         "lobbyingDayNotes={}, lobbyingDayAttending={}",
                 group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
                 schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim,
-                hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim, hasBeenSentInitialMassLobbyingEmail,
+                hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim, hasBeenSentInitialMassLobbyingEmail, lobbyingDayHasBeenSentMpTemplate,
                 lobbyingDayHasSentMpTemplateLetter, lobbyingDayHasReceivedMpResponse, lobbyingDayMpHasConfirmedAttendance, lobbyingDayMpIsMinister, lobbyingDayNotes,
                 lobbyingDayAttending
         );
@@ -149,6 +151,7 @@ public class MemberService {
                 "u.has_been_sent_claim_confirmation_email = ?, " +
                 "u.opted_out_of_claim = ?, " +
                 "u.has_been_sent_initial_mass_lobbying_email = ?, " +
+                "u.lobbying_day_has_been_sent_mp_template = ?, " +
                 "u.lobbying_day_has_sent_mp_template_letter = ?, " +
                 "u.lobbying_day_has_received_mp_response = ?, " +
                 "u.lobbying_day_mp_has_confirmed_attendance = ?, " +
@@ -184,6 +187,7 @@ public class MemberService {
                 hasBeenSentClaimConfirmationEmail,
                 hasOptedOutOfClaim,
                 hasBeenSentInitialMassLobbyingEmail,
+                lobbyingDayHasBeenSentMpTemplate,
                 lobbyingDayHasSentMpTemplateLetter,
                 lobbyingDayHasReceivedMpResponse,
                 lobbyingDayMpHasConfirmedAttendance,
@@ -312,6 +316,7 @@ public class MemberService {
                     false,
                     false,
                     false,
+                    false,
                     "",
                     LobbyingDayAttendance.UNSET,
                     guid()
@@ -388,7 +393,7 @@ public class MemberService {
                 "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
                 "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, u.attending_mass_lobbying_day, " +
                 "u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`, " +
-                "u.has_been_sent_initial_mass_lobbying_email, u.lobbying_day_has_sent_mp_template_letter, u.lobbying_day_has_received_mp_response, " +
+                "u.has_been_sent_initial_mass_lobbying_email, u.lobbying_day_has_been_sent_mp_template, u.lobbying_day_has_sent_mp_template_letter, u.lobbying_day_has_received_mp_response, " +
                 "u.lobbying_day_mp_has_confirmed_attendance, u.lobbying_day_mp_is_minister, u.lobbying_day_notes, u.lobbying_day_attending " +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
@@ -591,6 +596,11 @@ public class MemberService {
             parameters.add(member.getHasBeenSentInitialMassLobbyingEmail());
         }
 
+        if (member.getLobbyingDayHasBeenSentMpTemplate() != null) {
+            clauses.add("u.lobbying_day_has_been_sent_mp_template = ?");
+            parameters.add(member.getLobbyingDayHasBeenSentMpTemplate());
+        }
+
         if (member.getLobbyingDayHasSentMpTemplateLetter() != null) {
             clauses.add("u.lobbying_day_has_sent_mp_template_letter = ?");
             parameters.add(member.getLobbyingDayHasSentMpTemplateLetter());
@@ -658,6 +668,7 @@ public class MemberService {
                 rs.getBoolean("has_been_sent_claim_confirmation_email"),
                 rs.getBoolean("opted_out_of_claim"),
                 rs.getBoolean("has_been_sent_initial_mass_lobbying_email"),
+                rs.getBoolean("lobbying_day_has_been_sent_mp_template"),
                 rs.getBoolean("lobbying_day_has_sent_mp_template_letter"),
                 rs.getBoolean("lobbying_day_has_received_mp_response"),
                 rs.getBoolean("lobbying_day_mp_has_confirmed_attendance"),
