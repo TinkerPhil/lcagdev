@@ -25,6 +25,9 @@
     <script src="/js/lcag-statistics.js"></script>
     <script src="/js/lcag-member-grid.js"></script>
     <script src="/js/lcag-payments-grid.js"></script>
+    <script src="/js/lcag-mp-grid.js"></script>
+    <script src="/js/lcag-mp-campaign-grid.js"></script>
+    <script src="/js/lcag-mp-campaign-user-grid.js"></script>
     <script src="/js/lcag-verification-grid.js"></script>
     <title>Loan Charge Action Group Membership Dashboard</title>
 </head>
@@ -107,6 +110,9 @@
                 <li role="presentation" class="active"><a href="#members" aria-controls="members" role="tab" data-toggle="tab">Members</a></li>
                 <li role="presentation"><a id="guestsAwaitingVerificationTabHeader" href="#guestsAwaitingVerification" aria-controls="guestsAwaitingVerification" role="tab" data-toggle="tab">Guests Awaiting Verification</a></li>
                 <li role="presentation"><a href="#payments" aria-controls="payments" role="tab" data-toggle="tab">Payments</a></li>
+                <li role="presentation"><a href="#mp" aria-controls="mp" role="tab" data-toggle="tab">MP</a></li>
+                <li role="presentation"><a href="#mpcampaign" aria-controls="mpcampaign" role="tab" data-toggle="tab">MP Campaign</a></li>
+                <li role="presentation"><a href="#mpcampaignuser" aria-controls="mpcampaignuser" role="tab" data-toggle="tab">MP Campaign-user</a></li>
             </ul>
 
             <div class="tab-content">
@@ -128,6 +134,24 @@
                         </table>
                     </div>
                 </div>
+                <div role="tabpanel" class="tab-pane" id="mp">
+                    <div class="horizontal-scroll">
+                        <table id="mp-grid">
+                        </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="mpcampaign">
+                    <div class="horizontal-scroll">
+                        <table id="mp-campaign-grid">
+                        </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="mpcampaignuser">
+                    <div class="horizontal-scroll">
+                        <table id="mp-campaign-user-grid">
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
@@ -136,6 +160,9 @@
         $(function () {
             lcag.MemberGrid.initialise();
             lcag.PaymentsGrid.initialise();
+            lcag.MpGrid.initialise();
+            lcag.MpCampaignGrid.initialise();
+            lcag.MpCampaignUserGrid.initialise();
             lcag.VerificationGrid.initialise();
             $("#dropzone-form").dropzone({
                 maxFiles: 2000,
