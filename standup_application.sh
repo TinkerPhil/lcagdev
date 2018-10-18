@@ -21,9 +21,9 @@ docker run -d \
     -e "SFTP_HOST=lcag-sftp" \
 	-e "SFTP_PORT=22" \
 	-e "SFTP_ROOT_DIRECTORY=/upload" \
-	-e "MYBB_FORUM_DATABASE_URL=jdbc:mysql://176.9.31.124:4306/lcag-mybb" \
-	-e "MYBB_FORUM_DATABASE_USERNAME=lcag" \
-	-e "MYBB_FORUM_DATABASE_PASSWORD=Nr8tchJ48jmcOI7l5B87" \
+	-e "MYBB_FORUM_DATABASE_URL=jdbc:mysql://lcag-mysql/mybb" \
+	-e "MYBB_FORUM_DATABASE_USERNAME=root" \
+	-e "MYBB_FORUM_DATABASE_PASSWORD=p@ssword" \
 	-e "EMAIL_SOURCE_URL=https://docs.google.com/document/d/1ESy7IwM_mEuUQDP3xnx2We9aRwVcN_XdCAs4bF23ceI/export?format=html" \
 	-e "VERIFICATION_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1yK5m3fDBRPIS-qGjnTpOLEaQc-iALl5au62RJcQCuJI/export?format=html" \
 	-e "VERIFICATION_EMAIL_SUBJECT=Your identification has been verified" \

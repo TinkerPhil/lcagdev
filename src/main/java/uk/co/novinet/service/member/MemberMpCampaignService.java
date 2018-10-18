@@ -34,9 +34,10 @@ public class MemberMpCampaignService {
         put("sentInitialEmail", "umc.sentInitialEmail");
         put("meetingNext", "umc.meetingNext");
         put("meetingCount", "umc.meetingCount");
-        put("letterCount", "umc.letterCount");
-        put("emailCount", "umc.emailCount");
+        put("telephoneCount", "umc.telephoneCount");
+        put("writtenCount", "umc.writtenCount");
         put("involved", "umc.involved");
+        put("edmUrl", "m.edmUrl");
         put("campaignNotes", "umc.campaignNotes");
     }};
 
@@ -47,8 +48,8 @@ public class MemberMpCampaignService {
             String campaignNotes,
             String meetingNext,
             Integer meetingCount,
-            Integer letterCount,
-            Integer emailCount,
+            Integer telephoneCount,
+            Integer writtenCount,
             Integer involved
             ) {
         LOGGER.info("Going to update usersMpCampaign with id {}", id);
@@ -64,8 +65,8 @@ public class MemberMpCampaignService {
                 " umc.campaignNotes = ?, " +
                 " umc.meetingNext = STR_TO_DATE(?, '%Y%m%d %H:%i'), " +
                 " umc.meetingCount = ?, " +
-                " umc.letterCount = ?, " +
-                " umc.emailCount = ?, " +
+                " umc.telephoneCount = ?, " +
+                " umc.writtenCount = ?, " +
                 " umc.involved = ? " +
                 "where umc.uid = ?";
 
@@ -78,8 +79,8 @@ public class MemberMpCampaignService {
                 campaignNotes,
                 meetingNext,
                 meetingCount,
-                letterCount,
-                emailCount,
+                telephoneCount,
+                writtenCount,
                 involved,
                 id
         );
@@ -94,8 +95,8 @@ public class MemberMpCampaignService {
 
     private String buildUserTableSelect() {
         return "select umc.uid, u.name, ug.title as usergroup, m.mpName, a.name as administratorName, u.email, umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, " +
-                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') AS meetingNext, umc.meetingCount, umc.letterCount, umc.emailCount, umc.involved, " +
-                "u.username, u.postnum, u.threadnum, u.lastvisit, u.schemes, u.lobbying_day_attending as lobbyingDayAttending " +
+                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') AS meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
+                "u.username, u.postnum, u.threadnum, u.lastvisit, u.schemes, u.lobbying_day_attending as lobbyingDayAttending, m.edmUrl " +
                 "from " + mpCampaignUsersTableName() + " umc " +
                 " inner join " + usersTableName() + " u on u.uid = umc.uid " +
                 " inner join " + userGroupsTableName() + " ug on ug.gid=u.usergroup " +
@@ -165,13 +166,13 @@ public class MemberMpCampaignService {
             clauses.add("umc.meetingCount = ?");
             parameters.add(member.getMeetingCount());
         }
-        if(member.getLetterCount() != null ) {
-            clauses.add("umc.letterCount = ?");
-            parameters.add(member.getLetterCount());
+        if(member.getTelephoneCount() != null ) {
+            clauses.add("umc.telephoneCount = ?");
+            parameters.add(member.getTelephoneCount());
         }
-        if(member.getEmailCount() != null ) {
-            clauses.add("umc.emailCount = ?");
-            parameters.add(member.getEmailCount());
+        if(member.getWrittenCount() != null ) {
+            clauses.add("umc.writtenCount = ?");
+            parameters.add(member.getWrittenCount());
         }
         if(member.getInvolved() != null ) {
             clauses.add("umc.involved = ?");
@@ -200,9 +201,10 @@ public class MemberMpCampaignService {
                 rs.getString("campaignNotes"),
                 rs.getString("meetingNext"),
                 rs.getInt("meetingCount"),
-                rs.getInt("letterCount"),
-                rs.getInt( "emailCount"),
+                rs.getInt("telephoneCount"),
+                rs.getInt( "writtenCount"),
                 rs.getInt("involved"),
+                rs.getString("edmUrl"),
                 rs.getString("lobbyingDayAttending"),
                 rs.getString("administratorName")
         );

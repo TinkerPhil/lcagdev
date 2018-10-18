@@ -100,6 +100,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<option value="No Point" ' + (row.edmStatus == 'No Point' ? 'selected="selected"' : '') + '>No Point</option>'
                 + '<option value="Sympathetic" ' + (row.edmStatus == 'Sympathetic' ? 'selected="selected"' : '') + '>Sympathetic</option></select>'
                 + '</td></tr>'
+                + '<tr><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
                 + '<tr><th>Party</th><td>'+row.party +'</td></tr>'
                 + '<tr><th>Ministerial</th><td>'+row.ministerialStatus +'</td></tr>'
                 + '<tr><th>Twitter</th><td>'+row.twitter +'</td></tr>'
@@ -122,7 +123,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<tr><th>Private</th><td>'+row.privateCampaignEmails+'</td></tr>'
                 + '<tr><th>Mail</th><td>'
                 + '<a href="mailto:'+row.sharedCampaignEmails+'">Shared</a><br>'
-                + '<a href="mailto:?'+row.privateCampaignEmails+'">Private</a><br>'
+                + '<a href="mailto:bcc='+row.privateCampaignEmails+'">Private</a><br>'
                 + '<a href="mailto:'+row.sharedCampaignEmails+'?bcc='+row.privateCampaignEmails+'">Both</a>'
                 + '</td></tr>'
                 + '</table>';

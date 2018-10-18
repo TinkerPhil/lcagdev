@@ -13,6 +13,7 @@ public class MP {
     private String constituency;
     private String constituencyAddress;
     private String edmStatus;
+    private String edmUrl;
     private String ministerialStatus;
     private String url;
     private Long majority;
@@ -38,6 +39,7 @@ public class MP {
     	String constituency,
     	String constituencyAddress,
     	String edmStatus,
+    	String edmUrl,
     	String ministerialStatus,
     	String url,
         Long majority,
@@ -59,6 +61,7 @@ public class MP {
 		this.constituency = constituency;
 		this.constituencyAddress = constituencyAddress;
 		this.edmStatus = edmStatus;
+		this.edmUrl = edmUrl;
 		this.ministerialStatus = ministerialStatus;
 		this.url = url;
 		this.majority = majority;
@@ -128,8 +131,14 @@ public class MP {
     public String getEdmStatus() {
         return edmStatus;
     }
-    public void setEdmStatus(String EdmStatus) {
-        this.edmStatus = EdmStatus;
+    public void setEdmStatus(String edmStatus) {
+        this.edmStatus = edmStatus;
+    }
+    public String getEdmUrl() {
+        return edmUrl;
+    }
+    public void setEdmUrl(String edmUrl) {
+        this.edmUrl = edmUrl;
     }
     public String getMinisterialStatus() {
         return ministerialStatus;

@@ -13,10 +13,23 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 { name: "sentInitialEmail", label: "Initial e-mail", width: 150, formatter: lcag.MpCampaignUserGrid.formatters.sentInitialEmail },
                 { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.campaignNotes },
                 { name: "action", label: "", width: 250, formatter: lcag.MpCampaignUserGrid.formatters.action, search: false },
-                { name: "meetingNext", label: "Next meeting", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
+//                { name: "meetingNext", label: "Next meeting", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
+                { name: "meetingNext", label: "Next Meeting", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.meetingDate },
+
+//                { name: "meetingNext", label: "Next meeting", search: true, searchoptions: {
+//                        sopt: ['eq'],
+//                        dataInit: function(e) {
+//                            $(e).datetimepicker({
+//                                dateFormat: 'yyyymmdd '
+//                            })
+//                                .change(function() {
+//                                    $("#mp-campaign-user-grid")[0].triggerToolbar();
+//                               });
+//                        }
+//                    } },
                 { name: "meetingCount", label: "Meetings", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingCount },
-                { name: "letterCount", label: "Letters", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.letterCount },
-                { name: "emailCount", label: "Emails", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.emailCount },
+                { name: "telephoneCount", label: "Telephone", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.telephoneCount },
+                { name: "writtenCount", label: "Written", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.writtenCount },
                 { name: "involved", label: "Involved", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.involved }
 
             ],
@@ -76,8 +89,8 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                                   "campaignNotes": $("#campaignNotes_" + rowid).val(),
                                   "meetingNext": $("#meetingNext_" + rowid).val(),
                                   "meetingCount": $("#meetingCount_" + rowid).val(),
-                                  "letterCount": $("#letterCount_" + rowid).val(),
-                                  "emailCount": $("#emailCount_" + rowid).val(),
+                                  "telephoneCount": $("#telephoneCount_" + rowid).val(),
+                                  "writtenCount": $("#writtenCount_" + rowid).val(),
                                   "involved": $("#involved_" + rowid).val()
                             };
                           })(),
@@ -109,7 +122,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             return '<div class="input-group">'
             + '<select id="allowEmailShareStatus_' + row.id + '" class="form-control" >'
             + '<option value="Not Asked"' + (row.allowEmailShareStatus == "Not Asked" ? 'selected="selected"' : '') + '>Not Asked</option>'
-            + '<option value="Awaiting Reply" ' + (row.allowEmailShareStatus == "Awaiting Reply" ? 'selected="selected"' : '') + '>Awaiting Reply</option>'
+            + '<option value="Awaiting Reply" ' + (row.allowEmailShareStatus == "Awaiting Reply" ? 'selected="selected"' : '') + ' disabled=""">Awaiting Reply</option>'
             + '<option value="To Be Shared" ' + (row.allowEmailShareStatus == "To Be Shared" ? 'selected="selected"' : '') + ' >To Be Shared</option>'
             + '<option value="Shared" ' + (row.allowEmailShareStatus == "Shared" ? 'selected="selected"' : '') + ' disabled="">Shared</option>'
             + '<option value="Private" ' + (row.allowEmailShareStatus == "Private" ? 'selected="selected"' : '') + '>Private</option>'
@@ -125,16 +138,19 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 + '</div>';
         },
         "meetingNext": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="meetingNext_' + row.id + '" type="text" class="form-control input-large" value="' + row.meetingNext + '"></div>';
+//            return '<div class="input-group"><input id="meetingNext_' + row.id + '" type="text" class="form-control input-large" value="' + row.meetingNext + '"></div>';
+            var dateString = row.meetingNext == null ? "" : moment(row.meetingNext).format("DD/MM/YYYY");
+            return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + ' id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
+
         },
         "meetingCount": function(cellvalue, options, row) {
             return '<div class="input-group"><input id="meetingCount_' + row.id + '" type="text" class="form-control input-large" value="' + row.meetingCount + '"></div>';
         },
-        "letterCount": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="letterCount_' + row.id + '" type="text" class="form-control input-large" value="' + row.letterCount + '"></div>';
+        "telephoneCount": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="telephoneCount_' + row.id + '" type="text" class="form-control input-large" value="' + row.telephoneCount + '"></div>';
         },
-        "emailCount": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="emailCount_' + row.id + '" type="text" class="form-control input-large" value="' + row.emailCount + '"></div>';
+        "writtenCount": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="writtenCount_' + row.id + '" type="text" class="form-control input-large" value="' + row.writtenCount + '"></div>';
         },
         "involved": function(cellvalue, options, row) {
             return '<div class="input-group"><input id="involved_' + row.id + '" type="text" class="form-control input-large" value="' + row.involved + '"></div>';
@@ -149,6 +165,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 + '<tr><th>Last Visit</th><td>'+row.lastvisit +'</td></tr>'
                 + '<tr><th>Schemes</th><td>'+row.schemes +'</td></tr>'
                 + '<tr><th>MP</th><td>'+row.mpName+'</td></tr>'
+                + '<tr><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
                 + '<tr><th>e-mail</th><td><a href="mailto:' + row.email +'">'+row.email +'</a></td></tr>'
                 + '<tr><th colspan="2"><button type="button" class="btn btn-default update-membermpcampaign-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></th></tr>'
                 + '</table>'

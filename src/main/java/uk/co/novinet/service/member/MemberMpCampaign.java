@@ -13,15 +13,16 @@ public class MemberMpCampaign {
     private Integer threadnum;
     private String lastvisit;
     private String schemes;
-    private String lobbyingDayAttending;
     private String allowEmailShareStatus;
     private String sentInitialEmail;
     private String campaignNotes;
     private String meetingNext;
     private Integer meetingCount;
-    private Integer letterCount;
-    private Integer emailCount;
+    private Integer telephoneCount;
+    private Integer writtenCount;
     private Integer involved;
+    private String edmUrl;
+    private String lobbyingDayAttending;
     private String administratorName;
 
     public MemberMpCampaign() {}
@@ -42,9 +43,10 @@ public class MemberMpCampaign {
             String campaignNotes,
             String meetingNext,
             Integer meetingCount,
-            Integer letterCount,
-            Integer emailCount,
+            Integer telephoneCount,
+            Integer writtenCount,
             Integer involved,
+            String edmUrl,
             String lobbyingDayAttending,
             String administratorName
             ) {
@@ -63,9 +65,10 @@ public class MemberMpCampaign {
         this.setCampaignNotes(campaignNotes);
         this.setMeetingNext(meetingNext);
         this.meetingCount = meetingCount;
-        this.letterCount = letterCount;
-        this.emailCount = emailCount;
+        this.telephoneCount = telephoneCount;
+        this.writtenCount = writtenCount;
         this.involved = involved;
+        this.edmUrl = edmUrl;
         this.lobbyingDayAttending = lobbyingDayAttending;
 
         this.administratorName = administratorName;
@@ -107,12 +110,14 @@ public class MemberMpCampaign {
     public void setMeetingNext(String meetingNext) { if( meetingNext == null || meetingNext.equals("null")) { meetingNext=""; } this.meetingNext= meetingNext; }
     public Integer getMeetingCount() { return meetingCount;}
     public void setMeetingCount(Integer meetingCount) { this.meetingCount= meetingCount; }
-    public Integer getLetterCount() { return letterCount;}
-    public void setLetterCount(Integer letterCount) { this.letterCount= letterCount; }
-    public Integer getEmailCount() { return emailCount;}
-    public void setEmailCount(Integer emailCount) { this.emailCount= emailCount; }
+    public Integer getTelephoneCount() { return telephoneCount;}
+    public void setTelephoneCount(Integer telephoneCount) { this.telephoneCount = telephoneCount; }
+    public Integer getWrittenCount() { return writtenCount;}
+    public void setWrittenCount(Integer writtenCount) { this.writtenCount = writtenCount; }
     public Integer getInvolved() { return involved;}
     public void setInvolved(Integer involved) { this.involved= involved;}
+    public String getEdmUrl() { return edmUrl;}
+    public void setEdmUrl(String edmUrl) { this.edmUrl= edmUrl; }
 
     public String getLobbyingDayAttending() { return lobbyingDayAttending; }
     public void setLobbyingDayAttending(String lobbyingDatAttending) { this.lobbyingDayAttending = lobbyingDayAttending; }

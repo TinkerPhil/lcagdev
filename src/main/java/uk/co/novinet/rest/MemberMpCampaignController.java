@@ -38,8 +38,8 @@ public class MemberMpCampaignController {
             @RequestParam(value = "campaignNotes", required = false) String campaignNotes,
             @RequestParam(value = "meetingNext", required = false) String meetingNext,
             @RequestParam(value = "meetingCount", required = false) Integer meetingCount,
-            @RequestParam(value = "letterCount", required = false) Integer letterCount,
-            @RequestParam(value = "emailCount", required = false) Integer emailCount,
+            @RequestParam(value = "telephoneCount", required = false) Integer telephoneCount,
+            @RequestParam(value = "writtenCount", required = false) Integer writtenCount,
             @RequestParam(value = "involved", required=false) Integer involved
     ) {
         service.update(
@@ -49,8 +49,8 @@ public class MemberMpCampaignController {
                 campaignNotes,
                 meetingNext,
                 meetingCount,
-                letterCount,
-                emailCount,
+                telephoneCount,
+                writtenCount,
                 involved
         );
         return new ResponseEntity(HttpStatus.OK);

@@ -36,6 +36,7 @@ public class MpService {
         put("constituency", "m.constituency");
         put("constituencyAddress", "m.constituencyAddress");
         put("edmStatus", "m.edmStatus");
+        put("edmUrl", "m.edmUrl");
         put("ministerialStatus", "m.ministerialStatus");
         put("url", "m.url");
         put("majority", "m.majority");
@@ -56,6 +57,7 @@ public class MpService {
             String constituency,
             String constituencyAddress,
             String edmStatus,
+            String edmUrl,
             String ministerialStatus,
             String url,
             Integer majority,
@@ -85,6 +87,7 @@ public class MpService {
                 "m.constituency = ?, " +
                 "m.constituencyAddress = ?, " +
                 "m.edmStatus = ?, " +
+                "m.edmUrl = ?, " +
                 "m.ministerialStatus = ?, " +
                 "m.url = ?, " +
                 "m.majority = ?, " +
@@ -107,6 +110,7 @@ public class MpService {
                 constituency,
                 constituencyAddress,
                 edmStatus,
+                edmUrl,
                 ministerialStatus,
                 url,
                 majority,
@@ -155,7 +159,7 @@ public class MpService {
 
     private String buildMpTableSelect() {
         return "select m.mpId, m.lastName, m.firstName, m.mpName, m.party, m.twitter, m.email, " +
-                "m.constituency, m.constituencyAddress, m.edmStatus, m.ministerialStatus, m.url, m.majority," +
+                "m.constituency, m.constituencyAddress, m.edmStatus, m.edmUrl, m.ministerialStatus, m.url, m.majority," +
                 "m.pCon, m.mpGroupNo, m.telNo, m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, u.name as administratorName " +
                 "from " + mpTableName() + " m left join " + usersTableName() + " u on u.uid = m.uidAdministrator ";
     }
@@ -305,6 +309,7 @@ public class MpService {
                 rs.getString("constituency"),
                 rs.getString("constituencyAddress"),
                 rs.getString("edmStatus"),
+                rs.getString("edmUrl"),
                 rs.getString("ministerialStatus"),
                 rs.getString("url"),
                 rs.getLong("majority"),
