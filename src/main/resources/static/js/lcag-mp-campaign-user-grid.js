@@ -12,7 +12,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
 //                { name: "allowEmailShareStatus", label: "Share e-mail", width: 150, formatter: lcag.MpCampaignUserGrid.formatters.allowEmailShareStatus },
 //                { name: "sentInitialEmail", label: "Initial e-mail", width: 150, formatter: lcag.MpCampaignUserGrid.formatters.sentInitialEmail },
                 { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.campaignNotes },
-                { name: "action", label: "", width: 250, formatter: lcag.MpCampaignUserGrid.formatters.action, search: false },
+                { name: "action", label: "", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.action, search: false },
                 { name: "meetingNext", label: "Next meeting", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
 //                { name: "meetingNext", label: "Next Meeting", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.meetingNext },
 //                {name:'meetingNext',index:'meetingNext',width:120, formatter: 'date', formatoptions: { srcformat: 'U/1000', newformat:'m/d/Y' }},

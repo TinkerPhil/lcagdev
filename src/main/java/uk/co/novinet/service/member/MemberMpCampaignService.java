@@ -101,7 +101,7 @@ public class MemberMpCampaignService {
     private String buildUserTableSelect() {
         return "select umc.uid, u.name, ug.title as usergroup, m.mpName, a.name as administratorName, u.email, " +
                 "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, " +
-                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %h:%i') as meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
+                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') as meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
                 "u.username, u.postnum, u.threadnum, u.lastvisit, u.schemes, u.lobbying_day_attending as lobbyingDayAttending, m.edmUrl " +
                 "from " + mpCampaignUsersTableName() + " umc " +
                 " inner join " + usersTableName() + " u on u.uid = umc.uid " +
