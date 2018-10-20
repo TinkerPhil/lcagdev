@@ -10,6 +10,7 @@ import uk.co.novinet.service.PersistenceUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.*;
 
 import static uk.co.novinet.service.PersistenceUtils.*;
@@ -39,6 +40,7 @@ public class MemberMpCampaignService {
         put("involved", "umc.involved");
         put("edmUrl", "m.edmUrl");
         put("campaignNotes", "umc.campaignNotes");
+        put("telNo", "umc.telNo");
     }};
 
     public void update(
@@ -46,6 +48,7 @@ public class MemberMpCampaignService {
             String allowEmailShareStatus,
             String sentInitialEmail,
             String campaignNotes,
+            String telNo,
             String meetingNext,
             Integer meetingCount,
             Integer telephoneCount,
@@ -63,6 +66,7 @@ public class MemberMpCampaignService {
                 "set umc.allowEmailShareStatus = ?," +
                 " umc.sentInitialEmail = ?," +
                 " umc.campaignNotes = ?, " +
+                " umc.telNo = ?, " +
                 " umc.meetingNext = STR_TO_DATE(?, '%Y%m%d %H:%i'), " +
                 " umc.meetingCount = ?, " +
                 " umc.telephoneCount = ?, " +
@@ -77,6 +81,7 @@ public class MemberMpCampaignService {
                 allowEmailShareStatus,
                 sentInitialEmail,
                 campaignNotes,
+                telNo,
                 meetingNext,
                 meetingCount,
                 telephoneCount,
@@ -94,8 +99,9 @@ public class MemberMpCampaignService {
     }
 
     private String buildUserTableSelect() {
-        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, a.name as administratorName, u.email, umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, " +
-                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') AS meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
+        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, a.name as administratorName, u.email, " +
+                "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, " +
+                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %h:%i') as meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
                 "u.username, u.postnum, u.threadnum, u.lastvisit, u.schemes, u.lobbying_day_attending as lobbyingDayAttending, m.edmUrl " +
                 "from " + mpCampaignUsersTableName() + " umc " +
                 " inner join " + usersTableName() + " u on u.uid = umc.uid " +
@@ -199,6 +205,7 @@ public class MemberMpCampaignService {
                 rs.getString("allowEmailShareStatus"),
                 rs.getString("sentInitialEmail"),
                 rs.getString("campaignNotes"),
+                rs.getString("telNo"),
                 rs.getString("meetingNext"),
                 rs.getInt("meetingCount"),
                 rs.getInt("telephoneCount"),

@@ -1,5 +1,8 @@
 package uk.co.novinet.service.member;
 
+import java.time.Instant;
+import java.util.Date;
+
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
 public class MemberMpCampaign {
@@ -16,6 +19,7 @@ public class MemberMpCampaign {
     private String allowEmailShareStatus;
     private String sentInitialEmail;
     private String campaignNotes;
+    private String telNo;
     private String meetingNext;
     private Integer meetingCount;
     private Integer telephoneCount;
@@ -41,6 +45,7 @@ public class MemberMpCampaign {
             String allowEmailShareStatus,
             String sentInitialEmail,
             String campaignNotes,
+            String telNo,
             String meetingNext,
             Integer meetingCount,
             Integer telephoneCount,
@@ -63,6 +68,7 @@ public class MemberMpCampaign {
         this.allowEmailShareStatus = allowEmailShareStatus;
         this.sentInitialEmail = sentInitialEmail;
         this.setCampaignNotes(campaignNotes);
+        this.telNo = telNo;
         this.setMeetingNext(meetingNext);
         this.meetingCount = meetingCount;
         this.telephoneCount = telephoneCount;
@@ -106,8 +112,10 @@ public class MemberMpCampaign {
     public void setSentInitialEmail(String sentInitialEmail) { this.sentInitialEmail = sentInitialEmail; }
     public String getCampaignNotes() { return campaignNotes;}
     public void setCampaignNotes(String campaignNotes) { if(campaignNotes == null || campaignNotes.equals("null")) { campaignNotes = ""; } this.campaignNotes = campaignNotes; }
+    public String getTelNo() { return telNo;}
+    public void setTelNo(String telNo) { this.telNo = telNo; }
     public String getMeetingNext() { return meetingNext;}
-    public void setMeetingNext(String meetingNext) { if( meetingNext == null || meetingNext.equals("null")) { meetingNext=""; } this.meetingNext= meetingNext; }
+    public void setMeetingNext(String meetingNext) { this.meetingNext= meetingNext; }
     public Integer getMeetingCount() { return meetingCount;}
     public void setMeetingCount(Integer meetingCount) { this.meetingCount= meetingCount; }
     public Integer getTelephoneCount() { return telephoneCount;}

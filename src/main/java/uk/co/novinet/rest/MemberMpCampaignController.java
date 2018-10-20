@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import uk.co.novinet.service.member.MemberMpCampaign;
 import uk.co.novinet.service.member.MemberMpCampaignService;
 
+import java.time.Instant;
+import java.util.Date;
+
 @RestController
 public class MemberMpCampaignController {
 
@@ -36,6 +39,7 @@ public class MemberMpCampaignController {
             @RequestParam(value = "allowEmailShareStatus", required = false) String allowEmailShareStatus,
             @RequestParam(value = "sentInitialEmail", required = false) String sentInitialEmail,
             @RequestParam(value = "campaignNotes", required = false) String campaignNotes,
+            @RequestParam(value = "telNo", required = false) String telNo,
             @RequestParam(value = "meetingNext", required = false) String meetingNext,
             @RequestParam(value = "meetingCount", required = false) Integer meetingCount,
             @RequestParam(value = "telephoneCount", required = false) Integer telephoneCount,
@@ -47,6 +51,7 @@ public class MemberMpCampaignController {
                 allowEmailShareStatus,
                 sentInitialEmail,
                 campaignNotes,
+                telNo,
                 meetingNext,
                 meetingCount,
                 telephoneCount,
