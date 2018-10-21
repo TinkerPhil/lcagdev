@@ -166,7 +166,7 @@ public class MpService {
                 "m.constituency, m.constituencyAddress, m.edmStatus, m.edmUrl, m.ministerialStatus, m.url, m.majority," +
                 "m.pCon, m.mpGroupNo, m.telNo, " +
                 "m.tags, " +
-                "m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, u.name as administratorName " +
+                "m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, u.username as administratorName " +
                 "from " + mpTableName() + " m left join " + usersTableName() + " u on u.uid = m.uidAdministrator ";
     }
 
@@ -296,7 +296,7 @@ public class MpService {
                 if( i > 0 ) {
                     clause = clause + " OR ";
                 }
-                clause = clause + "umc.tags like ?";
+                clause = clause + "m.tags like ?";
                 parameters.add(like(tags[i]));
             }
             clause = clause + ")";
@@ -309,7 +309,7 @@ public class MpService {
         }
 
         if (mp.getAdministratorName() != null) {
-            clauses.add("lower(u.name) like ?");
+            clauses.add("lower(u.username) like ?");
             parameters.add(like(mp.getAdministratorName()));
         }
 

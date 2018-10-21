@@ -105,7 +105,7 @@ public class MemberMpCampaignService {
     }
 
     private String buildUserTableSelect() {
-        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, a.name as administratorName, u.email, " +
+        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, a.username as administratorName, u.email, " +
                 "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, " +
                 "umc.tags, " +
                 "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') as meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
@@ -172,7 +172,7 @@ public class MemberMpCampaignService {
         }
 
         if(member.getAdministratorName() != null ) {
-            clauses.add("lower(a.name) like ?");
+            clauses.add("lower(a.username) like ?");
             parameters.add(like(member.getAdministratorName()));
         }
         if(member.getMeetingCount() != null ) {
