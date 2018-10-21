@@ -41,6 +41,7 @@ public class MemberMpCampaignService {
         put("edmUrl", "m.edmUrl");
         put("campaignNotes", "umc.campaignNotes");
         put("telNo", "umc.telNo");
+        put("tags", "umc.tags");
     }};
 
     public void update(
@@ -49,6 +50,7 @@ public class MemberMpCampaignService {
             String sentInitialEmail,
             String campaignNotes,
             String telNo,
+            String tags,
             String meetingNext,
             Integer meetingCount,
             Integer telephoneCount,
@@ -67,6 +69,7 @@ public class MemberMpCampaignService {
                 " umc.sentInitialEmail = ?," +
                 " umc.campaignNotes = ?, " +
                 " umc.telNo = ?, " +
+                " umc.tags = ?, " +
                 " umc.meetingNext = STR_TO_DATE(?, '%Y%m%d %H:%i'), " +
                 " umc.meetingCount = ?, " +
                 " umc.telephoneCount = ?, " +
@@ -82,6 +85,7 @@ public class MemberMpCampaignService {
                 sentInitialEmail,
                 campaignNotes,
                 telNo,
+                tags,
                 meetingNext,
                 meetingCount,
                 telephoneCount,
@@ -101,6 +105,7 @@ public class MemberMpCampaignService {
     private String buildUserTableSelect() {
         return "select umc.uid, u.name, ug.title as usergroup, m.mpName, a.name as administratorName, u.email, " +
                 "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, " +
+                "umc.tags, " +
                 "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') as meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
                 "u.username, u.postnum, u.threadnum, u.lastvisit, u.schemes, u.lobbying_day_attending as lobbyingDayAttending, m.edmUrl " +
                 "from " + mpCampaignUsersTableName() + " umc " +
@@ -184,6 +189,19 @@ public class MemberMpCampaignService {
             clauses.add("umc.involved = ?");
             parameters.add(member.getInvolved());
         }
+        if(member.getTags() != null ) {
+            String[] tags = member.getTags().split(",");
+            String clause = "(";
+            for(int i = 0; i < tags.length; i++) {
+                if( i > 0 ) {
+                    clause = clause + " OR ";
+                }
+                clause = clause + "umc.tags like ?";
+                parameters.add(like(tags[i]));
+            }
+            clause = clause + ")";
+            clauses.add(clause);
+        }
 
 
 
@@ -206,6 +224,7 @@ public class MemberMpCampaignService {
                 rs.getString("sentInitialEmail"),
                 rs.getString("campaignNotes"),
                 rs.getString("telNo"),
+                rs.getString("tags"),
                 rs.getString("meetingNext"),
                 rs.getInt("meetingCount"),
                 rs.getInt("telephoneCount"),

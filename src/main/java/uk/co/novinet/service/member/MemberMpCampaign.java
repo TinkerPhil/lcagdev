@@ -20,6 +20,7 @@ public class MemberMpCampaign {
     private String sentInitialEmail;
     private String campaignNotes;
     private String telNo;
+    private String tags;
     private String meetingNext;
     private Integer meetingCount;
     private Integer telephoneCount;
@@ -46,6 +47,7 @@ public class MemberMpCampaign {
             String sentInitialEmail,
             String campaignNotes,
             String telNo,
+            String tags,
             String meetingNext,
             Integer meetingCount,
             Integer telephoneCount,
@@ -68,7 +70,8 @@ public class MemberMpCampaign {
         this.allowEmailShareStatus = allowEmailShareStatus;
         this.sentInitialEmail = sentInitialEmail;
         this.setCampaignNotes(campaignNotes);
-        this.telNo = telNo;
+        this.setTelNo(telNo);
+        this.setTags(tags);
         this.setMeetingNext(meetingNext);
         this.meetingCount = meetingCount;
         this.telephoneCount = telephoneCount;
@@ -113,9 +116,11 @@ public class MemberMpCampaign {
     public String getCampaignNotes() { return campaignNotes;}
     public void setCampaignNotes(String campaignNotes) { if(campaignNotes == null || campaignNotes.equals("null")) { campaignNotes = ""; } this.campaignNotes = campaignNotes; }
     public String getTelNo() { return telNo;}
-    public void setTelNo(String telNo) { this.telNo = telNo; }
+    public void setTelNo(String telNo) { if(telNo== null || telNo.equals("null")) { telNo = ""; } this.telNo= telNo; }
+    public String getTags() { return tags;}
+    public void setTags(String tags) { if(tags== null || tags.equals("null")) { tags = ""; } this.tags= tags; }
     public String getMeetingNext() { return meetingNext;}
-    public void setMeetingNext(String meetingNext) { this.meetingNext= meetingNext; }
+    public void setMeetingNext(String meetingNext) { if(meetingNext == null || meetingNext.equals("null")) { meetingNext = ""; } this.meetingNext = meetingNext; }
     public Integer getMeetingCount() { return meetingCount;}
     public void setMeetingCount(Integer meetingCount) { this.meetingCount= meetingCount; }
     public Integer getTelephoneCount() { return telephoneCount;}

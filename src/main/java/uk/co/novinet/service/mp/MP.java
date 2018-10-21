@@ -20,6 +20,7 @@ public class MP {
     private String pCon;
     private Integer mpGroupNo;
     private String telNo;
+    private String tags;
     private String campaignNotes;
     private String sharedCampaignEmails;
     private String privateCampaignEmails;
@@ -46,6 +47,7 @@ public class MP {
     	String pCon,
     	Integer mpGroupNo,
         String telNo,
+        String tags,
         String campaignNotes,
         String sharedCampaignEmails,
         String privateCampaignEmails,
@@ -68,7 +70,8 @@ public class MP {
 		this.pCon			        = pCon;
 		this.mpGroupNo = mpGroupNo;
 		this.telNo = telNo;
-		this.campaignNotes = campaignNotes;
+		this.setTags(tags);
+		this.setCampaignNotes(campaignNotes);
 		this.sharedCampaignEmails = sharedCampaignEmails;
 		this.privateCampaignEmails = privateCampaignEmails;
 		this.administratorName = administratorName;
@@ -176,12 +179,14 @@ public class MP {
     public void setTelNo(String telNo) {
         this.telNo = telNo;
     }
+    public String getTags() {
+        return tags;
+    }
+    public void setTags(String tags) { if(tags== null || tags.equals("null")) { tags= ""; } this.tags= tags; }
     public String getCampaignNotes() {
         return campaignNotes;
     }
-    public void setCampaignNotes(String campaignNotes) {
-        this.campaignNotes = campaignNotes;
-    }
+    public void setCampaignNotes(String campaignNotes) { if(campaignNotes== null || campaignNotes.equals("null")) { campaignNotes = ""; } this.campaignNotes= campaignNotes; }
     public String getSharedCampaignEmails() {
         return sharedCampaignEmails;
     }

@@ -80,11 +80,13 @@ public class MpController {
     public ResponseEntity updateCampaign(
             @RequestParam("id") Long MpId,
             @RequestParam(value = "edmStatus", required = false) String edmStatus,
+            @RequestParam(value = "tags", required = false) String tags,
             @RequestParam(value = "campaignNotes", required= false) String campaignNotes
     ) {
         mpService.updateCampaign(
                 MpId,
                 edmStatus,
+                tags,
                 campaignNotes
         );
         return new ResponseEntity(HttpStatus.OK);

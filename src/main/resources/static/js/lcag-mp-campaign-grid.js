@@ -10,6 +10,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 { name: "administratorName", label: "Administrator", width: 150, template: "string" },
                 { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignGrid.formatters.campaignNotes },
                 { name: "other", label: "", width: 600, formatter: lcag.MpCampaignGrid.formatters.other, search: false },
+                { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },
                 { name: "emails", label: "", width: 400, formatter: lcag.MpCampaignGrid.formatters.emails, search: false }
             ],
             datatype: function(postData) {
@@ -59,9 +60,10 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                               var id = $(rowContext).data("row-id");
                               lcag.Common.alertPleaseWait();
                               return {
-                                "id": id,
-                                "edmStatus": $("#edmStatus_" + id).val(),
-                                "campaignNotes": $("#campaignNotes_" + id).val()
+                                  "id": id,
+                                  "edmStatus": $("#edmStatus_" + id).val(),
+                                  "tags": $("#tags_" + id).val(),
+                                  "campaignNotes": $("#campaignNotes_" + id).val()
                             };
                           })(),
                           success: function(e) {
@@ -116,6 +118,9 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<tr></tr>'
                 + '<tr><td colspan="2" align="center"><button type="button" class="btn btn-default update-mp-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></td></tr>'
                 + '</table>';
+        },
+        "tags": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
         },
         "emails": function(cellvalue, options, row) {
             return '<table>'

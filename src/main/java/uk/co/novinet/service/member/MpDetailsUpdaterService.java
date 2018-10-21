@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MpDetailsUpdaterService {
-
+/*
     private static final Logger LOGGER = LoggerFactory.getLogger(MpDetailsUpdaterService.class);
 
     @Autowired
@@ -36,4 +36,5 @@ public class MpDetailsUpdaterService {
         }
 
     }
+*/
 }

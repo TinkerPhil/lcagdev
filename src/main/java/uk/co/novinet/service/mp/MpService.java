@@ -43,6 +43,7 @@ public class MpService {
         put("pCon", "m.pCon");
         put("mpGroupNo", "m.mpGroupNo");
         put("telNo", "m.telNo");
+        put("tags", "m.tags");
         put("campaignNotes", "m.campaignNotes");
     }};
 
@@ -126,7 +127,8 @@ public class MpService {
     public void updateCampaign(
             Long id,
             String edmStatus,
-            String campaignNotes
+            String campaignNotes,
+            String tags
     ) {
         LOGGER.info("Going to update MP with id {}", id);
         LOGGER.info( "mpId={}, edmStatus={}, campaignNotes={}",
@@ -137,6 +139,7 @@ public class MpService {
 
         String sql = "update " + mpTableName() + " m " +
                 "set m.edmStatus = ?, " +
+                "m.tags = ?, " +
                 "m.campaignNotes = ?" +
                 "where m.mpId = ?";
 
@@ -145,6 +148,7 @@ public class MpService {
         int result = jdbcTemplate.update(
                 sql,
                 edmStatus,
+                tags,
                 campaignNotes,
                 id
         );
@@ -160,7 +164,9 @@ public class MpService {
     private String buildMpTableSelect() {
         return "select m.mpId, m.lastName, m.firstName, m.mpName, m.party, m.twitter, m.email, " +
                 "m.constituency, m.constituencyAddress, m.edmStatus, m.edmUrl, m.ministerialStatus, m.url, m.majority," +
-                "m.pCon, m.mpGroupNo, m.telNo, m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, u.name as administratorName " +
+                "m.pCon, m.mpGroupNo, m.telNo, " +
+                "m.tags, " +
+                "m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, u.name as administratorName " +
                 "from " + mpTableName() + " m left join " + usersTableName() + " u on u.uid = m.uidAdministrator ";
     }
 
@@ -283,6 +289,19 @@ public class MpService {
             clauses.add("m.telNo = ?");
             parameters.add(mp.getTelNo());
         }
+        if(mp.getTags() != null ) {
+            String[] tags = mp.getTags().split(",");
+            String clause = "(";
+            for(int i = 0; i < tags.length; i++) {
+                if( i > 0 ) {
+                    clause = clause + " OR ";
+                }
+                clause = clause + "umc.tags like ?";
+                parameters.add(like(tags[i]));
+            }
+            clause = clause + ")";
+            clauses.add(clause);
+        }
 
         if (mp.getCampaignNotes() != null) {
             clauses.add("lower(m.campaignNotes) like ?");
@@ -316,6 +335,7 @@ public class MpService {
                 rs.getString("pCon"),
                 rs.getInt("mpGroupNo"),
                 rs.getString("telNo"),
+                rs.getString("tags"),
                 rs.getString( "campaignNotes"),
                 rs.getString("sharedCampaignEmails"),
                 rs.getString( "privateCampaignEmails"),
