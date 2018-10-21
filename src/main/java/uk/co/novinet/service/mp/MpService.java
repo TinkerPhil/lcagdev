@@ -127,8 +127,8 @@ public class MpService {
     public void updateCampaign(
             Long id,
             String edmStatus,
-            String campaignNotes,
-            String tags
+            String tags,
+            String campaignNotes
     ) {
         LOGGER.info("Going to update MP with id {}", id);
         LOGGER.info( "mpId={}, edmStatus={}, campaignNotes={}",
@@ -290,7 +290,7 @@ public class MpService {
             parameters.add(mp.getTelNo());
         }
         if(mp.getTags() != null ) {
-            String[] tags = mp.getTags().split(",");
+            String[] tags = mp.getTags().split(" *, *");
             String clause = "(";
             for(int i = 0; i < tags.length; i++) {
                 if( i > 0 ) {

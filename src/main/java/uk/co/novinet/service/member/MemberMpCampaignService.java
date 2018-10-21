@@ -58,8 +58,10 @@ public class MemberMpCampaignService {
             Integer involved
             ) {
         LOGGER.info("Going to update usersMpCampaign with id {}", id);
-        LOGGER.info("allowEmailShareStatus={}, sentInitialEmail=(), campaignNotes={}",
-                allowEmailShareStatus, sentInitialEmail, campaignNotes
+        LOGGER.info("allowEmailShareStatus={}, sentInitialEmail=(), campaignNotes={}, telNo={}, tags={}, meetingNext={}, meetingCount={}, telephoneCount={}, writtenCount={}, involved={}",
+                allowEmailShareStatus, sentInitialEmail, campaignNotes,
+                telNo,tags, meetingNext, meetingCount, telephoneCount,
+                writtenCount, involved
         );
 
         MemberMpCampaign existingMember = getMemberById(id);
@@ -189,8 +191,12 @@ public class MemberMpCampaignService {
             clauses.add("umc.involved = ?");
             parameters.add(member.getInvolved());
         }
+        if(member.getMeetingNext() != null ) {
+            clauses.add("DATE(umc.meetingNext) = DATE(?)");
+            parameters.add(member.getMeetingNext());
+        }
         if(member.getTags() != null ) {
-            String[] tags = member.getTags().split(",");
+            String[] tags = member.getTags().split(" *, *");
             String clause = "(";
             for(int i = 0; i < tags.length; i++) {
                 if( i > 0 ) {
