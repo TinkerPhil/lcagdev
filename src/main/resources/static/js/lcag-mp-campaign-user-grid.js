@@ -21,7 +21,8 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 { name: "writtenCount", label: "Written", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.writtenCount },
                 { name: "involved", label: "Involved", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.involved },
                 { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },
-                { name: "email", label: "email", width: 150, template: "string" }
+                { name: "email", label: "email", width: 150, template: "string" },
+                { name: "mpConstituency", label: "Constituency", width: 150, template: "string" }
 
             ],
             datatype: function(postData) {

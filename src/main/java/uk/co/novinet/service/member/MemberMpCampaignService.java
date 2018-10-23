@@ -29,6 +29,7 @@ public class MemberMpCampaignService {
         put("id", "umc.uid");
         put("name", "u.name");
         put("mpName", "u.mp_name");
+        put("mpConstituency", "u.mp_constituency");
         put("email", "u.email");
         put("administratorName", "a.name");
         put("allowEmailShareStatus", "umc.allowEmailShareStatus");
@@ -105,7 +106,7 @@ public class MemberMpCampaignService {
     }
 
     private String buildUserTableSelect() {
-        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, a.username as administratorName, u.email, " +
+        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, m.constituency, a.username as administratorName, u.email, " +
                 "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, " +
                 "umc.tags, " +
                 "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') as meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
@@ -169,6 +170,10 @@ public class MemberMpCampaignService {
             clauses.add("lower(m.mpName) like ?");
             parameters.add(like(member.getMpName()));
         }
+        if (member.getMpConstituency() != null) {
+            clauses.add("lower(m.constituency) like ?");
+            parameters.add(like(member.getMpConstituency()));
+        }
 
         if(member.getAdministratorName() != null ) {
             clauses.add("lower(a.username) like ?");
@@ -224,6 +229,7 @@ public class MemberMpCampaignService {
                 rs.getLong("uid"),
                 rs.getString("name"),
                 rs.getString("mpName"),
+                rs.getString("constituency"),
                 rs.getString("email"),
                 rs.getString("username"),
                 rs.getString("usergroup"),

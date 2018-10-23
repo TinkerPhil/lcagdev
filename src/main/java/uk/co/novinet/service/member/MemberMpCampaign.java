@@ -9,6 +9,7 @@ public class MemberMpCampaign {
     private Long id;
     private String name;
     private String mpName;
+    private String mpConstituency;
     private String email;
     private String username;
     private String usergroup;
@@ -36,6 +37,7 @@ public class MemberMpCampaign {
             Long id,
             String name,
             String mpName,
+            String mpConstituency,
             String email,
             String username,
             String usergroup,
@@ -60,6 +62,7 @@ public class MemberMpCampaign {
         this.id = id;
         this.name = name;
         this.mpName = mpName;
+        this.mpConstituency = mpConstituency;
         this.email = email;
         this.username= username;
         this.usergroup = usergroup;
@@ -93,6 +96,8 @@ public class MemberMpCampaign {
     public void setName(String name) { this.name = name; }
     public String getMpName() { return mpName;    }
     public void setMpName(String mpName) { this.mpName = mpName;    }
+    public String getMpConstituency() { return mpConstituency;    }
+    public void setMpConstituency(String mpConstituency) { this.mpConstituency = mpConstituency;    }
     public String getEmail() { return email;    }
     public void setEmail(String email) { this.email = email;    }
 

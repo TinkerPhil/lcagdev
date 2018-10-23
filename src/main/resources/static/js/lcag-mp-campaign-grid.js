@@ -129,7 +129,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<tr><th>Private</th><td>'+row.privateCampaignEmails+'</td></tr>'
                 + '<tr><th>Mail</th><td>'
                 + '<a href="mailto:'+row.sharedCampaignEmails+'">Shared</a><br>'
-                + '<a href="mailto:bcc='+row.privateCampaignEmails+'">Private</a><br>'
+                + '<a href="mailto:?bcc='+row.privateCampaignEmails+'">Private</a><br>'
                 + '<a href="mailto:'+row.sharedCampaignEmails+'?bcc='+row.privateCampaignEmails+'">Both</a>'
                 + '</td></tr>'
                 + '</table>';
