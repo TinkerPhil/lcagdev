@@ -211,6 +211,10 @@ public class MemberMpCampaignService {
             clauses.add("lower(u.email) like ?");
             parameters.add(like(member.getEmail()));
         }
+        if (member.getAllowEmailShareStatus() != null) {
+            clauses.add("lower(umc.allowEmailShareStatus) like ?");
+            parameters.add(like(member.getAllowEmailShareStatus()));
+        }
 
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
