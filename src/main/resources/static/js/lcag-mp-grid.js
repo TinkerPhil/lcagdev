@@ -146,13 +146,14 @@ lcag.MpGrid = lcag.MpGrid || {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="constituencyAddress_' + row.id + '" type="text" class="form-control" value="' + row.constituencyAddress + '"></div>';
         },
         "edmStatus": function(cellvalue, options, row) {
+            var val = cellvalue.substring(0,2).toUpperCase()
             //return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="edmStatus_' + row.id + '" type="text" class="form-control" value="' + row.edmStatus + '"></div>';
             return '<select id="edmStatus_' + row.id + '" class="form-control" >'
-                + '<option value="UNSET"' + (row.edmStatus == 'UNSET' ? 'selected="selected"' : '') + '>Unset</option>'
-                + '<option value="Signed" ' + (row.edmStatus == 'Signed' ? 'selected="selected"' : '') + '>Signed</option>'
-                + '<option value="Refused" ' + (row.edmStatus == 'Refused' ? 'selected="selected"' : '') + '>Refused</option>'
-                + '<option value="No Point" ' + (row.edmStatus == 'No Point' ? 'selected="selected"' : '') + '>No Point</option>'
-                + '<option value="Sympathetic" ' + (row.edmStatus == 'Sympathetic' ? 'selected="selected"' : '') + '>Sympathetic</option></select>';
+                + '<option value="UNSET"' + (val === 'UN' ? 'selected="selected"' : '') + '>Unset</option>'
+                + '<option value="Signed" ' + (val === 'SI' ? 'selected="selected"' : '') + '>Signed</option>'
+                + '<option value="Refused" ' + (val === 'RE' ? 'selected="selected"' : '') + '>Refused</option>'
+                + '<option value="No Point" ' + (val === 'NO' ? 'selected="selected"' : '') + '>No Point</option>'
+                + '<option value="Sympathetic" ' + (val === 'SY' ? 'selected="selected"' : '') + '>' + val +'XXXSympathetic</option></select>';
         },
         "ministerialStatus": function(cellvalue, options, row) {
             var disabled = !(row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators");

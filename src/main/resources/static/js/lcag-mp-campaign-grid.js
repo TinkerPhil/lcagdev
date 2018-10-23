@@ -93,14 +93,15 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
         },
 
         "other": function(cellvalue, options, row) {
+            var edm = row.edmStatus.substring(0,2).toUpperCase();
             return '<table>'
                 + '<tr><th>EDM</th><td width="100">'
                 + '<select id="edmStatus_' + row.id + '" class="form-control" >'
-                + '<option value="UNSET"' + (row.edmStatus == 'UNSET ' ? 'selected="selected"' : '') + '>Unset</option>'
-                + '<option value="Signed" ' + (row.edmlStatus == 'Signed' ? 'selected="selected"' : '') + '>Signed</option>'
-                + '<option value="Refused" ' + (row.edmStatus == 'Refused' ? 'selected="selected"' : '') + '>Refused</option>'
-                + '<option value="No Point" ' + (row.edmStatus == 'No Point' ? 'selected="selected"' : '') + '>No Point</option>'
-                + '<option value="Sympathetic" ' + (row.edmStatus == 'Sympathetic' ? 'selected="selected"' : '') + '>Sympathetic</option></select>'
+                + '<option value="UNSET"' + (edm === 'UN ' ? 'selected="selected"' : '') + '>Unset</option>'
+                + '<option value="Signed" ' + (edm === 'SI' ? 'selected="selected"' : '') + '>Signed</option>'
+                + '<option value="Refused" ' + (edm === 'RE' ? 'selected="selected"' : '') + '>Refused</option>'
+                + '<option value="No Point" ' + (edm === 'NO' ? 'selected="selected"' : '') + '>No Point</option>'
+                + '<option value="Sympathetic" ' + (edm === 'SY' ? 'selected="selected"' : '') + '>Sympathetic</option></select>'
                 + '</td></tr>'
                 + '<tr><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
                 + '<tr><th>Party</th><td>'+row.party +'</td></tr>'

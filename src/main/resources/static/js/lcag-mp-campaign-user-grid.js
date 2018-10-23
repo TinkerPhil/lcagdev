@@ -20,7 +20,8 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 { name: "telephoneCount", label: "Telephone", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.telephoneCount },
                 { name: "writtenCount", label: "Written", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.writtenCount },
                 { name: "involved", label: "Involved", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.involved },
-                { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags }
+                { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },
+                { name: "email", label: "email", width: 150, template: "string" }
 
             ],
             datatype: function(postData) {

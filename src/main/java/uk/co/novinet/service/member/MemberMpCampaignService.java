@@ -114,8 +114,7 @@ public class MemberMpCampaignService {
                 " inner join " + usersTableName() + " u on u.uid = umc.uid " +
                 " inner join " + userGroupsTableName() + " ug on ug.gid=u.usergroup " +
                 "left outer join " + mpTableName() + " m on m.mpId = umc.mpId " +
-                "left outer join "+ mpCampaignVolunteerTableName() + " mcv on mcv.mpGroupNo = m.mpGroupNo " +
-                "left outer join " + usersTableName() + " a on a.uid = mcv.uid ";
+                "left outer join " + usersTableName() + " a on a.uid = m.uidAdministrator ";
     }
 
     private String buildUserTableGroupBy() {
@@ -208,8 +207,10 @@ public class MemberMpCampaignService {
             clause = clause + ")";
             clauses.add(clause);
         }
-
-
+        if (member.getEmail() != null) {
+            clauses.add("lower(u.email) like ?");
+            parameters.add(like(member.getEmail()));
+        }
 
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
