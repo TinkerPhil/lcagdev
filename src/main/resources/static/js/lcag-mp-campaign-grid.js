@@ -93,11 +93,11 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
         },
 
         "other": function(cellvalue, options, row) {
-            var edm = row.edmStatus.substring(0,4).toUpperCase();
+            var edm = row.edmStatus.substring(0,3).toUpperCase();
             return '<table>'
                 + '<tr><th>EDM</th><td width="100">'
                 + '<select id="edmStatus_' + row.id + '" class="form-control" >'
-                + '<option value="Not Asked"' + (edm === 'NOT' ? 'selected="selected"' : '') + '>Not ASked</option>'
+                + '<option value="Not Asked"' + (edm === 'NOT' ? 'selected="selected"' : '') + '>Not Asked</option>'
                 + '<option value="Signed" ' + (edm === 'SIG' ? 'selected="selected"' : '') + '>Signed</option>'
                 + '<option value="Refused" ' + (edm === 'REF' ? 'selected="selected"' : '') + '>Refused</option>'
                 + '<option value="No Point" ' + (edm === 'NO ' ? 'selected="selected"' : '') + '>No Point</option>'
