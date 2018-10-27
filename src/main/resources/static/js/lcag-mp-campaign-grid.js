@@ -95,7 +95,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
         "other": function(cellvalue, options, row) {
             var edm = row.edmStatus.substring(0,3).toUpperCase();
             return '<table>'
-                + '<tr><th>EDM</th><td width="100">'
+                + '<tr title="'+row.edmStatus+'"><th>EDM</th><td width="100">'
                 + '<select id="edmStatus_' + row.id + '" class="form-control" >'
                 + '<option value="Not Asked"' + (edm === 'NOT' ? 'selected="selected"' : '') + '>Not Asked</option>'
                 + '<option value="Signed" ' + (edm === 'SIG' ? 'selected="selected"' : '') + '>Signed</option>'
@@ -103,34 +103,45 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<option value="No Point" ' + (edm === 'NO ' ? 'selected="selected"' : '') + '>No Point</option>'
                 + '<option value="Sympathetic" ' + (edm === 'SYM' ? 'selected="selected"' : '') + '>Sympathetic</option></select>'
                 + '</td></tr>'
-                + '<tr><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
-                + '<tr><th>Party</th><td>'+row.party +'</td></tr>'
-                + '<tr><th>Ministerial</th><td>'+row.ministerialStatus +'</td></tr>'
-                + '<tr><th>Twitter</th><td>'+row.twitter +'</td></tr>'
-                + '<tr><th>Constituency</th><td>'+row.constituency+'</td></tr>'
-                + '<tr><th>Address</th><td>'+row.constituencyAddress+'</td></tr>'
+                + '<tr title="'+row.edmUrl+'"><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
+                + '<tr title="'+row.party+'"><th>Party</th><td>'+row.party +'</td></tr>'
+                + '<tr title="'+row.ministerialStatus+'"><th>Ministerial</th><td>'+row.ministerialStatus +'</td></tr>'
+                + '<tr title="'+row.twitter+'"><th>Twitter</th><td>'+row.twitter +'</td></tr>'
+                + '<tr title="'+row.constituency+'"><th>Constituency</th><td>'+row.constituency+'</td></tr>'
+                + '<tr title="'+row.constituencyAddress+'"><th>Address</th><td>'+row.constituencyAddress+'</td></tr>'
                 //+ '<tr><th>pCon</th><td>'+row.pCon+'</td></tr>'
-                + '<tr><th>mpGroupNo</th><td>'+row.mpGroupNo+'</td></tr>'
-                + '<tr><th>Majority</th><td>'+row.majority+'</td></tr>'
-                + '<tr><th>Telephone</th><td>'+row.telNo +'</td></tr>'
-                + '<tr><th>e-mail</th><td><a href="mailto:' + row.email +'">'+row.email +'</a></td></tr>'
-                + '<tr><th>URL</th><td><a href="'+row.url+'" target="_blank">'+row.url +'</a></td></tr>'
-                + '<tr></tr>'
-                + '<tr></tr>'
+                //+ '<tr><th>mpGroupNo</th><td>'+row.mpGroupNo+'</td></tr>'
+                + '<tr title="'+row.majority+'"><th>Majority</th><td>'+row.majority+'</td></tr>'
+                + '<tr title="'+row.telNo+'"><th>Telephone</th><td>'+row.telNo +'</td></tr>'
+                + '<tr title="'+row.email+'"><th>e-mail</th><td><a href="mailto:' + row.email +'">'+row.email +'</a></td></tr>'
+                + '<tr title="'+row.url+'"><th>URL</th><td><a href="'+row.url+'" target="_blank">'+row.url +'</a></td></tr>'
+                + '<tr><td colspan="2">&nbsp;</td> </tr>'
+                + '<tr><td colspan="2">&nbsp;</td> </tr>'
                 + '<tr><td colspan="2" align="center"><button type="button" class="btn btn-default update-mp-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></td></tr>'
                 + '</table>';
         },
         "tags": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
+            return '<div class="input-group"><textarea id="tags_' + row.id + '" type="textarea" rows="3" cols="100" class="form-control">' + row.tags + '</textarea></div>';
+//            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
         },
         "emails": function(cellvalue, options, row) {
+            var shared = row.sharedCampaignEmails;
+            var private = row.privateCampaignEmails;
+            if( shared == null) { shared="";}
+            var sharedCsv = shared.replaceAll(';',',');
+            if( private == null) { private="";}
+            var privateCsv = private.replaceAll(';',',');
             return '<table>'
-                + '<tr><th>Shared</th><td>'+row.sharedCampaignEmails+'</td></tr>'
-                + '<tr><th>Private</th><td>'+row.privateCampaignEmails+'</td></tr>'
-                + '<tr><th>Mail</th><td>'
-                + '<a href="mailto:'+row.sharedCampaignEmails+'">Shared</a><br>'
-                + '<a href="mailto:?bcc='+row.privateCampaignEmails+'">Private</a><br>'
-                + '<a href="mailto:'+row.sharedCampaignEmails+'?bcc='+row.privateCampaignEmails+'">Both</a>'
+                + '<tr title="'+shared+'"><th>Shared (;)</th><td>&nbsp;</td><td>'+shared+'</td></tr>'
+                + '<tr title="'+private+'"><th>Private (;)</th><td>&nbsp;</td><td>'+private+'</td></tr>'
+                + '<tr title=""><td colspan="3">&nbsp;</td> </tr>'
+                + '<tr title="'+sharedCsv+'"><th>Shared (,)</th><td>&nbsp;</td><td>'+sharedCsv+'</td></tr>'
+                + '<tr title="'+privateCsv+'"><th>Private (,)</th><td>&nbsp;</td><td>'+privateCsv+'</td></tr>'
+                + '<tr title=""><td colspan="3">&nbsp;</td> </tr>'
+                + '<tr title=""><th>Mail</th><td>&nbsp;</td><td>'
+                + '<a href="mailto:'+shared+'">Shared</a><br>'
+                + '<a href="mailto:?bcc='+private+'">Private</a><br>'
+                + '<a href="mailto:'+shared+'?bcc='+private+'">Both</a>'
                 + '</td></tr>'
                 + '</table>';
         },

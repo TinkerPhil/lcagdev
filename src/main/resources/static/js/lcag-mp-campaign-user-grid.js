@@ -13,9 +13,8 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
 //                { name: "sentInitialEmail", label: "Initial e-mail", width: 150, formatter: lcag.MpCampaignUserGrid.formatters.sentInitialEmail },
                 { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.campaignNotes },
                 { name: "action", label: "", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.action, search: false },
-                { name: "meetingNext", label: "Next meeting", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
-//                { name: "meetingNext", label: "Next Meeting", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.meetingNext },
-//                {name:'meetingNext',index:'meetingNext',width:120, formatter: 'date', formatoptions: { srcformat: 'U/1000', newformat:'m/d/Y' }},
+//                { name: "meetingNext", label: "Next meeting", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
+                { name: "meetingNext", label: "Next meeting", width: 150, align: "center", sorttype: "date", formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
                 { name: "meetingCount", label: "Meetings", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingCount },
                 { name: "telephoneCount", label: "Telephone", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.telephoneCount },
                 { name: "writtenCount", label: "Written", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.writtenCount },
@@ -100,6 +99,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 $('.date').datepicker({
                     autoclose: true,
                     format: "dd/mm/yyyy"
+                    //format: "LT"
                 });
             }
         }).jqGrid("filterToolbar", {
@@ -132,10 +132,27 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
               + '<option value="Y" ' + (row.sentInitialEmail == 'Y' ? 'selected="selected"' : '') + '>Yes</option></select>'
                 + '</div>';
         },
+//        "meetingNext": function(cellvalue, options, row) {
+//            return '<div class="input-group"><input id="meetingNext_' + row.id + '" type="text" class="form-control input-small" value="' + row.meetingNext + '"></div>';
+//        },
         "meetingNext": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="meetingNext_' + row.id + '" type="text" class="form-control input-small" value="' + row.meetingNext + '"></div>';
-//            return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + ' id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + row.meetingNext + '"></div>';
+            var dateString = row.meetingNext == null ? "" : moment(row.meetingNext).format("DD/MM/YYYY");
+            return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input  id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
+
         },
+//        "meetingNext": function(cellvalue, options, row) {
+//            //var datetimeString = row.meetingNext == null ? "" : moment(row.meetingNext).format("DD/MM/YYYY hh:mm");
+//            return '<div class="col-sm-6">' +
+//                    '<div class="form-group">' +
+//                        '<div class="input-group date" id="meetingNext_' + row.id + '">' +
+//                            '<input type="text" class="form-control">' +
+//                            '<span class="input-group-addon">' +
+//                                '<span class="glyphicon glyphicon-time"></span>' +
+//                            '</span>' +
+//                        '</div>' +
+//                    '</div>' +
+//                '</div>';
+//        },
         "meetingCount": function(cellvalue, options, row) {
             return '<div class="input-group"><input id="meetingCount_' + row.id + '" type="text" class="form-control" value="' + row.meetingCount + '"></div>';
         },
@@ -149,7 +166,8 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             return '<div class="input-group"><input id="involved_' + row.id + '" type="text" class="form-control input-small" value="' + row.involved + '"></div>';
         },
         "tags": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
+            return '<div class="input-group"><textarea id="tags_' + row.id + '" rows="3" cols="100" class="form-control">' + row.tags + '</textarea></div>';
+//            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
         },
         "action": function(cellvalue, options, row) {
             return '<table>'
@@ -161,7 +179,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
 //                + '<tr><th>Last Visit</th><td>'+row.lastvisit +'</td></tr>'
                 + '<tr><th>Schemes</th><td>'+row.schemes +'</td></tr>'
                 + '<tr><th>Tel No</th><td>'
-                + '<div class="input-group"><input id="telNo_' + row.id + '" type="text" class="form-control" value="' + row.telNo + '"></div>'
+                + '<div class="input-group"><input id="telNo_' + row.id + '" width="150" type="text" class="form-control" value="' + row.telNo + '"></div>'
                 + '</td></tr>'
                 + '<tr><th>MP</th><td>'+row.mpName+'</td></tr>'
                 + '<tr><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'

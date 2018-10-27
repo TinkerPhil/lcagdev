@@ -3,6 +3,7 @@ package uk.co.novinet.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,8 @@ public class MemberMpCampaignController {
             @RequestParam(value = "campaignNotes", required = false) String campaignNotes,
             @RequestParam(value = "telNo", required = false) String telNo,
             @RequestParam(value = "tags", required = false) String tags,
-            @RequestParam(value = "meetingNext", required = false) String meetingNext,
+//            @RequestParam(value = "meetingNext", required = false) Instant meetingNext,
+            @RequestParam(value = "meetingNext", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") Date meetingNext,
             @RequestParam(value = "meetingCount", required = false) Integer meetingCount,
             @RequestParam(value = "telephoneCount", required = false) Integer telephoneCount,
             @RequestParam(value = "writtenCount", required = false) Integer writtenCount,
@@ -54,6 +56,7 @@ public class MemberMpCampaignController {
                 campaignNotes,
                 telNo,
                 tags,
+//                meetingNext,
                 meetingNext,
                 meetingCount,
                 telephoneCount,

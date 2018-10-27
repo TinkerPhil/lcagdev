@@ -52,7 +52,7 @@ public class MemberMpCampaignService {
             String campaignNotes,
             String telNo,
             String tags,
-            String meetingNext,
+            Date meetingNext,
             Integer meetingCount,
             Integer telephoneCount,
             Integer writtenCount,
@@ -73,7 +73,7 @@ public class MemberMpCampaignService {
                 " umc.campaignNotes = ?, " +
                 " umc.telNo = ?, " +
                 " umc.tags = ?, " +
-                " umc.meetingNext = STR_TO_DATE(?, '%Y%m%d %H:%i'), " +
+                " umc.meetingNext = ?, " +
                 " umc.meetingCount = ?, " +
                 " umc.telephoneCount = ?, " +
                 " umc.writtenCount = ?, " +
@@ -82,6 +82,11 @@ public class MemberMpCampaignService {
 
         LOGGER.info("Created sql: {}", sql);
 
+        java.text.SimpleDateFormat sdf =
+                new java.text.SimpleDateFormat("yyyy-MM-dd");
+
+
+
         int result = jdbcTemplate.update(
                 sql,
                 allowEmailShareStatus,
@@ -89,7 +94,8 @@ public class MemberMpCampaignService {
                 campaignNotes,
                 telNo,
                 tags,
-                meetingNext,
+//                meetingNext,
+                sdf.format(meetingNext),
                 meetingCount,
                 telephoneCount,
                 writtenCount,
@@ -109,7 +115,9 @@ public class MemberMpCampaignService {
         return "select umc.uid, u.name, ug.title as usergroup, m.mpName, m.constituency, a.username as administratorName, u.email, " +
                 "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, " +
                 "umc.tags, " +
-                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') as meetingNext, umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
+//                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') as meetingNext, " +
+                "umc.meetingNext, " +
+                "umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
                 "u.username, u.postnum, u.threadnum, u.lastvisit, u.schemes, u.lobbying_day_attending as lobbyingDayAttending, m.edmUrl " +
                 "from " + mpCampaignUsersTableName() + " umc " +
                 " inner join " + usersTableName() + " u on u.uid = umc.uid " +
@@ -196,7 +204,7 @@ public class MemberMpCampaignService {
             parameters.add(member.getInvolved());
         }
         if(member.getMeetingNext() != null ) {
-            clauses.add("DATE(umc.meetingNext) = DATE(?)");
+            clauses.add("umc.meetingNext = ?");
             parameters.add(member.getMeetingNext());
         }
         if(member.getTags() != null ) {
@@ -242,7 +250,8 @@ public class MemberMpCampaignService {
                 rs.getString("campaignNotes"),
                 rs.getString("telNo"),
                 rs.getString("tags"),
-                rs.getString("meetingNext"),
+                //rs.getString("meetingNext"),
+                rs.getDate("meetingNext"),
                 rs.getInt("meetingCount"),
                 rs.getInt("telephoneCount"),
                 rs.getInt( "writtenCount"),

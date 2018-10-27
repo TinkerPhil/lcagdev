@@ -22,7 +22,7 @@ public class MemberMpCampaign {
     private String campaignNotes;
     private String telNo;
     private String tags;
-    private String meetingNext;
+    private Date meetingNext;
     private Integer meetingCount;
     private Integer telephoneCount;
     private Integer writtenCount;
@@ -50,7 +50,7 @@ public class MemberMpCampaign {
             String campaignNotes,
             String telNo,
             String tags,
-            String meetingNext,
+            Date meetingNext,
             Integer meetingCount,
             Integer telephoneCount,
             Integer writtenCount,
@@ -75,7 +75,7 @@ public class MemberMpCampaign {
         this.setCampaignNotes(campaignNotes);
         this.setTelNo(telNo);
         this.setTags(tags);
-        this.setMeetingNext(meetingNext);
+        this.meetingNext = meetingNext;
         this.meetingCount = meetingCount;
         this.telephoneCount = telephoneCount;
         this.writtenCount = writtenCount;
@@ -124,8 +124,8 @@ public class MemberMpCampaign {
     public void setTelNo(String telNo) { if(telNo== null || telNo.equals("null")) { telNo = ""; } this.telNo= telNo; }
     public String getTags() { return tags;}
     public void setTags(String tags) { if(tags== null || tags.equals("null")) { tags = ""; } this.tags= tags; }
-    public String getMeetingNext() { return meetingNext;}
-    public void setMeetingNext(String meetingNext) { if(meetingNext == null || meetingNext.equals("null")) { meetingNext = ""; } this.meetingNext = meetingNext; }
+    public Date getMeetingNext() { return meetingNext;}
+    public void setMeetingNext(Date meetingNext) { this.meetingNext = meetingNext; }
     public Integer getMeetingCount() { return meetingCount;}
     public void setMeetingCount(Integer meetingCount) { this.meetingCount= meetingCount; }
     public Integer getTelephoneCount() { return telephoneCount;}
