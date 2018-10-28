@@ -95,7 +95,7 @@ public class MemberMpCampaignService {
                 telNo,
                 tags,
 //                meetingNext,
-                sdf.format(meetingNext),
+                meetingNext == null ? meetingNext : sdf.format(meetingNext),
                 meetingCount,
                 telephoneCount,
                 writtenCount,
