@@ -1,4 +1,4 @@
 import org.openqa.selenium.chrome.ChromeDriver
 
-System.setProperty("webdriver.chrome.driver", "/Users/rcgeorge23/Documents/workspace/lcagautomation/browser-drivers/chromedriver");
+System.setProperty("webdriver.chrome.driver", "/Users/phil/Documents/GitHub/lcagautomation/browser-drivers/chromedriver");
 driver = { new ChromeDriver() }
