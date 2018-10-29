@@ -224,6 +224,10 @@ public class MemberMpCampaignService {
             clauses.add("lower(u.email) like ?");
             parameters.add(like(member.getEmail()));
         }
+        if (member.getUsername() != null) {
+            clauses.add("lower(u.username) like ?");
+            parameters.add(like(member.getUsername()));
+        }
         if (member.getAllowEmailShareStatus() != null) {
             clauses.add("lower(umc.allowEmailShareStatus) like ?");
             parameters.add(like(member.getAllowEmailShareStatus()));
