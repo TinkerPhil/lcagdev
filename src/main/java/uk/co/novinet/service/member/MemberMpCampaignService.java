@@ -39,9 +39,13 @@ public class MemberMpCampaignService {
         put("telephoneCount", "umc.telephoneCount");
         put("writtenCount", "umc.writtenCount");
         put("involved", "umc.involved");
-        put("edmUrl", "m.edmUrl");
         put("campaignNotes", "umc.campaignNotes");
         put("telNo", "umc.telNo");
+        put("edmUrl", "m.edmUrl");
+        put("edmStatus", "m.edmStatus");
+        put("mpTelNo", "m.telNo");
+        put("mpEmail", "m.email");
+        put("mpTwitter", "m.twitter");
         put("tags", "umc.tags");
     }};
 
@@ -112,18 +116,20 @@ public class MemberMpCampaignService {
     }
 
     private String buildUserTableSelect() {
-        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, m.constituency, a.username as administratorName, u.email, " +
-                "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, " +
-                "umc.tags, " +
-//                "DATE_FORMAT(umc.meetingNext, '%Y%m%d %H:%i') as meetingNext, " +
-                "umc.meetingNext, " +
-                "umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, " +
-                "u.username, u.postnum, u.threadnum, u.lastvisit, u.schemes, u.lobbying_day_attending as lobbyingDayAttending, m.edmUrl " +
-                "from " + mpCampaignUsersTableName() + " umc " +
-                " inner join " + usersTableName() + " u on u.uid = umc.uid " +
-                " inner join " + userGroupsTableName() + " ug on ug.gid=u.usergroup " +
-                "left outer join " + mpTableName() + " m on m.mpId = umc.mpId " +
-                "left outer join " + usersTableName() + " a on a.uid = m.uidAdministrator ";
+        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, m.party, m.constituency, m.majority, a.username as administratorName, u.email, "
+                + "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, "
+                + "umc.tags, "
+                + "umc.meetingNext, "
+                + "umc.meetingCount, umc.telephoneCount, umc.writtenCount, umc.involved, "
+                + "u.username, u.postnum, u.threadnum, u.lastvisit, u.schemes, u.lobbying_day_attending as lobbyingDayAttending, "
+                + "m.edmUrl, m.edmStatus, m.telNo as mpTelNo, m.email as mpEmail, m.twitter as mpTwitter, "
+                + "m.sharedCampaignEmails, m.privateCampaignEmails, "
+                + "m.parliamentaryEmail, m.constituencyEmail, m.properName "
+                + "from " + mpCampaignUsersTableName() + " umc "
+                + " inner join " + usersTableName() + " u on u.uid = umc.uid "
+                + " inner join " + userGroupsTableName() + " ug on ug.gid=u.usergroup "
+                + "left outer join " + mpTableName() + " m on m.mpId = umc.mpId "
+                + "left outer join " + usersTableName() + " a on a.uid = m.uidAdministrator ";
     }
 
     private String buildUserTableGroupBy() {
@@ -169,6 +175,10 @@ public class MemberMpCampaignService {
         List<String> clauses = new ArrayList<>();
         List<Object> parameters = new ArrayList<>();
 
+        if (member.getCampaignNotes() != null) {
+            clauses.add("lower(umc.campaignNotes) like ?");
+            parameters.add(like(member.getCampaignNotes()));
+        }
         if (member.getName() != null) {
             clauses.add("lower(u.name) like ?");
             parameters.add(like(member.getName()));
@@ -241,7 +251,9 @@ public class MemberMpCampaignService {
                 rs.getLong("uid"),
                 rs.getString("name"),
                 rs.getString("mpName"),
+                rs.getString("party"),
                 rs.getString("constituency"),
+                rs.getString("majority"),
                 rs.getString("email"),
                 rs.getString("username"),
                 rs.getString("usergroup"),
@@ -254,14 +266,22 @@ public class MemberMpCampaignService {
                 rs.getString("campaignNotes"),
                 rs.getString("telNo"),
                 rs.getString("tags"),
-                //rs.getString("meetingNext"),
                 rs.getDate("meetingNext"),
                 rs.getInt("meetingCount"),
                 rs.getInt("telephoneCount"),
                 rs.getInt( "writtenCount"),
                 rs.getInt("involved"),
-                rs.getString("edmUrl"),
                 rs.getString("lobbyingDayAttending"),
+                rs.getString("edmUrl"),
+                rs.getString("edmStatus"),
+                rs.getString("mpTelNo"),
+                rs.getString("mptwitter"),
+                rs.getString("mpEmail"),
+                rs.getString("sharedCampaignEmails"),
+                rs.getString("privateCampaignEmails"),
+                rs.getString("parliamentaryEmail"),
+                rs.getString("constituencyEmail"),
+                rs.getString("properName"),
                 rs.getString("administratorName")
         );
     }

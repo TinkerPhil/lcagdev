@@ -9,7 +9,9 @@ public class MemberMpCampaign {
     private Long id;
     private String name;
     private String mpName;
+    private String party;
     private String mpConstituency;
+    private String majority;
     private String email;
     private String username;
     private String usergroup;
@@ -27,9 +29,18 @@ public class MemberMpCampaign {
     private Integer telephoneCount;
     private Integer writtenCount;
     private Integer involved;
-    private String edmUrl;
     private String lobbyingDayAttending;
+    private String edmUrl;
+    private String edmStatus;
+    private String mpTelNo;
+    private String mpTwitter;
+    private String mpEmail;
+    private String sharedCampaignEmails;
+    private String privateCampaignEmails;
     private String administratorName;
+    private String parliamentaryEmail;
+    private String constituencyEmail;
+    private String properName;
 
     public MemberMpCampaign() {}
 
@@ -37,7 +48,9 @@ public class MemberMpCampaign {
             Long id,
             String name,
             String mpName,
+            String party,
             String mpConstituency,
+            String majority,
             String email,
             String username,
             String usergroup,
@@ -55,14 +68,25 @@ public class MemberMpCampaign {
             Integer telephoneCount,
             Integer writtenCount,
             Integer involved,
-            String edmUrl,
             String lobbyingDayAttending,
+            String edmUrl,
+            String edmStatus,
+            String mpTelNo,
+            String mpTwitter,
+            String mpEmail,
+            String sharedCampaignEmails,
+            String privateCampaignEmails,
+            String parliamentaryEmail,
+            String constituencyEmail,
+            String properName,
             String administratorName
             ) {
         this.id = id;
         this.name = name;
         this.mpName = mpName;
+        this.party= party;
         this.mpConstituency = mpConstituency;
+        this.majority = majority;
         this.email = email;
         this.username= username;
         this.usergroup = usergroup;
@@ -80,8 +104,18 @@ public class MemberMpCampaign {
         this.telephoneCount = telephoneCount;
         this.writtenCount = writtenCount;
         this.involved = involved;
-        this.edmUrl = edmUrl;
         this.lobbyingDayAttending = lobbyingDayAttending;
+
+        this.edmUrl = edmUrl;
+        this.edmStatus = edmStatus;
+        this.mpTelNo = mpTelNo;
+        this.mpTwitter = mpTwitter;
+        this.mpEmail = mpEmail;
+        this.sharedCampaignEmails = sharedCampaignEmails;
+        this.privateCampaignEmails = privateCampaignEmails;
+        this.parliamentaryEmail = parliamentaryEmail;
+        this.constituencyEmail = constituencyEmail;
+        this.properName = properName;
 
         this.administratorName = administratorName;
     }
@@ -96,8 +130,12 @@ public class MemberMpCampaign {
     public void setName(String name) { this.name = name; }
     public String getMpName() { return mpName;    }
     public void setMpName(String mpName) { this.mpName = mpName;    }
+    public String getParty() { return party;    }
+    public void setParty(String party) { this.party= party;    }
     public String getMpConstituency() { return mpConstituency;    }
     public void setMpConstituency(String mpConstituency) { this.mpConstituency = mpConstituency;    }
+    public String getMajority() { return majority;    }
+    public void setMajority(String majority) { this.majority= majority;    }
     public String getEmail() { return email;    }
     public void setEmail(String email) { this.email = email;    }
 
@@ -134,11 +172,31 @@ public class MemberMpCampaign {
     public void setWrittenCount(Integer writtenCount) { this.writtenCount = writtenCount; }
     public Integer getInvolved() { return involved;}
     public void setInvolved(Integer involved) { this.involved= involved;}
-    public String getEdmUrl() { return edmUrl;}
-    public void setEdmUrl(String edmUrl) { this.edmUrl= edmUrl; }
 
     public String getLobbyingDayAttending() { return lobbyingDayAttending; }
     public void setLobbyingDayAttending(String lobbyingDatAttending) { this.lobbyingDayAttending = lobbyingDayAttending; }
+
+    public String getEdmUrl() { return edmUrl;}
+    public void setEdmUrl(String edmUrl) { this.edmUrl= edmUrl; }
+    public String getEdmStatus() { return edmStatus;}
+    public void setEdmStatus(String edmStatus) { this.edmStatus= edmStatus; }
+    public String getMpTelNo() { return mpTelNo;}
+    public void setMpTelNo(String mpTelNo) { this.mpTelNo= mpTelNo; }
+    public String getMpTwitter() { return mpTwitter;}
+    public void setMpTwitter(String mpTwitter) { this.mpTwitter= mpTwitter; }
+    public String getMpEmail() { return mpEmail;}
+    public void setMpEmail(String mpEmail) { this.mpEmail= mpEmail; }
+    public String getSharedCampaignEmails() { return sharedCampaignEmails;}
+    public void setSharedCampaignEmails(String sharedCampaignEmails) { this.sharedCampaignEmails= sharedCampaignEmails; }
+    public String getPrivateCampaignEmails() { return privateCampaignEmails;}
+    public void setPrivateCampaignEmails(String privateCampaignEmails) { this.privateCampaignEmails= privateCampaignEmails; }
+    public String getParliamentaryEmail() { return parliamentaryEmail;}
+    public void setParliamentaryEmail(String parliamentaryEmail) { this.parliamentaryEmail= parliamentaryEmail; }
+    public String getConstituencyEmail() { return constituencyEmail;}
+    public void setConstituencyEmail(String constituencyEmail) { this.constituencyEmail= constituencyEmail; }
+    public String getProperName() { return properName;}
+    public void setProperName(String properName) { this.properName= properName; }
+
     public String getAdministratorName() { return administratorName;}
     public void setAdministratorName(String administratorName) { this.administratorName = administratorName; }
 

@@ -107,7 +107,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<tr title="'+row.edmUrl+'"><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
                 + '<tr title="'+row.party+'"><th>Party</th><td>'+row.party +'</td></tr>'
                 + '<tr title="'+row.ministerialStatus+'"><th>Ministerial</th><td>'+row.ministerialStatus +'</td></tr>'
-                + '<tr title="'+row.twitter+'"><th>Twitter</th><td><a href="https://twitter.com/'+row.twitter+'">'+row.twitter +'</a></td></tr>'
+                + '<tr title="'+row.twitter+'"><th>Twitter</th><td><a href="https://twitter.com/'+row.twitter+'" target="_blank">'+row.twitter +'</a></td></tr>'
                 + '<tr title="'+row.constituency+'"><th>Constituency</th><td>'+row.constituency+'</td></tr>'
                 + '<tr title="'+row.constituencyAddress+'"><th>Address</th><td>'+row.constituencyAddress+'</td></tr>'
                 //+ '<tr><th>pCon</th><td>'+row.pCon+'</td></tr>'
