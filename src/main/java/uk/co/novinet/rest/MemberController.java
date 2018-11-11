@@ -84,6 +84,7 @@ public class MemberController {
     @PostMapping(path = "/member/update")
     public ResponseEntity update(
             @RequestParam("id") Long memberId,
+            @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "identificationChecked", required = false) boolean identificationChecked,
             @RequestParam(value = "hmrcLetterChecked", required = false) boolean hmrcLetterChecked,
             @RequestParam(value = "mpName", required = false) String mpName,
@@ -117,6 +118,7 @@ public class MemberController {
     ) {
         memberService.update(
                 memberId,
+                name,
                 group,
                 identificationChecked,
                 hmrcLetterChecked,

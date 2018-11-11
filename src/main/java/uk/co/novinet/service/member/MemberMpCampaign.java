@@ -1,5 +1,6 @@
 package uk.co.novinet.service.member;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 
@@ -14,6 +15,7 @@ public class MemberMpCampaign {
     private String majority;
     private String email;
     private String username;
+    private String bigGroupUsername;
     private String usergroup;
     private Integer postnum;
     private Integer threadnum;
@@ -30,6 +32,7 @@ public class MemberMpCampaign {
     private Integer writtenCount;
     private Integer involved;
     private String lobbyingDayAttending;
+    private String ministerialStatus;
     private String edmUrl;
     private String edmStatus;
     private String mpTelNo;
@@ -37,7 +40,9 @@ public class MemberMpCampaign {
     private String mpEmail;
     private String sharedCampaignEmails;
     private String privateCampaignEmails;
-    private String administratorName;
+    private String adminName;
+    private String adminUsername;
+    private String adminSig;
     private String parliamentaryEmail;
     private String constituencyEmail;
     private String properName;
@@ -53,6 +58,7 @@ public class MemberMpCampaign {
             String majority,
             String email,
             String username,
+            String bigGroupUsername,
             String usergroup,
             Integer postnum,
             Integer threadnum,
@@ -69,6 +75,7 @@ public class MemberMpCampaign {
             Integer writtenCount,
             Integer involved,
             String lobbyingDayAttending,
+            String ministerialStatus,
             String edmUrl,
             String edmStatus,
             String mpTelNo,
@@ -79,7 +86,9 @@ public class MemberMpCampaign {
             String parliamentaryEmail,
             String constituencyEmail,
             String properName,
-            String administratorName
+            String adminUsername,
+            String adminName,
+            String adminSig
             ) {
         this.id = id;
         this.name = name;
@@ -89,6 +98,7 @@ public class MemberMpCampaign {
         this.majority = majority;
         this.email = email;
         this.username= username;
+        this.bigGroupUsername = bigGroupUsername;
         this.usergroup = usergroup;
         this.postnum = postnum;
         this.threadnum = threadnum;
@@ -106,6 +116,7 @@ public class MemberMpCampaign {
         this.involved = involved;
         this.lobbyingDayAttending = lobbyingDayAttending;
 
+        this.ministerialStatus = ministerialStatus;
         this.edmUrl = edmUrl;
         this.edmStatus = edmStatus;
         this.mpTelNo = mpTelNo;
@@ -117,7 +128,9 @@ public class MemberMpCampaign {
         this.constituencyEmail = constituencyEmail;
         this.properName = properName;
 
-        this.administratorName = administratorName;
+        this.adminUsername = adminUsername;
+        this.adminName = adminName;
+        this.adminSig = adminSig;
     }
 
     public Long getId() {
@@ -141,6 +154,8 @@ public class MemberMpCampaign {
 
     public String getUsername() { return username;    }
     public void setUsername(String username) { this.username = username;    }
+    public String getBigGroupUsername() { return bigGroupUsername;    }
+    public void setBigGroupUsername(String bigGroupUsername) { this.bigGroupUsername= bigGroupUsername;    }
     public String getUsergroup() { return usergroup;    }
     public void setUsergroup(String usergroup) { this.usergroup = usergroup;    }
     public Integer  getPostnum() { return postnum;    }
@@ -164,6 +179,7 @@ public class MemberMpCampaign {
     public void setTags(String tags) { if(tags== null || tags.equals("null")) { tags = ""; } this.tags= tags; }
     public Date getMeetingNext() { return meetingNext;}
     public void setMeetingNext(Date meetingNext) { this.meetingNext = meetingNext; }
+    public void setMeetingNext(String meetingNext) throws Exception { System.out.println("Boo"); this.meetingNext = new SimpleDateFormat("yyyyMMdd").parse(meetingNext); }
     public Integer getMeetingCount() { return meetingCount;}
     public void setMeetingCount(Integer meetingCount) { this.meetingCount= meetingCount; }
     public Integer getTelephoneCount() { return telephoneCount;}
@@ -176,6 +192,8 @@ public class MemberMpCampaign {
     public String getLobbyingDayAttending() { return lobbyingDayAttending; }
     public void setLobbyingDayAttending(String lobbyingDatAttending) { this.lobbyingDayAttending = lobbyingDayAttending; }
 
+    public String getMinisterialStatus() { return ministerialStatus;}
+    public void setMinisterialStatus(String ministerialStatus) { this.ministerialStatus=ministerialStatus; }
     public String getEdmUrl() { return edmUrl;}
     public void setEdmUrl(String edmUrl) { this.edmUrl= edmUrl; }
     public String getEdmStatus() { return edmStatus;}
@@ -197,7 +215,11 @@ public class MemberMpCampaign {
     public String getProperName() { return properName;}
     public void setProperName(String properName) { this.properName= properName; }
 
-    public String getAdministratorName() { return administratorName;}
-    public void setAdministratorName(String administratorName) { this.administratorName = administratorName; }
+    public String getAdminUsername() { return adminUsername;}
+    public void setAdminUsername(String adminUsername) { this.adminUsername = adminUsername; }
+    public String getAdminName() { return adminName;}
+    public void setAdminName(String adminName) { this.adminName = adminName; }
+    public String getAdminSig() { return adminSig;}
+    public void setAdminSig(String adminSig) { this.adminSig= adminSig; }
 
 }

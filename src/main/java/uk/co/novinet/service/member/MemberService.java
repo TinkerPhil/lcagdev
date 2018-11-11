@@ -79,6 +79,7 @@ public class MemberService {
 
     public void update(
             Long memberId,
+            String name,
             String group,
             boolean identificationChecked,
             boolean hmrcLetterChecked,
@@ -110,13 +111,13 @@ public class MemberService {
             String lobbyingDayNotes,
             LobbyingDayAttendance lobbyingDayAttending) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, " +
+        LOGGER.info("name={}, group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, " +
                         "mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, " +
                         "memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, " +
                         "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}, hasBeenSentInitialMassLobbyingEmail={}, lobbyingDayHasBeenSentMpTemplate={}" +
                         "lobbyingDayHasSentMpTemplateLetter={}, lobbyingDayHasReceivedMpResponse={}, lobbyingDayMpHasConfirmedAttendance={}, lobbyingDayMpIsMinister={}," +
                         "lobbyingDayNotes={}, lobbyingDayAttending={}",
-                group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
+                name, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
                 schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim,
                 hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim, hasBeenSentInitialMassLobbyingEmail, lobbyingDayHasBeenSentMpTemplate,
                 lobbyingDayHasSentMpTemplateLetter, lobbyingDayHasReceivedMpResponse, lobbyingDayMpHasConfirmedAttendance, lobbyingDayMpIsMinister, lobbyingDayNotes,
@@ -128,7 +129,8 @@ public class MemberService {
         boolean shouldSendFullMembershipEmail = "LCAG Guests".equals(existingMember.getGroup()) && "Registered".equals(group);
 
         String sql = "update " + usersTableName() + " u " +
-                "set u.usergroup = (select `gid` from " + userGroupsTableName() + " ug where ug.title = ?), " +
+                "set u.name = ?," +
+                "u.usergroup = (select `gid` from " + userGroupsTableName() + " ug where ug.title = ?), " +
                 "u.identification_checked = ?, " +
                 "u.hmrc_letter_checked = ?, " +
                 "u.agreed_to_contribute_but_not_paid = ?, " +
@@ -164,6 +166,7 @@ public class MemberService {
 
         int result = jdbcTemplate.update(
                 sql,
+                name,
                 group,
                 identificationChecked,
                 hmrcLetterChecked,

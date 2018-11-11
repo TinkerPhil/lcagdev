@@ -9,6 +9,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "registrationDate", label: "Registration Date", width: 90, align: "center", sorttype: "date", formatter: "date", formatoptions: { newformat: "d-M-Y" }, formatter: lcag.MemberGrid.formatters.registrationDate },
                 { name: "name", label: "Name", width: 150, template: "string", formatter: lcag.MemberGrid.formatters.name },
                 { name: "username", label: "Username", width: 150, template: "string" },
+                { name: "action", label: "", width: 65, formatter: lcag.MemberGrid.formatters.action, search: false },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "bigGroupUsername", label: "Big Group Username", width: 90, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
                 { name: "emailAddress", label: "Email Address", width: 150, template: "string" },
@@ -90,6 +91,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
 
                             return {
                                 "id": id,
+                                "name": $("#name_" + id).val(),
                                 "identificationChecked": $("#identificationChecked_" + id).prop("checked"),
                                 "hmrcLetterChecked": $("#hmrcLetterChecked_" + id).prop("checked"),
                                 "agreedToContributeButNotPaid": $("#agreedToContributeButNotPaid_" + id).prop("checked"),
@@ -152,6 +154,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
         });
     },
 	formatters: {
+        "name": function(cellvalue, options, row) {
+            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="name_' + row.id + '" type="text" class="form-control" value="' + row.name + '"></div>';
+        },
         "registrationDate": function(cellvalue, options, row) {
             return moment(row.registrationDate).format("DD/MM/YYYY HH:mm");
         },

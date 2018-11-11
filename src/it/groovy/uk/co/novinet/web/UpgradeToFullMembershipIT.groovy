@@ -31,12 +31,12 @@ class UpgradeToFullMembershipIT extends GebSpec {
             memberGridIdentityCheckedTds.find("input").click()
             memberGridVerifiedOnTds[0].find("input").value(new SimpleDateFormat("dd/MM/yyyy").format(new Date()))
             memberGridVerifiedByTds[0].find("input").value("RG")
-            memberGridActionButtonTds.find("button").click()
+            memberGridActionButtonTds.find("button")[0].click()
             waitFor { toastSuccess.text() == "Updated successfully" }
 
         then: "we set their group to 'Registered'"
             memberGridGroupSelectTds.find("select").value("Registered")
-            memberGridActionButtonTds.find("button").click()
+            memberGridActionButtonTds.find("button")[0].click()
             waitFor { toastSuccess.text() == "Updated successfully" }
 
         and: "member receives email saying they are now a full member"

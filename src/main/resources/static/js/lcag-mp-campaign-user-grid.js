@@ -6,23 +6,20 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
         $("#mp-campaign-user-grid").jqGrid({
             colModel: [
                 { name: "id", label: "ID", hidden: true },
-                { name: "email", label: "email", width: 150, template: "string" },
-                { name: "name", label: "User", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.userdet},//, search: false },
-                { name: "mpName", label: "MP", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.mpdet},//, search: false },
+                { name: "email", label: "email", width: 150, formatter: lcag.MpCampaignUserGrid.formatters.email},
+                { name: "name", label: "Member", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.member_det},
+                { name: "mpName", label: "MP", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.mp_det},
                 { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.campaignNotes },
-                { name: "meetingNext", label: "Next meeting", width: 150, align: "center", sorttype: "date", formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
+                { name: "meetingNext", label: "Next meeting", width: 150, align: "center", search: false, formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
                 { name: "meetingCount", label: "Meets", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingCount },
                 { name: "telephoneCount", label: "Tel", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.telephoneCount },
                 { name: "writtenCount", label: "Writ", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.writtenCount },
                 { name: "involved", label: "Involved", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.involved },
                 { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },
-//                { name: "name", label: "Name", width: 150, template: "string" },
-//                { name: "allowEmailShareStatus", label: "Share e-mail", width: 100, formatter: lcag.MpCampaignUserGrid.formatters.allowEmailShareStatus },
                 { name: "allowEmailShareStatus", label: "Share e-mail", width: 100, template: "string" },
                 { name: "username", label: "Username", width: 150, template: "string" },
-                { name: "administratorName", label: "Administrator", width: 150, template: "string" },
+                { name: "adminSig", label: "Admin Sig", width: 100, template: "string" },
                 { name: "mpConstituency", label: "Constituency", width: 150, template: "string" },
-//                { name: "mpName", label: "MP Name", width: 150, template: "string" }
                 { name: "extra", label: "Extra", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.extra, search: false }
 
 
@@ -110,6 +107,27 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
         });
     },
 	formatters: {
+        "email": function(cellvalue, options, row) {
+            var shared = row.sharedCampaignEmails;
+            var private = row.privateCampaignEmails;
+            if( shared == null) {
+                shared="";
+            }
+            if( private == null) {
+                private="";
+            }
+            var shared = shared.replaceAll(row.email,'');
+            var private = private.replaceAll(row.email,'');
+            return '<div><table>'
+                    + '<tr title="'+row.email+'"><th>'+row.email +'</th></tr>'
+                    + '<tr title=""><td>&nbsp;</td></tr>'
+                    + '<tr title="'+row.email+'"><td><a href="mailto:'+row.email+'">Member</a></td></tr>'
+                    + '<tr title=""><td>&nbsp;</td></tr>'
+                    + '<tr title="'+row.email+';'+shared+'"><td><a href="mailto:'+row.email+'?cc='+shared+'">Member+CC</a></td></tr>'
+                    + '<tr title=""><td>&nbsp;</td></tr>'
+                    + '<tr title="'+row.email+';'+shared+';'+private+'"><td><a href="mailto:'+row.email+'?cc='+shared+'&bcc='+private+'">Member+CC+BCC</a></td></tr>'
+                + '</table></div>';
+        },
         "campaignNotes": function(cellvalue, options, row) {
             return '<div class="input-group"><textarea id="campaignNotes_' + row.id + '" rows="12" cols="200" class="form-control">' + row.campaignNotes + '</textarea></div>';
         },
@@ -156,18 +174,19 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             return '<div class="input-group"><textarea id="tags_' + row.id + '" rows="3" cols="100" class="form-control">' + row.tags + '</textarea></div>';
 //            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
         },
-        "userdet": function(cellvalue, options, row) {
+        "member_det": function(cellvalue, options, row) {
             var val = row.allowEmailShareStatus.substring(0,1).toUpperCase();
             if( val == null) { val="N";}
             return '<table>'
-                + '<tr><th>Name</th><td>'+row.name +'</td></tr>'
-                + '<tr><th>Username</th><td>'+row.username +'  (' + row.usergroup+ ')</td></tr>'
-                + '<tr><th>Lobby Day</th><td>'+row.lobbyingDayAttending+'</td></tr>'
-                + '<tr><th>Schemes</th><td>'+row.schemes +'</td></tr>'
-                + '<tr><th>Tel No</th><td>'
+                + '<tr title="'+row.name+'"><th>Name</th><td>'+row.name +'</td></tr>'
+                + '<tr title="'+row.username+' ('+row.usergroup+')"><th>Username</th><td>'+row.username +'  (' + row.usergroup+ ')</td></tr>'
+                + '<tr title="'+row.bigGroupUsername+'"><th>WTT Username</th><td>'+row.bigGroupUsername +'</td></tr>'
+                + '<tr title="'+row.lobbyingDayAttending+'"><th>Lobby Day</th><td>'+row.lobbyingDayAttending+'</td></tr>'
+                + '<tr title="'+row.schemes+'"><th>Schemes</th><td>'+row.schemes +'</td></tr>'
+                + '<tr title="'+row.telNo+'"><th>Tel No</th><td>'
                 + '<div class="input-group"><input id="telNo_' + row.id + '" width="150" type="text" class="form-control" value="' + row.telNo + '"></div>'
                 + '</td></tr>'
-                + '<tr><th>Administrator</th><td>'+row.administratorName+'</td></tr>'
+                + '<tr title="'+row.adminName+' - '+row.adminUsername+'"><th>Administrator</th><td>'+row.adminSig+'</td></tr>'
                 + '<tr><th>Email Share</th><td>'
                     + '<select id="allowEmailShareStatus_' + row.id + '" class="form-control">'
                         + '<option value="Not Asked"' + (val === "N" ? ' selected="selected"' : '') + '>Not Asked</option>'
@@ -179,15 +198,15 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                         + '<option value="Shared"' + (val ==="S" ? ' selected="selected"' : '') + ' >***Shared***</option>'
                     + '</select>'
                 + '</td></tr>'
-                + '<tr><th align="right" colspan="2"><button type="button" class="btn btn-default update-membermpcampaign-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></th></tr>'
+                + '<tr><th title="" align="right" colspan="2"><button type="button" class="btn btn-default update-membermpcampaign-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></th></tr>'
                 + '</table>';
         },
-        "mpdet": function(cellvalue, options, row) {
+        "mp_det": function(cellvalue, options, row) {
             var shared = row.sharedCampaignEmails;
             var private = row.privateCampaignEmails;
             var privateCount;
             var sharedCount;
-            if( shared == null) {
+            if( shared == null || shared === "") {
                 shared="";
                 sharedCount=0;
             }
@@ -195,7 +214,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 sharedCount = shared.split(';').length;
             }
             var sharedCsv = shared.replaceAll(';',',');
-            if( private == null) {
+            if( private == null || private === "") {
                 private="";
                 privateCount = 0;
             }
@@ -205,39 +224,39 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             var privateCsv = private.replaceAll(';',',');
 
             return '<table>'
-                    + '<tr><th>MP</th><td>'+row.mpName+'&nbsp;&nbsp('+row.party+')</td></tr>'
-                    + '<tr><th>Constituency</th><td>'+row.mpConstituency+'&nbsp;&nbsp('+row.majority+')</td></tr>'
-                    + '<tr><th>EDM Status</th><td>'+row.edmStatus +'</td></tr>'
-                    + '<tr><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
-                    + '<tr><th>MP Tel</th><td>'+row.mpTelNo+'</td></tr>'
-                    + '<tr><th>MP Twitter</th><td><a href="https://twitter.com/' + row.mpTwitter +'" target="_blank">'+row.mpTwitter +'</a></td></tr>'
-                    + '<tr><th>MP email</th><td><a href="mailto:' + row.mpEmail +'">'+row.mpEmail +'</a></td></tr>'
+                    + '<tr title="'+row.mpName+'"><th>MP</th><td>'+row.mpName+'&nbsp;&nbsp('+row.party+')</td></tr>'
+                    + '<tr title="'+row.mpConstituency+'&nbsp;&nbsp('+row.majority+')"><th>Constituency</th><td>'+row.mpConstituency+'&nbsp;&nbsp('+row.majority+')</td></tr>'
+                    + '<tr title="'+row.edmStatus+'&nbsp;&nbsp('+row.ministerialStatus+')"><th>EDM/Minis Status</th><td>'+row.edmStatus+'&nbsp;&nbsp('+row.ministerialStatus+')</td></tr>'
+                    + '<tr title="'+row.edmUrl+'"><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
+                    + '<tr title="'+row.mpTelNo+'"><th>MP Tel</th><td>'+row.mpTelNo+'</td></tr>'
+                    + '<tr title="'+row.mpTwitter+'"><th>MP Twitter</th><td><a href="https://twitter.com/' + row.mpTwitter +'" target="_blank">'+row.mpTwitter +'</a></td></tr>'
+                    + '<tr title="'+row.mpEmail+'"><th>MP email</th><td><a href="mailto:' + row.mpEmail +'">'+row.mpEmail +'</a></td></tr>'
                 + '</table>'
 //                + '<br>'
                 + '<table style="border-spacing:5px; border-collapse:separate;">'
                     + '<tr title="">'
-                        + '<th>Mail</th>'
-                        + '<th><a href="mailto:'+shared+'">Shared</a></th>'
-                        + '<th><a href="mailto:?bcc='+private+'">Private</a></th>'
-                        + '<th><a href="mailto:'+shared+'?bcc='+private+'">Both</a></th>'
+                        + '<th title="">Mail</th>'
+                        + '<th title="'+shared+'"><a href="mailto:'+shared+'">Shared</a></th>'
+                        + '<th title="'+private+'"><a href="mailto:?bcc='+private+'">Private</a></th>'
+                        + '<th title="'+shared+';'+private+'"><a href="mailto:'+shared+'?bcc='+private+'">Both</a></th>'
                     + '</tr>'
-                    + '<tr>'
-                        + '<th>Count</th>'
-                        + '<td>'+sharedCount+'</td>'
-                        + '<td>'+privateCount+'</td>'
-                        + '<td>'+(sharedCount+privateCount)+'</td>'
+                    + '<tr title="">'
+                        + '<th title="">Count</th>'
+                        + '<td title="">'+sharedCount+'</td>'
+                        + '<td title="">'+privateCount+'</td>'
+                        + '<td title="">'+(sharedCount+privateCount)+'</td>'
                     + '</tr>'
-                    + '<tr>'
-                        + '<th>Semicolon</th>'
-                        + '<td style="max-width:50px;overflow:hidden;white-space:nowrap;">'+shared+'</td>'
-                        + '<td style="max-width:50px;overflow:hidden;white-space:nowrap;">'+private+'</td>'
+                    + '<tr title="">'
+                        + '<th title="">Semicolon</th>'
+                        + '<td title="'+shared+'" style="max-width:50px;overflow:hidden;white-space:nowrap;">'+shared+'</td>'
+                        + '<td title="'+private+'" style="max-width:50px;overflow:hidden;white-space:nowrap;">'+private+'</td>'
                         + '<td></th>'
                     + '</tr>'
-                    + '<tr>'
-                        + '<th>Comma</th>'
-                        + '<td style="max-width:50px;overflow:hidden;white-space:nowrap;">'+sharedCsv+'</td>'
-                        + '<td style="max-width:50px;overflow:hidden;white-space:nowrap;">'+privateCsv+'</td>'
-                        + '<td></th>'
+                    + '<tr title="">'
+                        + '<th title="">Comma</th>'
+                        + '<td title="'+sharedCsv+'" style="max-width:50px;overflow:hidden;white-space:nowrap;">'+sharedCsv+'</td>'
+                        + '<td title="'+privateCsv+'" style="max-width:50px;overflow:hidden;white-space:nowrap;">'+privateCsv+'</td>'
+                        + '<td></td>'
                     + '</tr>'
 //                    + '<tr title="'+shared+'"><th>Shared</th><td style="max-width:50px;overflow:hidden;white-space:nowrap;">'+shared+'</td><td style="max-width:50px;overflow:hidden;white-space:nowrap;">'+sharedCsv+'</td></tr>'
 //                    + '<tr title="'+private+'"><th>Private</th><td style="max-width:50px;overflow:hidden;white-space:nowrap;">'+private+'</td><td style="max-width:50px;overflow:hidden;white-space:nowrap;">'+privateCsv+'</td></tr>'
@@ -247,9 +266,9 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             var val = row.allowEmailShareStatus.substring(0,1).toUpperCase();
             if( val == null) { val="N";}
             return '<table style="border-spacing:5px; border-collapse:separate;">'
-                + '<tr><th>Parliamentary e-mail</th><td>'+row.parliamentaryEmail +'</td></tr>'
-                + '<tr><th>Constituency e-mail</th><td>'+row.constituencyEmail +'</td></tr>'
-                + '<tr><th>Proper Name</th><td>'+row.properName+'</td></tr>'
+                + '<tr title="'+row.parliamentaryEmail +'"><th>Parliamentary e-mail</th><td>'+row.parliamentaryEmail +'</td></tr>'
+                + '<tr title="'+row.constituencyEmail +'"><th>Constituency e-mail</th><td>'+row.constituencyEmail +'</td></tr>'
+                + '<tr title="'+row.properName+'"><th>Proper Name</th><td>'+row.properName+'</td></tr>'
                 + '</table>';
         }
     }

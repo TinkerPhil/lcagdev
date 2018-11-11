@@ -104,7 +104,8 @@ class GuestVerificationIT extends GebSpec {
 
         and: "the guest is now a verified member"
             switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
-            memberGridNameTds[0].attr("title") == "John Smith"
+//            memberGridNameTds[0].attr("title") == "John Smith"
+            memberGridNameTds[0].find("input").value() == "John Smith"
             checkboxValue(memberGridHmrcLetterCheckedTds[0].find("input")) == true
             checkboxValue(memberGridIdentityCheckedTds[0].find("input")) == true
             memberGridVerifiedOnTds[0].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
@@ -155,7 +156,8 @@ class GuestVerificationIT extends GebSpec {
 
             and: "the guest is now a verified member"
             switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
-            memberGridNameTds[0].attr("title") == "John Smith"
+//            memberGridNameTds[0].attr("title") == "John Smith"
+            memberGridNameTds[0].find("input").value() == "John Smith"
             checkboxValue(memberGridHmrcLetterCheckedTds[0].find("input")) == true
             checkboxValue(memberGridIdentityCheckedTds[0].find("input")) == true
             memberGridVerifiedOnTds[0].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
