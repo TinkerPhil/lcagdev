@@ -9,8 +9,6 @@ lcag.MpGrid = lcag.MpGrid || {
                 { name: "lastName", label: "Last Name", width: 150, template: "string"/*, formatter: lcag.MpGrid.formatters.lastName */ },
                 { name: "firstName", label: "First Name", width: 150, template: "string"/*, formatter: lcag.MpGrid.formatters.firstName */ },
                 { name: "edmStatus", label: "EDM Status", width: 100, template: "string"/*, formatter: lcag.MpGrid.formatters.edmStatus */},
-//                { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string"/*, formatter: lcag.MpGrid.formatters.campaignNotes },
-//                { name: "action", label: "", width: 90, formatter: lcag.MpGrid.formatters.action, search: false },
 
                 { name: "party", label: "Party", width: 100, template: "string"/*, formatter: lcag.MpGrid.formatters.party */},
                 { name: "twitter", label: "Twitter", width: 150, template: "string"/*, formatter: lcag.MpGrid.formatters.twitter*/ },
@@ -20,8 +18,6 @@ lcag.MpGrid = lcag.MpGrid || {
                 { name: "ministerialStatus", label: "Minister", width: 200, template: "string"/*, formatter: lcag.MpGrid.formatters.ministerialStatus, stype: "select", searchoptions: { sopt: ["eq", "ne" ], value: ":Any;1:Yes;0:No" } */},
                 { name: "url", label: "Url", width: 400, template: "string"/*, formatter: lcag.MpGrid.formatters.url */},
                 { name: "majority", label: "Majority", width: 90, template: "string"/*, formatter: lcag.MpGrid.formatters.majority */},
-//                { name: "pCon", label: "pCon", width: 90, template: "string"/*, formatter: lcag.MpGrid.formatters.pCon */},
-                { name: "mpGroupNo", label: "Group", width: 50, template: "string"/*, formatter: lcag.MpGrid.formatters.mpGroupNo */},
                 { name: "telNo", label: "Tel", width: 120, template: "string"/*, formatter: lcag.MpGrid.formatters.telNo */ }
 
             ],
@@ -87,8 +83,6 @@ lcag.MpGrid = lcag.MpGrid || {
                                 "ministerialStatus": $("#ministerialStatus_" + id).val(),
                                 "url": $("#url_" + id).val(),
                                 "majority": $("#majority_" + id).val(),
-                                "pCon": $("#pCon_" + id).val(),
-                                "mpGroupNo": $("#mpGroupNo_" + id).val(),
                                 "telNo": $("#telNo_" + id).val()//,
                                 //"campaignNotes": $("#campaignNotes_" + id).val()
                             };
@@ -166,12 +160,6 @@ lcag.MpGrid = lcag.MpGrid || {
         },
         "majority": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="majority_' + row.id + '" type="text" class="form-control" value="' + row.majority + '"></div>';
-        },
-        "pCon": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="pCon_' + row.id + '" type="text" class="form-control" value="' + row.pCon + '"></div>';
-        },
-        "mpGroupNo": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpGroupNo_' + row.id + '" type="text" class="form-control" value="' + row.mpGroupNo + '"></div>';
         },
         "telNo": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="telNo_' + row.id + '" type="text" class="form-control" value="' + row.telNo + '"></div>';

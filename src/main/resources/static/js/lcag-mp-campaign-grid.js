@@ -7,7 +7,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
             colModel: [
                 { name: "id", label: "ID", hidden: true },
                 { name: "mpName", label: "MP Name", width: 150, template: "string" },
-                { name: "administratorName", label: "Administrator", width: 150, template: "string" },
+                { name: "adminSig", label: "Administrator", width: 150, template: "string" },
                 { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignGrid.formatters.campaignNotes },
                 { name: "other", label: "", width: 600, formatter: lcag.MpCampaignGrid.formatters.other, search: false },
                 { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },

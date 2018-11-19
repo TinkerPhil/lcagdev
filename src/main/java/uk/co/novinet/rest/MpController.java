@@ -47,10 +47,7 @@ public class MpController {
             @RequestParam(value = "ministerialStatus", required = false) String ministerialStatus,
             @RequestParam(value = "url", required = false) String url,
             @RequestParam(value = "majority", required = false) Integer majority,
-            @RequestParam(value = "pCon", required = false) String pCon,
-            @RequestParam(value = "mpGroupNo", required = false) Integer mpGroupNo,
             @RequestParam(value = "telNo", required = false) String telNo
-            //@RequestParam(value = "campaignNotes", required= false) String campaignNotes
     ) {
         mpService.update(
                 MpId,
@@ -67,10 +64,7 @@ public class MpController {
                 ministerialStatus,
                 url,
                 majority,
-                pCon,
-                mpGroupNo,
-                telNo//,
-                //campaignNotes
+                telNo
         );
         return new ResponseEntity(HttpStatus.OK);
     }

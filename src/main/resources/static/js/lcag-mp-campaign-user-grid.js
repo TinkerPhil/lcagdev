@@ -175,8 +175,8 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
 //            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
         },
         "member_det": function(cellvalue, options, row) {
-            var val = row.allowEmailShareStatus.substring(0,1).toUpperCase();
-            if( val == null) { val="N";}
+            var val = row.allowEmailShareStatus;
+            if( val == null) { val="Not Asked";}
             return '<table>'
                 + '<tr title="'+row.name+'"><th>Name</th><td>'+row.name +'</td></tr>'
                 + '<tr title="'+row.username+' ('+row.usergroup+')"><th>Username</th><td>'+row.username +'  (' + row.usergroup+ ')</td></tr>'
@@ -189,13 +189,14 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 + '<tr title="'+row.adminName+' - '+row.adminUsername+'"><th>Administrator</th><td>'+row.adminSig+'</td></tr>'
                 + '<tr><th>Email Share</th><td>'
                     + '<select id="allowEmailShareStatus_' + row.id + '" class="form-control">'
-                        + '<option value="Not Asked"' + (val === "N" ? ' selected="selected"' : '') + '>Not Asked</option>'
-                        + '<option value="To Be Shared"' + (val === "T" ? ' selected="selected"' : '') + ' >To Be Shared</option>'
-                        + '<option value="Private"' + (val === "P" ? ' selected="selected"' : '') + '>Private</option>'
-                        + '<option value="Exclude"' + (val === "E" ? ' selected="selected"' : '') + '>Exclude</option>'
-                        + '<option value="Bad Email"' + (val === "B" ? ' selected="selected"' : '') + '>Bad Email</option>'
-                        + '<option value="Awaiting Reply"' + (val === "A" ? ' selected="selected"' : '') + '>***Awaiting Reply***</option>'
-                        + '<option value="Shared"' + (val ==="S" ? ' selected="selected"' : '') + ' >***Shared***</option>'
+                        + '<option value="Not Asked"' + (val === "Not Asked" ? ' selected="selected"' : '') + '>***Not Asked***</option>'
+                        + '<option value="To Be Shared"' + (val === "To Be Shared" ? ' selected="selected"' : '') + ' >To Be Shared</option>'
+                        + '<option value="Private"' + (val === "Private" ? ' selected="selected"' : '') + '>Private</option>'
+                        + '<option value="Exclude"' + (val === "Exclude" ? ' selected="selected"' : '') + '>Exclude</option>'
+                        + '<option value="Bad Email"' + (val === "Bad Email" ? ' selected="selected"' : '') + '>Bad Email</option>'
+                        + '<option value="Awaiting Reply"' + (val === "Awaiting Reply" ? ' selected="selected"' : '') + '>***Awaiting Reply***</option>'
+                        + '<option value="Shared"' + (val ==="Shared" ? ' selected="selected"' : '') + ' >***Shared***</option>'
+                        + '<option value="Never Replied"' + (val ==="Never Replied" ? ' selected="selected"' : '') + ' >***Never Replied***</option>'
                     + '</select>'
                 + '</td></tr>'
                 + '<tr><th title="" align="right" colspan="2"><button type="button" class="btn btn-default update-membermpcampaign-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></th></tr>'

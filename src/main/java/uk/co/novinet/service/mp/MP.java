@@ -17,15 +17,12 @@ public class MP {
     private String ministerialStatus;
     private String url;
     private Long majority;
-    private String pCon;
-    private Integer mpGroupNo;
     private String telNo;
     private String tags;
     private String campaignNotes;
     private String sharedCampaignEmails;
     private String privateCampaignEmails;
-
-    private String administratorName;
+    private String adminSig;
 
     public MP() {}
 
@@ -44,14 +41,12 @@ public class MP {
     	String ministerialStatus,
     	String url,
         Long majority,
-    	String pCon,
-    	Integer mpGroupNo,
         String telNo,
         String tags,
         String campaignNotes,
         String sharedCampaignEmails,
         String privateCampaignEmails,
-        String administratorName
+        String adminSig
     ) {
 		this.id = id;
 		this.lastName = lastName;
@@ -67,14 +62,12 @@ public class MP {
 		this.ministerialStatus = ministerialStatus;
 		this.url = url;
 		this.majority = majority;
-		this.pCon			        = pCon;
-		this.mpGroupNo = mpGroupNo;
 		this.telNo = telNo;
 		this.setTags(tags);
 		this.setCampaignNotes(campaignNotes);
 		this.sharedCampaignEmails = sharedCampaignEmails;
 		this.privateCampaignEmails = privateCampaignEmails;
-		this.administratorName = administratorName;
+		this.adminSig = adminSig;
     }
 
     public Long getId() {
@@ -161,18 +154,6 @@ public class MP {
     public void setMajority(Long Majority) {
         this.majority = Majority;
     }
-    public String getpCon() {
-        return pCon;
-    }
-    public void setpCon(String pCon) {
-        this.pCon = pCon;
-    }
-    public Integer getMpGroupNo() {
-        return mpGroupNo;
-    }
-    public void setMpGroupNo(Integer MpGroup) {
-        this.mpGroupNo = MpGroup;
-    }
     public String getTelNo() {
         return telNo;
     }
@@ -199,12 +180,10 @@ public class MP {
     public void setPrivateCampaignEmails(String privateCampaignEmails) {
         this.privateCampaignEmails = privateCampaignEmails;
     }
-
-    // Extra
-    public String getAdministratorName() {
-        return administratorName;
+    public String getAdminSig() {
+        return adminSig;
     }
-    public void setAdministratorName(String administratorName) {
-        this.administratorName = administratorName;
+    public void setAdminSig(String adminSig) {
+        this.adminSig = adminSig;
     }
 }

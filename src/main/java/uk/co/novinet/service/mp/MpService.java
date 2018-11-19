@@ -40,8 +40,6 @@ public class MpService {
         put("ministerialStatus", "m.ministerialStatus");
         put("url", "m.url");
         put("majority", "m.majority");
-        put("pCon", "m.pCon");
-        put("mpGroupNo", "m.mpGroupNo");
         put("telNo", "m.telNo");
         put("tags", "m.tags");
         put("campaignNotes", "m.campaignNotes");
@@ -62,18 +60,15 @@ public class MpService {
             String ministerialStatus,
             String url,
             Integer majority,
-            String pCon,
-            Integer mpGroupNo,
-            String telNo//,
-            //String campaignNotes
+            String telNo
         ) {
         LOGGER.info("Going to update MP with id {}", id);
         LOGGER.info( "mpId={}, lastName={}, firstName={}, mpName={}, party={}, twitter={}, email={}, constituency={}, "
-			+ "constituencyAddress={}, edmStatus={}, ministerialStatus={}, url={}, majority={}, pCon={}, "
-			+ "mpGroupNo={}, telNo={}", //, campaignNotes={}",
+			+ "constituencyAddress={}, edmStatus={}, ministerialStatus={}, url={}, "
+			+ "telNo={}",
 			id, lastName, firstName, mpName, party, twitter, email, constituency,
-			constituencyAddress, edmStatus, ministerialStatus, url, majority, pCon,
-			mpGroupNo, telNo//, campaignNotes
+			constituencyAddress, edmStatus, ministerialStatus, url, majority,
+			telNo
         );
 
         MP existingMP = getMpById(id);
@@ -92,10 +87,7 @@ public class MpService {
                 "m.ministerialStatus = ?, " +
                 "m.url = ?, " +
                 "m.majority = ?, " +
-                "m.pCon = ?, " +
-                "m.mpGroupNo = ?, " +
                 "m.telNo = ?, " +
-              //  "m.campaignNotes = ?" +
                 "where m.mpId = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -115,8 +107,6 @@ public class MpService {
                 ministerialStatus,
                 url,
                 majority,
-                pCon,
-                mpGroupNo,
                 telNo,
                 id
         );
@@ -164,10 +154,13 @@ public class MpService {
     private String buildMpTableSelect() {
         return "select m.mpId, m.lastName, m.firstName, m.mpName, m.party, m.twitter, m.email, " +
                 "m.constituency, m.constituencyAddress, m.edmStatus, m.edmUrl, m.ministerialStatus, m.url, m.majority," +
-                "m.pCon, m.mpGroupNo, m.telNo, " +
+                "m.telNo, " +
                 "m.tags, " +
-                "m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, u.username as administratorName " +
-                "from " + mpTableName() + " m left join " + usersTableName() + " u on u.uid = m.uidAdministrator ";
+                "m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, " +
+                " mcv.signature as adminSig " +
+                "from " + mpTableName() + " m " +
+                "left join " + mpCampaignVolunteerTableName() + " mcv on mcv.uid=m.uidAdministrator "
+                ;
     }
 
     private String buildMpTableGroupBy() {
@@ -275,20 +268,11 @@ public class MpService {
             parameters.add(mp.getMajority());
         }
 
-        if (mp.getpCon() != null) {
-            clauses.add("m.pCon = ?");
-            parameters.add(mp.getpCon());
-        }
-
-        if (mp.getMpGroupNo() != null) {
-            clauses.add("m.mpGroupNo = ?");
-            parameters.add(mp.getMpGroupNo());
-        }
-
         if (mp.getTelNo() != null) {
             clauses.add("m.telNo = ?");
             parameters.add(mp.getTelNo());
         }
+
         if(mp.getTags() != null ) {
             String[] tags = mp.getTags().split(" *, *");
             String clause = "(";
@@ -308,11 +292,10 @@ public class MpService {
             parameters.add(like(mp.getCampaignNotes()));
         }
 
-        if (mp.getAdministratorName() != null) {
-            clauses.add("lower(u.username) like ?");
-            parameters.add(like(mp.getAdministratorName()));
+        if (mp.getAdminSig() != null) {
+            clauses.add("lower(mcv.signature) like ?");
+            parameters.add(like(mp.getAdminSig()));
         }
-
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
@@ -332,15 +315,12 @@ public class MpService {
                 rs.getString("ministerialStatus"),
                 rs.getString("url"),
                 rs.getLong("majority"),
-                rs.getString("pCon"),
-                rs.getInt("mpGroupNo"),
                 rs.getString("telNo"),
                 rs.getString("tags"),
-                rs.getString( "campaignNotes"),
+                rs.getString("campaignNotes"),
                 rs.getString("sharedCampaignEmails"),
-                rs.getString( "privateCampaignEmails"),
-                rs.getString( "administratorName")
-
+                rs.getString("privateCampaignEmails"),
+                rs.getString("adminSig")
         );
     }
 }
