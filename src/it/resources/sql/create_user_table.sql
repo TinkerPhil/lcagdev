@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `lobbying_day_mp_has_confirmed_attendance` tinyint(1) NOT NULL DEFAULT '0',
   `lobbying_day_notes` varchar(1000) NOT NULL DEFAULT '',
   `lobbying_day_attending` varchar(50) NOT NULL DEFAULT 'UNSET',
+  `country` varchar(50) null default 'UK',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`),
   KEY `usergroup` (`usergroup`),

@@ -12,15 +12,15 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
     initialise: function() {
         $("#verification-grid").jqGrid({
             colModel: [
-                { name: "id", label: "ID", hidden: true },
-                { name: "registrationDate", label: "Registration Date", width: 90, align: "center", sorttype: "date", formatter: "date", formatoptions: { newformat: "d-M-Y" }, formatter: lcag.VerificationGrid.formatters.registrationDate },
-                { name: "name", label: "Name", width: 150, template: "string", formatter: lcag.VerificationGrid.formatters.name },
+                { name: "id", label: "ID", width: 0, hidden: true },
+                { name: "registrationDate", label: "Registration Date", width: 150, align: "center", sorttype: "date", formatter: "date", formatoptions: { newformat: "d-M-Y" }, formatter: lcag.VerificationGrid.formatters.registrationDate },
+                { name: "name", label: "Name", width: 200, template: "string", formatter: lcag.VerificationGrid.formatters.name },
                 { name: "username", label: "Username", width: 150, template: "string" },
-                { name: "emailAddress", label: "Email Address", width: 150, template: "string" },
+                { name: "emailAddress", label: "Email Address", width: 200, template: "string" },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.VerificationGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "bigGroupUsername", label: "Big Group Username", width: 90, template: "string" },
-                { name: "notes", label: "Notes", width: 150, template: "string" },
-                { name: "action", label: "", width: 150, formatter: lcag.VerificationGrid.formatters.action, search: false }
+                { name: "bigGroupUsername", label: "Big Group Username", width: 150, template: "string" },
+                { name: "notes", label: "Notes", width: 500, template: "string" },
+                { name: "action", label: "", width: 160, formatter: lcag.VerificationGrid.formatters.action, search: false }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -42,6 +42,10 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
                         }
                     });
             },
+            shrinkToFit:false,
+            width: $(window).width() - 10, //"2500", // 8500px
+            autoresizeOnLoad: true,
+
             iconSet: "fontAwesome",
             sortname: "id",
             sortorder: "desc",
@@ -49,7 +53,7 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
             headertitles: true,
             pager: true,
             rowNum: 25,
-            width: "1500px",
+            //width: "1500px",
             altRows: true,
             viewrecords: true,
             gridComplete: function() {
@@ -62,6 +66,14 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
         }).jqGrid("filterToolbar", {
             searchOnEnter: false
         });
+
+        $("#verification-grid").setGridWidth($(window).width() -10);
+
+        $(window).bind('resize', function() {
+            $("#verification-grid").width($(window).width() -10);
+            $("#verification-grid").setGridWidth($(window).width() -10);
+            $("#verification-grid").setGridHeight($(window).height()-220);
+        }).trigger('resize');
 
         $( "#documentVerificationModal" ).on('shown.bs.modal', function(e) {
             $("#dynamicVerificationTable").remove();

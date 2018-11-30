@@ -9,7 +9,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 { name: "mpName", label: "MP Name", width: 150, template: "string" },
                 { name: "adminSig", label: "Administrator", width: 150, template: "string" },
                 { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignGrid.formatters.campaignNotes },
-                { name: "other", label: "", width: 600, formatter: lcag.MpCampaignGrid.formatters.other, search: false },
+                { name: "other", label: "", width: 500, formatter: lcag.MpCampaignGrid.formatters.other, search: false },
                 { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },
                 { name: "emails", label: "", width: 400, formatter: lcag.MpCampaignGrid.formatters.emails, search: false },
                 { name: "constituency", label: "Constituency", width: 150, template: "string" },
@@ -28,17 +28,17 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                         }
                     });
             },
+            shrinkToFit:false,
+            width: $(window).width() - 10,
+            autoresizeOnLoad: true,
+
             iconSet: "fontAwesome",
             sortname: "id",
             sortorder: "desc",
             threeStateSort: false,
-            cmTemplate: { autoResizable: true },
-            autoResizing: { compact: true },
-            autoresizeOnLoad: true,
             headertitles: true,
             pager: true,
             rowNum: 25,
-            //width: "2500", // 8500px
             altRows: true,
             rowattr: function (row) {
                 if (row.group == "Registered") {
@@ -87,6 +87,18 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
         }).jqGrid("filterToolbar", {
             searchOnEnter: false
         });
+        $("#mp-campaign-grid").keyup(function (e) {
+            if (e.keyCode === 27) {
+                $("#mp-campaign-grid")[0].clearToolbar();
+                return false;
+            }
+        });
+        $(window).bind('resize', function() {
+            $("#mp-campaign-grid").width($(window).width() -10);
+            $("#mp-campaign-grid").setGridWidth($(window).width() -10);
+            $("#mp-campaign-grid").setGridHeight($(window).height()-200);
+        }).trigger('resize');
+
     },
 	formatters: {
         "campaignNotes": function(cellvalue, options, row) {
@@ -96,7 +108,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
         "other": function(cellvalue, options, row) {
             var edm = row.edmStatus.substring(0,3).toUpperCase();
             return '<table>'
-                + '<tr title="'+row.edmStatus+'"><th>EDM</th><td width="100">'
+                + '<tr title="'+row.edmStatus+'"><th>EDM</th><td style="width: 100px;">'
                 + '<select id="edmStatus_' + row.id + '" class="form-control" >'
                 + '<option value="Not Asked"' + (edm === 'NOT' ? 'selected="selected"' : '') + '>Not Asked</option>'
                 + '<option value="Signed" ' + (edm === 'SIG' ? 'selected="selected"' : '') + '>Signed</option>'
@@ -110,8 +122,6 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<tr title="'+row.twitter+'"><th>Twitter</th><td><a href="https://twitter.com/'+row.twitter+'" target="_blank">'+row.twitter +'</a></td></tr>'
                 + '<tr title="'+row.constituency+'"><th>Constituency</th><td>'+row.constituency+'</td></tr>'
                 + '<tr title="'+row.constituencyAddress+'"><th>Address</th><td>'+row.constituencyAddress+'</td></tr>'
-                //+ '<tr><th>pCon</th><td>'+row.pCon+'</td></tr>'
-                //+ '<tr><th>mpGroupNo</th><td>'+row.mpGroupNo+'</td></tr>'
                 + '<tr title="'+row.majority+'"><th>Majority</th><td>'+row.majority+'</td></tr>'
                 + '<tr title="'+row.telNo+'"><th>Telephone</th><td>'+row.telNo +'</td></tr>'
                 + '<tr title="'+row.email+'"><th>e-mail</th><td><a href="mailto:' + row.email +'">'+row.email +'</a></td></tr>'
@@ -126,6 +136,58 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
 //            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
         },
         "emails": function(cellvalue, options, row) {
+            var shared = row.sharedCampaignEmails;
+            var private = row.privateCampaignEmails;
+            var privateCount;
+            var sharedCount;
+            if( shared == null || shared === "") {
+                shared="";
+                sharedCount=0;
+            }
+            else {
+                sharedCount = shared.split(';').length;
+            }
+            var sharedCsv = shared.replaceAll(';',',');
+
+            if( private == null || private === "") {
+                private="";
+                privateCount = 0;
+            }
+            else {
+                privateCount = private.split(';').length;
+            }
+            var privateCsv = private.replaceAll(';',',');
+
+            return '<table style="border-spacing:5px; border-collapse:separate;">'
+                    + '<tr title="">'
+                        + '<th title="">Mail</th>'
+                        + '<th title="'+shared+'"><a href="mailto:'+shared+'">Shared</a></th>'
+                        + '<th title="'+private+'"><a href="mailto:?bcc='+private+'">Private</a></th>'
+                        + '<th title="'+shared+';'+private+'"><a href="mailto:'+shared+'?bcc='+private+'">Both</a></th>'
+                    + '</tr>'
+                    + '<tr title="">'
+                        + '<th title="">Count</th>'
+                        + '<td title="">'+sharedCount+'</td>'
+                        + '<td title="">'+privateCount+'</td>'
+                        + '<td title="">'+(sharedCount+privateCount)+'</td>'
+                    + '</tr>'
+                    + '<tr title="">'
+                        + '<th title="">Semicolon</th>'
+                        + '<td title="'+shared+'" style="max-width:50px;overflow:hidden;white-space:nowrap;">'+shared+'</td>'
+                        + '<td title="'+private+'" style="max-width:50px;overflow:hidden;white-space:nowrap;">'+private+'</td>'
+                        + '<td></th>'
+                    + '</tr>'
+                    + '<tr title="">'
+                        + '<th title="">Comma</th>'
+                        + '<td title="'+sharedCsv+'" style="max-width:50px;overflow:hidden;white-space:nowrap;">'+sharedCsv+'</td>'
+                        + '<td title="'+privateCsv+'" style="max-width:50px;overflow:hidden;white-space:nowrap;">'+privateCsv+'</td>'
+                        + '<td></td>'
+                    + '</tr>'
+                    + '</table>';
+             },
+/*
+        "emails": function(cellvalue, options, row) {
+
             var shared = row.sharedCampaignEmails;
             var private = row.privateCampaignEmails;
             if( shared == null) { shared="";}
@@ -146,5 +208,6 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '</td></tr>'
                 + '</table>';
         },
+*/
     }
 }

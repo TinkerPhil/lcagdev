@@ -5,7 +5,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
     initialise: function() {
         $("#mp-campaign-user-grid").jqGrid({
             colModel: [
-                { name: "id", label: "ID", hidden: true },
+                { name: "id", label: "ID", width: 0, hidden: true },
                 { name: "email", label: "email", width: 150, formatter: lcag.MpCampaignUserGrid.formatters.email},
                 { name: "name", label: "Member", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.member_det},
                 { name: "mpName", label: "MP", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.mp_det},
@@ -21,8 +21,6 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 { name: "adminSig", label: "Admin Sig", width: 100, template: "string" },
                 { name: "mpConstituency", label: "Constituency", width: 150, template: "string" },
                 { name: "extra", label: "Extra", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.extra, search: false }
-
-
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -32,25 +30,25 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                         complete: function(response, status) {
                             if (status == "success") {
                                 lcag.MpCampaignUserGrid.grid = $("#mp-campaign-user-grid");
-                                console.log("jsondata:", response.responseJSON);
+                                //console.log("jsondata:", response.responseJSON);
                                 lcag.MpCampaignUserGrid.grid[0].addJSONData(response.responseJSON);
                             }
                         }
                     });
             },
+            shrinkToFit:false,
+            width: $(window).width() - 10,
+            autoresizeOnLoad: true,
+
             iconSet: "fontAwesome",
-            editurl: 'clientArray',
             sortname: "id",
             sortorder: "desc",
             threeStateSort: false,
-            cmTemplate: { autoResizable: true },
-            autoResizing: { compact: true },
-            autoresizeOnLoad: true,
             headertitles: true,
             pager: true,
             rowNum: 25,
-            //width: "2500", // 8500px
             altRows: true,
+            viewrecords: true,
             rowattr: function (row) {
                 if (row.group == "Registered") {
                     return { "class": "success" };
@@ -60,10 +58,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                     return { "class": "info" };
                 }
             },
-            viewrecords: true,
             gridComplete: function() {
-                //$('#mp-campaign-user-grid').jqGrid("editCell", 0, 0, false);
-                //lcag.Statistics.refresh();
                 $("#mp-campaign-user-grid").find(".update-membermpcampaign-row-btn").on("click", function(e) {
                     var rowContext = this;
                     $.ajax({
@@ -105,7 +100,21 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
         }).jqGrid("filterToolbar", {
             searchOnEnter: false
         });
+
+        $("#mp-campaign-user-grid").keyup(function (e) {
+            if (e.keyCode === 27) {
+                $("#mp-campaign-user-grid")[0].clearToolbar();
+                return false;
+            }
+        });
+
+        $(window).bind('resize', function() {
+            $("#mp-campaign-user-grid").width($(window).width() -10);
+            $("#mp-campaign-user-grid").setGridWidth($(window).width() -10);
+            $("#mp-campaign-user-grid").setGridHeight($(window).height()-200);
+        }).trigger('resize');
     },
+
 	formatters: {
         "email": function(cellvalue, options, row) {
             var shared = row.sharedCampaignEmails;
@@ -155,8 +164,12 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
         },
         "meetingNext": function(cellvalue, options, row) {
             var dateString = row.meetingNext == null ? "" : moment(row.meetingNext).format("DD/MM/YYYY");
-            return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input  id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
-
+            //return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input  id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
+            return '<table>'
+                    + '<tr title="'+dateString+'"><td><div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input  id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div></td></tr>'
+                    + '<tr><td><br></td></tr>'
+                    + '<tr><th title="" align="right"><button type="button" class="btn btn-default update-membermpcampaign-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></th></tr>'
+                    + '</table>';
         },
         "meetingCount": function(cellvalue, options, row) {
             return '<div class="input-group"><input id="meetingCount_' + row.id + '" type="text" class="form-control" value="' + row.meetingCount + '"></div>';
@@ -181,7 +194,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 + '<tr title="'+row.name+'"><th>Name</th><td>'+row.name +'</td></tr>'
                 + '<tr title="'+row.username+' ('+row.usergroup+')"><th>Username</th><td>'+row.username +'  (' + row.usergroup+ ')</td></tr>'
                 + '<tr title="'+row.bigGroupUsername+'"><th>WTT Username</th><td>'+row.bigGroupUsername +'</td></tr>'
-                + '<tr title="'+row.lobbyingDayAttending+'"><th>Lobby Day</th><td>'+row.lobbyingDayAttending+'</td></tr>'
+                //+ '<tr title="'+row.lobbyingDayAttending+'"><th>Lobby Day</th><td>'+row.lobbyingDayAttending+'</td></tr>'
                 + '<tr title="'+row.schemes+'"><th>Schemes</th><td>'+row.schemes +'</td></tr>'
                 + '<tr title="'+row.telNo+'"><th>Tel No</th><td>'
                 + '<div class="input-group"><input id="telNo_' + row.id + '" width="150" type="text" class="form-control" value="' + row.telNo + '"></div>'
@@ -199,7 +212,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                         + '<option value="Never Replied"' + (val ==="Never Replied" ? ' selected="selected"' : '') + ' >***Never Replied***</option>'
                     + '</select>'
                 + '</td></tr>'
-                + '<tr><th title="" align="right" colspan="2"><button type="button" class="btn btn-default update-membermpcampaign-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></th></tr>'
+                //+ '<tr><th title="" align="right" colspan="2"><button type="button" class="btn btn-default update-membermpcampaign-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></th></tr>'
                 + '</table>';
         },
         "mp_det": function(cellvalue, options, row) {
@@ -214,7 +227,9 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             else {
                 sharedCount = shared.split(';').length;
             }
+            shared = shared.replaceAll(row.email,'');
             var sharedCsv = shared.replaceAll(';',',');
+
             if( private == null || private === "") {
                 private="";
                 privateCount = 0;
@@ -222,6 +237,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             else {
                 privateCount = private.split(';').length;
             }
+            private = private.replaceAll(row.email,'');
             var privateCsv = private.replaceAll(';',',');
 
             return '<table>'
@@ -264,8 +280,8 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 + '</table>';
         },
         "extra": function(cellvalue, options, row) {
-            var val = row.allowEmailShareStatus.substring(0,1).toUpperCase();
-            if( val == null) { val="N";}
+//            var val = row.allowEmailShareStatus.substring(0,1).toUpperCase();
+//            if( val == null) { val="N";}
             return '<table style="border-spacing:5px; border-collapse:separate;">'
                 + '<tr title="'+row.parliamentaryEmail +'"><th>Parliamentary e-mail</th><td>'+row.parliamentaryEmail +'</td></tr>'
                 + '<tr title="'+row.constituencyEmail +'"><th>Constituency e-mail</th><td>'+row.constituencyEmail +'</td></tr>'

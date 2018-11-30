@@ -3,6 +3,7 @@ package uk.co.novinet.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import uk.co.novinet.service.member.MemberMpCampaign;
 import uk.co.novinet.service.member.MemberMpCampaignService;
 
-import java.time.Instant;
 import java.util.Date;
 
-@RestController
+@Controller
 public class MemberMpCampaignController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MemberMpCampaignController.class);
@@ -21,8 +21,14 @@ public class MemberMpCampaignController {
     @Autowired
     private MemberMpCampaignService service;
 
+    @GetMapping("/mp_campaign_user")
+    public String get() {
+        return "mp_campaign_user";
+    }
+
     @CrossOrigin
     @GetMapping(path = "/membermpcampaign")
+    @ResponseBody
     public DataContainer getMps(MemberMpCampaign member,
             @RequestParam(value = "page", required = false) Long current,
             @RequestParam(value = "rows", required = false) Long rowCount,
@@ -35,6 +41,7 @@ public class MemberMpCampaignController {
 
     @CrossOrigin
     @PostMapping(path = "/membermpcampaign/update")
+    @ResponseBody
     public ResponseEntity update(
             @RequestParam("id") Long id,
             @RequestParam(value = "allowEmailShareStatus", required = false) String allowEmailShareStatus,

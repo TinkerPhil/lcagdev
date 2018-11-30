@@ -1,6 +1,8 @@
+/*
 body {
     width: 3000px;
 }
+*/
 span.action {
     cursor: pointer;
 }
@@ -12,8 +14,9 @@ span.action {
   left: 10px;
   top: 10px;
 }
+
 .horizontal-scroll {
-    width: 3000px;
+/*    width: 3000px; */
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;

@@ -40,8 +40,8 @@ class DashboardPage extends Page {
         memberGridVerifiedByTds { memberGrid.find("td[aria-describedby=member-grid_verifiedBy]") }
         memberGridVerifiedOnTds { memberGrid.find("td[aria-describedby=member-grid_verifiedOn]") }
         memberGridContributionAmountTds { memberGrid.find("td[aria-describedby=member-grid_contributionAmount]") }
-        memberGridActionButtonTds { memberGrid.find("td[aria-describedby=member-grid_action]") }
         memberGridGroupSelectTds { memberGrid.find("td[aria-describedby=member-grid_group]") }
+        memberGridActionButtonTds { memberGrid.find("td[aria-describedby=member-grid_action]") }
 
         // payments grid
         paymentsGridMemberTds { paymentsGrid.find("td[aria-describedby=payments-grid_userId]") }

@@ -106,15 +106,16 @@ public class MemberController {
             @RequestParam(value = "hasCompletedClaimParticipantForm", required = false) Boolean hasCompletedClaimParticipantForm,
             @RequestParam(value = "hasBeenSentClaimConfirmationEmail", required = false) Boolean hasBeenSentClaimConfirmationEmail,
             @RequestParam(value = "hasOptedOutOfClaim", required = false) Boolean hasOptedOutOfClaim,
-            @RequestParam(value = "hasBeenSentInitialMassLobbyingEmail", required = false) Boolean hasBeenSentInitialMassLobbyingEmail,
-            @RequestParam(value = "lobbyingDayHasBeenSentMpTemplate", required = false) Boolean lobbyingDayHasBeenSentMpTemplate,
-            @RequestParam(value = "lobbyingDayHasSentMpTemplateLetter", required = false) Boolean lobbyingDayHasSentMpTemplateLetter,
-            @RequestParam(value = "lobbyingDayHasReceivedMpResponse", required = false) Boolean lobbyingDayHasReceivedMpResponse,
-            @RequestParam(value = "lobbyingDayMpHasConfirmedAttendance", required = false) Boolean lobbyingDayMpHasConfirmedAttendance,
-            @RequestParam(value = "lobbyingDayMpIsMinister", required = false) Boolean lobbyingDayMpIsMinister,
-            @RequestParam(value = "lobbyingDayNotes", required = false) String lobbyingDayNotes,
-            @RequestParam(value = "lobbyingDayAttending", required = false) String lobbyingDayAttending,
-            @RequestParam("group") String group
+//            @RequestParam(value = "hasBeenSentInitialMassLobbyingEmail", required = false) Boolean hasBeenSentInitialMassLobbyingEmail,
+//            @RequestParam(value = "lobbyingDayHasBeenSentMpTemplate", required = false) Boolean lobbyingDayHasBeenSentMpTemplate,
+//            @RequestParam(value = "lobbyingDayHasSentMpTemplateLetter", required = false) Boolean lobbyingDayHasSentMpTemplateLetter,
+//            @RequestParam(value = "lobbyingDayHasReceivedMpResponse", required = false) Boolean lobbyingDayHasReceivedMpResponse,
+//            @RequestParam(value = "lobbyingDayMpHasConfirmedAttendance", required = false) Boolean lobbyingDayMpHasConfirmedAttendance,
+//            @RequestParam(value = "lobbyingDayMpIsMinister", required = false) Boolean lobbyingDayMpIsMinister,
+//            @RequestParam(value = "lobbyingDayNotes", required = false) String lobbyingDayNotes,
+//            @RequestParam(value = "lobbyingDayAttending", required = false) String lobbyingDayAttending,
+            @RequestParam("group") String group,
+            @RequestParam(value="country", required=false) String country
     ) {
         memberService.update(
                 memberId,
@@ -141,14 +142,15 @@ public class MemberController {
                 hasCompletedClaimParticipantForm,
                 hasBeenSentClaimConfirmationEmail,
                 hasOptedOutOfClaim,
-                hasBeenSentInitialMassLobbyingEmail,
-                lobbyingDayHasBeenSentMpTemplate,
-                lobbyingDayHasSentMpTemplateLetter,
-                lobbyingDayHasReceivedMpResponse,
-                lobbyingDayMpHasConfirmedAttendance,
-                lobbyingDayMpIsMinister,
-                lobbyingDayNotes,
-                lobbyingDayAttending == null ? LobbyingDayAttendance.UNSET : LobbyingDayAttendance.valueOf(lobbyingDayAttending)
+//                hasBeenSentInitialMassLobbyingEmail,
+//                lobbyingDayHasBeenSentMpTemplate,
+//                lobbyingDayHasSentMpTemplateLetter,
+//                lobbyingDayHasReceivedMpResponse,
+//                lobbyingDayMpHasConfirmedAttendance,
+//                lobbyingDayMpIsMinister,
+//                lobbyingDayNotes,
+//                lobbyingDayAttending == null ? LobbyingDayAttendance.UNSET : LobbyingDayAttendance.valueOf(lobbyingDayAttending),
+                country
         );
         return new ResponseEntity(HttpStatus.OK);
     }

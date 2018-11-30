@@ -35,17 +35,20 @@ lcag.MpGrid = lcag.MpGrid || {
                         }
                     });
             },
+            shrinkToFit:false,
+            width: $(window).width() - 10,
+            autoresizeOnLoad: true,
+
             iconSet: "fontAwesome",
             sortname: "id",
             sortorder: "desc",
             threeStateSort: false,
             cmTemplate: { autoResizable: true },
-            autoResizing: { compact: true },
-            autoresizeOnLoad: true,
+            //autoResizing: { compact: true },
             headertitles: true,
             pager: true,
             rowNum: 25,
-            //width: "2500", // 8500px
+
             altRows: true,
             rowattr: function (row) {
                 if (row.group == "Registered") {
@@ -59,7 +62,6 @@ lcag.MpGrid = lcag.MpGrid || {
             viewrecords: true,
 
             gridComplete: function() {
-                //lcag.Statistics.refresh();
                 $("#mp-grid").find(".update-mp-row-btn").on("click", function(e) {
                     var rowContext = this;
                     $.ajax({
@@ -83,19 +85,16 @@ lcag.MpGrid = lcag.MpGrid || {
                                 "ministerialStatus": $("#ministerialStatus_" + id).val(),
                                 "url": $("#url_" + id).val(),
                                 "majority": $("#majority_" + id).val(),
-                                "telNo": $("#telNo_" + id).val()//,
-                                //"campaignNotes": $("#campaignNotes_" + id).val()
+                                "telNo": $("#telNo_" + id).val()
                             };
                           })(),
                           success: function(e) {
                             lcag.Common.alertSuccess();
                             lcag.MpGrid.grid.trigger("reloadGrid");
-                            //lcag.VerificationGrid.grid.trigger("reloadGrid");
                           },
                           error: function(e) {
                             lcag.Common.alertError();
                             lcag.MpGrid.grid.trigger("reloadGrid");
-                            //lcag.VerificationGrid.grid.trigger("reloadGrid");
                           }
                         });
                 });
@@ -108,6 +107,18 @@ lcag.MpGrid = lcag.MpGrid || {
             searchOnEnter: false
         });
 
+        $("#mp-grid").keyup(function (e) {
+            if (e.keyCode === 27) {
+                $("#mp-grid")[0].clearToolbar();
+                return false;
+            }
+        });
+
+        $(window).bind('resize', function() {
+            $("#mp-grid").width($(window).width() -10);
+            $("#mp-grid").setGridWidth($(window).width() -10);
+            $("#mp-grid").setGridHeight($(window).height()-200);
+        }).trigger('resize');
 
         $("#mp-grid").jqGrid('setGroupHeaders', {
             useColSpanStyle: false,

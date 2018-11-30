@@ -5,17 +5,17 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
     initialise: function() {
         $("#payments-grid").jqGrid({
             colModel: [
-                { name: "id", label: "ID", hidden: true },
-                { name: "userId", label: "Member", width: 150, template: "string", formatter: lcag.PaymentsGrid.formatters.userId },
-                { name: "date", label: "Transaction Date", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.date, search: false },
-                { name: "transactionIndexOnDay", label: "Index", width: 40, template: "string" },
-                { name: "description", label: "Description", width: 180, template: "string" },
-                { name: "emailAddress", label: "Email Address", width: 90, template: "string" },
-                { name: "amount", label: "Amount", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.amount },
-                { name: "runningBalance", label: "Running Balance", width: 40, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },
-                { name: "counterParty", label: "Counter Party", width: 70, template: "string" },
-                { name: "reference", label: "Reference", width: 50, template: "string" },
-                { name: "paymentSource", label: "Payment Source", width: 50, template: "string" }
+                { name: "id", label: "ID", width: 0, hidden: true },
+                { name: "userId", label: "Member", width: 300, template: "string", formatter: lcag.PaymentsGrid.formatters.userId },
+                { name: "date", label: "Transaction Date", width: 100, template: "string", formatter: lcag.PaymentsGrid.formatters.date, search: false },
+                { name: "transactionIndexOnDay", label: "Index", width: 90, template: "string" },
+                { name: "description", label: "Description", width: 400, template: "string" },
+                { name: "emailAddress", label: "Email Address", width: 200, template: "string" },
+                { name: "amount", label: "Amount", width: 90, template: "string", formatter: lcag.PaymentsGrid.formatters.amount },
+                { name: "runningBalance", label: "Running Balance", width: 120, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },
+                { name: "counterParty", label: "Counter Party", width: 150, template: "string" },
+                { name: "reference", label: "Reference", width: 150, template: "string" },
+                { name: "paymentSource", label: "Payment Source", width: 150, template: "string" }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -30,6 +30,10 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                         }
                     });
             },
+            shrinkToFit: false,
+            width: $(window).width() - 10,
+            autoresizeOnLoad: true,
+
             iconSet: "fontAwesome",
             sortname: "id",
             sortorder: "desc",
@@ -37,7 +41,6 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
             headertitles: true,
             pager: true,
             rowNum: 25,
-            width: "1800px",
             altRows: true,
             viewrecords: true,
             gridComplete: function() {
@@ -80,6 +83,13 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
         }).jqGrid("filterToolbar", {
             searchOnEnter: false
         });
+
+        $(window).bind('resize', function() {
+            $("#payments-grid").width($(window).width() -10);
+            $("#payments-grid").setGridWidth($(window).width() -10);
+            $("#payments-grid").setGridHeight($(window).height()-220);
+        }).trigger('resize');
+
     },
 	formatters: {
         "amount": function(cellvalue, options, row) {

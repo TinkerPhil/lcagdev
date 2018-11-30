@@ -30,6 +30,7 @@
     <script src="/js/lcag-mp-campaign-grid.js"></script>
     <script src="/js/lcag-mp-campaign-user-grid.js"></script>
     <script src="/js/lcag-verification-grid.js"></script>
+    <script src="/js/lcag-ffc-payment-grid.js"></script>
     <title>Loan Charge Action Group Membership Dashboard</title>
 </head>
     <body>
@@ -114,42 +115,49 @@
                 <li role="presentation"><a href="#mp" aria-controls="mp" role="tab" data-toggle="tab">MP</a></li>
                 <li role="presentation"><a href="#mpcampaign" aria-controls="mpcampaign" role="tab" data-toggle="tab">MP Campaign</a></li>
                 <li role="presentation"><a href="#mpcampaignuser" aria-controls="mpcampaignuser" role="tab" data-toggle="tab">MP Campaign-user</a></li>
+                <li role="presentation"><a href="#ffcpayment" aria-controls="ffcpayment" role="tab" data-toggle="tab">FFC payments</a></li>
             </ul>
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="members">
-                    <div class="horizontal-scroll">
+                    <div> <!-- class="horizontal-scroll">-->
                         <table id="member-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="guestsAwaitingVerification">
-                    <div class="horizontal-scroll">
+                    <div> <!-- class="horizontal-scroll">-->
                         <table id="verification-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="payments">
-                    <div class="horizontal-scroll">
+                    <div>< <!-- class="horizontal-scroll">-->
                         <table id="payments-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="mp">
-                    <div class="horizontal-scroll">
+                    <div> <!-- class="horizontal-scroll">-->
                         <table id="mp-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="mpcampaign">
-                    <div class="horizontal-scroll">
+                    <div> <!-- class="horizontal-scroll">-->
                         <table id="mp-campaign-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="mpcampaignuser">
-                    <div class="horizontal-scroll">
+                    <div> <!-- class="horizontal-scroll">-->
                         <table id="mp-campaign-user-grid">
+                        </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="ffcpayment">
+                    <div> <!-- class="horizontal-scroll">-->
+                        <table id="ffc-payment-grid">
                         </table>
                     </div>
                 </div>
@@ -165,6 +173,7 @@
             lcag.MpCampaignGrid.initialise();
             lcag.MpCampaignUserGrid.initialise();
             lcag.VerificationGrid.initialise();
+            lcag.FfcPaymentGrid.initialise();
             $("#dropzone-form").dropzone({
                 maxFiles: 2000,
                 url: "/paymentUpload",
