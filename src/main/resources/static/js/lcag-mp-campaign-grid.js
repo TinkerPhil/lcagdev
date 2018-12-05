@@ -124,7 +124,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<tr title="'+row.constituencyAddress+'"><th>Address</th><td>'+row.constituencyAddress+'</td></tr>'
                 + '<tr title="'+row.majority+'"><th>Majority</th><td>'+row.majority+'</td></tr>'
                 + '<tr title="'+row.telNo+'"><th>Telephone</th><td>'+row.telNo +'</td></tr>'
-                + '<tr title="'+row.email+'"><th>e-mail</th><td><a href="mailto:' + row.email +'">'+row.email +'</a></td></tr>'
+                + '<tr title="'+row.email+'"><th>e-mail</th><td><a href="mailto:' + row.email +'">'+row.email +'</a>&nbsp;<a href="mailto:'+row.email+'?cc='+row.sharedCampaignEmails+'&bcc='+row.privateCampaignEmails+'">CC+BCC</a></td></tr>'
                 + '<tr title="'+row.url+'"><th>URL</th><td><a href="'+row.url+'" target="_blank">'+row.url +'</a></td></tr>'
                 + '<tr><td colspan="2">&nbsp;</td> </tr>'
                 + '<tr><td colspan="2">&nbsp;</td> </tr>'
