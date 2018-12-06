@@ -8,7 +8,8 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "id", label: "ID", hidden: true },
                 { name: "name", label: "Name", width: 150, template: "string", formatter: lcag.MemberGrid.formatters.name, frozen: true },
                 { name: "username", label: "Username", width: 150, template: "string", frozen: true },
-                { name: "registrationDate", label: "Registration Date", width: 150, align: "center", sorttype: "date", formatter: "date", formatoptions: { newformat: "d-M-Y" }, formatter: lcag.MemberGrid.formatters.registrationDate },
+                { name: "emailAddress", label: "Email Address", width: 200, template: "string" },
+
                 { name: "action", label: "", width: 90, formatter: lcag.MemberGrid.formatters.action, search: false },
                 { name: "hmrcLetterChecked", label: "HMRC Letter Checked", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "identificationChecked", label: "Identification Checked", width: 90, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
@@ -20,7 +21,8 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "country", label: "Country", width: 120, formatter: lcag.MemberGrid.formatters.country },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "bigGroupUsername", label: "Big Group Username", width: 90, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
-                { name: "emailAddress", label: "Email Address", width: 200, template: "string" },
+                { name: "registrationDate", label: "Registration Date", width: 150, align: "center", sorttype: "date", formatter: "date", formatoptions: { newformat: "d-M-Y" }, formatter: lcag.MemberGrid.formatters.registrationDate },
+
                 { name: "action", label: "", width: 100, formatter: lcag.MemberGrid.formatters.action, search: false },
                 { name: "mpName", label: "MP Name", width: 90, formatter: lcag.MemberGrid.formatters.mpName },
                 { name: "mpParty", label: "MP Party", width: 90, formatter: lcag.MemberGrid.formatters.mpParty },

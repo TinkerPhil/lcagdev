@@ -24,6 +24,7 @@ class UpgradeToFullMembershipIT extends GebSpec {
             insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
             go("http://admin:lcag@localhost:8282")
             at DashboardPage
+        
 
         when: "set the user docs as verified"
             switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
