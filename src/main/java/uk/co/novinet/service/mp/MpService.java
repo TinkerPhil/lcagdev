@@ -153,7 +153,7 @@ public class MpService {
 
     private String buildMpTableSelect() {
         return "select m.mpId, m.lastName, m.firstName, m.mpName, m.party, m.twitter, m.email, " +
-                "m.constituency, m.constituencyAddress, m.edmStatus, m.edmUrl, m.ministerialStatus, m.url, m.majority," +
+                "m.constituency, m.pCon, m.constituencyAddress, m.edmStatus, m.edmUrl, m.ministerialStatus, m.url, m.majority," +
                 "m.telNo, " +
                 "m.tags, " +
                 "m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, " +
@@ -309,6 +309,7 @@ public class MpService {
                 rs.getString("twitter"),
                 rs.getString("email"),
                 rs.getString("constituency"),
+                rs.getString("pCon"),
                 rs.getString("constituencyAddress"),
                 rs.getString("edmStatus"),
                 rs.getString("edmUrl"),

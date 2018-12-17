@@ -11,6 +11,7 @@ public class MP {
     private String twitter;
     private String email;
     private String constituency;
+    private String pCon;
     private String constituencyAddress;
     private String edmStatus;
     private String edmUrl;
@@ -35,6 +36,7 @@ public class MP {
         String twitter,
     	String email,
     	String constituency,
+    	String pCon,
     	String constituencyAddress,
     	String edmStatus,
     	String edmUrl,
@@ -56,6 +58,7 @@ public class MP {
 		this.twitter = twitter;
 		this.email = email;
 		this.constituency = constituency;
+		this.pCon = pCon;
 		this.constituencyAddress = constituencyAddress;
 		this.edmStatus = edmStatus;
 		this.edmUrl = edmUrl;
@@ -117,6 +120,12 @@ public class MP {
     }
     public void setConstituency(String MpConstituency) {
         this.constituency = MpConstituency;
+    }
+    public String getpCon() {
+        return pCon;
+    }
+    public void setpCon(String pCon) {
+        this.pCon= pCon;
     }
     public String getConstituencyAddress() {
         return constituencyAddress;

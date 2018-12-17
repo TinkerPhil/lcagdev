@@ -120,7 +120,7 @@ public class MemberMpCampaignService {
     }
 
     private String buildUserTableSelect() {
-        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, m.party, m.constituency, m.majority, "
+        return "select umc.uid, u.name, ug.title as usergroup, m.mpName, m.party, m.constituency, m.majority, m.pCon, "
                 + "a.username as adminUsername, a.name as adminName, mcv.signature as adminSig, u.email, "
                 + "umc.allowEmailShareStatus, umc.sentInitialEmail, umc.campaignNotes, umc.telNo, "
                 + "umc.tags, "
@@ -260,6 +260,7 @@ public class MemberMpCampaignService {
                 rs.getString("mpName"),
                 rs.getString("party"),
                 rs.getString("constituency"),
+                rs.getString("pCon"),
                 rs.getString("majority"),
                 rs.getString("email"),
                 rs.getString("username"),

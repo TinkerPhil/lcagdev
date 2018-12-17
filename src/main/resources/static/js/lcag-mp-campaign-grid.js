@@ -12,7 +12,8 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 { name: "other", label: "", width: 500, formatter: lcag.MpCampaignGrid.formatters.other, search: false },
                 { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },
                 { name: "emails", label: "", width: 400, formatter: lcag.MpCampaignGrid.formatters.emails, search: false },
-                { name: "constituency", label: "Constituency", width: 150, template: "string" },
+//                { name: "constituency", label: "Constituency", width: 150, template: "string" },
+                { name: "mpConstituency", label: "Constituency", width: 150, template: "string", formatter: lcag.MpCampaignGrid.formatters.constituency },
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -120,7 +121,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '<tr title="'+row.party+'"><th>Party</th><td>'+row.party +'</td></tr>'
                 + '<tr title="'+row.ministerialStatus+'"><th>Ministerial</th><td>'+row.ministerialStatus +'</td></tr>'
                 + '<tr title="'+row.twitter+'"><th>Twitter</th><td><a href="https://twitter.com/'+row.twitter+'" target="_blank">'+row.twitter +'</a></td></tr>'
-                + '<tr title="'+row.constituency+'"><th>Constituency</th><td>'+row.constituency+'</td></tr>'
+                + '<tr title="'+row.constituency+'"><th>Constituency</th><td><a target="_blank" href="https://www.bbc.co.uk/news/politics/constituencies/'+row.pCon+ '">'+ row.constituency + '</a></td></tr>'
                 + '<tr title="'+row.constituencyAddress+'"><th>Address</th><td>'+row.constituencyAddress+'</td></tr>'
                 + '<tr title="'+row.majority+'"><th>Majority</th><td>'+row.majority+'</td></tr>'
                 + '<tr title="'+row.telNo+'"><th>Telephone</th><td>'+row.telNo +'</td></tr>'
@@ -135,6 +136,10 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
             return '<div class="input-group"><textarea id="tags_' + row.id + '" type="textarea" rows="3" cols="100" class="form-control">' + row.tags + '</textarea></div>';
 //            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
         },
+        "constituency": function(cellvalue, options, row) {
+            return '<a target="_blank" href="https://www.bbc.co.uk/news/politics/constituencies/'+row.pCon+ '">'+ row.constituency + '</a>';
+        },
+
         "emails": function(cellvalue, options, row) {
             var shared = row.sharedCampaignEmails;
             var private = row.privateCampaignEmails;
