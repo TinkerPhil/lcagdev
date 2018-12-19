@@ -52,7 +52,7 @@ class BankTransactionAssignmentIT extends GebSpec {
 
         and: "new member receives email saying their payment has been received"
             waitFor { getEmails(MEMBER_EMAIL_ADDRESS, "Inbox").size() == 1 }
-            getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith, Your payment of £50 has now been received. Thank you, Richard Horsley Membership Team")
+            getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith, Your donation of £50 has now been received. You will be upgraded to full membership as soon as we have reconciled the payment. Note there can be a lag of 1-2 days before this occurs so please be patient. Thank you, LCAG Membership Team")
             getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].subject.contains("Your payment has been received")
     }
 

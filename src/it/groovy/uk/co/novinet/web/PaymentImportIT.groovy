@@ -187,7 +187,7 @@ class PaymentImportIT {
         assertEquals("roundabout23", transactions[0].reference)
 
         assertEquals(1, TestUtils.getEmails("roundabout23@test.com", "Inbox").size())
-        assertEquals("Dear Bert Cooper, Your payment of £250 has now been received. Thank you, Richard Horsley Membership Team", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getContent().trim())
+        assertEquals("Dear Bert Cooper, Your donation of £250 has now been received. You will be upgraded to full membership as soon as we have reconciled the payment. Note there can be a lag of 1-2 days before this occurs so please be patient. Thank you, LCAG Membership Team", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getContent().trim())
         assertEquals("Your payment has been received", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getSubject().trim())
     }
 
