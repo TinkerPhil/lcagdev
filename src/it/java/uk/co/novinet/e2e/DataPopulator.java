@@ -16,6 +16,9 @@ public class DataPopulator {
                 runSqlScript("sql/drop_enquiry_table.sql");
                 runSqlScript("sql/create_user_table.sql");
                 runSqlScript("sql/create_mp_details_table.sql");
+                runSqlScript("sql/create_mpDetails_table.sql");
+                runSqlScript("sql/create_mpCampaignVolunteers_table.sql");
+                runSqlScript("sql/create_mpCampaignUsers_table.sql");
                 runSqlScript("sql/create_ffc_contributions_table.sql");
                 runSqlScript("sql/create_enquiry_table.sql");
                 runSqlScript("sql/create_usergroups_table.sql");
@@ -24,6 +27,7 @@ public class DataPopulator {
                 runSqlScript("sql/populate_bank_transaction_table.sql");
                 needToRetry = false;
             } catch (Exception e) {
+                e.printStackTrace();
                 sqlRetryCounter++;
                 sleep(1000);
             }

@@ -295,7 +295,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
         },
         "action": function(cellvalue, options, row) {
             if (row.status != 3) {
-                return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button>';
+                return '<button type="button" class="btn-md btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-sm" aria-hidden="true"></span>&nbsp;Update</button>';
             }
             return "";
         }
