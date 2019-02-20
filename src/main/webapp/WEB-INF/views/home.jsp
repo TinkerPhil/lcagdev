@@ -136,7 +136,7 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="payments">
-                    <div>< <!-- class="horizontal-scroll">-->
+                    <div> <!-- class="horizontal-scroll">-->
                         <table id="payments-grid">
                         </table>
                     </div>

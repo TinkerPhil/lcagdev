@@ -5,11 +5,11 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
     initialise: function() {
         $("#payments-grid").jqGrid({
             colModel: [
-                { name: "id", label: "ID", width: 0, hidden: true },
+                { name: "id", label: "ID", hidden: false },
                 { name: "userId", label: "Member", width: 300, template: "string", formatter: lcag.PaymentsGrid.formatters.userId },
                 { name: "date", label: "Transaction Date", width: 100, template: "string", formatter: lcag.PaymentsGrid.formatters.date, search: false },
                 { name: "transactionIndexOnDay", label: "Index", width: 90, template: "string" },
-                { name: "description", label: "Description", width: 400, template: "string" },
+                { name: "description", label: "Description", width: 500, template: "string" },
                 { name: "emailAddress", label: "Email Address", width: 200, template: "string" },
                 { name: "amount", label: "Amount", width: 90, template: "string", formatter: lcag.PaymentsGrid.formatters.amount },
                 { name: "runningBalance", label: "Running Balance", width: 120, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },

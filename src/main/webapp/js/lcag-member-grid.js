@@ -123,14 +123,6 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "hasCompletedClaimParticipantForm": $("#hasCompletedClaimParticipantForm_" + id).prop("checked"),
                                 "hasBeenSentClaimConfirmationEmail": $("#hasBeenSentClaimConfirmationEmail_" + id).prop("checked"),
                                 "hasOptedOutOfClaim": $("#hasOptedOutOfClaim_" + id).prop("checked"),
-//                                "hasBeenSentInitialMassLobbyingEmail": $("#hasBeenSentInitialMassLobbyingEmail_" + id).prop("checked"),
-//                                "lobbyingDayHasBeenSentMpTemplate": $("#lobbyingDayHasBeenSentMpTemplate_" + id).prop("checked"),
-//                                "lobbyingDayAttending": $("#lobbyingDayAttending_" + id).val(),
-//                                "lobbyingDayHasSentMpTemplateLetter": $("#lobbyingDayHasSentMpTemplateLetter_" + id).prop("checked"),
-//                                "lobbyingDayHasReceivedMpResponse": $("#lobbyingDayHasReceivedMpResponse_" + id).prop("checked"),
-//                                "lobbyingDayMpHasConfirmedAttendance": $("#lobbyingDayMpHasConfirmedAttendance_" + id).prop("checked"),
-//                                "lobbyingDayMpIsMinister": $("#lobbyingDayMpIsMinister_" + id).prop("checked"),
-//                                "lobbyingDayNotes": $("#lobbyingDayNotes_" + id).val(),
                                 "country": $("#country_"+id).val()
                             };
                           })(),
@@ -245,13 +237,6 @@ lcag.MemberGrid = lcag.MemberGrid || {
 
             return row.group;
         },
-/*
-        "lobbyingDayAttending": function(cellvalue, options, row) {
-            var disabled = !(row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators");
-            console.log("row.group", row.group);
-            return '<select id="lobbyingDayAttending_' + row.id + '" class="form-control" ' + (disabled ? 'disabled="disabled" ' : '') + '><option value="UNSET"' + (row.lobbyingDayAttending == 'UNSET ' ? 'selected="selected"' : '') + '>Unset</option><option value="YES" ' + (row.lobbyingDayAttending == 'YES' ? 'selected="selected"' : '') + '>Yes</option><option value="NO" ' + (row.lobbyingDayAttending == 'NO' ? 'selected="selected"' : '') + '>No</option><option value="MAYBE" ' + (row.lobbyingDayAttending == 'MAYBE' ? 'selected="selected"' : '') + '>Maybe</option></select>';
-        },
-*/
         "hasCompletedMembershipForm": function(cellvalue, options, row) {
             return '<input id="hasCompletedMembershipForm_' + row.id + '" type="checkbox" ' + (row.hasCompletedMembershipForm ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
@@ -267,35 +252,12 @@ lcag.MemberGrid = lcag.MemberGrid || {
         "hasOptedOutOfClaim": function(cellvalue, options, row) {
             return '<input id="hasOptedOutOfClaim_' + row.id + '" type="checkbox" ' + (row.hasOptedOutOfClaim ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
-/*
-        "lobbyingDayMpIsMinister": function(cellvalue, options, row) {
-            return '<input id="lobbyingDayMpIsMinister_' + row.id + '" type="checkbox" ' + (row.lobbyingDayMpIsMinister ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-        },
-        "lobbyingDayMpHasConfirmedAttendance": function(cellvalue, options, row) {
-            return '<input id="lobbyingDayMpHasConfirmedAttendance_' + row.id + '" type="checkbox" ' + (row.lobbyingDayMpHasConfirmedAttendance ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-        },
-        "lobbyingDayHasReceivedMpResponse": function(cellvalue, options, row) {
-            return '<input id="lobbyingDayHasReceivedMpResponse_' + row.id + '" type="checkbox" ' + (row.lobbyingDayHasReceivedMpResponse ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-        },
-        "lobbyingDayHasBeenSentMpTemplate": function(cellvalue, options, row) {
-            return '<input id="lobbyingDayHasBeenSentMpTemplate_' + row.id + '" type="checkbox" ' + (row.lobbyingDayHasBeenSentMpTemplate ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-        },
-        "lobbyingDayHasSentMpTemplateLetter": function(cellvalue, options, row) {
-            return '<input id="lobbyingDayHasSentMpTemplateLetter_' + row.id + '" type="checkbox" ' + (row.lobbyingDayHasSentMpTemplateLetter ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-        },
-        "hasBeenSentInitialMassLobbyingEmail": function(cellvalue, options, row) {
-            return '<input id="hasBeenSentInitialMassLobbyingEmail_' + row.id + '" type="checkbox" ' + (row.hasBeenSentInitialMassLobbyingEmail ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
-        },
-        "lobbyingDayNotes": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="lobbyingDayNotes_' + row.id + '" type="text" class="form-control input-large" value="' + row.lobbyingDayNotes + '"></div>';
-        },
-*/
         "country": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="country_' + row.id + '" type="text" class="form-control input-large" value="' + row.country + '"></div>';
         },
         "action": function(cellvalue, options, row) {
             if (row.status != 3) {
-                return '<button type="button" class="btn-md btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-sm" aria-hidden="true"></span>&nbsp;Update</button>';
+                return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-sm" aria-hidden="true"></span>&nbsp;Update</button>';
             }
             return "";
         }
