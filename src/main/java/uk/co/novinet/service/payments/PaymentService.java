@@ -14,7 +14,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -78,7 +77,13 @@ public class PaymentService {
 
                         if (bankTransaction.getUserId() != null) {
                             Member member = memberService.getMemberById(bankTransaction.getUserId());
-                            mailSenderService.sendBankTransactionAssignmentEmail(member, bankTransaction);
+
+                            try {
+                                mailSenderService.sendBankTransactionAssignmentEmail(member, bankTransaction);
+                                paymentDao.updateEmailSent(true, bankTransaction.getId());
+                            } catch (Exception e) {
+                                LOGGER.error("Unable to send email for bank transaction: {}", bankTransaction, e);
+                            }
                         }
 
                         numberOfNewTransactions++;
@@ -131,7 +136,8 @@ public class PaymentService {
                         findInDescription(description, "counterParty"),
                         reference,
                         transactionIndexOnDay,
-                        PaymentSource.SANTANDER));
+                        PaymentSource.SANTANDER,
+                        false));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }

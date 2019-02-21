@@ -66,7 +66,7 @@ public class PersistenceUtils {
         return null;
     }
 
-    public static Object like(String argument) {
+    public static String like(String argument) {
         return "%" + argument.toLowerCase() + "%";
     }
 
