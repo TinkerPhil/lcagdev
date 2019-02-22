@@ -17,7 +17,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "verifiedBy", label: "Verified By", width: 100, formatter: lcag.MemberGrid.formatters.verifiedBy },
                 { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: lcag.MemberGrid.formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "contributionAmount", label: "Contribution Amount", width: 120, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
-                { name: "group", label: "Group", width: 100, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators" } },
+                { name: "group", label: "Group", width: 100, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators;Suspended:Suspended" } },
                 { name: "country", label: "Country", width: 120, formatter: lcag.MemberGrid.formatters.country },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "bigGroupUsername", label: "Big Group Username", width: 90, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
@@ -239,8 +239,13 @@ lcag.MemberGrid = lcag.MemberGrid || {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="industry_' + row.id + '" type="text" class="form-control input-large" value="' + row.industry + '"></div>';
         },
         "group": function(cellvalue, options, row) {
-            if (row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators") {
-                return '<select id="group_' + row.id + '" class="form-control"><option ' + (row.group == 'LCAG Guests' ? 'selected="selected"' : '') + '>LCAG Guests</option><option ' + (row.group == 'Registered' ? 'selected="selected"' : '') + '>Registered</option><option ' + (row.group == 'Moderators' ? 'selected="selected"' : '') + '>Moderators</option></select>';
+            if (row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators" || row.group == 'Suspended') {
+                return '<select id="group_' + row.id + '" class="form-control">'
+                        + '<option ' + (row.group == 'LCAG Guests' ? 'selected="selected"' : '') + '>LCAG Guests</option>'
+                        + '<option ' + (row.group == 'Registered' ? 'selected="selected"' : '') + '>Registered</option>'
+                        + '<option ' + (row.group == 'Moderators' ? 'selected="selected"' : '') + '>Moderators</option>'
+                        + '<option ' + (row.group == 'Suspended' ? 'selected="selected"' : '') + '>Suspended</option>'
+                    + '</select>';
             }
 
             return row.group;

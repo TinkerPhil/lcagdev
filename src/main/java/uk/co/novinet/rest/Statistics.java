@@ -5,13 +5,15 @@ public class Statistics {
     private int totalContributors;
     private int numberOfRegisteredMembers;
     private int numberOfGuests;
+    private int numberOfSuspended;
     private int totalUsers;
 
-    public Statistics(Double totalContributions, int totalContributors, int numberOfRegisteredMembers, int numberOfGuests, int totalUsers) {
+    public Statistics(Double totalContributions, int totalContributors, int numberOfRegisteredMembers, int numberOfGuests, int numberOfSuspended, int totalUsers) {
         this.totalContributions = totalContributions;
         this.totalContributors = totalContributors;
         this.numberOfRegisteredMembers = numberOfRegisteredMembers;
         this.numberOfGuests = numberOfGuests;
+        this.numberOfSuspended = numberOfSuspended;
         this.totalUsers = totalUsers;
     }
 
@@ -29,6 +31,10 @@ public class Statistics {
 
     public int getNumberOfGuests() {
         return numberOfGuests;
+    }
+
+    public int getNumberOfSuspended() {
+        return numberOfSuspended;
     }
 
     public int getTotalUsers() {
