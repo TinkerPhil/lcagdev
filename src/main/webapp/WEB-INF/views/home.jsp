@@ -35,6 +35,7 @@
     <script src="/js/lcag-mp-campaign-user-grid.js"></script>
     <script src="/js/lcag-verification-grid.js"></script>
     <script src="/js/lcag-ffc-payment-grid.js"></script>
+    <script src="/js/lcag-extract.js"></script>
     <title>Loan Charge Action Group Membership Dashboard</title>
 </head>
     <body>
@@ -98,15 +99,23 @@
                         <span id="totalContributors" class="label label-primary">0 Contributors</span>
                         <span id="numberOfRegisteredMembers" class="label label-success action" data-toggle="modal" data-target="#emailAddressesModal">0 Members</span>
                         <span id="numberOfGuests" class="label label-info action" data-toggle="modal" data-target="#emailAddressesModal">0 Guests</span>
+                        <span id="numberOfSuspended" class="label label-default action" data-toggle="modal" data-target="#emailAddressesModal">0 Suspended</span>
                         <span id="totalUsers" class="label label-danger action" data-toggle="modal" data-target="#emailAddressesModal">0 Total</span>
                     </p>
                     <ul class="nav navbar-nav">
                         <li>
-                            <form action="/paymentUpload" class="dropzone" id="dropzone-form">
+                            <form action="/paymentUpload" class="dropzone" id="pay-dropzone-form">
                                 <p class="dz-message">Drop bank export txt file here</p>
                             </form>
                         </li>
                     </ul>
+<!--                    <ul class="nav navbar-nav">
+                        <li>
+                            <form action="/ffcUpload" class="dropzone" id="ffc-dropzone-form">
+                                <p class="dz-message">Drop FFC txt file here</p>
+                            </form>
+                        </li>
+                    </ul> -->
                 </div>
             </div>
         </nav>
@@ -120,48 +129,99 @@
                 <li role="presentation"><a href="#mpcampaign" aria-controls="mpcampaign" role="tab" data-toggle="tab">MP Campaign</a></li>
                 <li role="presentation"><a href="#mpcampaignuser" aria-controls="mpcampaignuser" role="tab" data-toggle="tab">MP Campaign-user</a></li>
                 <li role="presentation"><a href="#ffcpayment" aria-controls="ffcpayment" role="tab" data-toggle="tab">FFC payments</a></li>
+                <li role="presentation"><a href="#extract" aria-controls="extract" role="tab" data-toggle="tab">Extracts</a></li>
             </ul>
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="members">
-                    <div> <!-- class="horizontal-scroll">-->
+                    <div>
                         <table id="member-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="guestsAwaitingVerification">
-                    <div> <!-- class="horizontal-scroll">-->
+                    <div>
                         <table id="verification-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="payments">
-                    <div> <!-- class="horizontal-scroll">-->
+                    <div> <!-- class="horizontal-scroll"> -->
                         <table id="payments-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="mp">
-                    <div> <!-- class="horizontal-scroll">-->
+                    <div>
                         <table id="mp-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="mpcampaign">
-                    <div> <!-- class="horizontal-scroll">-->
+                    <div>
                         <table id="mp-campaign-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="mpcampaignuser">
-                    <div> <!-- class="horizontal-scroll">-->
+                    <div>
                         <table id="mp-campaign-user-grid">
                         </table>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="ffcpayment">
-                    <div> <!-- class="horizontal-scroll">-->
+                    <div>
                         <table id="ffc-payment-grid">
+                        </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="extract">
+                    <div>
+                        <table id="extract-page">
+                            <tr>
+                                <th>Type</th><td><select id="extractType"><option>MP</option><option>Member</option><option>Special</option></select></td>
+                                <td class="extractSpecial"><input type="text" id="extractSpecial"></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr><td colspan="4">&nbsp;</td></tr>
+                            <tr>
+                                <th>Columns</th><td colspan="3"><input type="text" id="extractColumns" value="*"></td>
+                            </tr>
+                            <tr><td colspan="4">&nbsp;</td></tr>
+                            <tr><th colspan="2">MP</th><th class="extractMember" colspan="2">Member</th></tr>
+                            <tr>
+                                <td>Name</td>                                   <td><input type="text" id="extractMpName"></td>
+                                <td class="extractMember">Name</td>             <td class="extractMember"><input type="text" id="extractName"></td>
+                            </tr>
+                            <tr>
+                                <td>Constituency</td>                           <td><input type="text" id="extractMpConstituency"></td>
+                                <td class="extractMember">e-mail</td>           <td class="extractMember"><input type="text" id="extractEmail"></td>
+                            </tr>
+                            <tr>
+                                <td>Party</td>                                  <td><input type="text" id="extractMpParty"></td>
+                                <td class="extractMember">Username</td>         <td class="extractMember"><input type="text" id="extractUsername"></td>
+                            </tr>
+                            <tr>
+                                <td>Tags</td>                                   <td><input type="text" id="extractMpTags"></td>
+                                <td class="extractMember">Tags</td>             <td class="extractMember"><input type="text" id="extractTags"></td>
+                            </tr>
+                            <tr><td colspan="4">&nbsp;</td></tr>
+                            <tr>
+                                <th>Extra Col 1</th><td>value</td>
+                                <th>Extra Col 2</th><td>value</td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" id="extractField1"></td><td><input type="text" id="extractValue1"></td>
+                                <td><input type="text" id="extractField2"></td><td><input type="text" id="extractValue2"></td>
+                            </tr>
+
+                            <tr><td colspan="2">&nbsp;</td></tr>
+                            <tr><td align="center" colspan="2"><input type="button" value="Go" id="extractGo"></td></tr>
+                        </table>
+                        <br>
+                        <table width="100%">
+                            <tr><th>Results</th><td><input type="button" value="Copy" id="extractCopy"></td></tr>
+                            <tr><td colspan="2"><textarea style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 150px;" id="extractResults">Hit Go to populate</textarea></td></tr>
                         </table>
                     </div>
                 </div>
@@ -178,9 +238,20 @@
             lcag.MpCampaignUserGrid.initialise();
             lcag.VerificationGrid.initialise();
             lcag.FfcPaymentGrid.initialise();
-            $("#dropzone-form").dropzone({
+            lcag.ExtractPage.initialise();
+            $("#pay-dropzone-form").dropzone({
                 maxFiles: 2000,
                 url: "/paymentUpload",
+                success: function (file, response) {
+                    lcag.Common.alertSuccess();
+                    lcag.PaymentsGrid.grid.trigger("reloadGrid");
+                    lcag.MemberGrid.grid.trigger("reloadGrid");
+                    lcag.VerificationGrid.grid.trigger("reloadGrid");
+                }
+            });
+            $("#ffc-dropzone-form").dropzone({
+                maxFiles: 2000,
+                url: "/ffcUpload",
                 success: function (file, response) {
                     lcag.Common.alertSuccess();
                     lcag.PaymentsGrid.grid.trigger("reloadGrid");

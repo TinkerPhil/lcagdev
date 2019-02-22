@@ -10,6 +10,7 @@ lcag.Statistics = lcag.Statistics || {
             $("#totalContributors").html(result.totalContributors + " Contributors");
             $("#numberOfRegisteredMembers").html(result.numberOfRegisteredMembers + " Members");
             $("#numberOfGuests").html(result.numberOfGuests + " Guests");
+            $("#numberOfSuspended").html(result.numberOfSuspended + " Suspended");
             $("#totalUsers").html(result.totalUsers + " Total");
 
             $( "#emailAddressesModal" ).on('shown.bs.modal', function(e) {
@@ -20,6 +21,8 @@ lcag.Statistics = lcag.Statistics || {
                     groupParameter = "?group=Registered";
                 } else if (sourceButton == 'numberOfGuests') {
                     groupParameter = "?group=LCAG Guests";
+                } else if (sourceButton == 'numberOfSuspended') {
+                    groupParameter = "?group=Suspended";
                 }
 
                 $.ajax({
@@ -32,6 +35,8 @@ lcag.Statistics = lcag.Statistics || {
                        title = "Registered Member Email Addresses";
                     } else if (sourceButton == "numberOfGuests") {
                         title = "Guest Email Addresses";
+                    } else if (sourceButton == "numberOfSuspended") {
+                        title = "Suspended Email Addresses";
                     } else if (sourceButton == "totalUsers") {
                         title = "All Email Addresses";
                     }

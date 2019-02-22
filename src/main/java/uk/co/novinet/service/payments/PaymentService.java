@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.enquiry.MailSenderService;
 import uk.co.novinet.service.member.Member;
@@ -14,7 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +51,11 @@ public class PaymentService {
     @Autowired
     private PaymentDao paymentDao;
 
+    @Scheduled(initialDelayString = "${resendFailedEmailsInitialDelayMilliseconds}", fixedRateString = "${resendFailedEmailsIntervalMilliseconds}")
+    public void resendFailedEmails() {
+        paymentDao.findAssignedBankTransactionsRequiringEmails().forEach(this::attemptToSendBankTransactionEmail);
+    }
+
     public ImportOutcome importTransactions(String transactions) {
         LOGGER.info("importTransactions called for: {}", transactions);
 
@@ -75,12 +80,6 @@ public class PaymentService {
                     List<BankTransaction> existingBankTransactions = paymentDao.findExistingBankTransaction(bankTransaction);
                     if (existingBankTransactions == null || existingBankTransactions.isEmpty()) {
                         paymentDao.create(bankTransaction);
-
-                        if (bankTransaction.getUserId() != null) {
-                            Member member = memberService.getMemberById(bankTransaction.getUserId());
-                            mailSenderService.sendBankTransactionAssignmentEmail(member, bankTransaction);
-                        }
-
                         numberOfNewTransactions++;
                         LOGGER.info("Persisting new bank transaction: {}", bankTransaction);
                     }
@@ -94,6 +93,19 @@ public class PaymentService {
         } catch (Exception e) {
             LOGGER.error("Could not import transactions: {}", transactions, e);
             throw new RuntimeException(e);
+        }
+    }
+
+    private void attemptToSendBankTransactionEmail(BankTransaction bankTransaction) {
+        LOGGER.info("Going to try and send bank transaction email for bankTransaction: {}", bankTransaction);
+
+        Member member = memberService.getMemberById(bankTransaction.getUserId());
+
+        try {
+            mailSenderService.sendBankTransactionAssignmentEmail(member, bankTransaction);
+            paymentDao.updateEmailSent(true, bankTransaction.getId());
+        } catch (Exception e) {
+            LOGGER.error("Unable to send email for bank transaction: {}", bankTransaction, e);
         }
     }
 
@@ -131,7 +143,8 @@ public class PaymentService {
                         findInDescription(description, "counterParty"),
                         reference,
                         transactionIndexOnDay,
-                        PaymentSource.SANTANDER));
+                        PaymentSource.SANTANDER,
+                        false));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -190,6 +203,6 @@ public class PaymentService {
 
     public void assignToMember(Long memberId, Long paymentId) {
         paymentDao.updateMemberId(paymentId, memberId);
-        mailSenderService.sendBankTransactionAssignmentEmail(memberService.getMemberById(memberId), paymentDao.getBankTransactionById(paymentId));
+        paymentDao.updateEmailSent(false, memberId);
     }
 }

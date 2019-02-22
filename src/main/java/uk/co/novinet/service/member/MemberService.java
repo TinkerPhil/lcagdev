@@ -396,6 +396,9 @@ public class MemberService {
     public List<Member> findExistingForumUsersByField(String field, String value) {
         return jdbcTemplate.query(buildUserTableSelect() + "where lower(u." + field + ") = ?" + buildUserTableGroupBy(), new Object[] { value.toLowerCase() }, (rs, rowNum) -> buildMember(rs));
     }
+    public List<Member> findExistingForumUsersByFieldWild(String field, String regex) {
+        return jdbcTemplate.query(buildUserTableSelect() + "where lower(u." + field + ") like ?" + buildUserTableGroupBy(), new Object[] { regex.toLowerCase() }, (rs, rowNum) -> buildMember(rs));
+    }
 
     private String buildUserTableSelect() {
         return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, " +

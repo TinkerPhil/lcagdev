@@ -27,9 +27,10 @@ public class StatisticsService {
         Integer totalContributors = jdbcTemplate.queryForObject("select count(distinct(user_id)) from " + bankTransactionsTableName(), new Object[] { }, Integer.class);
         Integer numberOfRegisteredMembers = jdbcTemplate.queryForObject("select count(u.uid) from " + usersTableName() + " u where u.usergroup in (select gid from " + userGroupsTableName() + " where title = ? or title = ?)", new Object[] { "Registered", "Moderators" }, Integer.class);
         Integer numberOfGuests = jdbcTemplate.queryForObject("select count(*) from " + usersTableName() + " u where u.usergroup in (select gid from " + userGroupsTableName() + " where title = ?)", new Object[] { "LCAG Guests" }, Integer.class);
-        Integer totalUsers = numberOfRegisteredMembers + numberOfGuests;
+        Integer numberOfSuspended = jdbcTemplate.queryForObject("select count(*) from " + usersTableName() + " u where u.usergroup in (select gid from " + userGroupsTableName() + " where title = ?)", new Object[] { "Suspended" }, Integer.class);
+        Integer totalUsers = numberOfRegisteredMembers + numberOfGuests + numberOfSuspended;
 
-        return new Statistics(totalContributions, totalContributors, numberOfRegisteredMembers, numberOfGuests, totalUsers);
+        return new Statistics(totalContributions, totalContributors, numberOfRegisteredMembers, numberOfGuests, numberOfSuspended, totalUsers);
     }
 
 }

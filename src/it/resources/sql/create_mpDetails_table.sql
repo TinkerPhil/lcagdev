@@ -1,4 +1,4 @@
-CREATE TABLE `i7b0_mpDetails` (
+CREATE TABLE IF NOT EXISTS `i7b0_mpDetails` (
   `mpId` int(11) NOT NULL,
   `firstName` varchar(100) DEFAULT NULL,
   `lastName` varchar(100) DEFAULT NULL,

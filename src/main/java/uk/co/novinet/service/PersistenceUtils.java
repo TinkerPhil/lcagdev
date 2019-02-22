@@ -66,7 +66,7 @@ public class PersistenceUtils {
         return null;
     }
 
-    public static Object like(String argument) {
+    public static String like(String argument) {
         return "%" + argument.toLowerCase() + "%";
     }
 
@@ -87,6 +87,9 @@ public class PersistenceUtils {
         return forumDatabaseTablePrefix + "bank_transactions";
     }
 
+    public static String ffcTransactionsTableName() {
+        return forumDatabaseTablePrefix + "ffc_bank";
+    }
     public static String ffcContributionsTableName() {
         return forumDatabaseTablePrefix + "ffc_contributions";
     }

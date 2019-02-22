@@ -45,6 +45,7 @@ public class PaymentController {
             ImportOutcome importOutcome = paymentService.importTransactions(IOUtils.toString(file.getInputStream(), bankExportCharacterEncoding));
             return new ResponseEntity(importOutcome, HttpStatus.OK);
         } catch (Exception e) {
+            LOGGER.error("Unable to retrieve payments", e);
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

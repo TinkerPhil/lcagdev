@@ -7,6 +7,8 @@ docker run -d \
     -e "DASHBOARD_PASSWORD=lcag" \
     -e "RETRIEVE_MAIL_INITIAL_DELAY_MILLISECONDS=1000" \
     -e "RETRIEVE_MAIL_REFRESH_INTERVAL_MILLISECONDS=1000" \
+    -e "RESEND_FAILED_EMAILS_INITIAL_DELAY_MILLISECONDS=1000" \
+    -e "RESEND_FAILED_EMAILS_INTERVAL_MILLISECONDS=1000" \
 	-e "SMTP_HOST=lcag-mail" \
 	-e "SMTP_PORT=3025" \
 	-e "SMTP_USERNAME=lcag-testing@lcag.com" \
@@ -40,6 +42,7 @@ docker run -d \
 	-e "VIRTUAL_PORT=8282" \
 	-e "SERVER_PORT=8282" \
 	-e "BANK_EXPORT_CHARACTER_ENCODING=iso-8859-1" \
+	-e "FFC_EXPORT_CHARACTER_ENCODING=iso-8859-1" \
 	--name lcag-application \
     --network lcag-automation-network \
     -p 8282:8282 -p 5005:5005 \

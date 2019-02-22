@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.PersistenceUtils;
-import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
 import uk.co.novinet.service.member.Where;
 
@@ -38,6 +37,7 @@ public class PaymentDao {
         put("reference", "bt.reference");
         put("transactionIndexOnDay", "bt.transaction_index_on_day");
         put("paymentSource", "bt.payment_source");
+        put("emailSent", "bt.email_sent");
     }};
 
     @Value("${forumDatabaseTablePrefix}")
@@ -53,7 +53,7 @@ public class PaymentDao {
 
         bankTransaction.setId(nextAvailableId);
 
-        String sql = "insert into " + bankTransactionsTableName() + " (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into " + bankTransactionsTableName() + " (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_sent`) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         LOGGER.info("sql: {}", sql);
 
@@ -68,7 +68,8 @@ public class PaymentDao {
                 bankTransaction.getCounterParty() == null ? "" : bankTransaction.getCounterParty(),
                 bankTransaction.getReference() == null ? "" : bankTransaction.getReference(),
                 bankTransaction.getTransactionIndexOnDay(),
-                String.valueOf(bankTransaction.getPaymentSource())
+                String.valueOf(bankTransaction.getPaymentSource()),
+                bankTransaction.getEmailSent()
         );
 
         LOGGER.info("Insertion result: {}", result);
@@ -146,8 +147,8 @@ public class PaymentDao {
                 rs.getString("bt.counter_party"),
                 rs.getString("bt.reference"),
                 rs.getInt("bt.transaction_index_on_day"),
-                PaymentSource.valueOf(rs.getString("bt.payment_source"))
-        );
+                PaymentSource.valueOf(rs.getString("bt.payment_source")),
+                rs.getBoolean("bt.email_sent"));
 
         LOGGER.info("Retrieved bank transaction: {}", bankTransaction);
 
@@ -261,10 +262,29 @@ public class PaymentDao {
             parameters.add(like(String.valueOf(bankTransaction.getPaymentSource())));
         }
 
+        if (bankTransaction.getEmailSent() != null) {
+            clauses.add("bt.email_sent = ?");
+            parameters.add(bankTransaction.getEmailSent());
+        }
+
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
     public void updateMemberId(Long paymentId, Long memberId) {
         jdbcTemplate.update("update " + bankTransactionsTableName() + " bt set bt.user_id = ? where bt.id = ?", memberId, paymentId);
+    }
+
+    public void updateEmailSent(boolean emailSent, Long paymentId) {
+        jdbcTemplate.update("update " + bankTransactionsTableName() + " bt set bt.email_sent = ? where bt.id = ?", emailSent, paymentId);
+    }
+
+    public List<BankTransaction> findAssignedBankTransactionsRequiringEmails() {
+        LOGGER.info("Finding bank transactions that require emails");
+
+        String sql = buildBankTransactionTableSelect() + "where email_sent = ? and user_id is not null";
+
+        LOGGER.info("Going to execute sql: {}", sql);
+
+        return jdbcTemplate.query(sql, new Object[] { false }, (rs, rowNum) -> buildBankTransaction(rs));
     }
 }
