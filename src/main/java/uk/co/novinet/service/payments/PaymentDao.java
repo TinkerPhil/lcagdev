@@ -277,4 +277,14 @@ public class PaymentDao {
     public void updateEmailSent(boolean emailSent, Long paymentId) {
         jdbcTemplate.update("update " + bankTransactionsTableName() + " bt set bt.email_sent = ? where bt.id = ?", emailSent, paymentId);
     }
+
+    public List<BankTransaction> findAssignedBankTransactionsRequiringEmails() {
+        LOGGER.info("Finding bank transactions that require emails");
+
+        String sql = buildBankTransactionTableSelect() + "where email_sent = ? and user_id is not null";
+
+        LOGGER.info("Going to execute sql: {}", sql);
+
+        return jdbcTemplate.query(sql, new Object[] { false }, (rs, rowNum) -> buildBankTransaction(rs));
+    }
 }
