@@ -18,6 +18,7 @@ public class BankTransaction {
     private String reference;
     private Integer transactionIndexOnDay;
     private PaymentSource paymentSource;
+    private Boolean emailSent;
 
     public BankTransaction(
             Long id,
@@ -31,7 +32,8 @@ public class BankTransaction {
             String counterParty,
             String reference,
             Integer transactionIndexOnDay,
-            PaymentSource paymentSource) {
+            PaymentSource paymentSource,
+            Boolean emailSent) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -44,6 +46,7 @@ public class BankTransaction {
         this.reference = reference;
         this.transactionIndexOnDay = transactionIndexOnDay;
         this.paymentSource = paymentSource;
+        this.emailSent = emailSent;
     }
 
     void setId(Long id) {
@@ -142,4 +145,11 @@ public class BankTransaction {
         return reflectionToString(this);
     }
 
+    public Boolean getEmailSent() {
+        return emailSent;
+    }
+
+    public void setEmailSent(Boolean emailSent) {
+        this.emailSent = emailSent;
+    }
 }

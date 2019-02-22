@@ -15,7 +15,8 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 { name: "runningBalance", label: "Running Balance", width: 120, template: "string", formatter: lcag.PaymentsGrid.formatters.runningBalance  },
                 { name: "counterParty", label: "Counter Party", width: 150, template: "string" },
                 { name: "reference", label: "Reference", width: 150, template: "string" },
-                { name: "paymentSource", label: "Payment Source", width: 150, template: "string" }
+                { name: "paymentSource", label: "Payment Source", width: 150, template: "string" },
+                { name: "emailSent", label: "Email Sent", width: 59, formatter: lcag.PaymentsGrid.formatters.emailSent, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -106,6 +107,9 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 return '<select style="width: 100%;" id="userId_' + row.id + '" class="userIdSelect"></select>';
             }
             return '<select style="width: 100%;" id="userId_' + row.id + '" class="userIdSelect"><option selected value="' + row.userId + '">' + row.username + ' (' + row.emailAddress + ')</option></select>';
+        },
+        "emailSent": function(cellvalue, options, row) {
+            return '<input disabled="disabled" id="emailSent_' + row.id + '" type="checkbox" ' + (row.emailSent ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         }
     }
 }

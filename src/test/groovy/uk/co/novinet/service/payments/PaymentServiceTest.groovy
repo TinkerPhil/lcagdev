@@ -1,6 +1,8 @@
 package uk.co.novinet.service.payments
 
 import spock.lang.Specification
+import uk.co.novinet.service.enquiry.MailSenderService
+import uk.co.novinet.service.member.Member
 import uk.co.novinet.service.member.MemberService
 
 import java.text.SimpleDateFormat
@@ -39,9 +41,14 @@ Balance: 4550.00 
 
     PaymentService testObj = new PaymentService()
     MemberService memberServiceMock = Mock()
+    Member memberMock = Mock()
+    PaymentDao paymentDaoMock = Mock()
+    MailSenderService mailSenderServiceMock = Mock()
 
     def setup() {
         testObj.memberService = memberServiceMock
+        testObj.paymentDao = paymentDaoMock
+        testObj.mailSenderService = mailSenderServiceMock
     }
 
     def "buildBankTransactions builds a list of BankTransaction objects in oldest date first order"() {
@@ -90,6 +97,17 @@ Balance: 4550.00 
         bankTransactions[4].counterParty == "A Smith"
         bankTransactions[4].reference == "ABC123"
         bankTransactions[4].transactionIndexOnDay == 0
+    }
+
+    def "When importing a set of bank transactions - if the first email fails to send, we still continue to process and import the remaining transaction"() {
+        when:
+        ImportOutcome importOutcome = testObj.importTransactions(transactions)
+        memberServiceMock.getMemberById(_) >> memberMock
+        paymentDaoMock.updateEmailSent(_, _) >> { throw new RuntimeException() }
+
+        then:
+        importOutcome.importedTransactions == 5
+        5 * paymentDaoMock.create(_)
     }
 
     private long time(String dateString) {

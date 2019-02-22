@@ -162,7 +162,7 @@ public class TestUtils {
                 schemes, industry, howDidYouFindOutAboutLcag, memberOfBigGroup ? "1" : "0", bigGroupUsername));
     }
 
-    private static long unixTime() {
+    static long unixTime() {
         return new Date().getTime() / 1000;
     }
 
