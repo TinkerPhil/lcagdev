@@ -23,6 +23,7 @@ public class DataPopulator {
                 runSqlScript("sql/create_usergroups_table.sql");
                 runSqlScript("sql/populate_usergroups_table.sql");
                 runSqlScript("sql/create_bank_transaction_table.sql");
+                runSqlScript("sql/create_bank_transaction_infull_table.sql");
                 runSqlScript("sql/populate_bank_transaction_table.sql");
                 needToRetry = false;
             } catch (Exception e) {
