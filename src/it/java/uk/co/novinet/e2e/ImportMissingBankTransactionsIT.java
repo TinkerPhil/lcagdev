@@ -131,4 +131,36 @@ public class ImportMissingBankTransactionsIT {
     }
 
 
+    @Test
+    public void mixtureOfOlderAndNewerMissingTransactionsOnlyOlderMissingTransactionsAreImported() throws InterruptedException {
+        assertTrue(getBankTransactionRows().isEmpty());
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+                "VALUES\n" +
+                "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.contributor1155092 FROM TEST1 S P ', 50.00, 69178.86, 'TEST1 S P ', 'contributor1155092', 0, 'SANTANDER', '', 1);\n")
+        );
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+                        "VALUES\n" +
+                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM TEST1 S P ', '2019-02-23 00:00:00'),\n" +
+                        "\t(603, 50.00, 68328.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM TEST2 ', '2019-02-23 00:00:00'),\n" +
+                        "\t(606, 100.00, 68178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM TEST3 ', '2019-02-22 00:00:00'),\n" +
+                        "\t(608, 100.00, 67978.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM TEST4 ', '2019-02-22 00:00:00');\n",
+                contributorUsername1,
+                contributorUsername2,
+                contributorUsername3,
+                contributorUsername4)
+        );
+
+        sleep(5000);
+
+        assertEquals(0, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+        assertEquals(0, getEmails(contributorUsername2 + "@victim.com", "Inbox").size());
+        assertEquals(1, getEmails(contributorUsername3 + "@victim.com", "Inbox").size());
+        assertEquals(1, getEmails(contributorUsername4 + "@victim.com", "Inbox").size());
+
+        assertEquals(3, getBankTransactionRows().size());
+    }
+
+
 }
