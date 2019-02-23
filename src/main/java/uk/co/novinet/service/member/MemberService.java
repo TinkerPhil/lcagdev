@@ -18,6 +18,12 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
 
+import static com.google.common.primitives.Longs.asList;
+import static java.lang.Long.parseLong;
+import static java.util.Arrays.stream;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static uk.co.novinet.service.PersistenceUtils.*;
 
 @Service
@@ -256,6 +262,7 @@ public class MemberService {
                     extractUsername(enquiry.getEmailAddress()),
                     enquiry.getName(),
                     null,
+                    emptyList(),
                     Instant.now(),
                     false,
                     false,
@@ -355,7 +362,7 @@ public class MemberService {
     }
 
     private String buildUserTableSelect() {
-        return "select u.uid, u.username, u.name, u.email, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, " +
+        return "select u.uid, u.username, u.name, u.email, u.additionalgroups, u.salt, u.password, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, " +
                 "u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, " +
                 "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
                 "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, " +
@@ -575,6 +582,7 @@ public class MemberService {
                 rs.getString("username"),
                 rs.getString("name"),
                 rs.getString("group"),
+                buildAdditionalGroupIds(rs.getString("additionalgroups")),
                 dateFromMyBbRow(rs, "regdate"),
                 rs.getBoolean("hmrc_letter_checked"),
                 rs.getBoolean("identification_checked"),
@@ -606,6 +614,18 @@ public class MemberService {
         );
     }
 
+    private List<Long> buildAdditionalGroupIds(String additionalGroups) {
+        if (isBlank(additionalGroups)) {
+            return emptyList();
+        }
+
+        if (!additionalGroups.contains(",")) {
+            return singletonList(parseLong(additionalGroups.trim()));
+        }
+
+        return asList(stream(additionalGroups.split(",")).mapToLong(Long::parseLong).toArray());
+    }
+
     private String extractUsername(String emailAddress) {
         String usernameCandidate = firstBitOfEmailAddress(emailAddress);
         LOGGER.info("Candidate username: {}", usernameCandidate);
@@ -634,4 +654,9 @@ public class MemberService {
     private String firstBitOfEmailAddress(String emailAddress) {
         return emailAddress.substring(0, emailAddress.indexOf("@"));
     }
+
+    public List<MemberGroup> getAllMemberGroups() {
+        return jdbcTemplate.query("select * from usergroups", (rs, rowNum) -> new MemberGroup(rs.getLong("git"), rs.getString("title")));
+    }
+
 }

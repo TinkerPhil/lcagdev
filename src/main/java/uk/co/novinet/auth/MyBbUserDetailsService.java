@@ -10,6 +10,8 @@ import uk.co.novinet.service.member.MemberService;
 
 import java.util.List;
 
+import static java.lang.String.format;
+
 @Service
 public class MyBbUserDetailsService implements UserDetailsService {
 
@@ -21,14 +23,14 @@ public class MyBbUserDetailsService implements UserDetailsService {
         List<Member> members = memberService.findExistingForumUsersByField("username", username);
 
         if (members.size() > 1) {
-            throw new RuntimeException("More than one member with username: " + username);
+            throw new RuntimeException(format("More than one member with username: $s", username));
         }
 
         if (members.isEmpty()) {
             return null;
         }
 
-        return new MyBbUserPrincipal(members.get(0));
+        return new MyBbUserPrincipal(members.get(0), memberService);
     }
 
 }

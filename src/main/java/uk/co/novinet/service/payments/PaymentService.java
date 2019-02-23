@@ -57,7 +57,7 @@ public class PaymentService {
     private Long resendFailedEmailsThrottleTimeMilliseconds;
 
     @Scheduled(initialDelayString = "${resendFailedEmailsInitialDelayMilliseconds}", fixedRateString = "${resendFailedEmailsIntervalMilliseconds}")
-    public void resendFailedEmails() {
+    public void asynchronouslyProcessBankTransactions() {
         paymentDao.findAssignedBankTransactionsRequiringEmails().forEach(bankTransaction -> {
             attemptToSendBankTransactionEmail(bankTransaction);
             try {

@@ -1,5 +1,6 @@
 package uk.co.novinet.service.member;
 
+import java.util.List;
 import uk.co.novinet.service.enquiry.PasswordDetails;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class Member {
     private String username;
     private String name;
     private String group;
+    private List<Long> additionalGroupIds;
     private Instant registrationDate;
     private Boolean hmrcLetterChecked;
     private Boolean identificationChecked;
@@ -58,6 +60,7 @@ public class Member {
             String username,
             String name,
             String group,
+            List<Long> additionalGroupIds,
             Instant registrationDate,
             Boolean hmrcLetterChecked,
             Boolean identificationChecked,
@@ -90,6 +93,7 @@ public class Member {
         this.emailAddress = emailAddress;
         this.username = username;
         this.group = group;
+        this.additionalGroupIds = additionalGroupIds;
         this.registrationDate = registrationDate;
         this.hmrcLetterChecked = hmrcLetterChecked;
         this.identificationChecked = identificationChecked;
@@ -380,4 +384,12 @@ public class Member {
     }
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
+
+    public List<Long> getAdditionalGroupIds() {
+        return additionalGroupIds;
+    }
+
+    public void setAdditionalGroupIds(List<Long> additionalGroupIds) {
+        this.additionalGroupIds = additionalGroupIds;
+    }
 }

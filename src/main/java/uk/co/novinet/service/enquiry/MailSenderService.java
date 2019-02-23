@@ -148,7 +148,7 @@ public class MailSenderService {
     private String replaceTokens(String emailTemplate, Member member, BankTransaction bankTransaction) {
         String substitutedMemberTokens = emailTemplate
                 .replace("$USERNAME", member.getUsername())
-                .replace("$PASSWORD", member.getPasswordDetails() == null ? "" : member.getPasswordDetails().getPassword())
+                .replace("$PASSWORD", member.getPasswordDetails() == null ? "" : (member.getPasswordDetails().getPassword() == null ? "" : member.getPasswordDetails().getPassword()))
                 .replace("$NAME", member.getName())
                 .replace("$TOKEN", member.getToken())
                 .replace("$CLAIM_TOKEN", member.getClaimToken());

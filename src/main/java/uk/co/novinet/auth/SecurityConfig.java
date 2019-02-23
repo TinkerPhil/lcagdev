@@ -1,5 +1,6 @@
 package uk.co.novinet.auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,28 +11,37 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import uk.co.novinet.service.member.MemberService;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${dashboard.username}")
-    private String username;
+    @Autowired
+    private MyBbUserDetailsService userDetailsService;
 
-    @Value("${dashboard.password}")
-    private String password;
+    @Autowired
+    private MyBbPasswordEncoder myBbPasswordEncoder;
+
+    @Autowired
+    private MemberService memberService;
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(new DaoAuthenticationProvider())
-        auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .withUser(username).password(password).roles("USER", "ADMIN");
+        auth.authenticationProvider(new DaoAuthenticationProvider());
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(myBbPasswordEncoder);
+        return authProvider;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and().formLogin().permitAll()
-                .and().logout().permitAll();
+        http.httpBasic().and().authorizeRequests()
+                .antMatchers("/status").permitAll()
+                .antMatchers("/**").hasAnyRole("Administrators", "LCAG Dashboard Administrator", "Moderators", "Super Moderators").and().csrf().disable().headers().frameOptions().disable();
     }
 
 }
