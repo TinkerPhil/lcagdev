@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.enquiry.Enquiry;
 import uk.co.novinet.service.enquiry.MailSenderService;
+import uk.co.novinet.service.enquiry.PasswordDetails;
 import uk.co.novinet.service.enquiry.PasswordSource;
 
 import java.math.BigDecimal;
@@ -66,15 +67,6 @@ public class MemberService {
         put("hasBeenSentClaimConfirmationEmail", "u.has_been_sent_claim_confirmation_email");
         put("hasOptedOutOfClaim", "u.opted_out_of_claim");
         put("claimToken", "u.claim_token");
-//        put("attendingMassLobbyingDay", "u.attending_mass_lobbying_day");
-//        put("hasBeenSentInitialMassLobbyingEmail", "u.has_been_sent_initial_mass_lobbying_email");
-//        put("lobbyingDayHasBeenSentMpTemplate", "u.lobbying_day_has_been_sent_mp_template");
-//        put("lobbyingDayHasSentMpTemplateLetter", "u.lobbying_day_has_sent_mp_template_letter");
-//        put("lobbyingDayHasReceivedMpResponse", "u.lobbying_day_has_received_mp_response");
-//        put("lobbyingDayMpHasConfirmedAttendance", "u.lobbying_day_mp_has_confirmed_attendance");
-//        put("lobbyingDayMpIsMinister", "u.lobbying_day_mp_is_minister");
-//        put("lobbyingDayNotes", "u.lobbying_day_notes");
-//        put("lobbyingDayAttending", "u.lobbying_day_attending");
         put("country", "u.country");
     }};
 
@@ -103,29 +95,15 @@ public class MemberService {
             Boolean hasCompletedClaimParticipantForm,
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
-//            Boolean hasBeenSentInitialMassLobbyingEmail,
-//            Boolean lobbyingDayHasBeenSentMpTemplate,
-//            Boolean lobbyingDayHasSentMpTemplateLetter,
-//            Boolean lobbyingDayHasReceivedMpResponse,
-//            Boolean lobbyingDayMpHasConfirmedAttendance,
-//            Boolean lobbyingDayMpIsMinister,
-//            String lobbyingDayNotes,
-//            LobbyingDayAttendance lobbyingDayAttending,
             String country) {
         LOGGER.info("Going to update user with id {}", memberId);
         LOGGER.info("name={}, group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, " +
                         "mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, " +
                         "memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, " +
                         "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}",
-                        //", hasBeenSentInitialMassLobbyingEmail={}, lobbyingDayHasBeenSentMpTemplate={}" +
-                        //"lobbyingDayHasSentMpTemplateLetter={}, lobbyingDayHasReceivedMpResponse={}, lobbyingDayMpHasConfirmedAttendance={}, lobbyingDayMpIsMinister={}," +
-                        //"lobbyingDayNotes={}, lobbyingDayAttending={}",
                 name, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
                 schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim,
                 hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim
-                //, hasBeenSentInitialMassLobbyingEmail, lobbyingDayHasBeenSentMpTemplate,
-                //lobbyingDayHasSentMpTemplateLetter, lobbyingDayHasReceivedMpResponse, lobbyingDayMpHasConfirmedAttendance, lobbyingDayMpIsMinister, lobbyingDayNotes,
-                //lobbyingDayAttending
         );
 
         Member existingMember = getMemberById(memberId);
@@ -156,14 +134,6 @@ public class MemberService {
                 "u.has_completed_claim_participant_form = ?, " +
                 "u.has_been_sent_claim_confirmation_email = ?, " +
                 "u.opted_out_of_claim = ?, " +
-//                "u.has_been_sent_initial_mass_lobbying_email = ?, " +
-//                "u.lobbying_day_has_been_sent_mp_template = ?, " +
-//                "u.lobbying_day_has_sent_mp_template_letter = ?, " +
-//                "u.lobbying_day_has_received_mp_response = ?, " +
-//                "u.lobbying_day_mp_has_confirmed_attendance = ?, " +
-//                "u.lobbying_day_mp_is_minister = ?, " +
-//                "u.lobbying_day_notes = ?, " +
-//                "u.lobbying_day_attending = ?, " +
                 "u.country = ? " +
                 "where u.uid = ?";
 
@@ -194,14 +164,6 @@ public class MemberService {
                 hasCompletedClaimParticipantForm,
                 hasBeenSentClaimConfirmationEmail,
                 hasOptedOutOfClaim,
-//                hasBeenSentInitialMassLobbyingEmail,
-//                lobbyingDayHasBeenSentMpTemplate,
-//                lobbyingDayHasSentMpTemplateLetter,
-//                lobbyingDayHasReceivedMpResponse,
-//                lobbyingDayMpHasConfirmedAttendance,
-//                lobbyingDayMpIsMinister,
-//                lobbyingDayNotes,
-//                lobbyingDayAttending.toString(),
                 country,
                 memberId
         );
@@ -320,14 +282,6 @@ public class MemberService {
                     false,
                     false,
                     false,
-//                    false,
-//                    false,
-//                    false,
-//                    false,
-//                    false,
-//                    false,
-//                    "",
-//                    LobbyingDayAttendance.UNSET,
                     guid(),
                     null
             );
@@ -605,47 +559,7 @@ public class MemberService {
             clauses.add("u.opted_out_of_claim = ?");
             parameters.add(member.getHasOptedOutOfClaim());
         }
-/*
-        if (member.getHasBeenSentInitialMassLobbyingEmail() != null) {
-            clauses.add("u.has_been_sent_initial_mass_lobbying_email = ?");
-            parameters.add(member.getHasBeenSentInitialMassLobbyingEmail());
-        }
 
-        if (member.getLobbyingDayHasBeenSentMpTemplate() != null) {
-            clauses.add("u.lobbying_day_has_been_sent_mp_template = ?");
-            parameters.add(member.getLobbyingDayHasBeenSentMpTemplate());
-        }
-
-        if (member.getLobbyingDayHasSentMpTemplateLetter() != null) {
-            clauses.add("u.lobbying_day_has_sent_mp_template_letter = ?");
-            parameters.add(member.getLobbyingDayHasSentMpTemplateLetter());
-        }
-
-        if (member.getLobbyingDayHasReceivedMpResponse() != null) {
-            clauses.add("u.lobbying_day_has_received_mp_response = ?");
-            parameters.add(member.getLobbyingDayHasReceivedMpResponse());
-        }
-
-        if (member.getLobbyingDayMpHasConfirmedAttendance() != null) {
-            clauses.add("u.lobbying_day_mp_has_confirmed_attendance = ?");
-            parameters.add(member.getLobbyingDayMpHasConfirmedAttendance());
-        }
-
-        if (member.getLobbyingDayMpIsMinister() != null) {
-            clauses.add("u.lobbying_day_mp_is_minister = ?");
-            parameters.add(member.getLobbyingDayMpIsMinister());
-        }
-
-        if (member.getLobbyingDayNotes() != null) {
-            clauses.add("lower(u.lobbying_day_notes) like ?");
-            parameters.add(like(member.getLobbyingDayNotes()));
-        }
-
-        if (member.getLobbyingDayAttending() != null) {
-            clauses.add("lower(u.lobbying_day_attending) like ?");
-            parameters.add(like(member.getLobbyingDayAttending().toString()));
-        }
-*/
         if (member.getCountry() != null) {
             clauses.add("lower(u.country) like ?");
             parameters.add(like(member.getCountry()));
@@ -675,7 +589,7 @@ public class MemberService {
                 rs.getString("industry"),
                 rs.getString("token"),
                 rs.getBoolean("has_completed_membership_form"),
-                null,
+                new PasswordDetails(rs.getString("salt"), rs.getString("password"), null),
                 rs.getBigDecimal("contribution_amount"),
                 rs.getString("how_did_you_hear_about_lcag"),
                 rs.getBoolean("member_of_big_group"),
@@ -687,14 +601,6 @@ public class MemberService {
                 rs.getBoolean("has_completed_claim_participant_form"),
                 rs.getBoolean("has_been_sent_claim_confirmation_email"),
                 rs.getBoolean("opted_out_of_claim"),
-//                rs.getBoolean("has_been_sent_initial_mass_lobbying_email"),
-//                rs.getBoolean("lobbying_day_has_been_sent_mp_template"),
-//                rs.getBoolean("lobbying_day_has_sent_mp_template_letter"),
-//                rs.getBoolean("lobbying_day_has_received_mp_response"),
-//                rs.getBoolean("lobbying_day_mp_has_confirmed_attendance"),
-//                rs.getBoolean("lobbying_day_mp_is_minister"),
-//                rs.getString("lobbying_day_notes"),
-//                LobbyingDayAttendance.valueOf(rs.getString("lobbying_day_attending")),
                 rs.getString("claim_token"),
                 rs.getString("country")
         );

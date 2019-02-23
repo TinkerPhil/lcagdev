@@ -47,14 +47,6 @@ public class Member {
     private Boolean hasCompletedClaimParticipantForm;
     private Boolean hasBeenSentClaimConfirmationEmail;
     private Boolean hasOptedOutOfClaim;
-//    private Boolean hasBeenSentInitialMassLobbyingEmail;
-//    private Boolean lobbyingDayHasBeenSentMpTemplate;
-//    private Boolean lobbyingDayHasSentMpTemplateLetter;
-//    private Boolean lobbyingDayHasReceivedMpResponse;
-//    private Boolean lobbyingDayMpHasConfirmedAttendance;
-//    private Boolean lobbyingDayMpIsMinister;
-//    private String lobbyingDayNotes;
-//    private LobbyingDayAttendance lobbyingDayAttending;
     private String claimToken;
     private String country;
 
@@ -92,14 +84,6 @@ public class Member {
             Boolean hasCompletedClaimParticipantForm,
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
-//            Boolean hasBeenSentInitialMassLobbyingEmail,
-//            Boolean lobbyingDayHasBeenSentMpTemplate,
-//            Boolean lobbyingDayHasSentMpTemplateLetter,
-//            Boolean lobbyingDayHasReceivedMpResponse,
-//            Boolean lobbyingDayMpHasConfirmedAttendance,
-//            Boolean lobbyingDayMpIsMinister,
-//            String lobbyingDayNotes,
-//            LobbyingDayAttendance lobbyingDayAttending,
             String claimToken,
             String country) {
         this.id = id;
@@ -133,14 +117,6 @@ public class Member {
         this.hasCompletedClaimParticipantForm = hasCompletedClaimParticipantForm;
         this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
-//        this.hasBeenSentInitialMassLobbyingEmail = hasBeenSentInitialMassLobbyingEmail;
-//        this.lobbyingDayHasBeenSentMpTemplate = lobbyingDayHasBeenSentMpTemplate;
-//        this.lobbyingDayHasSentMpTemplateLetter = lobbyingDayHasSentMpTemplateLetter;
-//        this.lobbyingDayHasReceivedMpResponse = lobbyingDayHasReceivedMpResponse;
-//        this.lobbyingDayMpHasConfirmedAttendance = lobbyingDayMpHasConfirmedAttendance;
-//        this.lobbyingDayMpIsMinister = lobbyingDayMpIsMinister;
-//        this.lobbyingDayNotes = lobbyingDayNotes;
-//        this.lobbyingDayAttending = lobbyingDayAttending;
         this.claimToken = claimToken;
         this.country = country;
     }
@@ -402,71 +378,6 @@ public class Member {
     public void setHasOptedOutOfClaim(Boolean hasOptedOutOfClaim) {
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
     }
-/*
-    public Boolean getHasBeenSentInitialMassLobbyingEmail() {
-        return hasBeenSentInitialMassLobbyingEmail;
-    }
-
-    public void setHasBeenSentInitialMassLobbyingEmail(Boolean hasBeenSentInitialMassLobbyingEmail) {
-        this.hasBeenSentInitialMassLobbyingEmail = hasBeenSentInitialMassLobbyingEmail;
-    }
-
-    public Boolean getLobbyingDayHasSentMpTemplateLetter() {
-        return lobbyingDayHasSentMpTemplateLetter;
-    }
-
-    public void setLobbyingDayHasSentMpTemplateLetter(Boolean lobbyingDayHasSentMpTemplateLetter) {
-        this.lobbyingDayHasSentMpTemplateLetter = lobbyingDayHasSentMpTemplateLetter;
-    }
-
-    public Boolean getLobbyingDayHasReceivedMpResponse() {
-        return lobbyingDayHasReceivedMpResponse;
-    }
-
-    public void setLobbyingDayHasReceivedMpResponse(Boolean lobbyingDayHasReceivedMpResponse) {
-        this.lobbyingDayHasReceivedMpResponse = lobbyingDayHasReceivedMpResponse;
-    }
-
-    public Boolean getLobbyingDayMpHasConfirmedAttendance() {
-        return lobbyingDayMpHasConfirmedAttendance;
-    }
-
-    public void setLobbyingDayMpHasConfirmedAttendance(Boolean lobbyingDayMpHasConfirmedAttendance) {
-        this.lobbyingDayMpHasConfirmedAttendance = lobbyingDayMpHasConfirmedAttendance;
-    }
-
-    public Boolean getLobbyingDayMpIsMinister() {
-        return lobbyingDayMpIsMinister;
-    }
-
-    public void setLobbyingDayMpIsMinister(Boolean lobbyingDayMpIsMinister) {
-        this.lobbyingDayMpIsMinister = lobbyingDayMpIsMinister;
-    }
-
-    public String getLobbyingDayNotes() {
-        return lobbyingDayNotes;
-    }
-
-    public void setLobbyingDayNotes(String lobbyingDayNotes) {
-        this.lobbyingDayNotes = lobbyingDayNotes;
-    }
-
-    public LobbyingDayAttendance getLobbyingDayAttending() {
-        return lobbyingDayAttending;
-    }
-
-    public void setLobbyingDayAttending(LobbyingDayAttendance lobbyingDayAttending) {
-        this.lobbyingDayAttending = lobbyingDayAttending;
-    }
-
-    public Boolean getLobbyingDayHasBeenSentMpTemplate() {
-        return lobbyingDayHasBeenSentMpTemplate;
-    }
-
-    public void setLobbyingDayHasBeenSentMpTemplate(Boolean lobbyingDayHasBeenSentMpTemplate) {
-        this.lobbyingDayHasBeenSentMpTemplate = lobbyingDayHasBeenSentMpTemplate;
-    }
-*/
     public String getCountry() { return country; }
     public void setCountry(String country) { this.country = country; }
 }
