@@ -1,13 +1,12 @@
 package uk.co.novinet.e2e;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.WordUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static java.lang.String.format;
+import static java.lang.Thread.sleep;
 import static org.apache.commons.lang3.StringUtils.truncate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -49,6 +48,10 @@ public class ImportMissingBankTransactionsIT {
 
     @After
     public void teardown() {
+        runSqlScript("sql/delete_all_users.sql");
+        runSqlScript("sql/delete_all_bank_transactions.sql");
+        runSqlScript("sql/delete_all_bank_transactions_infull.sql");
+
         deleteAllMessages(contributorUsername1 + "@victim.com");
         deleteAllMessages(contributorUsername2 + "@victim.com");
         deleteAllMessages(contributorUsername3 + "@victim.com");
@@ -56,7 +59,7 @@ public class ImportMissingBankTransactionsIT {
     }
 
     @Test
-    public void importsMissingBankTransactions() throws Exception {
+    public void importsMissingBankTransactionsWhenThereAreNoExistingBankTransactions() throws Exception {
         assertTrue(getBankTransactionRows().isEmpty());
 
         runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
@@ -94,6 +97,37 @@ public class ImportMissingBankTransactionsIT {
         getEmails(contributorUsername4 + "@victim.com", "Inbox").get(0).getContent().contains("Your payment has been received");
 
         assertEquals(4, getBankTransactionRows().size());
+    }
+
+    @Test
+    public void doesNotImportMissingBankTransactionsWhenLatestBankTransactionIsEarlierThanTransactionsFromInFullTable() throws InterruptedException {
+        assertTrue(getBankTransactionRows().isEmpty());
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+                        "VALUES\n" +
+                        "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.contributor1155092 FROM TEST1 S P ', 50.00, 69178.86, 'TEST1 S P ', 'contributor1155092', 0, 'SANTANDER', '', 1);\n")
+        );
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+                        "VALUES\n" +
+                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM TEST1 S P ', '2019-02-23 00:00:00'),\n" +
+                        "\t(603, 50.00, 68328.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM TEST2 ', '2019-02-23 00:00:00'),\n" +
+                        "\t(606, 100.00, 68178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM TEST3 ', '2019-02-23 00:00:00'),\n" +
+                        "\t(608, 100.00, 67978.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM TEST4 ', '2019-02-23 00:00:00');\n",
+                contributorUsername1,
+                contributorUsername2,
+                contributorUsername3,
+                contributorUsername4)
+        );
+
+        sleep(5000);
+
+        assertEquals(0, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+        assertEquals(0, getEmails(contributorUsername2 + "@victim.com", "Inbox").size());
+        assertEquals(0, getEmails(contributorUsername3 + "@victim.com", "Inbox").size());
+        assertEquals(0, getEmails(contributorUsername4 + "@victim.com", "Inbox").size());
+
+        assertEquals(1, getBankTransactionRows().size());
     }
 
 
