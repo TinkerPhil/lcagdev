@@ -23,5 +23,15 @@ CREATE TABLE IF NOT EXISTS `i7b0_ffc_contributions` (
   `payment_method` varchar(40) NOT NULL,
   `email_sent` tinyint(1) NOT NULL DEFAULT '0',
   `guid` varchar(120) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+  `signature_data` text,
+  `has_provided_signature` tinyint(1) NOT NULL DEFAULT '0',
+  `signed_contribution_agreement` blob,
+  `contribution_agreement_signature_date` int(10) unsigned NOT NULL DEFAULT '0',
+  `mustSendESigEMail` bit(1) DEFAULT b'0',
+  `id_ffc_bank` int(11) DEFAULT NULL,
+  `id_ffc_bank_reverse` int(11) DEFAULT NULL,
+  `id_lcag_bank` int(11) DEFAULT NULL,
+  `isMembershipPayment` bit(1) DEFAULT b'0',
+  PRIMARY KEY (`id`),
+  KEY `stripe_token` (`stripe_token`)
+) ENGINE=MyISAM AUTO_INCREMENT=2855 DEFAULT CHARSET=utf8;

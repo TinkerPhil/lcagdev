@@ -3,6 +3,7 @@ package uk.co.novinet.service.payments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Thread.sleep;
 import static java.util.Arrays.asList;
 
 @Service
@@ -51,9 +53,38 @@ public class PaymentService {
     @Autowired
     private PaymentDao paymentDao;
 
+    @Value("${resendFailedEmailsThrottleTimeMilliseconds}")
+    private Long resendFailedEmailsThrottleTimeMilliseconds;
+
     @Scheduled(initialDelayString = "${resendFailedEmailsInitialDelayMilliseconds}", fixedRateString = "${resendFailedEmailsIntervalMilliseconds}")
     public void resendFailedEmails() {
-        paymentDao.findAssignedBankTransactionsRequiringEmails().forEach(this::attemptToSendBankTransactionEmail);
+        paymentDao.findAssignedBankTransactionsRequiringEmails().forEach(bankTransaction -> {
+            attemptToSendBankTransactionEmail(bankTransaction);
+            try {
+                //throttle email sending so we don't overload hostinger
+                sleep(resendFailedEmailsThrottleTimeMilliseconds);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Scheduled(initialDelayString = "${processMissingBankTransactionsInitialDelayMilliseconds}", fixedRateString = "${processMissingBankTransactionsIntervalMilliseconds}")
+    public void fillInMissingBankTransactions() {
+        List<BankTransaction> missingBankTransactions = paymentDao.findMissingBankTransactions();
+
+        LOGGER.info("Found {} missingBankTransactions to process", missingBankTransactions.size());
+
+        missingBankTransactions.forEach(missingBankTransaction -> {
+            missingBankTransaction.setCounterParty(findInDescription(missingBankTransaction.getDescription(), "counterParty"));
+            String reference = findInDescription(missingBankTransaction.getDescription(), "reference");
+            missingBankTransaction.setReference(reference);
+            Member member = exactMatchingMember(reference);
+            missingBankTransaction.setUserId(member == null ? null : member.getId());
+            missingBankTransaction.setEmailAddress(member == null ? null : member.getEmailAddress());
+            missingBankTransaction.setUsername(member == null ? null : member.getUsername());
+            paymentDao.create(missingBankTransaction);
+        });
     }
 
     public ImportOutcome importTransactions(String transactions) {

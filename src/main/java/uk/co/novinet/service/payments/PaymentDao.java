@@ -13,6 +13,8 @@ import uk.co.novinet.service.member.Where;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -119,7 +121,7 @@ public class PaymentDao {
     public BankTransaction getMostRecentBankTransaction() {
         LOGGER.info("Finding most recent bank transaction");
 
-        String sql = buildBankTransactionTableSelect() + " order by `date`, `transaction_index_on_day` desc limit 1";
+        String sql = buildBankTransactionTableSelect() + " order by `date` desc, `transaction_index_on_day` desc limit 1";
 
         LOGGER.info("Going to execute sql: {}", sql);
 
@@ -286,5 +288,36 @@ public class PaymentDao {
         LOGGER.info("Going to execute sql: {}", sql);
 
         return jdbcTemplate.query(sql, new Object[] { false }, (rs, rowNum) -> buildBankTransaction(rs));
+    }
+
+    public List<BankTransaction> findMissingBankTransactions() {
+        LOGGER.info("Finding missing bank transactions");
+
+        BankTransaction mostRecentBankTransaction = getMostRecentBankTransaction();
+
+        String dateClause = mostRecentBankTransaction == null ? "" : "AND UNIX_TIMESTAMP(t.date) < ? \n";
+        Object[] args = mostRecentBankTransaction == null ? new Object[] {} : new Object[] { mostRecentBankTransaction.getDate().minus(1, ChronoUnit.DAYS).toEpochMilli() / 1000 };
+
+        return jdbcTemplate.query(
+                "SELECT t.id, t.moneyIn, t.rollingBalance, t.description, UNIX_TIMESTAMP(t.date) \n" +
+                "FROM i7b0_bank_transactions_infull t\n" +
+                "LEFT JOIN i7b0_bank_transactions b ON (REPLACE(b.description, '  ', ' ') = REPLACE(t.description, '&', '&amp;') or b.description = t.description)\n" +
+                "WHERE b.description IS NULL\n" +
+                dateClause +
+                "AND (moneyOut = 0 or moneyOut is null) \n" +
+                "ORDER BY t.id;", (rs, rowNum) -> new BankTransaction(
+                rs.getLong("id"),
+                null,
+                null,
+                null,
+                Instant.ofEpochMilli(rs.getLong("UNIX_TIMESTAMP(t.date)") * 1000),
+                rs.getString("t.description"),
+                rs.getBigDecimal("t.moneyIn"),
+                rs.getBigDecimal("t.rollingBalance"),
+                null,
+                null,
+                rowNum,
+                PaymentSource.SANTANDER,
+                false), args);
     }
 }
