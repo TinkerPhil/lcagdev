@@ -13,7 +13,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },
                 { name: "emails", label: "", width: 400, formatter: lcag.MpCampaignGrid.formatters.emails, search: false },
 //                { name: "constituency", label: "Constituency", width: 150, template: "string" },
-                { name: "mpConstituency", label: "Constituency", width: 150, template: "string", formatter: lcag.MpCampaignGrid.formatters.constituency },
+                { name: "constituency", label: "Constituency", width: 150, template: "string", formatter: lcag.MpCampaignGrid.formatters.constituency },
             ],
             datatype: function(postData) {
                     jQuery.ajax({

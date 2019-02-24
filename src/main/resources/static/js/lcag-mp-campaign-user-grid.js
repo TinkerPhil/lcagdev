@@ -19,7 +19,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 { name: "allowEmailShareStatus", label: "Share e-mail", width: 100, template: "string" },
                 { name: "username", label: "Username", width: 150, template: "string" },
                 { name: "adminSig", label: "Admin Sig", width: 100, template: "string" },
-                { name: "mpConstituency", label: "Constituency", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.constituency },
+                { name: "constituency", label: "Constituency", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.constituency },
                 //{ name: "mpConstituency", label: "Constituency", width: 150, template: "string" },
                 { name: "extra", label: "Extra", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.extra, search: false }
             ],
@@ -179,7 +179,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             return '<div class="input-group"><input id="telephoneCount_' + row.id + '" type="text" class="form-control input-small" value="' + row.telephoneCount + '"></div>';
         },
         "constituency": function(cellvalue, options, row) {
-            return '<a target="_blank" href="https://www.bbc.co.uk/news/politics/constituencies/'+row.pCon+ '">'+ row.mpConstituency + '</a>';
+            return '<a target="_blank" href="https://www.bbc.co.uk/news/politics/constituencies/'+row.pCon+ '">'+ row.constituency + '</a>';
         },
         "writtenCount": function(cellvalue, options, row) {
             return '<div class="input-group"><input id="writtenCount_' + row.id + '" type="text" class="form-control input-small" value="' + row.writtenCount + '"></div>';
@@ -246,7 +246,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
 
             return '<table>'
                     + '<tr title="'+row.mpName+'"><th>MP</th><td>'+row.mpName+'&nbsp;&nbsp('+row.party+')</td></tr>'
-                    + '<tr title="'+row.mpConstituency+'&nbsp;&nbsp('+row.majority+')"><th>Constituency</th><td><a target="_blank" href="https://www.bbc.co.uk/news/politics/constituencies/'+row.pCon+'">'+row.mpConstituency+'</a>&nbsp;&nbsp('+row.majority+')</td></tr>'
+                    + '<tr title="'+row.constituency+'&nbsp;&nbsp('+row.majority+')"><th>Constituency</th><td><a target="_blank" href="https://www.bbc.co.uk/news/politics/constituencies/'+row.pCon+'">'+row.constituency+'</a>&nbsp;&nbsp('+row.majority+')</td></tr>'
                     + '<tr title="'+row.edmStatus+'&nbsp;&nbsp('+row.ministerialStatus+')"><th>EDM/Minis Status</th><td>'+row.edmStatus+'&nbsp;&nbsp('+row.ministerialStatus+')</td></tr>'
                     + '<tr title="'+row.edmUrl+'"><th>EDM URL</th><td><a href="'+row.edmUrl+'" target="_blank">'+row.edmUrl +'</a></td></tr>'
                     + '<tr title="'+row.mpTelNo+'"><th>MP Tel</th><td>'+row.mpTelNo+'</td></tr>'

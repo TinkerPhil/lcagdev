@@ -11,7 +11,7 @@ public class MemberMpCampaign {
     private String name;
     private String mpName;
     private String party;
-    private String mpConstituency;
+    private String constituency;
     private String pCon;
     private String majority;
     private String email;
@@ -55,7 +55,7 @@ public class MemberMpCampaign {
             String name,
             String mpName,
             String party,
-            String mpConstituency,
+            String constituency,
             String pCon,
             String majority,
             String email,
@@ -96,7 +96,7 @@ public class MemberMpCampaign {
         this.name = name;
         this.mpName = mpName;
         this.party= party;
-        this.mpConstituency = mpConstituency;
+        this.constituency = constituency;
         this.majority = majority;
         this.pCon = pCon;
         this.email = email;
@@ -148,8 +148,8 @@ public class MemberMpCampaign {
     public void setMpName(String mpName) { this.mpName = mpName;    }
     public String getParty() { return party;    }
     public void setParty(String party) { this.party= party;    }
-    public String getMpConstituency() { return mpConstituency;    }
-    public void setMpConstituency(String mpConstituency) { this.mpConstituency = mpConstituency;    }
+    public String getConstituency() { return constituency;    }
+    public void setConstituency(String constituency) { this.constituency = constituency;    }
     public String getpCon() { return this.pCon; }
     public void setpCon(String pCon) {this.pCon = pCon; }
     public String getMajority() { return majority;    }

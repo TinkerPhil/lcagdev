@@ -31,7 +31,7 @@ public class MemberMpCampaignService {
         put("id", "umc.uid");
         put("name", "u.name");
         put("mpName", "u.mp_name");
-        put("mpConstituency", "u.mp_constituency");
+        put("constituency", "u.mp_constituency");
         put("email", "u.email");
         put("adminUsername", "a.username");
         put("adminName", "a.name");
@@ -194,9 +194,9 @@ public class MemberMpCampaignService {
             clauses.add("lower(m.mpName) like ?");
             parameters.add(like(member.getMpName()));
         }
-        if (member.getMpConstituency() != null) {
+        if (member.getConstituency() != null) {
             clauses.add("lower(m.constituency) like ?");
-            parameters.add(like(member.getMpConstituency()));
+            parameters.add(like(member.getConstituency()));
         }
 
         if(member.getAdminSig() != null ) {
