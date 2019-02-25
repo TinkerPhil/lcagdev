@@ -24,7 +24,7 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
             ],
             datatype: function(postData) {
                     jQuery.ajax({
-                        url: lcag.Common.urlPrefix + '/member?hasCompletedMembershipForm=true&verifiedBy=<NULL>&group=LCAG%20Guests',
+                        url: lcag.Common.urlPrefix + '/member?hasCompletedMembershipForm=true&verifiedBy=<NULL>&group=LCAG%20Guests,Suspended',
                         data: postData,
                         dataType: "json",
                         complete: function(response, status) {
