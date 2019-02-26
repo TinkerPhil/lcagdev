@@ -130,7 +130,8 @@ public class MemberService {
 
         Member existingMember = getMemberById(memberId);
 
-        boolean shouldSendFullMembershipEmail = "LCAG Guests".equals(existingMember.getGroup()) && "Registered".equals(group);
+        String origGroup = existingMember.getGroup();
+        boolean shouldSendFullMembershipEmail = ("LCAG Guests".equals(origGroup) || "Suspended".equals(origGroup) ) && "Registered".equals(group);
 
         String sql = "update " + usersTableName() + " u " +
                 "set u.name = ?," +
