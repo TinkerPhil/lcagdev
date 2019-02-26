@@ -1,4 +1,4 @@
-CREATE TABLE `i7b0_mpCampaignUsers` (
+CREATE TABLE IF NOT EXISTS `i7b0_mpCampaignUsers` (
   `uid` int(11) NOT NULL,
   `mpId` int(11) DEFAULT NULL,
   `allowEmailShareStatus` varchar(20) DEFAULT 'Not Asked',

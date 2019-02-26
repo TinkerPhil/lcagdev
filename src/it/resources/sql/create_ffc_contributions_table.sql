@@ -1,4 +1,4 @@
-CREATE TABLE `i7b0_ffc_contributions` (
+CREATE TABLE IF NOT EXISTS `i7b0_ffc_contributions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned DEFAULT NULL,
   `username` varchar(120) DEFAULT NULL,
