@@ -15,6 +15,8 @@ import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
 import org.jsoup.Jsoup;
 import uk.co.novinet.service.enquiry.Enquiry;
+import uk.co.novinet.service.payments.BankTransaction;
+import uk.co.novinet.service.payments.PaymentSource;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
@@ -30,6 +32,7 @@ import static java.lang.String.format;
 import static java.lang.Thread.sleep;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static uk.co.novinet.service.PersistenceUtils.dateFromMyBbRow;
 
 public class TestUtils {
 
@@ -65,6 +68,7 @@ public class TestUtils {
                 runSqlScript("sql/create_enquiry_table.sql");
                 runSqlScript("sql/create_usergroups_table.sql");
                 runSqlScript("sql/create_bank_transaction_table.sql");
+                runSqlScript("sql/create_bank_transaction_infull_table.sql");
                 runSqlScript("sql/populate_usergroups_table.sql");
 
                 needToRetry = false;
@@ -221,6 +225,48 @@ public class TestUtils {
             }
 
             return users;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (statement != null) connection.close();
+            } catch (SQLException ignored) { }
+            try {
+                if (connection != null) connection.close();
+            } catch (SQLException ignored) { }
+        }
+    }
+
+    static List<BankTransaction> getBankTransactionRows() {
+        Connection connection = null;
+        Statement statement = null;
+
+        try {
+            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("select * from i7b0_bank_transactions bt left outer join i7b0_users u on bt.user_id = u.uid");
+            List<BankTransaction> bankTransactions = new ArrayList<>();
+
+            while (rs.next()) {
+                String userId = rs.getString("bt.user_id");
+
+                bankTransactions.add(new BankTransaction(
+                        rs.getLong("bt.id"),
+                        userId == null ? null : Long.parseLong(userId),
+                        rs.getString("u.username"),
+                        rs.getString("u.email"),
+                        dateFromMyBbRow(rs, "bt.date"),
+                        rs.getString("bt.description"),
+                        rs.getBigDecimal("bt.amount"),
+                        rs.getBigDecimal("bt.running_balance"),
+                        rs.getString("bt.counter_party"),
+                        rs.getString("bt.reference"),
+                        rs.getInt("bt.transaction_index_on_day"),
+                        PaymentSource.valueOf(rs.getString("bt.payment_source")),
+                        rs.getBoolean("bt.email_sent")));
+            }
+
+            return bankTransactions;
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {

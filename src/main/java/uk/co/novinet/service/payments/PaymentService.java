@@ -61,11 +61,29 @@ public class PaymentService {
         paymentDao.findAssignedBankTransactionsRequiringEmails().forEach(bankTransaction -> {
             attemptToSendBankTransactionEmail(bankTransaction);
             try {
-                sleep(resendFailedEmailsThrottleTimeMilliseconds);
                 //throttle email sending so we don't overload hostinger
+                sleep(resendFailedEmailsThrottleTimeMilliseconds);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        });
+    }
+
+    @Scheduled(initialDelayString = "${processMissingBankTransactionsInitialDelayMilliseconds}", fixedRateString = "${processMissingBankTransactionsIntervalMilliseconds}")
+    public void fillInMissingBankTransactions() {
+        List<BankTransaction> missingBankTransactions = paymentDao.findMissingBankTransactions();
+
+        LOGGER.info("Found {} missingBankTransactions to process", missingBankTransactions.size());
+
+        missingBankTransactions.forEach(missingBankTransaction -> {
+            missingBankTransaction.setCounterParty(findInDescription(missingBankTransaction.getDescription(), "counterParty"));
+            String reference = findInDescription(missingBankTransaction.getDescription(), "reference");
+            missingBankTransaction.setReference(reference);
+            Member member = exactMatchingMember(reference);
+            missingBankTransaction.setUserId(member == null ? null : member.getId());
+            missingBankTransaction.setEmailAddress(member == null ? null : member.getEmailAddress());
+            missingBankTransaction.setUsername(member == null ? null : member.getUsername());
+            paymentDao.create(missingBankTransaction);
         });
     }
 

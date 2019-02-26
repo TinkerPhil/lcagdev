@@ -41,7 +41,7 @@ public class MpController {
             @RequestParam(value = "twitter", required = false) String twitter,
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "constituency", required = false) String constituency,
-            @RequestParam(value = "constituencySddress", required = false) String constituencyAddress,
+            @RequestParam(value = "constituencyAddress", required = false) String constituencyAddress,
             @RequestParam(value = "edmStatus", required = false) String edmStatus,
             @RequestParam(value = "edmUrl", required = false) String edmUrl,
             @RequestParam(value = "ministerialStatus", required = false) String ministerialStatus,

@@ -473,9 +473,26 @@ public class MemberService {
             parameters.add(like(member.getMpConstituency()));
         }
 
-        if (member.getGroup() != null) {
-            clauses.add("lower(ug.title) like ?");
-            parameters.add(like(member.getGroup()));
+        String group = member.getGroup();
+        if (group!= null) {
+            if(group.contains(",")) {
+                String clause = "(";
+                boolean x = false;
+                for(String grp: group.split(",")) {
+                    if( x == true ) {
+                        clause += " or ";
+                    }
+                    clause += "lower(ug.title) like ?";
+                    parameters.add(like(grp));
+                    x = true;
+                }
+                clause += ")";
+                clauses.add(clause);
+            }
+            else {
+                clauses.add("lower(ug.title) like ?");
+                parameters.add(like(group));
+            }
         }
 
         if (member.getMpName() != null) {
