@@ -72,6 +72,6 @@ public class PaymentController {
 
         LOGGER.info("totalCount: {}", totalCount);
 
-        return new DataContainer(current, rowCount, totalCount, (long) Math.ceil(totalCount / rowCount) + 1, paymentDao.searchBankTransactions((current - 1) * rowCount, rowCount, bankTransaction, sortBy, sortDirection, "operator"));
+        return new DataContainer(current, rowCount, totalCount, (long) Math.ceil(totalCount / rowCount) + 1, paymentDao.searchBankTransactions((current - 1) * rowCount, rowCount, bankTransaction, sortBy, sortDirection, operator));
     }
 }
