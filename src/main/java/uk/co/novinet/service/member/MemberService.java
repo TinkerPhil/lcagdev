@@ -673,7 +673,7 @@ public class MemberService {
     }
 
     public List<MemberGroup> getAllMemberGroups() {
-        return jdbcTemplate.query("select * from usergroups", (rs, rowNum) -> new MemberGroup(rs.getLong("git"), rs.getString("title")));
+        return jdbcTemplate.query("select * from i7b0_usergroups", (rs, rowNum) -> new MemberGroup(rs.getLong("gid"), rs.getString("title")));
     }
 
 }

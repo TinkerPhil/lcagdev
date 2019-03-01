@@ -1,9 +1,5 @@
 package uk.co.novinet.service.enquiry;
 
-import org.apache.commons.codec.digest.Md5Crypt;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;

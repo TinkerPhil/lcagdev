@@ -1,5 +1,7 @@
 package uk.co.novinet.e2e;
 
+import uk.co.novinet.auth.MyBbPasswordEncoder;
+
 import static java.lang.Thread.sleep;
 import static uk.co.novinet.e2e.TestUtils.insertUser;
 import static uk.co.novinet.e2e.TestUtils.runSqlScript;
@@ -43,6 +45,8 @@ public class DataPopulator {
         }
 
         insertUser(211, "testuser" + 211, "user" + 211 + "@something.com", "Test Name" + 211, 4);
+
+        insertUser(212, "admin", "admin@lcag.com", "Administrators", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt");
     }
 
 }

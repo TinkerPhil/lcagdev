@@ -1,6 +1,5 @@
 package uk.co.novinet.auth;
 
-import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,9 +9,12 @@ import uk.co.novinet.service.member.MemberService;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import static uk.co.novinet.auth.MyBbPasswordEncoder.SALT_DELIMITER;
+import static java.util.Arrays.asList;
+import static uk.co.novinet.auth.MyBbAuthority.BANNED;
+import static uk.co.novinet.auth.MyBbAuthority.SUSPENDED;
 
 public class MyBbUserPrincipal implements UserDetails {
 
@@ -35,7 +37,11 @@ public class MyBbUserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return member.getPasswordDetails().getSalt() + SALT_DELIMITER + member.getPasswordDetails().getPasswordHash();
+        return member.getPasswordDetails().getPasswordHash();
+    }
+
+    public String getSalt() {
+        return member.getPasswordDetails().getSalt();
     }
 
     @Override
@@ -45,12 +51,16 @@ public class MyBbUserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return getAuthorities().stream().anyMatch(grantedAuthority -> !isAuthorityLocked(grantedAuthority));
+    }
+
+    private boolean isAuthorityLocked(GrantedAuthority grantedAuthority) {
+        return asList(SUSPENDED.getFriendlyName(), BANNED.getFriendlyName()).contains(grantedAuthority.getAuthority());
     }
 
     @Override
