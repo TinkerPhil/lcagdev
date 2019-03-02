@@ -25,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authenticationProvider(authProvider)
                 .httpBasic().and().authorizeRequests()
+                .antMatchers("/status").permitAll()
                 .antMatchers("/**").hasAnyAuthority(
                         ADMINISTRATORS.getFriendlyName(),
                         LCAG_DASHBOARD_ADMINISTRATOR.getFriendlyName(),

@@ -13,7 +13,7 @@ class BankTransactionAssignmentIT extends GebSpec {
 
     def setup() {
         setupDatabaseSchema()
-        deleteAllMessages(MEMBER_EMAIL_ADDRESS);
+        deleteAllMessages(MEMBER_EMAIL_ADDRESS)
         runSqlScript("sql/delete_all_users.sql")
         runSqlScript("sql/delete_all_bank_transactions.sql")
         testSftpService = new TestSftpService()

@@ -14,6 +14,7 @@ import org.codemonkey.simplejavamail.Mailer;
 import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
 import org.jsoup.Jsoup;
+import uk.co.novinet.auth.MyBbPasswordEncoder;
 import uk.co.novinet.service.enquiry.Enquiry;
 import uk.co.novinet.service.payments.BankTransaction;
 import uk.co.novinet.service.payments.PaymentSource;
@@ -70,6 +71,8 @@ public class TestUtils {
                 runSqlScript("sql/create_bank_transaction_table.sql");
                 runSqlScript("sql/create_bank_transaction_infull_table.sql");
                 runSqlScript("sql/populate_usergroups_table.sql");
+
+                insertUser(99999, "admin", "admin@lcag.com", "Administrators", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt");
 
                 needToRetry = false;
             } catch (Exception e) {

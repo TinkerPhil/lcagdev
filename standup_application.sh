@@ -3,8 +3,6 @@
 echo "Standing up lcag automation application"
 docker run -d \
     -e "SPRING_PROFILES_ACTIVE=prod" \
-    -e "DASHBOARD_USERNAME=admin" \
-    -e "DASHBOARD_PASSWORD=lcag" \
     -e "RETRIEVE_MAIL_INITIAL_DELAY_MILLISECONDS=1000" \
     -e "RETRIEVE_MAIL_REFRESH_INTERVAL_MILLISECONDS=1000" \
     -e "RESEND_FAILED_EMAILS_INITIAL_DELAY_MILLISECONDS=1000" \
