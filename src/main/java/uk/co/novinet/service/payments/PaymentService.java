@@ -1,5 +1,6 @@
 package uk.co.novinet.service.payments;
 
+import jodd.util.HtmlDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,7 +150,7 @@ public class PaymentService {
 
         while (matcher.find()) {
             String date = matcher.group("date");
-            String description = matcher.group("description").replace('\u00A0',' ').trim();
+            String description = HtmlDecoder.decode(matcher.group("description").replace('\u00A0',' ').trim());
             String amount = matcher.group("amount");
             String balance = matcher.group("balance");
 
