@@ -10,7 +10,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import static java.lang.String.format;
-import static uk.co.novinet.service.enquiry.PasswordSource.toHex;
 
 @Service
 public class MyBbPasswordEncoder implements PasswordEncoder {
@@ -61,5 +60,13 @@ public class MyBbPasswordEncoder implements PasswordEncoder {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(salt.getBytes());
         return toHex(md.digest());
+    }
+
+    private static String toHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < bytes.length; i++) {
+            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
     }
 }

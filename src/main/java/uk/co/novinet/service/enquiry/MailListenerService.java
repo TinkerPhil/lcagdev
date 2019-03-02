@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberCreationResult;
 import uk.co.novinet.service.member.MemberService;
-//import uk.co.novinet.service.member.MpDetailsUpdaterService;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
@@ -27,6 +26,8 @@ import java.util.regex.Pattern;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.Arrays.asList;
+
+//import uk.co.novinet.service.member.MpDetailsUpdaterService;
 
 @Service
 public class MailListenerService {
@@ -66,16 +67,12 @@ public class MailListenerService {
     @Autowired
     private MemberService memberService;
 
-//    @Autowired
-//    private MpDetailsUpdaterService mpDetailsUpdaterService;
-
     @Autowired
     private EnquiryTableListenerService enquiryTableListenerService;
 
     @Scheduled(initialDelayString = "${retrieveMailInitialDelayMilliseconds}", fixedRateString = "${retrieveMailIntervalMilliseconds}")
     public void retrieveMail() {
         enquiryTableListenerService.processNewEnquiryTableRows();
-//        mpDetailsUpdaterService.updateMpDetails();
 
         LOGGER.info("Checking for new enquiry");
 

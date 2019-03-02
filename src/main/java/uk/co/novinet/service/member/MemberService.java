@@ -10,9 +10,9 @@ import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.enquiry.Enquiry;
 import uk.co.novinet.service.enquiry.MailSenderService;
 import uk.co.novinet.service.enquiry.PasswordDetails;
-import uk.co.novinet.service.enquiry.PasswordSource;
 
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -23,7 +23,9 @@ import static java.lang.Long.parseLong;
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static uk.co.novinet.auth.MyBbPasswordEncoder.hashPassword;
 import static uk.co.novinet.service.PersistenceUtils.*;
 
 @Service
@@ -278,7 +280,7 @@ public class MemberService {
                     enquiry.getIndustry(),
                     guid(),
                     false,
-                    PasswordSource.getRandomPasswordDetails(),
+                    generateRandomPasswordDetails(),
                     new BigDecimal("0.00"),
                     enquiry.getHowDidYouHearAboutLcag(),
                     enquiry.getMemberOfBigGroup(),
@@ -343,11 +345,22 @@ public class MemberService {
         }
     }
 
+    public PasswordDetails generateRandomPasswordDetails() {
+        try {
+            String salt = randomAlphanumeric(8);
+            String rawPassword = randomAlphanumeric(15);
+            return new PasswordDetails(salt, hashPassword(rawPassword, salt), rawPassword);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     private String emptyStringIfNull(String string) {
         return string == null ? "" : string;
     }
 
-    private String guid() {
+    public static String guid() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
@@ -369,9 +382,6 @@ public class MemberService {
                 "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, " +
                 "u.country, " +
                 "u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`" +
-                //"u.attending_mass_lobbying_day, " +
-                //"u.has_been_sent_initial_mass_lobbying_email, u.lobbying_day_has_been_sent_mp_template, u.lobbying_day_has_sent_mp_template_letter, u.lobbying_day_has_received_mp_response, " +
-                //"u.lobbying_day_mp_has_confirmed_attendance, u.lobbying_day_mp_is_minister, u.lobbying_day_notes, u.lobbying_day_attending, " +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
     }
@@ -475,22 +485,21 @@ public class MemberService {
         }
 
         String group = member.getGroup();
-        if (group!= null) {
-            if(group.contains(",")) {
-                String clause = "(";
-                boolean x = false;
-                for(String grp: group.split(",")) {
-                    if( x == true ) {
-                        clause += " or ";
+        if (group != null) {
+            if (group.contains(",")) {
+                StringBuilder clause = new StringBuilder("(");
+                boolean shouldAppendOr = false;
+                for (String grp : group.split(",")) {
+                    if (shouldAppendOr) {
+                        clause.append(" or ");
                     }
-                    clause += "lower(ug.title) like ?";
+                    clause.append("lower(ug.title) like ?");
                     parameters.add(like(grp));
-                    x = true;
+                    shouldAppendOr = true;
                 }
-                clause += ")";
-                clauses.add(clause);
-            }
-            else {
+                clause.append(")");
+                clauses.add(clause.toString());
+            } else {
                 clauses.add("lower(ug.title) like ?");
                 parameters.add(like(group));
             }
