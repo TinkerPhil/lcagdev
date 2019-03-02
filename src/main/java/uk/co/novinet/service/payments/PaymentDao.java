@@ -303,7 +303,9 @@ public class PaymentDao {
                 "FROM i7b0_bank_transactions_infull t\n" +
                 "LEFT JOIN i7b0_bank_transactions b ON (" +
                         "REPLACE(b.description, '  ', ' ') = REPLACE(t.description, '&', '&amp;') or " +
+                        "REPLACE(b.description, '  ', ' ') = t.description or " +
                         "REPLACE(t.description, '  ', ' ') = REPLACE(b.description, '&', '&amp;') or " +
+                        "REPLACE(t.description, '  ', ' ') = b.description or " +
                         "b.description = t.description" +
                     ")\n" +
                 "WHERE b.description IS NULL\n" +
