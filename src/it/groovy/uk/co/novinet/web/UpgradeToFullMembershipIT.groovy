@@ -15,7 +15,6 @@ class UpgradeToFullMembershipIT extends GebSpec {
     def setup() {
         setupDatabaseSchema()
         deleteAllMessages(GUEST_EMAIL_ADDRESS);
-        runSqlScript("sql/delete_all_users.sql")
     }
 
     def "guest member verification flow when guest has no docs"() {
@@ -27,7 +26,7 @@ class UpgradeToFullMembershipIT extends GebSpec {
 
 
         when: "set the user docs as verified"
-            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
+            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
             memberGridHmrcLetterCheckedTds.find("input").click()
             memberGridIdentityCheckedTds.find("input").click()
             memberGridVerifiedOnTds[0].find("input").value(new SimpleDateFormat("dd/MM/yyyy").format(new Date()))

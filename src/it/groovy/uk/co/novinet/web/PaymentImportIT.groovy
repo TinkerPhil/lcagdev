@@ -24,7 +24,6 @@ class PaymentImportIT {
     @Before
     void before() {
         runSqlScript("sql/delete_all_bank_transactions.sql")
-        runSqlScript("sql/delete_all_users.sql")
         deleteAllMessages("roundabout23@test.com")
     }
 

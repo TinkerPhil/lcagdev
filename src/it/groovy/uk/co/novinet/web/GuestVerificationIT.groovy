@@ -16,7 +16,6 @@ class GuestVerificationIT extends GebSpec {
     def setup() {
         setupDatabaseSchema()
         deleteAllMessages(GUEST_EMAIL_ADDRESS);
-        runSqlScript("sql/delete_all_users.sql")
         testSftpService = new TestSftpService()
         testSftpService.removeAllDocsForEmailAddress(GUEST_EMAIL_ADDRESS)
     }
@@ -69,7 +68,7 @@ class GuestVerificationIT extends GebSpec {
             at DashboardPage
 
         when: "wait for member grid to load and confirm it has the guest we inserted"
-            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
+            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
 
         then: "when we click on the verification tab we can see the guest we're waiting to verify"
             switchToGuestVerificationTabIfNecessaryAndAssertGridHasNRows(browser, 1)
@@ -127,7 +126,7 @@ class GuestVerificationIT extends GebSpec {
             at DashboardPage
 
         when: "wait for member grid to load and confirm it has the guest we inserted"
-            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
+            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
 
         then: "when we click on the verification tab we can see the guest we're waiting to verify"
             switchToGuestVerificationTabIfNecessaryAndAssertGridHasNRows(browser, 1)

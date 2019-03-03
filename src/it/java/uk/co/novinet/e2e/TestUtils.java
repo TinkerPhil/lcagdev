@@ -62,6 +62,7 @@ public class TestUtils {
         while (needToRetry && sqlRetryCounter < 60) {
             try {
                 runSqlScript("sql/create_user_table.sql");
+                runSqlScript("sql/delete_all_users.sql");
                 runSqlScript("sql/create_mp_details_table.sql");
                 runSqlScript("sql/create_mpDetails_table.sql");
                 runSqlScript("sql/create_mpCampaignVolunteers_table.sql");
@@ -72,14 +73,14 @@ public class TestUtils {
                 runSqlScript("sql/create_bank_transaction_infull_table.sql");
                 runSqlScript("sql/populate_usergroups_table.sql");
 
-                insertUser(99999, "admin", "admin@lcag.com", "Administrators", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt");
-
                 needToRetry = false;
             } catch (Exception e) {
                 e.printStackTrace();
                 sqlRetryCounter++;
                 sleep(1000);
             }
+
+            insertUser(9999, "admin", "admin@lcag.com", "Administrators", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt");
         }
     }
 

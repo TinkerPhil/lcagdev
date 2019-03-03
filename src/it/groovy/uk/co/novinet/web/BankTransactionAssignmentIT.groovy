@@ -14,7 +14,6 @@ class BankTransactionAssignmentIT extends GebSpec {
     def setup() {
         setupDatabaseSchema()
         deleteAllMessages(MEMBER_EMAIL_ADDRESS)
-        runSqlScript("sql/delete_all_users.sql")
         runSqlScript("sql/delete_all_bank_transactions.sql")
         testSftpService = new TestSftpService()
         testSftpService.removeAllDocsForEmailAddress(MEMBER_EMAIL_ADDRESS)
@@ -29,7 +28,7 @@ class BankTransactionAssignmentIT extends GebSpec {
             at DashboardPage
 
         and: "wait for member grid to load and confirm it has the guest we inserted"
-            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
+            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
             memberGridContributionAmountTds[0].find("input").value() == 0.00
 
         and: "wait for payments grid to load and confirm it has the transaction we inserted"
