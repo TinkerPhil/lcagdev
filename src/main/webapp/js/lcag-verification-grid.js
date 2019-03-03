@@ -98,7 +98,7 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
                         tableHtml +=
                             '<tr>' +
                                 '<td><a href="/member/document/download?path=' + encodeURIComponent(data.documents[i].path) + '" class="document-download-link" data-sftp-path="' + data.documents[i].path + '">' + data.documents[i].filename + '</a></td>' +
-                                '<td>' + moment(data.documents[i].uploadDate).format("DD/MM/YYYY HH:mm") + '</td>' +
+                                '<td>' + moment.unix(data.documents[i].uploadDate).format("DD/MM/YYYY HH:mm") + '</td>' +
                             '</tr>';
                     }
                     tableHtml += '</tbody></table>';
@@ -207,7 +207,7 @@ lcag.VerificationGrid = lcag.VerificationGrid || {
     },
 	formatters: {
         "registrationDate": function(cellvalue, options, row) {
-            return moment(row.registrationDate).format("DD/MM/YYYY HH:mm");
+            return moment.unix(row.registrationDate).format("DD/MM/YYYY HH:mm");
         },
         "memberOfBigGroup": function(cellvalue, options, row) {
             return '<input disabled="disabled" id="memberOfBigGroup_' + row.id + '" type="checkbox" ' + (row.memberOfBigGroup ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';

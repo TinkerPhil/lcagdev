@@ -164,7 +164,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 + '</div>';
         },
         "meetingNext": function(cellvalue, options, row) {
-            var dateString = row.meetingNext == null ? "" : moment(row.meetingNext).format("DD/MM/YYYY");
+            var dateString = row.meetingNext == null ? "" : moment.unix(row.meetingNext).format("DD/MM/YYYY");
             //return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input  id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
             return '<table>'
                     + '<tr title="'+dateString+'"><td><div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input  id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div></td></tr>'

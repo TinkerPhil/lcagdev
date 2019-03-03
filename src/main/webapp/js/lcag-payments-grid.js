@@ -100,7 +100,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
             return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input disabled="disabled" id="amount_' + row.id + '" type="text" value="' + row.runningBalance + '" class="form-control"></div></div>';
         },
         "date": function(cellvalue, options, row) {
-            return moment(row.date).format("DD/MM/YYYY");
+            return moment.unix(row.date).format("DD/MM/YYYY");
         },
         "userId": function(cellvalue, options, row) {
             if (row.userId == null) {

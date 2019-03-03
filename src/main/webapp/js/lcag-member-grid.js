@@ -176,10 +176,10 @@ lcag.MemberGrid = lcag.MemberGrid || {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="name_' + row.id + '" type="text" class="form-control" value="' + row.name + '"></div>';
         },
         "registrationDate": function(cellvalue, options, row) {
-            return moment(row.registrationDate).format("DD/MM/YYYY HH:mm");
+            return moment.unix(row.registrationDate).format("DD/MM/YYYY HH:mm");
         },
         "verifiedOn": function(cellvalue, options, row) {
-            var dateString = row.verifiedOn == null ? "" : moment(row.verifiedOn).format("DD/MM/YYYY");
+            var dateString = row.verifiedOn == null ? "" : moment.unix(row.verifiedOn).format("DD/MM/YYYY");
             return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="verifiedOn_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
         },
         "verifiedBy": function(cellvalue, options, row) {
