@@ -46,7 +46,7 @@ class BankTransactionAssignmentIT extends GebSpec {
             assert toastSuccess.text() == "Updated successfully"
 
         and: "the payment amount has been assigned to the member"
-            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
+            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
             waitFor { memberGridContributionAmountTds[0].find("input").value() == "50.00" }
 
         and: "new member receives email saying their payment has been received"

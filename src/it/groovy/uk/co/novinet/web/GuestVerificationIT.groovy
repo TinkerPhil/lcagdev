@@ -102,8 +102,7 @@ class GuestVerificationIT extends GebSpec {
             waitFor { verificationGridRows.size() == 1 }
 
         and: "the guest is now a verified member"
-            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
-//            memberGridNameTds[0].attr("title") == "John Smith"
+            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
             memberGridNameTds[0].find("input").value() == "John Smith"
             checkboxValue(memberGridHmrcLetterCheckedTds[0].find("input")) == true
             checkboxValue(memberGridIdentityCheckedTds[0].find("input")) == true
@@ -154,8 +153,7 @@ class GuestVerificationIT extends GebSpec {
             waitFor { verificationGridRows.size() == 1 }
 
             and: "the guest is now a verified member"
-            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 1)
-//            memberGridNameTds[0].attr("title") == "John Smith"
+            switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
             memberGridNameTds[0].find("input").value() == "John Smith"
             checkboxValue(memberGridHmrcLetterCheckedTds[0].find("input")) == true
             checkboxValue(memberGridIdentityCheckedTds[0].find("input")) == true
