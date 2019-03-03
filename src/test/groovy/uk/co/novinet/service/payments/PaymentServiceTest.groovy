@@ -34,7 +34,7 @@ Amount: 250.00 \t
 Balance: 4800.00 
 \t\t\t\t\t\t
 Date: 23/05/2018
-Description: FASTER PAYMENTS RECEIPT  FROM MR L D STEVENS                          
+Description: FASTER PAYMENTS RECEIPT  FROM MR L&amp;D STEVENS                          
 Amount: 250.00 \t
 Balance: 4550.00 
 """
@@ -59,10 +59,10 @@ Balance: 4550.00 
         bankTransactions.size() == 5
 
         bankTransactions[0].date.toEpochMilli() == time("23/05/2018")
-        bankTransactions[0].description == "FASTER PAYMENTS RECEIPT  FROM MR L D STEVENS"
+        bankTransactions[0].description == "FASTER PAYMENTS RECEIPT  FROM MR L&D STEVENS"
         bankTransactions[0].amount == 250.00d
         bankTransactions[0].runningBalance == 4550.00d
-        bankTransactions[0].counterParty == "MR L D STEVENS"
+        bankTransactions[0].counterParty == "MR L&D STEVENS"
         bankTransactions[0].reference == ""
         bankTransactions[0].transactionIndexOnDay == 0
 

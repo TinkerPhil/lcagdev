@@ -162,5 +162,159 @@ public class ImportMissingBankTransactionsIT {
         assertEquals(3, getBankTransactionRows().size());
     }
 
+    @Test
+    public void doesNotTryToFillInMissingTransactionWhereMainTableHasRowWithEscapedAmpersandInTheDescriptionButFillInTableHasNonEscapedAmpersand() throws InterruptedException {
+        assertTrue(getBankTransactionRows().isEmpty());
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+                "VALUES\n" +
+                "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&amp;S', 50.00, 69178.86, 'TEST1 S P ', 'contributor1155092', 0, 'SANTANDER', '', 1);\n", contributorUsername1)
+        );
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+                        "VALUES\n" +
+                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', '2019-02-22 00:00:00')\n",
+                contributorUsername1)
+        );
+
+        sleep(5000);
+
+        assertEquals(0, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+
+        assertEquals(1, getBankTransactionRows().size());
+    }
+
+    @Test
+    public void doesNotTryToFillInMissingTransactionWhereMainTableHasRowWithNonEscapedAmpersandInTheDescriptionButFillInTableHasEscapedAmpersand() throws InterruptedException {
+        assertTrue(getBankTransactionRows().isEmpty());
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+                "VALUES\n" +
+                "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', 50.00, 69178.86, 'TEST1 S P ', 'contributor1155092', 0, 'SANTANDER', '', 1);\n", contributorUsername1)
+        );
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+                        "VALUES\n" +
+                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&amp;S', '2019-02-22 00:00:00')\n",
+                contributorUsername1)
+        );
+
+        sleep(5000);
+
+        assertEquals(0, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+
+        assertEquals(1, getBankTransactionRows().size());
+    }
+
+    @Test
+    public void doesNotTryToFillInMissingTransactionWhereMainTableHasRowWithDoubleSpaceInTheDescriptionButFillInTableHasSingleSpace() throws InterruptedException {
+        assertTrue(getBankTransactionRows().isEmpty());
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+                "VALUES\n" +
+                "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD  D&S', 50.00, 69178.86, 'TEST1 S P ', 'contributor1155092', 0, 'SANTANDER', '', 1);\n", contributorUsername1)
+        );
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+                        "VALUES\n" +
+                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', '2019-02-22 00:00:00')\n",
+                contributorUsername1)
+        );
+
+        sleep(5000);
+
+        assertEquals(0, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+
+        assertEquals(1, getBankTransactionRows().size());
+    }
+
+    @Test
+    public void doesNotTryToFillInMissingTransactionWhereMainTableHasRowWithSingleSpaceInTheDescriptionButFillInTableHasDoubleSpace() throws InterruptedException {
+        assertTrue(getBankTransactionRows().isEmpty());
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+                "VALUES\n" +
+                "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', 50.00, 69178.86, 'TEST1 S P ', 'contributor1155092', 0, 'SANTANDER', '', 1);\n", contributorUsername1)
+        );
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+                        "VALUES\n" +
+                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD  D&S', '2019-02-22 00:00:00')\n",
+                contributorUsername1)
+        );
+
+        sleep(5000);
+
+        assertEquals(0, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+
+        assertEquals(1, getBankTransactionRows().size());
+    }
+
+    @Test
+    public void doesNotTryToFillInMissingTransactionWhereDescriptionAndAmountMatchingTransactionsWereMadeOnDifferentDays() throws InterruptedException {
+        assertTrue(getBankTransactionRows().isEmpty());
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+                "VALUES\n" +
+                "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', 50.00, 69178.86, 'TEST1 S P ', '%s', 0, 'SANTANDER', '', 1);\n", contributorUsername1, contributorUsername1)
+        );
+
+        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+                        "VALUES\n" +
+                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', '2019-02-24 00:00:00')\n",
+                contributorUsername1)
+        );
+
+        sleep(5000);
+
+        assertEquals(0, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+
+        assertEquals(1, getBankTransactionRows().size());
+    }
+
+//    @Test
+//    public void shouldFillInMissingTransactionWhereDescriptionAndAmountMatchingTransactionsWereMadeOnDifferentDays() throws InterruptedException {
+//        assertTrue(getBankTransactionRows().isEmpty());
+//
+//        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+//                "VALUES\n" +
+//                "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', 50.00, 69178.86, 'TEST1 S P ', '%s', 0, 'SANTANDER', '', 1);\n", contributorUsername1, contributorUsername1)
+//        );
+//
+//        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+//                        "VALUES\n" +
+//                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', '2019-02-24 00:00:00')\n",
+//                contributorUsername1)
+//        );
+//
+//        sleep(5000);
+//
+//        assertEquals(1, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+//
+//        assertEquals(2, getBankTransactionRows().size());
+//    }
+//
+//    @Test
+//    public void shouldFillInMissingTransactionWhereDescriptionAndDateMatchingTransactionsWereMadeForDifferentAmounts() throws InterruptedException {
+//        assertTrue(getBankTransactionRows().isEmpty());
+//
+//        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions` (`id`, `user_id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, `transaction_index_on_day`, `payment_source`, `email_address`, `email_sent`)\n" +
+//                "VALUES\n" +
+//                "\t(1, 1, 1550927661, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', 100.00, 69178.86, 'TEST1 S P ', '%s', 0, 'SANTANDER', '', 1);\n", contributorUsername1, contributorUsername1)
+//        );
+//
+//        runSqlUpdate(format("INSERT INTO `i7b0_bank_transactions_infull` (`id`, `moneyIn`, `rollingBalance`, `description`, `date`)\n" +
+//                        "VALUES\n" +
+//                        "\t(588, 50.00, 69178.86, 'FASTER PAYMENTS RECEIPT REF.%s FROM FITZGRLD D&S', '2019-02-23 00:00:00')\n",
+//                contributorUsername1)
+//        );
+//
+//        sleep(5000);
+//
+//        assertEquals(1, getEmails(contributorUsername1 + "@victim.com", "Inbox").size());
+//
+//        assertEquals(2, getBankTransactionRows().size());
+//    }
+
 
 }
