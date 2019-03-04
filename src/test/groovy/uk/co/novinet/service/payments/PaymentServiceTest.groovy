@@ -34,7 +34,7 @@ Amount: 250.00 \t
 Balance: 4800.00 
 \t\t\t\t\t\t
 Date: 23/05/2018
-Description: FASTER PAYMENTS RECEIPT  FROM MR L&amp;D STEVENS                          
+Description: FASTER PAYMENTS RECEIPT  FROM MR L&D STEVENS                          
 Amount: 250.00 \t
 Balance: 4550.00 
 """

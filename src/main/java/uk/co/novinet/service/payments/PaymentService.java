@@ -132,7 +132,7 @@ public class PaymentService {
 
         while (matcher.find()) {
             String date = matcher.group("date");
-            String description = HtmlDecoder.decode(matcher.group("description").replace('\u00A0',' ').trim());
+            String description = matcher.group("description").replace('\u00A0',' ').trim();
             String amount = matcher.group("amount");
             String balance = matcher.group("balance");
 
