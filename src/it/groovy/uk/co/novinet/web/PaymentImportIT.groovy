@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import uk.co.novinet.auth.MyBbPasswordEncoder
 import uk.co.novinet.e2e.TestUtils
 
 import java.text.SimpleDateFormat
@@ -13,6 +14,7 @@ import java.time.ZonedDateTime
 
 import static org.junit.Assert.*
 import static uk.co.novinet.e2e.TestUtils.*
+import static uk.co.novinet.service.PersistenceUtils.dateFromMyBbRow
 
 class PaymentImportIT {
 
@@ -25,6 +27,8 @@ class PaymentImportIT {
     void before() {
         runSqlScript("sql/delete_all_bank_transactions.sql")
         deleteAllMessages("roundabout23@test.com")
+        runSqlScript("sql/delete_all_users.sql")
+        insertUser(9999, "admin", "admin@lcag.com", "Administrators", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
     }
 
     @Test
@@ -62,7 +66,7 @@ class PaymentImportIT {
         assertNull(transactions[0].userId)
         assertNull(transactions[0].username)
         assertNull(transactions[0].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[0].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[0].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.roundabout23 FROM COOPER B", transactions[0].description)
         assertEquals(250.00, transactions[0].amount)
         assertEquals(4800.00, transactions[0].runningBalance)
@@ -74,7 +78,7 @@ class PaymentImportIT {
         assertNull(transactions[1].userId)
         assertNull(transactions[1].username)
         assertNull(transactions[1].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-22T00:00:00Z").toEpochSecond(), Instant.parse(transactions[1].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-22T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[1].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.MIKE BOWLER FROM M Bowler", transactions[1].description)
         assertEquals(50.00, transactions[1].amount)
         assertEquals(4850.00, transactions[1].runningBalance)
@@ -86,7 +90,7 @@ class PaymentImportIT {
         assertNull(transactions[2].userId)
         assertNull(transactions[2].username)
         assertNull(transactions[2].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-23T00:00:00Z").toEpochSecond(), Instant.parse(transactions[2].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-23T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[2].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.FROM FINK FROM FINK KITCHENS LTD", transactions[2].description)
         assertEquals(100.00, transactions[2].amount)
         assertEquals(4950.00, transactions[2].runningBalance)
@@ -98,7 +102,7 @@ class PaymentImportIT {
         assertNull(transactions[3].userId)
         assertNull(transactions[3].username)
         assertNull(transactions[3].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-24T00:00:00Z").toEpochSecond(), Instant.parse(transactions[3].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-24T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[3].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.BOB FRENCH FROM BOB FRENCH", transactions[3].description)
         assertEquals(100.00, transactions[3].amount)
         assertEquals(5050.00, transactions[3].runningBalance)
@@ -110,7 +114,7 @@ class PaymentImportIT {
         assertNull(transactions[4].userId)
         assertNull(transactions[4].username)
         assertNull(transactions[4].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-25T00:00:00Z").toEpochSecond(), Instant.parse(transactions[4].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-25T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[4].date).longValue())
         assertEquals("BILL PAYMENT FROM MR JAMES SMITH HENRY JONES, REFERENCE james45", transactions[4].description)
         assertEquals(250.00, transactions[4].amount)
         assertEquals(4800.00, transactions[4].runningBalance)
@@ -122,7 +126,7 @@ class PaymentImportIT {
         assertNull(transactions[5].userId)
         assertNull(transactions[5].username)
         assertNull(transactions[5].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-26T00:00:00Z").toEpochSecond(), Instant.parse(transactions[5].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-26T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[5].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.QSHJ FROM STUART PETERS", transactions[5].description)
         assertEquals(50.00, transactions[5].amount)
         assertEquals(4850.00, transactions[5].runningBalance)
@@ -134,7 +138,7 @@ class PaymentImportIT {
         assertNull(transactions[6].userId)
         assertNull(transactions[6].username)
         assertNull(transactions[6].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-27T00:00:00Z").toEpochSecond(), Instant.parse(transactions[6].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-27T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[6].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.JOHNCLOCK FROM CROW VD", transactions[6].description)
         assertEquals(100.00, transactions[6].amount)
         assertEquals(4950.00, transactions[6].runningBalance)
@@ -146,7 +150,7 @@ class PaymentImportIT {
         assertNull(transactions[7].userId)
         assertNull(transactions[7].username)
         assertNull(transactions[7].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-28T00:00:00Z").toEpochSecond(), Instant.parse(transactions[7].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-28T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[7].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.POP15 FROM B Zen", transactions[7].description)
         assertEquals(100.00, transactions[7].amount)
         assertEquals(5050.00, transactions[7].runningBalance)
@@ -178,14 +182,14 @@ class PaymentImportIT {
         assertEquals(1, transactions[0].userId)
         assertEquals("roundabout23", transactions[0].username)
         assertEquals("roundabout23@test.com", transactions[0].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[0].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[0].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.roundabout23 FROM COOPER B", transactions[0].description)
         assertEquals(250.00, transactions[0].amount)
         assertEquals(4800.00, transactions[0].runningBalance)
         assertEquals("COOPER B", transactions[0].counterParty)
         assertEquals("roundabout23", transactions[0].reference)
 
-        waitForNEmailsToAppearInFolder(1, "Inbox", "roundabout23@test.com");
+        waitForNEmailsToAppearInFolder(1, "Inbox", "roundabout23@test.com")
 
         assertEquals(1, TestUtils.getEmails("roundabout23@test.com", "Inbox").size())
         assertEquals("Dear Bert Cooper, Your donation of £250 has now been received. If you are a newly joined full member, you will be upgraded to full membership as soon as we have reconciled the payment. Note there can be a lag of 1-2 days before this occurs so please be patient. If you are an existing full member making an additional donation, we THANK YOU for it. Thank you, LCAG Membership Team", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getContent().trim())
@@ -210,7 +214,7 @@ class PaymentImportIT {
         assertNull(transactions[0].userId)
         assertNull(transactions[0].username)
         assertNull(transactions[0].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[0].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[0].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.roundabout23 FROM COOPER B", transactions[0].description)
         assertEquals(250.00, transactions[0].amount)
         assertEquals(4800.00, transactions[0].runningBalance)
@@ -222,7 +226,7 @@ class PaymentImportIT {
         assertNull(transactions[1].userId)
         assertNull(transactions[1].username)
         assertNull(transactions[1].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[1].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[1].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.MIKE BOWLER FROM M Bowler", transactions[1].description)
         assertEquals(50.00, transactions[1].amount)
         assertEquals(4850.00, transactions[1].runningBalance)
@@ -234,7 +238,7 @@ class PaymentImportIT {
         assertNull(transactions[2].userId)
         assertNull(transactions[2].username)
         assertNull(transactions[2].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[2].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[2].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.FROM FINK FROM FINK KITCHENS LTD", transactions[2].description)
         assertEquals(100.00, transactions[2].amount)
         assertEquals(4950.00, transactions[2].runningBalance)
@@ -246,7 +250,7 @@ class PaymentImportIT {
         assertNull(transactions[3].userId)
         assertNull(transactions[3].username)
         assertNull(transactions[3].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), Instant.parse(transactions[3].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-21T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[3].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.BOB FRENCH FROM BOB FRENCH", transactions[3].description)
         assertEquals(100.00, transactions[3].amount)
         assertEquals(5050.00, transactions[3].runningBalance)
@@ -258,7 +262,7 @@ class PaymentImportIT {
         assertNull(transactions[4].userId)
         assertNull(transactions[4].username)
         assertNull(transactions[4].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-22T00:00:00Z").toEpochSecond(), Instant.parse(transactions[4].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-22T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[4].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.FROM FINK FROM FINK KITCHENS LTD", transactions[4].description)
         assertEquals(100.00, transactions[4].amount)
         assertEquals(4950.00, transactions[4].runningBalance)
@@ -270,7 +274,7 @@ class PaymentImportIT {
         assertNull(transactions[5].userId)
         assertNull(transactions[5].username)
         assertNull(transactions[5].emailAddress)
-        assertEquals(ZonedDateTime.parse("2018-05-22T00:00:00Z").toEpochSecond(), Instant.parse(transactions[5].date).epochSecond)
+        assertEquals(ZonedDateTime.parse("2018-05-22T00:00:00Z").toEpochSecond(), ((BigDecimal) transactions[5].date).longValue())
         assertEquals("FASTER PAYMENTS RECEIPT REF.BOB FRENCH FROM BOB FRENCH", transactions[5].description)
         assertEquals(100.00, transactions[5].amount)
         assertEquals(5050.00, transactions[5].runningBalance)
