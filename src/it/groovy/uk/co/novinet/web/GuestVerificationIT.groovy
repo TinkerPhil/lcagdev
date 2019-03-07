@@ -93,7 +93,7 @@ class GuestVerificationIT extends GebSpec {
             confirmVerifyButton.click()
 
         then: "we get a toast success message"
-            waitFor { toastSuccess.text() == "Updated successfully" }
+            waitFor(10) { toastSuccess.text() == "Updated successfully" }
 
         and: "modal closes"
             waitFor { documentVerificationModal.displayed == false }
@@ -144,7 +144,7 @@ class GuestVerificationIT extends GebSpec {
             confirmVerifyButton.click()
 
         then: "we get a toast success message"
-            waitFor { toastSuccess.text() == "Updated successfully" }
+            waitFor(10) { toastSuccess.text() == "Updated successfully" }
 
         and: "modal closes"
             waitFor { documentVerificationModal.displayed == false }
