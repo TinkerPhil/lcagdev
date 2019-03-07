@@ -103,15 +103,15 @@ class GuestVerificationIT extends GebSpec {
 
         and: "the guest is now a verified member"
             switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
-            memberGridNameTds[0].find("input").value() == "John Smith"
-            checkboxValue(memberGridHmrcLetterCheckedTds[0].find("input")) == true
-            checkboxValue(memberGridIdentityCheckedTds[0].find("input")) == true
-            memberGridVerifiedOnTds[0].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
-            memberGridVerifiedByTds[0].find("input").value() == "RG"
+            memberGridNameTds[1].find("input").value() == "John Smith"
+            checkboxValue(memberGridHmrcLetterCheckedTds[1].find("input")) == true
+            checkboxValue(memberGridIdentityCheckedTds[1].find("input")) == true
+            memberGridVerifiedOnTds[1].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
+            memberGridVerifiedByTds[1].find("input").value() == "RG"
 
         and: "new member receives email saying their docs have been verified"
             waitFor { getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 1 }
-            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(0).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw NOTE: Although you have been verified, you will still be a Guest member until we receive your £100 and reconcile your payment. Regards, LCAG Membership Team")
+            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(1).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw NOTE: Although you have been verified, you will still be a Guest member until we receive your £100 and reconcile your payment. Regards, LCAG Membership Team")
     }
 
     def "guest member verification flow when guest has 2 docs"() {
@@ -154,15 +154,15 @@ class GuestVerificationIT extends GebSpec {
 
             and: "the guest is now a verified member"
             switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
-            memberGridNameTds[0].find("input").value() == "John Smith"
-            checkboxValue(memberGridHmrcLetterCheckedTds[0].find("input")) == true
-            checkboxValue(memberGridIdentityCheckedTds[0].find("input")) == true
-            memberGridVerifiedOnTds[0].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
-            memberGridVerifiedByTds[0].find("input").value() == "RG"
+            memberGridNameTds[1].find("input").value() == "John Smith"
+            checkboxValue(memberGridHmrcLetterCheckedTds[1].find("input")) == true
+            checkboxValue(memberGridIdentityCheckedTds[1].find("input")) == true
+            memberGridVerifiedOnTds[1].find("input").value() == new SimpleDateFormat("dd/MM/yyyy").format(new Date())
+            memberGridVerifiedByTds[1].find("input").value() == "RG"
 
         and: "new member receives email saying their docs have been verified"
             waitFor { getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 1 }
-            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(0).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw NOTE: Although you have been verified, you will still be a Guest member until we receive your £100 and reconcile your payment. Regards, LCAG Membership Team")
+            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(1).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw NOTE: Although you have been verified, you will still be a Guest member until we receive your £100 and reconcile your payment. Regards, LCAG Membership Team")
 
         and: "the docs have been deleted"
             assert testSftpService.getAllDocumentsForEmailAddress(GUEST_EMAIL_ADDRESS).size() == 0

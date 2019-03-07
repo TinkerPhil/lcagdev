@@ -47,7 +47,7 @@ class BankTransactionAssignmentIT extends GebSpec {
 
         and: "the payment amount has been assigned to the member"
             switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
-            waitFor { memberGridContributionAmountTds[0].find("input").value() == "50.00" }
+            waitFor { memberGridContributionAmountTds[1].find("input").value() == "50.00" }
 
         and: "new member receives email saying their payment has been received"
             waitFor { getEmails(MEMBER_EMAIL_ADDRESS, "Inbox").size() == 1 }
