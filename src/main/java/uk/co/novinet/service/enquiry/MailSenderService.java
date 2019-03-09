@@ -1,11 +1,10 @@
 package uk.co.novinet.service.enquiry;
 
 import org.apache.commons.io.IOUtils;
-import org.codemonkey.simplejavamail.Mailer;
-import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.co.novinet.service.member.Member;
@@ -13,10 +12,9 @@ import uk.co.novinet.service.payments.BankTransaction;
 
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Scanner;
 
 import static java.text.NumberFormat.getNumberInstance;
 import static java.util.Locale.UK;
@@ -26,17 +24,14 @@ public class MailSenderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MailSenderService.class);
 
-    @Value("${smtpHost}")
-    private String smtpHost;
+    @Autowired
+    private MailerWrapper mailerWrapper;
 
-    @Value("${smtpPort}")
-    private int smtpPort;
+    @Autowired
+    private GoogleDocsReader googleDocsReader;
 
     @Value("${smtpUsername}")
     private String smtpUsername;
-
-    @Value("${smtpPassword}")
-    private String smtpPassword;
 
     @Value("${emailSourceUrl}")
     private String emailSourceUrl;
@@ -65,6 +60,12 @@ public class MailSenderService {
     @Value("${alreadyHaveAnLcagAccountEmailSubject}")
     private String alreadyHaveAnLcagAccountEmailSubject;
 
+    @Value("${refundProcessedEmailSourceUrl}")
+    private String refundProcessedEmailSourceUrl;
+
+    @Value("${refundProcessedEmailSubject}")
+    private String refundProcessedEmailSubject;
+
     @Value("${emailSubject}")
     private String emailSubject;
 
@@ -90,8 +91,12 @@ public class MailSenderService {
     }
 
     public void sendBankTransactionAssignmentEmail(Member member, BankTransaction bankTransaction) {
-        LOGGER.info("Going to send payment received email to member: {}", member);
-        sendEmail(member, bankTransaction, paymentReceivedEmailSubject, paymentReceivedEmailSourceUrl, null);
+        LOGGER.info("Going to send payment or refund processed email to member: {}", member);
+        if (bankTransaction.getAmount().compareTo(BigDecimal.ZERO) >= 0) {
+            sendEmail(member, bankTransaction, paymentReceivedEmailSubject, paymentReceivedEmailSourceUrl, null);
+        } else {
+            sendEmail(member, bankTransaction, refundProcessedEmailSubject, refundProcessedEmailSourceUrl, null);
+        }
     }
 
     public void sendUpgradedToFullMembershipEmail(Member member) {
@@ -109,7 +114,7 @@ public class MailSenderService {
         return null;
     }
 
-    private void sendEmail(Member member, BankTransaction bankTransaction, String subject, String emailSourceUrl, GoogleDriveMailAttachment googleDriveMailAttachment) {
+    public void sendEmail(Member member, BankTransaction bankTransaction, String subject, String emailSourceUrl, GoogleDriveMailAttachment googleDriveMailAttachment) {
         try {
             Email email = new Email();
 
@@ -124,7 +129,7 @@ public class MailSenderService {
             }
 
             email.addRecipient(member.getEmailAddress(), member.getEmailAddress(), MimeMessage.RecipientType.TO);
-            email.setTextHTML(replaceTokens(retrieveEmailBodyHtmlFromGoogleDocs(emailSourceUrl), member, bankTransaction));
+            email.setTextHTML(replaceTokens(googleDocsReader.retrieveEmailBodyHtmlFromGoogleDocs(emailSourceUrl), member, bankTransaction));
             email.setSubject(subject);
 
             if (googleDriveMailAttachment != null) {
@@ -138,7 +143,7 @@ public class MailSenderService {
             }
 
             LOGGER.info("Going to try sending email with sourceUrl: {} to member {}", emailSourceUrl, member.getEmailAddress());
-            new Mailer(smtpHost, smtpPort, smtpUsername, smtpPassword, TransportStrategy.SMTP_TLS).sendMail(email);
+            mailerWrapper.sendMail(email);
             LOGGER.info("Email successfully sent to member {}", member.getEmailAddress());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -160,10 +165,7 @@ public class MailSenderService {
         return substitutedMemberTokens;
     }
 
-    private String retrieveEmailBodyHtmlFromGoogleDocs(String emailSourceUrl) throws IOException {
-        try (Scanner scanner = new Scanner(new URL(emailSourceUrl).openStream(), StandardCharsets.UTF_8.toString())) {
-            scanner.useDelimiter("\\A");
-            return scanner.hasNext() ? scanner.next() : "";
-        }
+    public void setGoogleDocsReader(GoogleDocsReader googleDocsReader) {
+        this.googleDocsReader = googleDocsReader;
     }
 }

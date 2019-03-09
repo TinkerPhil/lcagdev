@@ -32,6 +32,8 @@ docker run -d \
 	-e "VERIFICATION_EMAIL_SUBJECT=Your identification has been verified" \
 	-e "PAYMENT_RECEIVED_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1s7Z_sERtYiaYWxU-pH3YjzmEPMTgelJd_aB9ZnaGjOM/export?format=html" \
 	-e "PAYMENT_RECEIVED_EMAIL_SUBJECT=Your payment has been received" \
+	-e "REFUND_PROCESSED_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1buQkOAXYu-g5fl3m0G8r3Csg52CAY5jG7WS63Dm_tGM/export?format=html" \
+	-e "REFUND_PROCESSED_EMAIL_SUBJECT=Your refund has been processed" \
 	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1Ul_fpNid324swOOCGEdo9EMFaRqufXwN7T173nngIyI/export?format=html" \
 	-e "UPGRADED_TO_FULL_MEMBERSHIP_EMAIL_SUBJECT=You are now a full member" \
 	-e "ALREADY_HAVE_AN_LCAG_ACCOUNT_EMAIL_SOURCE_URL=https://docs.google.com/document/d/1ghlZmfMY07ZS7s374CPJAerbmpAxkQ7JTNIdNJiCRBU/export?format=html" \
