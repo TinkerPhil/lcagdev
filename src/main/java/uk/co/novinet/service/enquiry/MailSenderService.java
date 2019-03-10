@@ -159,7 +159,7 @@ public class MailSenderService {
                 .replace("$CLAIM_TOKEN", member.getClaimToken());
 
         if (bankTransaction != null) {
-            return substitutedMemberTokens.replace("$AMOUNT", getNumberInstance(UK).format(bankTransaction.getAmount()));
+            return substitutedMemberTokens.replace("$AMOUNT", getNumberInstance(UK).format(bankTransaction.getAmount().abs()));
         }
 
         return substitutedMemberTokens;

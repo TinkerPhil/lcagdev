@@ -21,7 +21,7 @@ class BankTransactionAssignmentIT extends GebSpec {
 
     def "manual bank transaction assignment triggers payment receipt email"() {
         given:
-            insertUnassignedBankTransactionRow()
+            insertUnassignedBankTransactionRow(50)
             assert getEmails(MEMBER_EMAIL_ADDRESS, "Inbox").size() == 0
             insertUser(1, "newguest", MEMBER_EMAIL_ADDRESS, "John Smith", 2, true)
             go("http://admin:lcag@localhost:8282")
@@ -55,10 +55,99 @@ class BankTransactionAssignmentIT extends GebSpec {
             getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].subject.contains("Your payment has been received")
     }
 
-    private void insertUnassignedBankTransactionRow() {
-        runSqlUpdate("INSERT INTO `i7b0_bank_transactions` (`id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, " +
-                "`transaction_index_on_day`, `payment_source`) VALUES ( 1, '" + unixTime() + "', 'test bank transaction', " +
-                "50, 100, 'Mr Smith', 'some_username', 0, 'SANTANDER')")
+    def "can import and assign negative balance transaction"() {
+        given:
+        insertUnassignedBankTransactionRow(-50)
+        assert getEmails(MEMBER_EMAIL_ADDRESS, "Inbox").size() == 0
+        insertUser(1, "newguest", MEMBER_EMAIL_ADDRESS, "John Smith", 2, true)
+        go("http://admin:lcag@localhost:8282")
+        at DashboardPage
+
+        and: "wait for member grid to load and confirm it has the guest we inserted"
+        switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
+        memberGridContributionAmountTds[0].find("input").value() == 0.00
+
+        and: "wait for payments grid to load and confirm it has the transaction we inserted"
+        paymentsTab.click()
+        waitFor { paymentsGrid.displayed }
+        switchToPaymentsTabIfNecessaryAndAssertGridHasNRows(browser, 1)
+
+        when: "we assign the transaction to the member"
+        $(".select2-selection__arrow").click()
+        waitFor { select2FirstMemberChoice.displayed }
+        select2FirstMemberChoice.click()
+
+        then: "toast success message apears"
+        waitFor { toastSuccess.displayed }
+        assert toastSuccess.text() == "Updated successfully"
+
+        and: "the payment amount has been assigned to the member"
+        switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
+        waitFor { memberGridContributionAmountTds[1].find("input").value() == "-50.00" }
+
+        and: "new member receives email saying their payment has been received"
+        waitFor { getEmails(MEMBER_EMAIL_ADDRESS, "Inbox").size() == 1 }
+        getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith, Your refund of £50 has now been processed. Thank you, LCAG Membership Team")
+        getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].subject.contains("Your refund has been processed")
+    }
+
+
+    def "can import and assign transaction then issue refund of same transaction"() {
+        given:
+        insertUnassignedBankTransactionRow(50)
+        insertUnassignedBankTransactionRow(-50)
+        assert getEmails(MEMBER_EMAIL_ADDRESS, "Inbox").size() == 0
+        insertUser(1, "newguest", MEMBER_EMAIL_ADDRESS, "John Smith", 2, true)
+        go("http://admin:lcag@localhost:8282")
+        at DashboardPage
+
+        and: "wait for member grid to load and confirm it has the guest we inserted"
+        switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
+        memberGridContributionAmountTds[0].find("input").value() == 0.00
+
+        and: "wait for payments grid to load and confirm it has the transaction we inserted"
+        paymentsTab.click()
+        waitFor { paymentsGrid.displayed }
+        switchToPaymentsTabIfNecessaryAndAssertGridHasNRows(browser, 2)
+
+        when: "we assign the first transaction to the member"
+        $(".select2-selection__arrow")[0].click()
+        waitFor { select2FirstMemberChoice.displayed }
+        select2FirstMemberChoice.click()
+
+        then: "toast success message appears"
+        waitFor { toastSuccess.displayed }
+        assert toastSuccess.text() == "Updated successfully"
+
+        waitFor(10) { $("#toast-container div.toast.toast-success div.toast-message").isDisplayed() == false }
+
+        and: "we assign the second transaction to the member"
+        $(".select2-selection__arrow")[1].click()
+        waitFor { select2FirstMemberChoice.displayed }
+        select2FirstMemberChoice.click()
+
+        then: "toast success message appears"
+        waitFor { toastSuccess.displayed }
+        assert toastSuccess.text() == "Updated successfully"
+
+        and: "the payment amount has been assigned to the member"
+        switchToMemberTabIfNecessaryAndAssertGridHasNRows(browser, 2)
+        waitFor { memberGridContributionAmountTds[1].find("input").value() == "0.00" }
+
+        and: "new member receives email saying their payment has been received"
+        waitFor { getEmails(MEMBER_EMAIL_ADDRESS, "Inbox").size() == 2 }
+
+        getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith, Your refund of £50 has now been processed. Thank you, LCAG Membership Team")
+        getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].subject.contains("Your refund has been processed")
+
+        getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[1].content.contains("Dear John Smith, Your donation of £50 has now been received. If you are a newly joined full member, you will be upgraded to full membership as soon as we have reconciled the payment. Note there can be a lag of 1-2 days before this occurs so please be patient. If you are an existing full member making an additional donation, we THANK YOU for it. Thank you, LCAG Membership Team")
+        getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[1].subject.contains("Your payment has been received")
+    }
+
+    private void insertUnassignedBankTransactionRow(int amount) {
+        runSqlUpdate("INSERT INTO `i7b0_bank_transactions` (`date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, " +
+                "`transaction_index_on_day`, `payment_source`) VALUES ('" + unixTime() + "', 'test bank transaction', " +
+                amount + ", 100, 'Mr Smith', 'some_username', 0, 'SANTANDER')")
     }
 
 }
