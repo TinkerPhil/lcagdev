@@ -284,7 +284,7 @@ class PaymentImportIT {
     }
 
     def allBankTransactionRows() {
-        return new JsonSlurper().parseText(getRequest("http://localhost:8282/payments?rows=1000&sidx=date&sord=asc")).rows
+        return new JsonSlurper().parseText(getRequest("http://localhost:8282/payments?rows=1000&sidx=date&sord=asc", "admin", "lcag")).rows
     }
 
     File tempFile(filename) {

@@ -25,13 +25,13 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.*;
 import java.sql.*;
-import java.util.*;
 import java.util.Date;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static java.lang.String.format;
 import static java.lang.Thread.sleep;
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static uk.co.novinet.service.PersistenceUtils.dateFromMyBbRow;
 
@@ -136,6 +136,10 @@ public class TestUtils {
     }
 
     public static void insertUser(int id, String username, String emailAddress, String name, int group, boolean hasCompletedMembershipForm, String hashedPassword, String salt) {
+        insertUser(id, username, emailAddress, name, group, Collections.emptyList(), hasCompletedMembershipForm, hashedPassword, salt);
+    }
+
+    public static void insertUser(int id, String username, String emailAddress, String name, int group, List<Integer> additionalGroups, boolean hasCompletedMembershipForm, String hashedPassword, String salt) {
         runSqlUpdate("INSERT INTO `i7b0_users` (`uid`, `username`, `password`, `salt`, `loginkey`, `email`, `postnum`, `threadnum`, `avatar`, " +
                 "`avatardimensions`, `avatartype`, `usergroup`, `additionalgroups`, `displaygroup`, `usertitle`, `regdate`, `lastactive`, `lastvisit`, " +
                 "`lastpost`, `website`, `icq`,  `yahoo`, `skype`, `google`, `birthday`, `birthdayprivacy`, `signature`, `allownotices`, `hideemail`, " +
@@ -147,7 +151,7 @@ public class TestUtils {
                 "`suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`, `name`, `has_completed_membership_form`, `token`, `claim_token`) " +
                 "VALUES (" +
                 id + ", '" + username + "', '" + hashedPassword + "', '" + salt + "', 'lvhLksjhHGcZIWgtlwNTJNr3bjxzCE2qgZNX6SBTBPbuSLx21u', '" + emailAddress +
-                "', 0, 0, '', '', '', " + group + ", '', 0, '', " + unixTime() + ", 0, 0, 0, '', '0', '', '', '', '', 'all', '', 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, " +
+                "', 0, 0, '', '', '', " + group + ", '" + additionalGroups.stream().map(Object::toString).collect(joining(",")) + "', 0, '', " + unixTime() + ", 0, 0, 0, '', '0', '', '', '', '', 'all', '', 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, " +
                 "'linear', 1, 1, 1, 1, 1, 1, 0, 0, 0, '', '', '', 0, 0, '', '', 0, 0, 0, '0', '', '', '', 0, 0, 0, '', '', '', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, " +
                 "1, '', 0, '" + name + "', '" + (hasCompletedMembershipForm ? "1" : "0") + "', 'aaaaaaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbb');");
     }
@@ -489,7 +493,7 @@ public class TestUtils {
     static void runSqlScript(String scriptName) {
         InputStream is = TestUtils.class.getClassLoader().getResourceAsStream(scriptName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        runSqlUpdate(reader.lines().collect(Collectors.joining(System.lineSeparator())));
+        runSqlUpdate(reader.lines().collect(joining(System.lineSeparator())));
     }
 
     static String getTextFromMessage(Message message) throws MessagingException, IOException {
@@ -580,11 +584,11 @@ public class TestUtils {
         return responseMsg;
     }
 
-    static String getRequest(String url) throws IOException {
+    static String getRequest(String url, String username, String password) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet get = new HttpGet(url);
         get.setHeader("Accept", "application/json");
-        get.setHeader("Authorization", "Basic " + new String(Base64.getEncoder().encode("admin:lcag".getBytes())));
+        get.setHeader("Authorization", "Basic " + new String(Base64.getEncoder().encode((username + ":" + password).getBytes())));
 
         CloseableHttpResponse response = httpclient.execute(get);
 
@@ -597,6 +601,17 @@ public class TestUtils {
         }
 
         return responseMsg;
+    }
+
+    public static int getRequestStatusCode(String url, String username, String password) throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet get = new HttpGet(url);
+        get.setHeader("Accept", "application/json");
+        get.setHeader("Authorization", "Basic " + new String(Base64.getEncoder().encode((username + ":" + password).getBytes())));
+
+        CloseableHttpResponse response = httpclient.execute(get);
+
+        return response.getStatusLine().getStatusCode();
     }
 
 
