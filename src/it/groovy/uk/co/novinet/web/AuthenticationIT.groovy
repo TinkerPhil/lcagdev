@@ -1,9 +1,9 @@
 package uk.co.novinet.web
 
 import geb.spock.GebSpec
+import spock.lang.Unroll
 import uk.co.novinet.auth.MyBbPasswordEncoder
 
-import static java.util.Collections.singletonList
 import static uk.co.novinet.e2e.TestUtils.*
 
 class AuthenticationIT extends GebSpec {
@@ -13,82 +13,78 @@ class AuthenticationIT extends GebSpec {
     public static final int USER_GROUP_MODERATORS = 6
     public static final int USER_GROUP_SUPER_MODERATORS = 3
     public static final int USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR = 13
+    public static final int USER_GROUP_LCAG_FFC_CONTRIBUTOR = 9
+    public static final int USER_GROUP_LCAG_GUESTS = 8
+    public static final int USER_GROUP_BANNED = 7
+    public static final int USER_GROUP_SUSPENDED = 12
 
     def setup() {
         setupDatabaseSchema()
         runSqlScript("sql/delete_all_users.sql")
     }
 
-    def "can login when main group is administrator"() {
+    @Unroll
+    def "can login to dashboard with main group: #mainGroup and additional groups: #additionalGroups"() {
         given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_ADMINISTRATORS, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
+        insertUser(9999, "user", "user@lcag.com", "user", mainGroup, additionalGroups as List, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
 
         expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 200
+        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == httpCode
+
+        where:
+        mainGroup                               | additionalGroups                                                           | httpCode
+        USER_GROUP_ADMINISTRATORS               | []                                                                         | 200
+        USER_GROUP_MODERATORS                   | []                                                                         | 200
+        USER_GROUP_SUPER_MODERATORS             | []                                                                         | 200
+        USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR | []                                                                         | 200
+        USER_GROUP_REGISTERED                   | [USER_GROUP_ADMINISTRATORS]                                                | 200
+        USER_GROUP_REGISTERED                   | [USER_GROUP_MODERATORS]                                                    | 200
+        USER_GROUP_REGISTERED                   | [USER_GROUP_SUPER_MODERATORS]                                              | 200
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR]                                  | 200
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_ADMINISTRATORS]               | 200
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_MODERATORS]                   | 200
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_SUPER_MODERATORS]             | 200
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR] | 200
     }
 
-    def "can login when main group is  lcag dashboard administrator"() {
+    @Unroll
+    def "cannot login to dashboard with main group: #mainGroup and additional groups: #additionalGroups"() {
         given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
+        insertUser(9999, "user", "user@lcag.com", "user", mainGroup, additionalGroups as List, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
 
         expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 200
-    }
+        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == httpCode
 
-    def "can login when main group is super moderator"() {
-        given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_SUPER_MODERATORS, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
-
-        expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 200
-    }
-
-    def "can login when main group is moderator"() {
-        given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_MODERATORS, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
-
-        expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 200
-    }
-
-    def "cannot login when main group is registered"() {
-        given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_REGISTERED, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
-
-        expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 403
-    }
-
-    def "can login when main group is registered but additional group contains administrator"() {
-        given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_REGISTERED, singletonList(USER_GROUP_ADMINISTRATORS), true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
-
-        expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 200
-    }
-
-    def "can login when main group is registered but additional group contains lcag dashboard administrator"() {
-        given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_REGISTERED, singletonList(USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR), true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
-
-        expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 200
-    }
-
-    def "can login when main group is registered but additional group contains  super moderator"() {
-        given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_REGISTERED, singletonList(USER_GROUP_SUPER_MODERATORS), true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
-
-        expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 200
-    }
-
-    def "can login when main group is registered but additional group contains  moderator"() {
-        given:
-        insertUser(9999, "user", "user@lcag.com", "user", USER_GROUP_REGISTERED, singletonList(USER_GROUP_MODERATORS), true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
-
-        expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == 200
+        where:
+        mainGroup                               | additionalGroups                                                                                 | httpCode
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR]                                                                | 403
+        USER_GROUP_LCAG_GUESTS                  | [USER_GROUP_LCAG_FFC_CONTRIBUTOR]                                                                | 403
+        USER_GROUP_REGISTERED                   | []                                                                                               | 403
+        USER_GROUP_LCAG_GUESTS                  | []                                                                                               | 403
+        USER_GROUP_ADMINISTRATORS               | [USER_GROUP_BANNED]                                                                              | 401
+        USER_GROUP_MODERATORS                   | [USER_GROUP_BANNED]                                                                              | 401
+        USER_GROUP_SUPER_MODERATORS             | [USER_GROUP_BANNED]                                                                              | 401
+        USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR | [USER_GROUP_BANNED]                                                                              | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_ADMINISTRATORS, USER_GROUP_BANNED]                                                   | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_MODERATORS, USER_GROUP_BANNED]                                                       | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_SUPER_MODERATORS, USER_GROUP_BANNED]                                                 | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR, USER_GROUP_BANNED]                                     | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_ADMINISTRATORS, USER_GROUP_BANNED]                  | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_MODERATORS, USER_GROUP_BANNED]                      | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_SUPER_MODERATORS, USER_GROUP_BANNED]                | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR, USER_GROUP_BANNED]    | 401
+        USER_GROUP_ADMINISTRATORS               | [USER_GROUP_SUSPENDED]                                                                           | 401
+        USER_GROUP_MODERATORS                   | [USER_GROUP_SUSPENDED]                                                                           | 401
+        USER_GROUP_SUPER_MODERATORS             | [USER_GROUP_SUSPENDED]                                                                           | 401
+        USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR | [USER_GROUP_SUSPENDED]                                                                           | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_ADMINISTRATORS, USER_GROUP_SUSPENDED]                                                | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_MODERATORS, USER_GROUP_SUSPENDED]                                                    | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_SUPER_MODERATORS, USER_GROUP_SUSPENDED]                                              | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR, USER_GROUP_SUSPENDED]                                  | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_ADMINISTRATORS, USER_GROUP_SUSPENDED]               | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_MODERATORS, USER_GROUP_SUSPENDED]                   | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_SUPER_MODERATORS, USER_GROUP_SUSPENDED]             | 401
+        USER_GROUP_REGISTERED                   | [USER_GROUP_LCAG_FFC_CONTRIBUTOR, USER_GROUP_LCAG_DASHBOARD_ADMINISTRATOR, USER_GROUP_SUSPENDED] | 401
     }
 
 

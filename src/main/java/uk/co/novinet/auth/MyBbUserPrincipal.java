@@ -56,7 +56,7 @@ public class MyBbUserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return getAuthorities().stream().anyMatch(grantedAuthority -> !isAuthorityLocked(grantedAuthority));
+        return getAuthorities().stream().noneMatch(this::isAuthorityLocked);
     }
 
     private boolean isAuthorityLocked(GrantedAuthority grantedAuthority) {
