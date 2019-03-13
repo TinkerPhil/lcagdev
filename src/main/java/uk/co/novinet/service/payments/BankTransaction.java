@@ -20,6 +20,8 @@ public class BankTransaction {
     private PaymentSource paymentSource;
     private Boolean emailSent;
 
+    BankTransaction() {}
+
     public BankTransaction(
             Long id,
             Long userId,

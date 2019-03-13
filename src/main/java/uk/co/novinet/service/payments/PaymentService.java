@@ -1,6 +1,5 @@
 package uk.co.novinet.service.payments;
 
-import jodd.util.HtmlDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class PaymentService {
     private static final Pattern TRANSACTION_PATTERN = Pattern.compile(
             "Date:.(?<date>\\d{2}/\\d{2}/\\d{4})\\s+" +
             "Description:(?<description>.+)\\s*" +
-            "Amount:.(?<amount>\\d+\\.\\d{2}).\\s*" +
+            "Amount:.(?<amount>\\-?\\d+\\.\\d{2}).\\s*" +
             "Balance:.(?<balance>\\d+\\.\\d{2})"
     );
 
@@ -41,6 +40,8 @@ public class PaymentService {
             Pattern.compile("FASTER PAYMENTS RECEIPT  FROM (?<counterParty>.*)")
 
     );
+
+    private static final char STRANGE_WHITESPACE_CHARACTER = '\u00A0';
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -132,7 +133,7 @@ public class PaymentService {
 
         while (matcher.find()) {
             String date = matcher.group("date");
-            String description = matcher.group("description").replace('\u00A0',' ').trim();
+            String description = matcher.group("description").replace(STRANGE_WHITESPACE_CHARACTER, ' ').trim();
             String amount = matcher.group("amount");
             String balance = matcher.group("balance");
 
