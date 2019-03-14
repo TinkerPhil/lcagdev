@@ -156,6 +156,7 @@ Balance: 4550.00 
         bankTransactions[0].counterParty == "MR L&D STEVENS"
         bankTransactions[0].reference == ""
         bankTransactions[0].transactionIndexOnDay == 0
+        bankTransactions[0].excludeFromMemberReconciliation == true
 
         bankTransactions[1].date.toEpochMilli() == time("24/05/2018")
         bankTransactions[1].description == "BILL PAYMENT FROM MR JAMES ANDREW HARRISON SMYTHE, REFERENCE jim65"
@@ -164,6 +165,7 @@ Balance: 4550.00 
         bankTransactions[1].counterParty == "MR JAMES ANDREW HARRISON SMYTHE"
         bankTransactions[1].reference == "jim65"
         bankTransactions[1].transactionIndexOnDay == 2
+        bankTransactions[1].excludeFromMemberReconciliation == true
 
         bankTransactions[2].date.toEpochMilli() == time("24/05/2018")
         bankTransactions[2].description == "FASTER PAYMENTS RECEIPT REF.KDMP FROM WILLIAMS MICHAEL"
@@ -172,6 +174,7 @@ Balance: 4550.00 
         bankTransactions[2].counterParty == "WILLIAMS MICHAEL"
         bankTransactions[2].reference == "KDMP"
         bankTransactions[2].transactionIndexOnDay == 1
+        bankTransactions[2].excludeFromMemberReconciliation == true
 
         bankTransactions[3].date.toEpochMilli() == time("24/05/2018")
         bankTransactions[3].description == "FASTER PAYMENTS RECEIPT REF.BOBWINKS FROM JONES TD"
@@ -180,6 +183,7 @@ Balance: 4550.00 
         bankTransactions[3].counterParty == "JONES TD"
         bankTransactions[3].reference == "BOBWINKS"
         bankTransactions[3].transactionIndexOnDay == 0
+        bankTransactions[3].excludeFromMemberReconciliation == false
 
         bankTransactions[4].date.toEpochMilli() == time("25/05/2018")
         bankTransactions[4].description == "FASTER PAYMENTS RECEIPT REF.ABC123 FROM A Smith"
@@ -188,7 +192,7 @@ Balance: 4550.00 
         bankTransactions[4].counterParty == "A Smith"
         bankTransactions[4].reference == "ABC123"
         bankTransactions[4].transactionIndexOnDay == 0
-
+        bankTransactions[4].excludeFromMemberReconciliation == false
     }
 
     private long time(String dateString) {

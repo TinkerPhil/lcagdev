@@ -159,7 +159,8 @@ public class PaymentService {
                         reference,
                         transactionIndexOnDay,
                         PaymentSource.SANTANDER,
-                        false));
+                        false,
+                        new BigDecimal(amount).compareTo(BigDecimal.ZERO) > 0));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }

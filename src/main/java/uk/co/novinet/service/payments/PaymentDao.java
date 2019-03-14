@@ -13,8 +13,6 @@ import uk.co.novinet.service.member.Where;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +38,7 @@ public class PaymentDao {
         put("transactionIndexOnDay", "bt.transaction_index_on_day");
         put("paymentSource", "bt.payment_source");
         put("emailSent", "bt.email_sent");
+        put("excludeFromMemberReconciliation", "bt.excludeFromMemberReconciliation");
     }};
 
     @Value("${forumDatabaseTablePrefix}")
@@ -150,7 +149,9 @@ public class PaymentDao {
                 rs.getString("bt.reference"),
                 rs.getInt("bt.transaction_index_on_day"),
                 PaymentSource.valueOf(rs.getString("bt.payment_source")),
-                rs.getBoolean("bt.email_sent"));
+                rs.getBoolean("bt.email_sent"),
+                rs.getBoolean("bt.excludeFromMemberReconciliation")
+        );
 
         LOGGER.info("Retrieved bank transaction: {}", bankTransaction);
 
@@ -267,6 +268,11 @@ public class PaymentDao {
         if (bankTransaction.getEmailSent() != null) {
             clauses.add("bt.email_sent = ?");
             parameters.add(bankTransaction.getEmailSent());
+        }
+
+        if (bankTransaction.getExcludeFromMemberReconciliation() != null) {
+            clauses.add("bt.excludeFromMemberReconciliation = ?");
+            parameters.add(bankTransaction.getExcludeFromMemberReconciliation());
         }
 
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);

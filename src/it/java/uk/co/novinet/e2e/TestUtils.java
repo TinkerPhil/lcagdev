@@ -275,7 +275,9 @@ public class TestUtils {
                         rs.getString("bt.reference"),
                         rs.getInt("bt.transaction_index_on_day"),
                         PaymentSource.valueOf(rs.getString("bt.payment_source")),
-                        rs.getBoolean("bt.email_sent")));
+                        rs.getBoolean("bt.email_sent"),
+                        rs.getBoolean("bt.excludeFromMemberReconciliation")
+                    ));
             }
 
             return bankTransactions;

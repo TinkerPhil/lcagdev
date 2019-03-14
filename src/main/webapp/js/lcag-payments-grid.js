@@ -16,7 +16,8 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 { name: "counterParty", label: "Counter Party", width: 150, template: "string" },
                 { name: "reference", label: "Reference", width: 150, template: "string" },
                 { name: "paymentSource", label: "Payment Source", width: 150, template: "string" },
-                { name: "emailSent", label: "Email Sent", width: 59, formatter: lcag.PaymentsGrid.formatters.emailSent, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } }
+                { name: "emailSent", label: "Email Sent", width: 59, formatter: lcag.PaymentsGrid.formatters.emailSent, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "excludeFromMemberReconciliation", label: "Exclude From Member Reconciliation", width: 150, formatter: lcag.PaymentsGrid.formatters.excludeFromMemberReconciliation, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -110,6 +111,9 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
         },
         "emailSent": function(cellvalue, options, row) {
             return '<input disabled="disabled" id="emailSent_' + row.id + '" type="checkbox" ' + (row.emailSent ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "excludeFromMemberReconciliation": function(cellvalue, options, row) {
+            return '<input disabled="disabled" id="excludeFromMemberReconciliation_' + row.id + '" type="checkbox" ' + (row.excludeFromMemberReconciliation ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         }
     }
 }

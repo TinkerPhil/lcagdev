@@ -19,6 +19,7 @@ public class BankTransaction {
     private Integer transactionIndexOnDay;
     private PaymentSource paymentSource;
     private Boolean emailSent;
+    private Boolean excludeFromMemberReconciliation;
 
     BankTransaction() {}
 
@@ -35,7 +36,8 @@ public class BankTransaction {
             String reference,
             Integer transactionIndexOnDay,
             PaymentSource paymentSource,
-            Boolean emailSent) {
+            Boolean emailSent,
+            Boolean excludeFromMemberReconciliation) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -49,6 +51,7 @@ public class BankTransaction {
         this.transactionIndexOnDay = transactionIndexOnDay;
         this.paymentSource = paymentSource;
         this.emailSent = emailSent;
+        this.excludeFromMemberReconciliation = excludeFromMemberReconciliation;
     }
 
     void setId(Long id) {
@@ -153,5 +156,13 @@ public class BankTransaction {
 
     public void setEmailSent(Boolean emailSent) {
         this.emailSent = emailSent;
+    }
+
+    public Boolean getExcludeFromMemberReconciliation() {
+        return excludeFromMemberReconciliation;
+    }
+
+    public void setExcludeFromMemberReconciliation(Boolean excludeFromMemberReconciliation) {
+        this.excludeFromMemberReconciliation = excludeFromMemberReconciliation;
     }
 }
