@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.codehaus.groovy.runtime.InvokerHelper.asList;
 import static uk.co.novinet.service.PersistenceUtils.*;
 
@@ -28,6 +28,7 @@ public class PaymentDao {
 
     private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
         put("id", "bt.id");
+
         put("userId", "bt.user_id");
         put("date", "bt.date");
         put("description", "bt.description");
@@ -179,9 +180,9 @@ public class PaymentDao {
 
         Where where = buildWhereClause(bankTransaction, operator);
 
-        String orderBy = "";
+        String orderBy = " order by user_id is null desc, date desc, transaction_index_on_day asc "; //default should be unassigned on top, followed by date desc, index on day asc.
 
-        if (sortField != null && sortDirection != null) {
+        if (isNotBlank(sortField) && isNotBlank(sortDirection)) {
             orderBy = " order by " + FIELD_TO_COLUMN_TRANSLATIONS.get(sortField) + " " + sortDirection + " ";
         }
 

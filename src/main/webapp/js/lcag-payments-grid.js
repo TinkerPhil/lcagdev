@@ -38,8 +38,6 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
             autoresizeOnLoad: true,
 
             iconSet: "fontAwesome",
-            sortname: "id",
-            sortorder: "desc",
             threeStateSort: false,
             headertitles: true,
             pager: true,
