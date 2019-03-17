@@ -104,7 +104,7 @@
                     </p>
                     <ul class="nav navbar-nav">
                         <li>
-                            <form action="/paymentUpload" class="dropzone" id="pay-dropzone-form">
+                            <form action="/payment/upload" class="dropzone" id="pay-dropzone-form">
                                 <p class="dz-message">Drop bank export txt file here</p>
                             </form>
                         </li>
@@ -241,7 +241,7 @@
             lcag.ExtractPage.initialise();
             $("#pay-dropzone-form").dropzone({
                 maxFiles: 2000,
-                url: "/paymentUpload",
+                url: "/payment/upload",
                 success: function (file, response) {
                     lcag.Common.alertSuccess();
                     lcag.PaymentsGrid.grid.trigger("reloadGrid");

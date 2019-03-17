@@ -35,7 +35,7 @@ class PaymentImportIT {
     void importsNewBankTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
     }
 
@@ -43,10 +43,10 @@ class PaymentImportIT {
     void doesNotReImportDuplicateTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
     }
 
@@ -54,10 +54,10 @@ class PaymentImportIT {
     void canImportSecondBatchOfDifferentTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_2.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_2.txt"))
         assertEquals(8, allBankTransactionRows().size())
 
         def transactions = allBankTransactionRows()
@@ -163,7 +163,7 @@ class PaymentImportIT {
     void importsBothTransactionsWhenThereAreTwoIdenticalTransactionsOnSameDay() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_2_identical_transactions.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_2_identical_transactions.txt"))
         assertEquals(2, allBankTransactionRows().size())
     }
 
@@ -173,7 +173,7 @@ class PaymentImportIT {
 
         insertUser(1, "roundabout23", "roundabout23@test.com", "Bert Cooper", 2)
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
 
         def transactions = allBankTransactionRows()
@@ -200,11 +200,11 @@ class PaymentImportIT {
     void canImportTransactionFilesWithPartiallyOverlappingDates() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_overlapping_transaction_dates_1.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_overlapping_transaction_dates_1.txt"))
         sleep(2000)
         assertEquals(4, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/paymentUpload", tempFile("santander_overlapping_transaction_dates_2.txt"))
+        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_overlapping_transaction_dates_2.txt"))
         sleep(2000)
         assertEquals(6, allBankTransactionRows().size())
 
@@ -284,7 +284,7 @@ class PaymentImportIT {
     }
 
     def allBankTransactionRows() {
-        return new JsonSlurper().parseText(getRequest("http://localhost:8282/payments?rows=1000&sidx=date&sord=asc", "admin", "lcag")).rows
+        return new JsonSlurper().parseText(getRequest("http://localhost:8282/payment?rows=1000&sidx=date&sord=asc", "admin", "lcag")).rows
     }
 
     File tempFile(filename) {

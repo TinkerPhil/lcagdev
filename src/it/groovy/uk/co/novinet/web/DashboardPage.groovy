@@ -12,6 +12,7 @@ class DashboardPage extends Page {
         guestsAwaitingVerificationTab { $(".nav.nav-tabs li a")[1] }
         paymentsTab { $(".nav.nav-tabs li a")[2] }
         paymentsGrid { $("#payments-grid") }
+        paymentsGridUpdateButtons { $("#payments-grid .update-row-btn") }
         paymentsGridRows { paymentsGrid.find("tr") }
         memberGrid { $("#member-grid") }
         memberGridRows { $("#member-grid tr") }

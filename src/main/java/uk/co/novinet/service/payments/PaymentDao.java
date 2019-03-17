@@ -286,6 +286,10 @@ public class PaymentDao {
         jdbcTemplate.update("update " + bankTransactionsTableName() + " bt set bt.email_sent = ? where bt.id = ?", emailSent, paymentId);
     }
 
+    public void updateExcludeFromMemberReconciliation(Long paymentId, Boolean excludeFromMemberReconciliation) {
+        jdbcTemplate.update("update " + bankTransactionsTableName() + " bt set bt.excludeFromMemberReconciliation = ? where bt.id = ?", excludeFromMemberReconciliation, paymentId);
+    }
+
     public List<BankTransaction> findAssignedBankTransactionsRequiringEmails() {
         LOGGER.info("Finding bank transactions that require emails");
 

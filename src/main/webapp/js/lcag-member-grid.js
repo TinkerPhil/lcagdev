@@ -42,14 +42,6 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "hasCompletedClaimParticipantForm", label: "Completed Claim Participant Form", width: 59, formatter: lcag.MemberGrid.formatters.hasCompletedClaimParticipantForm, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "claim" },
                 { name: "hasBeenSentClaimConfirmationEmail", label: "Has Been Sent Claim Confirmation Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentClaimConfirmationEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "claim" },
                 { name: "hasOptedOutOfClaim", label: "Has Opted Out Of Claim", width: 59, formatter: lcag.MemberGrid.formatters.hasOptedOutOfClaim, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "claim last" },
-//                { name: "hasBeenSentInitialMassLobbyingEmail", label: "Has Been Sent Initial Email", width: 59, formatter: lcag.MemberGrid.formatters.hasBeenSentInitialMassLobbyingEmail, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day first" },
-//                { name: "lobbyingDayAttending", label: "Attending", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayAttending, classes: "mass-lobbying-day ", stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;UNSET:Unset;YES:Yes;NO:No;MAYBE:Maybe" } },
-//                { name: "lobbyingDayHasBeenSentMpTemplate", label: "Has Been Sent MP Template Letter", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayHasBeenSentMpTemplate, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
-//                { name: "lobbyingDayHasSentMpTemplateLetter", label: "Has Sent Template Letter To MP", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayHasSentMpTemplateLetter, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
-//                { name: "lobbyingDayHasReceivedMpResponse", label: "Has Received MP Response", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayHasReceivedMpResponse, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
-//                { name: "lobbyingDayMpHasConfirmedAttendance", label: "MP Has Confirmed Attendance", width: 59, formatter: lcag.MemberGrid.formatters.lobbyingDayMpHasConfirmedAttendance, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
-//                { name: "lobbyingDayMpIsMinister", label: "MP Is Minister", width: 90, formatter: lcag.MemberGrid.formatters.lobbyingDayMpIsMinister, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" }, classes: "mass-lobbying-day" },
-//                { name: "lobbyingDayNotes", label: "Notes", width: 200, formatter: lcag.MemberGrid.formatters.lobbyingDayNotes, classes: "mass-lobbying-day last" },
                 { name: "action", label: "", width: 90, formatter: lcag.MemberGrid.formatters.action, search: false }
             ],
             datatype: function(postData) {
@@ -157,7 +149,6 @@ lcag.MemberGrid = lcag.MemberGrid || {
         $("#member-grid").jqGrid('setGroupHeaders', {
             useColSpanStyle: false,
             groupHeaders: [
-                //{ startColumnName: 'hasBeenSentInitialMassLobbyingEmail', numberOfColumns: 8, titleText: 'Mass Lobbying Day' },
                 { startColumnName: 'claimToken', numberOfColumns: 5, titleText: 'Claim' }
             ]
         });

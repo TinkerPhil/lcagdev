@@ -55,6 +55,33 @@ class BankTransactionAssignmentIT extends GebSpec {
             getEmails(MEMBER_EMAIL_ADDRESS, "Inbox")[0].subject.contains("Your payment has been received")
     }
 
+    def "can update excludeFromMemberReconciliation field"() {
+        given:
+            insertUnassignedBankTransactionRow()
+            assert getBankTransactionRows().get(0).excludeFromMemberReconciliation == false
+            go("http://admin:lcag@localhost:8282")
+            at DashboardPage
+
+        and: "wait for payments grid to load and confirm it has the transaction we inserted"
+            paymentsTab.click()
+            waitFor { paymentsGrid.displayed }
+            switchToPaymentsTabIfNecessaryAndAssertGridHasNRows(browser, 1)
+
+        when: "we check the excludeFromMemberReconciliation checkbox and update"
+            $("#excludeFromMemberReconciliation_1").click()
+            paymentsGridUpdateButtons[0].click()
+
+        then: "toast success message apears"
+            waitFor { toastSuccess.displayed }
+            assert toastSuccess.text() == "Updated successfully"
+
+        and: "checkbox still has value"
+            assert checkboxValue($("#excludeFromMemberReconciliation_1")) == true
+
+        and: "excludeFromMemberReconciliation value is set in database"
+            assert getBankTransactionRows().get(0).excludeFromMemberReconciliation == true
+    }
+
     private void insertUnassignedBankTransactionRow() {
         runSqlUpdate("INSERT INTO `i7b0_bank_transactions` (`id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, " +
                 "`transaction_index_on_day`, `payment_source`) VALUES ( 1, '" + unixTime() + "', 'test bank transaction', " +

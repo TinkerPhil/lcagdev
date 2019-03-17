@@ -221,4 +221,8 @@ public class PaymentService {
         paymentDao.updateMemberId(paymentId, memberId);
         paymentDao.updateEmailSent(false, memberId);
     }
+
+    public void update(Long bankTransactionId, Boolean excludeFromMemberReconciliation) {
+        paymentDao.updateExcludeFromMemberReconciliation(bankTransactionId, excludeFromMemberReconciliation);
+    }
 }

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,8 @@ import uk.co.novinet.service.payments.BankTransaction;
 import uk.co.novinet.service.payments.ImportOutcome;
 import uk.co.novinet.service.payments.PaymentDao;
 import uk.co.novinet.service.payments.PaymentService;
+
+import java.util.Date;
 
 @RestController
 public class PaymentController {
@@ -28,7 +31,7 @@ public class PaymentController {
     private String bankExportCharacterEncoding;
 
     @CrossOrigin
-    @GetMapping(path = "/payments")
+    @GetMapping(path = "/payment")
     public DataContainer getPayments(BankTransaction bankTransaction,
                                     @RequestParam(value = "page", required = false) Long current,
                                     @RequestParam(value = "rows", required = false) Long rowCount,
@@ -39,7 +42,7 @@ public class PaymentController {
     }
 
     @CrossOrigin
-    @PostMapping(path = "/paymentUpload")
+    @PostMapping(path = "/payment/upload")
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
             ImportOutcome importOutcome = paymentService.importTransactions(IOUtils.toString(file.getInputStream(), bankExportCharacterEncoding));
@@ -51,7 +54,7 @@ public class PaymentController {
     }
 
     @CrossOrigin
-    @PostMapping(path = "/assignToMember")
+    @PostMapping(path = "/payment/assignToMember")
     public ResponseEntity assignToMember(AssignToMemberRequest assignToMemberRequest) {
         paymentService.assignToMember(assignToMemberRequest.getMemberId(), assignToMemberRequest.getPaymentId());
         return ResponseEntity.ok().build();
@@ -73,5 +76,16 @@ public class PaymentController {
         LOGGER.info("totalCount: {}", totalCount);
 
         return new DataContainer(current, rowCount, totalCount, (long) Math.ceil(totalCount / rowCount) + 1, paymentDao.searchBankTransactions((current - 1) * rowCount, rowCount, bankTransaction, sortBy, sortDirection, operator));
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/payment/update")
+    public ResponseEntity update(
+            @RequestParam("id") Long bankTransactionId,
+            @RequestParam(value = "excludeFromMemberReconciliation", required = false) Boolean excludeFromMemberReconciliation
+    ) {
+        paymentService.update(bankTransactionId, excludeFromMemberReconciliation);
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -185,7 +185,6 @@ public class TestUtils {
     }
 
     static void runSqlUpdate(String sql) {
-//        System.out.println("sql: " + sql);
         Connection connection = null;
         Statement statement = null;
 

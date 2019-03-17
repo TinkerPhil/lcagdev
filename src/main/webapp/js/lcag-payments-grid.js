@@ -17,11 +17,12 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 { name: "reference", label: "Reference", width: 150, template: "string" },
                 { name: "paymentSource", label: "Payment Source", width: 150, template: "string" },
                 { name: "emailSent", label: "Email Sent", width: 59, formatter: lcag.PaymentsGrid.formatters.emailSent, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "excludeFromMemberReconciliation", label: "Exclude From Member Reconciliation", width: 150, formatter: lcag.PaymentsGrid.formatters.excludeFromMemberReconciliation, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } }
+                { name: "excludeFromMemberReconciliation", label: "Exclude From Member Reconciliation", width: 150, formatter: lcag.PaymentsGrid.formatters.excludeFromMemberReconciliation, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "action", label: "", width: 110, formatter: lcag.MemberGrid.formatters.action, search: false }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
-                        url: lcag.Common.urlPrefix + '/payments',
+                        url: lcag.Common.urlPrefix + '/payment',
                         data: postData,
                         dataType: "json",
                         complete: function(response, status) {
@@ -73,13 +74,39 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                     var paymentId = $(this).attr("id").split("_")[1];
                     $.ajax({
                       method: "POST",
-                      url: lcag.Common.urlPrefix + "/assignToMember",
+                      url: lcag.Common.urlPrefix + "/payment/assignToMember",
                       data: { "memberId": memberId, "paymentId": paymentId }
                     }).done(function(result) {
                         lcag.Common.alertSuccess();
                         lcag.PaymentsGrid.grid.trigger("reloadGrid");
                         lcag.MemberGrid.grid.trigger("reloadGrid");
                     });
+                });
+
+                $("#payments-grid").find(".update-row-btn").on("click", function(e) {
+                    var rowContext = this;
+                    $.ajax({
+                          type: "POST",
+                          url: lcag.Common.urlPrefix + "/payment/update",
+                          data: (function() {
+                            var id = $(rowContext).data("row-id");
+
+                            return {
+                                "id": id,
+                                "excludeFromMemberReconciliation": $("#excludeFromMemberReconciliation_" + id).prop("checked")
+                            };
+                          })(),
+                          success: function(e) {
+                            lcag.Common.alertSuccess();
+                            lcag.PaymentsGrid.grid.trigger("reloadGrid");
+                            lcag.MemberGrid.grid.trigger("reloadGrid");
+                          },
+                          error: function(e) {
+                            lcag.Common.alertError();
+                            lcag.PaymentsGrid.grid.trigger("reloadGrid");
+                            lcag.MemberGrid.grid.trigger("reloadGrid");
+                          }
+                        });
                 });
             }
         }).jqGrid("filterToolbar", {
@@ -113,7 +140,10 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
             return '<input disabled="disabled" id="emailSent_' + row.id + '" type="checkbox" ' + (row.emailSent ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "excludeFromMemberReconciliation": function(cellvalue, options, row) {
-            return '<input disabled="disabled" id="excludeFromMemberReconciliation_' + row.id + '" type="checkbox" ' + (row.excludeFromMemberReconciliation ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+            return '<input id="excludeFromMemberReconciliation_' + row.id + '" type="checkbox" ' + (row.excludeFromMemberReconciliation ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "action": function(cellvalue, options, row) {
+            return '<button id="paymentUpdateButton_' + row.id + '" type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-sm" aria-hidden="true"></span>&nbsp;Update</button>';
         }
     }
 }
