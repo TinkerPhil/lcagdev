@@ -341,6 +341,29 @@ class PaymentImportIT {
     }
 
     @Test
+    void transactionsOrderedByUnassignedThenDateDescThenIndexOnDayAscWhenDatesAreTheSame() throws NoSuchAlgorithmException, IOException {
+        insertUser(1, "test", "test@lcag.com", "test", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
+
+        insertBankTransaction(1, "1", "test", true, "100.00", "100", DATE_1, 0)
+        insertBankTransaction(2, "1", "test", true, "100.00", "200", DATE_1, 1)
+        insertBankTransaction(3, "1", "test", true, "100.00", "300", DATE_1, 2)
+        insertBankTransaction(4, "1", "test", true, "100.00", "400", DATE_1, 3)
+        insertBankTransaction(5, null, "test", true, "100.00", "500", DATE_1, 4)
+        insertBankTransaction(6, null, "test", true, "100.00", "600", DATE_1, 5)
+        insertBankTransaction(7, "1", "test", true, "100.00", "700", DATE_1, 6)
+
+        def json = new JsonSlurper().parseText(getRequest("http://localhost:8282/payment", "admin", "lcag"))
+
+        assertEquals(json.rows[0].id, 5)
+        assertEquals(json.rows[1].id, 6)
+        assertEquals(json.rows[2].id, 1)
+        assertEquals(json.rows[3].id, 2)
+        assertEquals(json.rows[4].id, 3)
+        assertEquals(json.rows[5].id, 4)
+        assertEquals(json.rows[6].id, 7)
+    }
+
+    @Test
     void transactionsOrderedByDateDescThenIndexOnDayAsc() throws NoSuchAlgorithmException, IOException {
         insertUser(1, "test", "test@lcag.com", "test", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
 
