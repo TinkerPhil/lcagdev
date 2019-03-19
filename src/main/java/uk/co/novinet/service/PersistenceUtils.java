@@ -66,6 +66,10 @@ public class PersistenceUtils {
         return null;
     }
 
+    public static Long toUnixTimestamp(Instant instant) throws SQLException {
+        return instant.toEpochMilli() / 1000;
+    }
+
     public static String like(String argument) {
         return "%" + argument.toLowerCase() + "%";
     }

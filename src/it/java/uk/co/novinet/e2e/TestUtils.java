@@ -15,6 +15,7 @@ import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
 import org.jsoup.Jsoup;
 import uk.co.novinet.auth.MyBbPasswordEncoder;
+import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.enquiry.Enquiry;
 import uk.co.novinet.service.payments.BankTransaction;
 import uk.co.novinet.service.payments.PaymentSource;
@@ -25,6 +26,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.*;
 import java.sql.*;
+import java.time.Instant;
 import java.util.Date;
 import java.util.*;
 
@@ -585,7 +587,7 @@ public class TestUtils {
         return responseMsg;
     }
 
-    static String getRequest(String url, String username, String password) throws IOException {
+    public static String getRequest(String url, String username, String password) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet get = new HttpGet(url);
         get.setHeader("Accept", "application/json");
@@ -613,6 +615,27 @@ public class TestUtils {
         CloseableHttpResponse response = httpclient.execute(get);
 
         return response.getStatusLine().getStatusCode();
+    }
+
+    public static void insertBankTransaction(
+            int bankTransactionId,
+            String userId,
+            String username,
+            boolean emailSent,
+            String amount,
+            String runningBalance,
+            Instant transactionDate,
+            int transactionIndexOnDay) {
+
+        if (userId == null) {
+            runSqlUpdate("INSERT INTO `i7b0_bank_transactions` (`id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, " +
+                    "`transaction_index_on_day`, `payment_source`, `email_sent`) VALUES ( " + bankTransactionId + ", '" + PersistenceUtils.unixTime(transactionDate) + "', 'test bank transaction', " +
+                    amount + ", " + runningBalance + ", 'Mr Smith', '" + username + "', " + transactionIndexOnDay + ", 'SANTANDER', " + (emailSent ? "1" : "0") + ")");
+        } else {
+            runSqlUpdate("INSERT INTO `i7b0_bank_transactions` (`id`, `date`, `description`, `amount`, `running_balance`, `counter_party`, `reference`, " +
+                    "`transaction_index_on_day`, `payment_source`, `user_id`, `email_sent`) VALUES ( " + bankTransactionId + ", '" + PersistenceUtils.unixTime(transactionDate) + "', 'test bank transaction', " +
+                    amount + ", " + runningBalance + ", 'Mr Smith', '" + username + "', " + transactionIndexOnDay + ", 'SANTANDER', '" + userId + "', " + (emailSent ? "1" : "0") + ")");
+        }
     }
 
 
