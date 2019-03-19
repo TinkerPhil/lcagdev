@@ -17,10 +17,12 @@ public class Enquiry {
     private Boolean memberOfBigGroup = false;
     private String bigGroupUsername;
     private Boolean processed;
+    private String phoneNumber;
 
-    public Enquiry(String emailAddress, String name) {
+    public Enquiry(String emailAddress, String name, String phoneNumber) {
         this.emailAddress = emailAddress;
         this.name = name;
+        this.phoneNumber = phoneNumber;
     }
 
     public Enquiry(
@@ -37,7 +39,8 @@ public class Enquiry {
             String howDidYouHearAboutLcag,
             Boolean memberOfBigGroup,
             String bigGroupUsername,
-            Boolean processed) {
+            Boolean processed,
+            String phoneNumber) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.name = name;
@@ -52,6 +55,7 @@ public class Enquiry {
         this.memberOfBigGroup = memberOfBigGroup;
         this.bigGroupUsername = bigGroupUsername;
         this.processed = processed;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmailAddress() {
@@ -114,5 +118,13 @@ public class Enquiry {
 
     public Boolean getProcessed() {
         return processed;
+    }
+
+    public String getPhoneNumber() {
+        if (phoneNumber == null) {
+            return "";
+        }
+
+        return phoneNumber;
     }
 }

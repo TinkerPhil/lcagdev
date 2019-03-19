@@ -51,6 +51,7 @@ public class Member {
     private Boolean hasOptedOutOfClaim;
     private String claimToken;
     private String country;
+    private String phoneNumber;
 
     public Member() {}
 
@@ -88,7 +89,8 @@ public class Member {
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
             String claimToken,
-            String country) {
+            String country,
+            String phoneNumber) {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
@@ -123,6 +125,7 @@ public class Member {
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
         this.claimToken = claimToken;
         this.country = country;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -391,5 +394,13 @@ public class Member {
 
     public void setAdditionalGroupIds(List<Long> additionalGroupIds) {
         this.additionalGroupIds = additionalGroupIds;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

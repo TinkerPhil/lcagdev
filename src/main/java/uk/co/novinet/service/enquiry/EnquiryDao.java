@@ -3,24 +3,17 @@ package uk.co.novinet.service.enquiry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.member.MemberService;
-import uk.co.novinet.service.member.Where;
-import uk.co.novinet.service.payments.BankTransaction;
-import uk.co.novinet.service.payments.PaymentSource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.codehaus.groovy.runtime.InvokerHelper.asList;
-import static uk.co.novinet.service.PersistenceUtils.*;
+import static uk.co.novinet.service.PersistenceUtils.enquiryTableName;
 
 @Service
 public class EnquiryDao {
@@ -81,7 +74,8 @@ public class EnquiryDao {
                 resultSet.getString("how_did_you_hear_about_lcag"),
                 resultSet.getBoolean("member_of_big_group"),
                 resultSet.getString("big_group_username"),
-                resultSet.getBoolean("has_been_processed")
+                resultSet.getBoolean("has_been_processed"),
+                ""
         );
     }
 

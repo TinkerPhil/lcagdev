@@ -107,7 +107,8 @@ public class MemberController {
             @RequestParam(value = "hasBeenSentClaimConfirmationEmail", required = false) Boolean hasBeenSentClaimConfirmationEmail,
             @RequestParam(value = "hasOptedOutOfClaim", required = false) Boolean hasOptedOutOfClaim,
             @RequestParam("group") String group,
-            @RequestParam(value="country", required=false) String country
+            @RequestParam(value="country", required=false) String country,
+            @RequestParam(value="phoneNumber", required=false) String phoneNumber
     ) {
         memberService.update(
                 memberId,
@@ -134,7 +135,8 @@ public class MemberController {
                 hasCompletedClaimParticipantForm,
                 hasBeenSentClaimConfirmationEmail,
                 hasOptedOutOfClaim,
-                country
+                country,
+                phoneNumber
         );
         return new ResponseEntity(HttpStatus.OK);
     }

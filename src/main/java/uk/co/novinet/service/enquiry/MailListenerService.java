@@ -27,8 +27,6 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.Arrays.asList;
 
-//import uk.co.novinet.service.member.MpDetailsUpdaterService;
-
 @Service
 public class MailListenerService {
     private static final List<Boolean> SEEN_FLAG_STATES = asList(TRUE, FALSE);
@@ -36,8 +34,8 @@ public class MailListenerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MailListenerService.class);
 
     private static final List<Pattern> ENQUIRY_PATTERNS = asList(
-            Pattern.compile("Message Details: Email (?<emailAddress>.*) Name (?<name>.*) Subject"),
-            Pattern.compile("---------------------------\\s+Name:\\s+(?<name>.*)\\s+Email:\\s+(?<emailAddress>.*)")
+            Pattern.compile("Message Details: Email (?<emailAddress>.*) Name (?<name>.*) Subject(?<phoneNumber>.*)"),
+            Pattern.compile("---------------------------\\s+Name:\\s+(?<name>.*)\\s+Email:\\s+(?<emailAddress>.*)\\s+Phone:\\s+(?<phoneNumber>.*)")
     );
 
     @Value("${imapHost}")
@@ -207,7 +205,7 @@ public class MailListenerService {
             Matcher matcher = enquiryPattern.matcher(emailBody);
 
             if (matcher.find()) {
-                return new Enquiry(matcher.group("emailAddress"), matcher.group("name"));
+                return new Enquiry(matcher.group("emailAddress"), matcher.group("name"), matcher.group("phoneNumber"));
             }
         }
 

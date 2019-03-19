@@ -9,6 +9,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "name", label: "Name", width: 150, template: "string", formatter: lcag.MemberGrid.formatters.name, frozen: true },
                 { name: "username", label: "Username", width: 150, template: "string", frozen: true },
                 { name: "emailAddress", label: "Email Address", width: 200, template: "string" },
+                { name: "phoneNumber", label: "Phone Number", width: 150, template: "string", formatter: lcag.MemberGrid.formatters.phoneNumber },
 
                 { name: "action", label: "", width: 90, formatter: lcag.MemberGrid.formatters.action, search: false },
                 { name: "hmrcLetterChecked", label: "HMRC Letter Checked", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
@@ -115,7 +116,8 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "hasCompletedClaimParticipantForm": $("#hasCompletedClaimParticipantForm_" + id).prop("checked"),
                                 "hasBeenSentClaimConfirmationEmail": $("#hasBeenSentClaimConfirmationEmail_" + id).prop("checked"),
                                 "hasOptedOutOfClaim": $("#hasOptedOutOfClaim_" + id).prop("checked"),
-                                "country": $("#country_"+id).val()
+                                "country": $("#country_"+id).val(),
+                                "phoneNumber": $("#phoneNumber_"+id).val()
                             };
                           })(),
                           success: function(e) {
@@ -165,6 +167,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
 	formatters: {
         "name": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="name_' + row.id + '" type="text" class="form-control" value="' + row.name + '"></div>';
+        },
+        "phoneNumber": function(cellvalue, options, row) {
+            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="phoneNumber_' + row.id + '" type="text" class="form-control" value="' + row.phoneNumber + '"></div>';
         },
         "registrationDate": function(cellvalue, options, row) {
             return moment.unix(row.registrationDate).format("DD/MM/YYYY HH:mm");

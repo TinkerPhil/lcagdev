@@ -99,7 +99,7 @@ public class TestUtils {
         new Mailer(SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, TransportStrategy.SMTP_PLAIN).sendMail(email);
     }
 
-    static void sendNewsletterEmail(String emailAddress, String name) {
+    static void sendNewsletterEmail(String emailAddress, String name, String phoneNumber) {
         String messageBody = "Testy Test has completed the Newsletter Form and their details are listed below.\n" +
                 "\n" +
                 "---------------------------\n" +
@@ -109,6 +109,9 @@ public class TestUtils {
                 "\n" +
                 "Email:\n" +
                 emailAddress + "\n" +
+                "\n" +"\n" +
+                "Phone:\n" +
+                phoneNumber + "\n" +
                 "\n" +
                 "Terms acceptance:\n" +
                 "Consented: I agree to the use of my data as specified in the Privacy Policy\n" +
@@ -319,7 +322,8 @@ public class TestUtils {
                         resultSet.getString("how_did_you_hear_about_lcag"),
                         resultSet.getBoolean("member_of_big_group"),
                         resultSet.getString("big_group_username"),
-                        resultSet.getBoolean("has_been_processed")
+                        resultSet.getBoolean("has_been_processed"),
+                        ""
                     )
                 );
             }

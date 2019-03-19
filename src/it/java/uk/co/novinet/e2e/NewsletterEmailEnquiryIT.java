@@ -63,7 +63,7 @@ public class NewsletterEmailEnquiryIT {
         assertEquals(1, getUserRows().size());
         assertEquals(enquirerEmailAddress, getUserRows().get(0).getEmailAddress());
 
-        sendNewsletterEmail(enquirerEmailAddress, "Testy Test");
+        sendNewsletterEmail(enquirerEmailAddress, "Testy Test", "01234567890");
 
         waitForNEmailsToAppearInFolder(1, "History", LCAG_INBOX_EMAIL_ADDRESS);
 
@@ -94,7 +94,7 @@ public class NewsletterEmailEnquiryIT {
     public void createsMyBbUserWhenEmailAddressNotInUserTableAndMovesEnquiryEmailToHistoryFolder() throws Exception {
         noEmailsSentAndNoMyBbUsersExist();
 
-        sendNewsletterEmail(enquirerEmailAddress, "Testy Test");
+        sendNewsletterEmail(enquirerEmailAddress, "Testy Test", "01234567890");
 
         waitForNEmailsToAppearInFolder(1, "History", LCAG_INBOX_EMAIL_ADDRESS);
 
@@ -126,7 +126,7 @@ public class NewsletterEmailEnquiryIT {
 
         deleteMailFolder("History", LCAG_INBOX_EMAIL_ADDRESS);
 
-        sendNewsletterEmail(enquirerEmailAddress, "Testy Test");
+        sendNewsletterEmail(enquirerEmailAddress, "Testy Test", "01234567890");
 
         waitForNEmailsToAppearInFolder(1, "Inbox", LCAG_INBOX_EMAIL_ADDRESS);
 
@@ -175,8 +175,8 @@ public class NewsletterEmailEnquiryIT {
         assertEquals(0, getEmails(duplicateEnquirerEmailAddress1, "Inbox").size());
         assertEquals(0, getEmails(duplicateEnquirerEmailAddress2, "Inbox").size());
 
-        sendNewsletterEmail(duplicateEnquirerEmailAddress1, "Testy Test1");
-        sendNewsletterEmail(duplicateEnquirerEmailAddress2, "Testy Test2");
+        sendNewsletterEmail(duplicateEnquirerEmailAddress1, "Testy Test1", "01234567890");
+        sendNewsletterEmail(duplicateEnquirerEmailAddress2, "Testy Test2", "01234567890");
 
         waitForUserRows(2);
 

@@ -9,16 +9,10 @@ import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberCreationResult;
 import uk.co.novinet.service.member.MemberService;
 
-import java.util.Arrays;
 import java.util.List;
-
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 
 @Service
 public class EnquiryTableListenerService {
-    private static final List<Boolean> SEEN_FLAG_STATES = Arrays.asList(TRUE, FALSE);
-
     private static final Logger LOGGER = LoggerFactory.getLogger(EnquiryTableListenerService.class);
 
     @Autowired
