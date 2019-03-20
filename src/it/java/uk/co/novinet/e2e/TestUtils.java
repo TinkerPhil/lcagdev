@@ -110,7 +110,7 @@ public class TestUtils {
                 "Email:\n" +
                 emailAddress + "\n" +
                 "\n" +"\n" +
-                "Phone:\n" +
+                "Phone number:\n" +
                 phoneNumber + "\n" +
                 "\n" +
                 "Terms acceptance:\n" +

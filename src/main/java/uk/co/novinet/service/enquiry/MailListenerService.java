@@ -35,7 +35,7 @@ public class MailListenerService {
 
     private static final List<Pattern> ENQUIRY_PATTERNS = asList(
             Pattern.compile("Message Details: Email (?<emailAddress>.*) Name (?<name>.*) Subject(?<phoneNumber>.*)"),
-            Pattern.compile("---------------------------\\s+Name:\\s+(?<name>.*)\\s+Email:\\s+(?<emailAddress>.*)\\s+Phone:\\s+(?<phoneNumber>.*)")
+            Pattern.compile("---------------------------\\s+Name:\\s+(?<name>.*)\\s+Email:\\s+(?<emailAddress>.*)\\s+Phone number:\\s+(?<phoneNumber>.*)")
     );
 
     @Value("${imapHost}")
