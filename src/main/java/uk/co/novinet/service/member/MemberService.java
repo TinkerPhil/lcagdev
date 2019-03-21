@@ -384,9 +384,10 @@ public class MemberService {
                 "u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, " +
                 "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
                 "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, " +
-                "u.country, u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(bt.amount) as `contribution_amount`, u.phone_number " +
+                "u.country, u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(ufs.lcagAmount) as `contribution_amount`, u.phone_number " +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
-                "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid ";
+                "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid " +
+                "left outer join " + userFundingSummaryTableName() + " ufs on ufs.uid = u.uid ";
     }
 
     private String buildUserTableGroupBy() {
