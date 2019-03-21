@@ -91,10 +91,6 @@ public class PersistenceUtils {
         return forumDatabaseTablePrefix + "bank_transactions";
     }
 
-    public static String userFundingSummaryTableName() {
-        return forumDatabaseTablePrefix + "userFundingSummary";
-    }
-
     public static String ffcTransactionsTableName() {
         return forumDatabaseTablePrefix + "ffc_bank";
     }
