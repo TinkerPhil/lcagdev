@@ -274,6 +274,9 @@ public class PaymentDao {
         if (bankTransaction.getExcludeFromMemberReconciliation() != null) {
             clauses.add("bt.excludeFromMemberReconciliation = ?");
             parameters.add(bankTransaction.getExcludeFromMemberReconciliation());
+        } else {
+            clauses.add("bt.excludeFromMemberReconciliation = ?");
+            parameters.add(false);
         }
 
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);

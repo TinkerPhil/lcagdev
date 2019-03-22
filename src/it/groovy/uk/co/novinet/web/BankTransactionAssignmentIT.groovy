@@ -71,14 +71,14 @@ class BankTransactionAssignmentIT extends GebSpec {
             $("#excludeFromMemberReconciliation_1").click()
             paymentsGridUpdateButtons[0].click()
 
-        then: "toast success message apears"
+        then: "toast success message appears"
             waitFor { toastSuccess.displayed }
             assert toastSuccess.text() == "Updated successfully"
 
-        and: "checkbox still has value"
-            assert checkboxValue($("#excludeFromMemberReconciliation_1")) == true
+        and: "payment row has disappeared from view"
+            switchToPaymentsTabIfNecessaryAndAssertGridHasNRows(browser, 0)
 
-        and: "excludeFromMemberReconciliation value is set in database"
+        and: "excludeFromMembcheckbox still has value excludeFromMemberReconciliation value is set in database"
             assert getBankTransactionRows().get(0).excludeFromMemberReconciliation == true
     }
 
