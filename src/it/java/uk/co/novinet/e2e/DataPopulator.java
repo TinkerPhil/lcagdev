@@ -17,6 +17,7 @@ public class DataPopulator {
                 runSqlScript("sql/drop_user_table.sql");
                 runSqlScript("sql/drop_enquiry_table.sql");
                 runSqlScript("sql/create_user_table.sql");
+                runSqlScript("sql/create_userFundingSummary_table.sql");
                 runSqlScript("sql/create_mp_details_table.sql");
                 runSqlScript("sql/create_mpDetails_table.sql");
                 runSqlScript("sql/create_mpCampaignVolunteers_table.sql");
