@@ -49,6 +49,7 @@ public class Member {
     private Boolean hasCompletedClaimParticipantForm;
     private Boolean hasBeenSentClaimConfirmationEmail;
     private Boolean hasOptedOutOfClaim;
+    private Boolean sendEmailStatement;
     private String claimToken;
     private String country;
     private String phoneNumber;
@@ -88,6 +89,7 @@ public class Member {
             Boolean hasCompletedClaimParticipantForm,
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
+            Boolean sendEmailStatement,
             String claimToken,
             String country,
             String phoneNumber) {
@@ -123,6 +125,7 @@ public class Member {
         this.hasCompletedClaimParticipantForm = hasCompletedClaimParticipantForm;
         this.hasBeenSentClaimConfirmationEmail = hasBeenSentClaimConfirmationEmail;
         this.hasOptedOutOfClaim = hasOptedOutOfClaim;
+        this.sendEmailStatement = sendEmailStatement;
         this.claimToken = claimToken;
         this.country = country;
         this.phoneNumber = phoneNumber;
@@ -402,5 +405,13 @@ public class Member {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Boolean getSendEmailStatement() {
+        return sendEmailStatement;
+    }
+
+    public void setSendEmailStatement(Boolean sendEmailStatement) {
+        this.sendEmailStatement = sendEmailStatement;
     }
 }

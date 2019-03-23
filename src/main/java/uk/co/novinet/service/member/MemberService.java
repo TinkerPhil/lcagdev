@@ -77,6 +77,7 @@ public class MemberService {
         put("claimToken", "u.claim_token");
         put("country", "u.country");
         put("phoneNumber", "u.phone_number");
+        put("sendEmailStatement", "u.send_email_statement");
     }};
 
     public void update(
@@ -105,7 +106,8 @@ public class MemberService {
             Boolean hasBeenSentClaimConfirmationEmail,
             Boolean hasOptedOutOfClaim,
             String country,
-            String phoneNumber) {
+            String phoneNumber,
+            Boolean sendEmailStatement) {
         LOGGER.info("Going to update user with id {}", memberId);
         LOGGER.info("name={}, group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, " +
                         "mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, " +
@@ -146,7 +148,8 @@ public class MemberService {
                 "u.has_been_sent_claim_confirmation_email = ?, " +
                 "u.opted_out_of_claim = ?, " +
                 "u.country = ?, " +
-                "u.phone_number = ? " +
+                "u.phone_number = ?, " +
+                "u.send_email_statement = ? " +
                 "where u.uid = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -178,6 +181,7 @@ public class MemberService {
                 hasOptedOutOfClaim,
                 country,
                 phoneNumber,
+                sendEmailStatement,
                 memberId
         );
 
@@ -296,6 +300,7 @@ public class MemberService {
                     false,
                     false,
                     false,
+                    false,
                     guid(),
                     null,
                     enquiry.getPhoneNumber());
@@ -384,7 +389,7 @@ public class MemberService {
                 "u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, " +
                 "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
                 "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, " +
-                "u.country, u.claim_token, ug.title as `group`, bt.id as `bank_transaction_id`, sum(ufs.lcagAmount) as `contribution_amount`, u.phone_number " +
+                "u.country, u.claim_token, ug.title as `group`, u.send_email_statement, bt.id as `bank_transaction_id`, sum(ufs.lcagAmount) as `contribution_amount`, u.phone_number " +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
                 "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid " +
                 "left outer join " + userFundingSummaryTableName() + " ufs on ufs.uid = u.uid ";
@@ -598,6 +603,11 @@ public class MemberService {
             parameters.add(member.getHasOptedOutOfClaim());
         }
 
+        if (member.getSendEmailStatement() != null) {
+            clauses.add("u.send_email_statement = ?");
+            parameters.add(member.getSendEmailStatement());
+        }
+
         if (member.getCountry() != null) {
             clauses.add("lower(u.country) like ?");
             parameters.add(like(member.getCountry()));
@@ -645,6 +655,7 @@ public class MemberService {
                 rs.getBoolean("has_completed_claim_participant_form"),
                 rs.getBoolean("has_been_sent_claim_confirmation_email"),
                 rs.getBoolean("opted_out_of_claim"),
+                rs.getBoolean("send_email_statement"),
                 rs.getString("claim_token"),
                 rs.getString("country"),
                 rs.getString("phone_number"));

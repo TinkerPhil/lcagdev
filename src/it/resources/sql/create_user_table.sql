@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `mpcampaign_allow_email_share` tinyint(1) NOT NULL DEFAULT '0',
   `country` varchar(50) DEFAULT 'UK',
   `guest_auto_disabled` bit(1) DEFAULT b'0',
+  `send_email_statement` bit(1) DEFAULT b'0',
   `phone_number` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`),

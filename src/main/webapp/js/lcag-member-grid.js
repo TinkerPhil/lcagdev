@@ -18,6 +18,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "verifiedBy", label: "Verified By", width: 100, formatter: lcag.MemberGrid.formatters.verifiedBy },
                 { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: lcag.MemberGrid.formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "contributionAmount", label: "Contribution Amount", width: 120, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
+                { name: "sendEmailStatement", label: "Send Email Statement", width: 59, formatter: lcag.MemberGrid.formatters.sendEmailStatement, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "group", label: "Group", width: 100, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators;Suspended:Suspended" } },
                 { name: "country", label: "Country", width: 120, formatter: lcag.MemberGrid.formatters.country },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
@@ -116,6 +117,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "hasCompletedClaimParticipantForm": $("#hasCompletedClaimParticipantForm_" + id).prop("checked"),
                                 "hasBeenSentClaimConfirmationEmail": $("#hasBeenSentClaimConfirmationEmail_" + id).prop("checked"),
                                 "hasOptedOutOfClaim": $("#hasOptedOutOfClaim_" + id).prop("checked"),
+                                "sendEmailStatement": $("#sendEmailStatement_" + id).prop("checked"),
                                 "country": $("#country_"+id).val(),
                                 "phoneNumber": $("#phoneNumber_"+id).val()
                             };
@@ -252,6 +254,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
         },
         "hasOptedOutOfClaim": function(cellvalue, options, row) {
             return '<input id="hasOptedOutOfClaim_' + row.id + '" type="checkbox" ' + (row.hasOptedOutOfClaim ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+        },
+        "sendEmailStatement": function(cellvalue, options, row) {
+            return '<input id="sendEmailStatement_' + row.id + '" type="checkbox" ' + (row.sendEmailStatement ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "country": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="country_' + row.id + '" type="text" class="form-control input-large" value="' + row.country + '"></div>';
