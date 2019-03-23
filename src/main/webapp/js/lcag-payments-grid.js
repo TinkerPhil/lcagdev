@@ -17,7 +17,7 @@ lcag.PaymentsGrid = lcag.PaymentsGrid || {
                 { name: "reference", label: "Reference", width: 150, template: "string" },
                 { name: "paymentSource", label: "Payment Source", width: 150, template: "string" },
                 { name: "emailSent", label: "Email Sent", width: 59, formatter: lcag.PaymentsGrid.formatters.emailSent, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "excludeFromMemberReconciliation", label: "Exclude From Member Reconciliation", width: 150, formatter: lcag.PaymentsGrid.formatters.excludeFromMemberReconciliation, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
+                { name: "excludeFromMemberReconciliation", label: "Exclude From Member Reconciliation", width: 150, formatter: lcag.PaymentsGrid.formatters.excludeFromMemberReconciliation, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Default (No);1:Yes;0:No" } },
                 { name: "action", label: "", width: 110, formatter: lcag.MemberGrid.formatters.action, search: false }
             ],
             datatype: function(postData) {
