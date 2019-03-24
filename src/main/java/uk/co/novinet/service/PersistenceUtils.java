@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import uk.co.novinet.service.member.Having;
 import uk.co.novinet.service.member.Where;
 
 import java.sql.ResultSet;
@@ -25,6 +26,19 @@ public class PersistenceUtils {
     private static String forumDatabaseTablePrefix;
 
     private static JdbcTemplate jdbcTemplate;
+
+    public static Having buildHavingClause(List<String> clauses, List<Object> parameters, String operator) {
+        String sql = clauses.isEmpty() ? "" : "having ";
+
+        for (int i = 0; i < clauses.size(); i++) {
+            sql += clauses.get(i);
+            if (i < clauses.size() - 1) {
+                sql += " " + operator + " ";
+            }
+        }
+
+        return new Having(sql, parameters);
+    }
 
     @Value("${forumDatabaseTablePrefix}")
     public void setForumDatabaseTablePrefix(String forumDatabaseTablePrefix) {

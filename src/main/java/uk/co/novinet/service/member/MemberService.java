@@ -401,10 +401,11 @@ public class MemberService {
 
     public long searchCountMembers(Member member, String operator) {
         Where where = buildWhereClause(member, operator);
-        final boolean hasWhere = !"".equals(where.getSql());
-        String sql = "select count(*) from (" + buildUserTableSelect() + where.getSql() + buildUserTableGroupBy() + ") as t";
+        Having having = buildHavingClause(member, operator);
+
+        String sql = "select count(*) from (" + buildUserTableSelect() + where.getSql() + buildUserTableGroupBy() + having.getSql() + ") as t";
         LOGGER.info("Going to execute this sql: {}", sql);
-        return jdbcTemplate.queryForObject(sql, hasWhere ? where.getArguments().toArray() : null, Long.class);
+        return jdbcTemplate.queryForObject(sql, buildArgumentArray(where, having), Long.class);
     }
 
     public List<Member> searchMembers(long offset, long itemsPerPage, Member member, String sortField, String sortDirection, String operator) {
@@ -422,16 +423,45 @@ public class MemberService {
             orderBy = " order by " + FIELD_TO_COLUMN_TRANSLATIONS.get(sortField) + " " + sortDirection + " ";
         }
 
-        final boolean hasWhere = !"".equals(where.getSql());
+        Having having = buildHavingClause(member, operator);
 
-        String sql = buildUserTableSelect() + where.getSql() + buildUserTableGroupBy() + orderBy + pagination;
+        String sql = buildUserTableSelect() + where.getSql() + buildUserTableGroupBy() + having.getSql() + orderBy + pagination;
 
         LOGGER.info("sql: {}", sql);
 
         return jdbcTemplate.query(sql,
-                hasWhere ? where.getArguments().toArray() : null,
+                buildArgumentArray(where, having),
                 (rs, rowNum) -> buildMember(rs)
         );
+    }
+
+    private Object[] buildArgumentArray(Where where, Having having) {
+        boolean hasWhere = !"".equals(where.getSql());
+        boolean hasHaving = !"".equals(having.getSql());
+
+        List<Object> result = new ArrayList<>();
+
+        if (hasWhere) {
+            result.addAll(where.getArguments());
+        }
+
+        if (hasHaving) {
+            result.addAll(having.getArguments());
+        }
+
+        return result.isEmpty() ? null : result.toArray();
+    }
+
+    private Having buildHavingClause(Member member, String operator) {
+        List<String> clauses = new ArrayList<>();
+        List<Object> parameters = new ArrayList<>();
+
+        if (member.getContributionAmount() != null) {
+            clauses.add("contribution_amount = ?");
+            parameters.add(member.getContributionAmount());
+        }
+
+        return PersistenceUtils.buildHavingClause(clauses, parameters, operator);
     }
 
     private Where buildWhereClause(Member member, String operator) {
@@ -557,11 +587,6 @@ public class MemberService {
         if (member.alreadyHaveAnLcagAccountEmailSent() != null) {
             clauses.add("u.already_have_an_lcag_account_email_sent = ?");
             parameters.add(member.alreadyHaveAnLcagAccountEmailSent());
-        }
-
-        if (member.getContributionAmount() != null) {
-            clauses.add("contribution_amount = ?");
-            parameters.add(member.getContributionAmount());
         }
 
         if (member.getVerifiedBy() != null) {
