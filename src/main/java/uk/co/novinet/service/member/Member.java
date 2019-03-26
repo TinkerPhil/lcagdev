@@ -11,11 +11,6 @@ import java.util.Map;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
 public class Member {
-    private Map<String, Integer> STATUS_MAPPINGS = new HashMap<String, Integer>() {{
-       put("Registered", 0);
-       put("Administrators", 3);
-       put("Moderators", 1);
-    }};
 
     private Long id;
     private String emailAddress;
@@ -158,11 +153,6 @@ public class Member {
     public Instant getRegistrationDate() {
         return registrationDate;
     }
-
-    public Integer getStatus() {
-        return STATUS_MAPPINGS.get(group);
-    }
-
 
     public Boolean getHmrcLetterChecked() {
         return hmrcLetterChecked;

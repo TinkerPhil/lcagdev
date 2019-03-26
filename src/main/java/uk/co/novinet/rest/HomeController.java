@@ -26,6 +26,7 @@ public class HomeController {
             put("mybbAdminAuthorities", new Gson().toJson(stream(MyBbAuthority.values()).filter(MyBbAuthority::canAuthenticate).map(MyBbAuthority::getFriendlyName).collect(toList())));
             put("mybbPreRegistrationAuthorities", new Gson().toJson(stream(MyBbAuthority.values()).filter(MyBbAuthority::isPreRegisteredGroup).map(MyBbAuthority::getFriendlyName).collect(toList())));
             put("mybbBlockedAuthorities", new Gson().toJson(stream(MyBbAuthority.values()).filter(MyBbAuthority::isBlocked).map(MyBbAuthority::getFriendlyName).collect(toList())));
+            put("mybbSelectableAsPrimaryGroupAuthorities", new Gson().toJson(stream(MyBbAuthority.values()).filter(MyBbAuthority::isSelectableAsPrimaryGroup).map(MyBbAuthority::getFriendlyName).collect(toList())));
         }});
     }
 

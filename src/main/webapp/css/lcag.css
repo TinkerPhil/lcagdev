@@ -16,7 +16,6 @@ span.action {
 }
 
 .horizontal-scroll {
-/*    width: 3000px; */
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll;

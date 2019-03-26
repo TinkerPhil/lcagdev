@@ -2,12 +2,13 @@ var lcag = lcag || {};
 
 lcag.MemberGrid = lcag.MemberGrid || {
     grid: {},
-    initialise: function(mybbAuthorityJqGridOpts, mybbAuthorities, mybbAdminAuthorities, mybbPreRegistrationAuthorities, mybbBlockedAuthorities) {
+    initialise: function(mybbAuthorityJqGridOpts, mybbAuthorities, mybbAdminAuthorities, mybbPreRegistrationAuthorities, mybbBlockedAuthorities, mybbSelectableAsPrimaryGroupAuthorities) {
         lcag.MemberGrid.mybbAuthorityJqGridOpts = mybbAuthorityJqGridOpts;
         lcag.MemberGrid.mybbAuthorities = mybbAuthorities;
         lcag.MemberGrid.mybbAdminAuthorities = mybbAdminAuthorities;
         lcag.MemberGrid.mybbPreRegistrationAuthorities = mybbPreRegistrationAuthorities;
         lcag.MemberGrid.mybbBlockedAuthorities = mybbBlockedAuthorities;
+        lcag.MemberGrid.mybbSelectableAsPrimaryGroupAuthorities = mybbSelectableAsPrimaryGroupAuthorities;
 
         $("#member-grid").jqGrid({
             colModel: [
@@ -25,7 +26,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: lcag.MemberGrid.formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "contributionAmount", label: "Contribution Amount", width: 120, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
                 { name: "sendEmailStatement", label: "Send Email Statement", width: 59, formatter: lcag.MemberGrid.formatters.sendEmailStatement, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "group", label: "Group", width: 100, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: mybbAuthorityJqGridOpts } },
+                { name: "group", label: "Group", width: 215, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: mybbAuthorityJqGridOpts } },
                 { name: "country", label: "Country", width: 120, formatter: lcag.MemberGrid.formatters.country },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "bigGroupUsername", label: "Big Group Username", width: 90, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
@@ -170,9 +171,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
         $("#member-grid").setFrozenColumns();
 
         $(window).bind('resize', function() {
-            $("#member-grid").width($(window).width() -10);
-            $("#member-grid").setGridWidth($(window).width() -10);
-            $("#member-grid").setGridHeight($(window).height()-270);
+            $("#member-grid").width($(window).width() - 10);
+            $("#member-grid").setGridWidth($(window).width() - 10);
+            $("#member-grid").setGridHeight($(window).height() - 270);
         }).trigger('resize');
 
     },
@@ -242,7 +243,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
             var control = '<select id="group_' + row.id + '" class="form-control">';
 
             for (var i = 0; i < lcag.MemberGrid.mybbAuthorities.length; i++) {
-                control += '<option ' + (row.group == lcag.MemberGrid.mybbAuthorities[i] ? 'selected="selected"' : '') + '>' + lcag.MemberGrid.mybbAuthorities[i] + '</option>'
+                control += '<option ' + (row.group == lcag.MemberGrid.mybbAuthorities[i] ? 'selected="selected"' : '') + (lcag.MemberGrid.mybbSelectableAsPrimaryGroupAuthorities.includes(lcag.MemberGrid.mybbAuthorities[i]) ? '' : ' disabled="disabled"') + '>' + lcag.MemberGrid.mybbAuthorities[i] + '</option>'
             }
 
             control += '</select>';
@@ -268,7 +269,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
             return '<input id="sendEmailStatement_' + row.id + '" type="checkbox" ' + (row.sendEmailStatement ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "country": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="country_' + row.id + '" type="text" class="form-control input-large" value="' + row.country + '"></div>';
+            return '<div class="input-group"><input id="country_' + row.id + '" type="text" class="form-control" value="' + row.country + '"></div>';
         },
         "action": function(cellvalue, options, row) {
             return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-sm" aria-hidden="true"></span>&nbsp;Update</button>';

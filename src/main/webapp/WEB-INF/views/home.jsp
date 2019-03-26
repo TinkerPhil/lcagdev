@@ -231,7 +231,14 @@
     <script type="text/javascript">
         Dropzone.autoDiscover = false;
         $(function () {
-            lcag.MemberGrid.initialise("${mybbAuthorityJqGridOpts}", ${mybbAuthorities}, ${mybbAdminAuthorities}, ${mybbPreRegistrationAuthorities}, ${mybbBlockedAuthorities});
+            lcag.MemberGrid.initialise(
+                "${mybbAuthorityJqGridOpts}",
+                ${mybbAuthorities},
+                ${mybbAdminAuthorities},
+                ${mybbPreRegistrationAuthorities},
+                ${mybbBlockedAuthorities},
+                ${mybbSelectableAsPrimaryGroupAuthorities}
+            );
             lcag.PaymentsGrid.initialise();
             lcag.MpGrid.initialise();
             lcag.MpCampaignGrid.initialise();
