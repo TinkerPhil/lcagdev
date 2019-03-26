@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import uk.co.novinet.auth.MyBbAuthority;
 import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.enquiry.Enquiry;
 import uk.co.novinet.service.enquiry.MailSenderService;
@@ -83,7 +84,7 @@ public class MemberService {
     public void update(
             Long memberId,
             String name,
-            String group,
+            String newGroup,
             boolean identificationChecked,
             boolean hmrcLetterChecked,
             Boolean agreedToContributeButNotPaid,
@@ -113,15 +114,10 @@ public class MemberService {
                         "mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, " +
                         "memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, " +
                         "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}",
-                name, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
+                name, newGroup, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
                 schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim,
                 hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim
         );
-
-        Member existingMember = getMemberById(memberId);
-
-        String origGroup = existingMember.getGroup();
-        boolean shouldSendFullMembershipEmail = ("LCAG Guests".equals(origGroup) || "Suspended".equals(origGroup) ) && "Registered".equals(group);
 
         String sql = "update " + usersTableName() + " u " +
                 "set u.name = ?," +
@@ -157,7 +153,7 @@ public class MemberService {
         int result = jdbcTemplate.update(
                 sql,
                 name,
-                group,
+                newGroup,
                 identificationChecked,
                 hmrcLetterChecked,
                 agreedToContributeButNotPaid,
@@ -185,11 +181,18 @@ public class MemberService {
                 memberId
         );
 
-        if (result == 1 && shouldSendFullMembershipEmail) {
+        Member existingMember = getMemberById(memberId);
+
+        if (result == 1 && shouldSendFullMembershipEmail(newGroup, existingMember)) {
             mailSenderService.sendUpgradedToFullMembershipEmail(existingMember);
         }
 
         LOGGER.info("Update result: {}", result);
+    }
+
+    private boolean shouldSendFullMembershipEmail(String newGroup, Member existingMember) {
+        MyBbAuthority currentMyBbAuthority = MyBbAuthority.fromFriendlyName(existingMember.getGroup());
+        return currentMyBbAuthority.isPreRegisteredGroup() && MyBbAuthority.fromFriendlyName(newGroup) == MyBbAuthority.REGISTERED;
     }
 
     public void verify(Member member, String verifiedBy) {
@@ -389,9 +392,8 @@ public class MemberService {
                 "u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, " +
                 "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
                 "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, " +
-                "u.country, u.claim_token, ug.title as `group`, u.send_email_statement, bt.id as `bank_transaction_id`, sum(ufs.lcagAmount) as `contribution_amount`, u.phone_number " +
+                "u.country, u.claim_token, ug.title as `group`, u.send_email_statement,  sum(ufs.lcagAmount) as `contribution_amount`, u.phone_number " +
                 "from " + usersTableName() + " u inner join " + userGroupsTableName() + " ug on u.usergroup = ug.gid " +
-                "left outer join " + bankTransactionsTableName() + " bt on bt.user_id = u.uid " +
                 "left outer join " + userFundingSummaryTableName() + " ufs on ufs.uid = u.uid ";
     }
 

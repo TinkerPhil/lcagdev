@@ -2,7 +2,13 @@ var lcag = lcag || {};
 
 lcag.MemberGrid = lcag.MemberGrid || {
     grid: {},
-    initialise: function() {
+    initialise: function(mybbAuthorityJqGridOpts, mybbAuthorities, mybbAdminAuthorities, mybbPreRegistrationAuthorities, mybbBlockedAuthorities) {
+        lcag.MemberGrid.mybbAuthorityJqGridOpts = mybbAuthorityJqGridOpts;
+        lcag.MemberGrid.mybbAuthorities = mybbAuthorities;
+        lcag.MemberGrid.mybbAdminAuthorities = mybbAdminAuthorities;
+        lcag.MemberGrid.mybbPreRegistrationAuthorities = mybbPreRegistrationAuthorities;
+        lcag.MemberGrid.mybbBlockedAuthorities = mybbBlockedAuthorities;
+
         $("#member-grid").jqGrid({
             colModel: [
                 { name: "id", label: "ID", hidden: true },
@@ -19,7 +25,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: lcag.MemberGrid.formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "contributionAmount", label: "Contribution Amount", width: 120, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
                 { name: "sendEmailStatement", label: "Send Email Statement", width: 59, formatter: lcag.MemberGrid.formatters.sendEmailStatement, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
-                { name: "group", label: "Group", width: 100, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;LCAG Guests:LCAG Guests;Registered:Registered;Moderators:Moderators;Administrators:Administrators;Suspended:Suspended" } },
+                { name: "group", label: "Group", width: 100, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: mybbAuthorityJqGridOpts } },
                 { name: "country", label: "Country", width: 120, formatter: lcag.MemberGrid.formatters.country },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "bigGroupUsername", label: "Big Group Username", width: 90, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
@@ -73,12 +79,16 @@ lcag.MemberGrid = lcag.MemberGrid || {
             rowNum: 25,
             altRows: true,
             rowattr: function (row) {
-                if (row.group == "Registered") {
-                    return { "class": "success" };
-                } else if (row.group == "Administrators") {
+                if (lcag.MemberGrid.mybbBlockedAuthorities.includes(row.group)) {
                     return { "class": "danger" };
-                } else if (row.group == "Moderators") {
+                } else if (lcag.MemberGrid.mybbAdminAuthorities.includes(row.group)) {
                     return { "class": "info" };
+                } else if (lcag.MemberGrid.mybbPreRegistrationAuthorities.includes(row.group)) {
+                    return { "class": "warning" };
+                } else if (row.group == "Registered") {
+                    return { "class": "success" };
+                } else {
+                    return { "class": "secondary" };
                 }
             },
             viewrecords: true,
@@ -168,77 +178,76 @@ lcag.MemberGrid = lcag.MemberGrid || {
     },
 	formatters: {
         "name": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="name_' + row.id + '" type="text" class="form-control" value="' + row.name + '"></div>';
+            return '<div class="input-group"><input id="name_' + row.id + '" type="text" class="form-control" value="' + row.name + '"></div>';
         },
         "phoneNumber": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="phoneNumber_' + row.id + '" type="text" class="form-control" value="' + row.phoneNumber + '"></div>';
+            return '<div class="input-group"><input id="phoneNumber_' + row.id + '" type="text" class="form-control" value="' + row.phoneNumber + '"></div>';
         },
         "registrationDate": function(cellvalue, options, row) {
             return moment.unix(row.registrationDate).format("DD/MM/YYYY HH:mm");
         },
         "verifiedOn": function(cellvalue, options, row) {
             var dateString = row.verifiedOn == null ? "" : moment.unix(row.verifiedOn).format("DD/MM/YYYY");
-            return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="verifiedOn_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
+            return '<div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input id="verifiedOn_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div>';
         },
         "verifiedBy": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="verifiedBy_' + row.id + '" type="text" class="form-control" value="' + row.verifiedBy + '"></div>';
+            return '<div class="input-group"><input id="verifiedBy_' + row.id + '" type="text" class="form-control" value="' + row.verifiedBy + '"></div>';
         },
         "identificationChecked": function(cellvalue, options, row) {
-            return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="identificationChecked_' + row.id + '" type="checkbox" ' + (row.identificationChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+            return '<input id="identificationChecked_' + row.id + '" type="checkbox" ' + (row.identificationChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "hmrcLetterChecked": function(cellvalue, options, row) {
-            return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="hmrcLetterChecked_' + row.id + '" type="checkbox" ' + (row.hmrcLetterChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+            return '<input id="hmrcLetterChecked_' + row.id + '" type="checkbox" ' + (row.hmrcLetterChecked ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "contributionAmount": function(cellvalue, options, row) {
             return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input disabled="disabled" id="contributionAmount_' + row.id + '" type="text" value="' + (row.contributionAmount == null ? "0.00" : parseFloat(Math.round(row.contributionAmount * 100) / 100).toFixed(2)) + '" class="form-control"></div></div>';
         },
         "agreedToContributeButNotPaid": function(cellvalue, options, row) {
-            return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="agreedToContributeButNotPaid_' + row.id + '" type="checkbox" ' + (row.agreedToContributeButNotPaid ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+            return '<input id="agreedToContributeButNotPaid_' + row.id + '" type="checkbox" ' + (row.agreedToContributeButNotPaid ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "mpName": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpName_' + row.id + '" type="text" class="form-control" value="' + row.mpName + '"></div>';
+            return '<div class="input-group"><input id="mpName_' + row.id + '" type="text" class="form-control" value="' + row.mpName + '"></div>';
         },
         "mpParty": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpParty_' + row.id + '" type="text" class="form-control" value="' + row.mpParty + '"></div>';
+            return '<div class="input-group"><input id="mpParty_' + row.id + '" type="text" class="form-control" value="' + row.mpParty + '"></div>';
         },
         "mpConstituency": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpConstituency_' + row.id + '" type="text" class="form-control" value="' + row.mpConstituency + '"></div>';
+            return '<div class="input-group"><input id="mpConstituency_' + row.id + '" type="text" class="form-control" value="' + row.mpConstituency + '"></div>';
         },
         "mpEngaged": function(cellvalue, options, row) {
-            return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpEngaged_' + row.id + '" type="checkbox" ' + (row.mpEngaged ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+            return '<input id="mpEngaged_' + row.id + '" type="checkbox" ' + (row.mpEngaged ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "mpSympathetic": function(cellvalue, options, row) {
-            return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="mpSympathetic_' + row.id + '" type="checkbox" ' + (row.mpSympathetic ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+            return '<input id="mpSympathetic_' + row.id + '" type="checkbox" ' + (row.mpSympathetic ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "schemes": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="schemes_' + row.id + '" type="text" class="form-control input-large" value="' + row.schemes + '"></div>';
+            return '<div class="input-group"><input id="schemes_' + row.id + '" type="text" class="form-control input-large" value="' + row.schemes + '"></div>';
         },
         "notes": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="notes_' + row.id + '" type="text" class="form-control input-large" value="' + row.notes + '"></div>';
+            return '<div class="input-group"><input id="notes_' + row.id + '" type="text" class="form-control input-large" value="' + row.notes + '"></div>';
         },
         "howDidYouHearAboutLcag": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="howDidYouHearAboutLcag_' + row.id + '" type="text" class="form-control input-large" value="' + row.howDidYouHearAboutLcag + '"></div>';
+            return '<div class="input-group"><input id="howDidYouHearAboutLcag_' + row.id + '" type="text" class="form-control input-large" value="' + row.howDidYouHearAboutLcag + '"></div>';
         },
         "memberOfBigGroup": function(cellvalue, options, row) {
-            return '<input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="memberOfBigGroup_' + row.id + '" type="checkbox" ' + (row.memberOfBigGroup ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
+            return '<input id="memberOfBigGroup_' + row.id + '" type="checkbox" ' + (row.memberOfBigGroup ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "bigGroupUsername": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="bigGroupUsername_' + row.id + '" type="text" class="form-control" value="' + row.bigGroupUsername + '"></div>';
+            return '<div class="input-group"><input id="bigGroupUsername_' + row.id + '" type="text" class="form-control" value="' + row.bigGroupUsername + '"></div>';
         },
         "industry": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="industry_' + row.id + '" type="text" class="form-control input-large" value="' + row.industry + '"></div>';
+            return '<div class="input-group"><input id="industry_' + row.id + '" type="text" class="form-control input-large" value="' + row.industry + '"></div>';
         },
         "group": function(cellvalue, options, row) {
-            if (row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators" || row.group == 'Suspended') {
-                return '<select id="group_' + row.id + '" class="form-control">'
-                        + '<option ' + (row.group == 'LCAG Guests' ? 'selected="selected"' : '') + '>LCAG Guests</option>'
-                        + '<option ' + (row.group == 'Registered' ? 'selected="selected"' : '') + '>Registered</option>'
-                        + '<option ' + (row.group == 'Moderators' ? 'selected="selected"' : '') + '>Moderators</option>'
-                        + '<option ' + (row.group == 'Suspended' ? 'selected="selected"' : '') + '>Suspended</option>'
-                    + '</select>';
+            var control = '<select id="group_' + row.id + '" class="form-control">';
+
+            for (var i = 0; i < lcag.MemberGrid.mybbAuthorities.length; i++) {
+                control += '<option ' + (row.group == lcag.MemberGrid.mybbAuthorities[i] ? 'selected="selected"' : '') + '>' + lcag.MemberGrid.mybbAuthorities[i] + '</option>'
             }
 
-            return row.group;
+            control += '</select>';
+
+            return control;
         },
         "hasCompletedMembershipForm": function(cellvalue, options, row) {
             return '<input id="hasCompletedMembershipForm_' + row.id + '" type="checkbox" ' + (row.hasCompletedMembershipForm ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
@@ -259,13 +268,10 @@ lcag.MemberGrid = lcag.MemberGrid || {
             return '<input id="sendEmailStatement_' + row.id + '" type="checkbox" ' + (row.sendEmailStatement ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';
         },
         "country": function(cellvalue, options, row) {
-            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="country_' + row.id + '" type="text" class="form-control input-large" value="' + row.country + '"></div>';
+            return '<div class="input-group"><input id="country_' + row.id + '" type="text" class="form-control input-large" value="' + row.country + '"></div>';
         },
         "action": function(cellvalue, options, row) {
-            if (row.status != 3) {
-                return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-sm" aria-hidden="true"></span>&nbsp;Update</button>';
-            }
-            return "";
+            return '<button type="button" class="btn btn-default update-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-sm" aria-hidden="true"></span>&nbsp;Update</button>';
         }
     }
 }

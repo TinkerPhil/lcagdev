@@ -53,8 +53,14 @@ tr.jqgrow.success {
 tr.jqgrow.danger {
     background-color: #f2dede;
 }
+tr.jqgrow.warning {
+    background-color: #fcf8e3;
+}
 tr.jqgrow.info {
     background-color: #d9edf7;
+}
+tr.jqgrow.secondary {
+    background-color: #e2e3e5;
 }
 input.form-control.input-large {
     width: 250px;

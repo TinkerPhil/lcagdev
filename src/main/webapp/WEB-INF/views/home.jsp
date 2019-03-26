@@ -231,7 +231,7 @@
     <script type="text/javascript">
         Dropzone.autoDiscover = false;
         $(function () {
-            lcag.MemberGrid.initialise();
+            lcag.MemberGrid.initialise("${mybbAuthorityJqGridOpts}", ${mybbAuthorities}, ${mybbAdminAuthorities}, ${mybbPreRegistrationAuthorities}, ${mybbBlockedAuthorities});
             lcag.PaymentsGrid.initialise();
             lcag.MpGrid.initialise();
             lcag.MpCampaignGrid.initialise();
