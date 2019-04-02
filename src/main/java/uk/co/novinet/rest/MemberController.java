@@ -108,6 +108,7 @@ public class MemberController {
             @RequestParam(value = "hasOptedOutOfClaim", required = false) Boolean hasOptedOutOfClaim,
             @RequestParam(value = "sendEmailStatement", required = false) Boolean sendEmailStatement,
             @RequestParam("group") String group,
+            @RequestParam(value = "additionalGroups[]", required = false) String[] additionalGroups,
             @RequestParam(value="country", required=false) String country,
             @RequestParam(value="phoneNumber", required=false) String phoneNumber
     ) {
@@ -115,6 +116,7 @@ public class MemberController {
                 memberId,
                 name,
                 group,
+                additionalGroups,
                 identificationChecked,
                 hmrcLetterChecked,
                 agreedToContributeButNotPaid,

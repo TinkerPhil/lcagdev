@@ -1,13 +1,14 @@
 package uk.co.novinet.service.member;
 
-import java.util.List;
+import uk.co.novinet.auth.MyBbAuthority;
 import uk.co.novinet.service.enquiry.PasswordDetails;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
 public class Member {
@@ -148,6 +149,10 @@ public class Member {
 
     public String getGroup() {
         return group;
+    }
+
+    public List<String> getAdditionalGroups() {
+        return Arrays.stream(MyBbAuthority.values()).filter(myBbAuthority -> additionalGroupIds.contains(myBbAuthority.getId())).map(MyBbAuthority::getFriendlyName).collect(toList());
     }
 
     public Instant getRegistrationDate() {

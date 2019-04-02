@@ -27,6 +27,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                 { name: "contributionAmount", label: "Contribution Amount", width: 120, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
                 { name: "sendEmailStatement", label: "Send Email Statement", width: 59, formatter: lcag.MemberGrid.formatters.sendEmailStatement, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "group", label: "Group", width: 215, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: mybbAuthorityJqGridOpts } },
+                { name: "additionalGroups", label: "Additional Groups", width: 215, formatter: lcag.MemberGrid.formatters.additionalGroups, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: mybbAuthorityJqGridOpts } },
                 { name: "country", label: "Country", width: 120, formatter: lcag.MemberGrid.formatters.country },
                 { name: "memberOfBigGroup", label: "Member of Big Group", width: 59, formatter: lcag.MemberGrid.formatters.memberOfBigGroup, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "bigGroupUsername", label: "Big Group Username", width: 90, formatter: lcag.MemberGrid.formatters.bigGroupUsername },
@@ -118,6 +119,7 @@ lcag.MemberGrid = lcag.MemberGrid || {
                                 "industry": $("#industry_" + id).val(),
                                 "notes": $("#notes_" + id).val(),
                                 "group": $("#group_" + id).val(),
+                                "additionalGroups": $("#additionalGroups_" + id).val(),
                                 "hasCompletedMembershipForm": $("#hasCompletedMembershipForm_" + id).prop("checked"),
                                 "memberOfBigGroup": $("#memberOfBigGroup_" + id).prop("checked"),
                                 "bigGroupUsername": $("#bigGroupUsername_" + id).val(),
@@ -244,6 +246,17 @@ lcag.MemberGrid = lcag.MemberGrid || {
 
             for (var i = 0; i < lcag.MemberGrid.mybbAuthorities.length; i++) {
                 control += '<option ' + (row.group == lcag.MemberGrid.mybbAuthorities[i] ? 'selected="selected"' : '') + (lcag.MemberGrid.mybbSelectableAsPrimaryGroupAuthorities.includes(lcag.MemberGrid.mybbAuthorities[i]) ? '' : ' disabled="disabled"') + '>' + lcag.MemberGrid.mybbAuthorities[i] + '</option>'
+            }
+
+            control += '</select>';
+
+            return control;
+        },
+        "additionalGroups": function(cellvalue, options, row) {
+            var control = '<select multiple id="additionalGroups_' + row.id + '" class="form-control">';
+
+            for (var i = 0; i < lcag.MemberGrid.mybbAuthorities.length; i++) {
+                control += '<option ' + ((row.additionalGroups != null && row.additionalGroups.includes(lcag.MemberGrid.mybbAuthorities[i])) ? 'selected="selected"' : '') + '>' + lcag.MemberGrid.mybbAuthorities[i] + '</option>'
             }
 
             control += '</select>';

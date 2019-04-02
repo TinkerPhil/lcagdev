@@ -1,5 +1,6 @@
 package uk.co.novinet.service.member;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,13 @@ import uk.co.novinet.service.enquiry.PasswordDetails;
 
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CollectionCertStoreParameters;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import static com.google.common.primitives.Longs.asList;
 import static java.lang.Long.parseLong;
@@ -84,7 +88,8 @@ public class MemberService {
     public void update(
             Long memberId,
             String name,
-            String newGroup,
+            String group,
+            String[] additionalGroups,
             boolean identificationChecked,
             boolean hmrcLetterChecked,
             Boolean agreedToContributeButNotPaid,
@@ -114,7 +119,7 @@ public class MemberService {
                         "mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, " +
                         "memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, " +
                         "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}",
-                name, newGroup, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
+                name, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
                 schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim,
                 hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim
         );
@@ -122,6 +127,7 @@ public class MemberService {
         String sql = "update " + usersTableName() + " u " +
                 "set u.name = ?," +
                 "u.usergroup = (select `gid` from " + userGroupsTableName() + " ug where ug.title = ?), " +
+                "u.additionalgroups = ?, " +
                 "u.identification_checked = ?, " +
                 "u.hmrc_letter_checked = ?, " +
                 "u.agreed_to_contribute_but_not_paid = ?, " +
@@ -153,7 +159,8 @@ public class MemberService {
         int result = jdbcTemplate.update(
                 sql,
                 name,
-                newGroup,
+                group,
+                toMyBbAuthorityIds(additionalGroups),
                 identificationChecked,
                 hmrcLetterChecked,
                 agreedToContributeButNotPaid,
@@ -183,11 +190,19 @@ public class MemberService {
 
         Member existingMember = getMemberById(memberId);
 
-        if (result == 1 && shouldSendFullMembershipEmail(newGroup, existingMember)) {
+        if (result == 1 && shouldSendFullMembershipEmail(group, existingMember)) {
             mailSenderService.sendUpgradedToFullMembershipEmail(existingMember);
         }
 
         LOGGER.info("Update result: {}", result);
+    }
+
+    private String toMyBbAuthorityIds(String[] additionalGroups) {
+        if (additionalGroups == null || additionalGroups.length == 0) {
+            return "";
+        }
+
+        return stream(additionalGroups).map(string -> String.valueOf(MyBbAuthority.fromFriendlyName(string.trim()).getId())).collect(Collectors.joining(","));
     }
 
     private boolean shouldSendFullMembershipEmail(String newGroup, Member existingMember) {
