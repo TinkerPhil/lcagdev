@@ -1,12 +1,12 @@
 package uk.co.novinet.web
 
 import geb.spock.GebSpec
-import uk.co.novinet.e2e.TestSftpService
 
 import java.text.SimpleDateFormat
 
 import static uk.co.novinet.e2e.TestUtils.*
-import static uk.co.novinet.web.GebTestUtils.*
+import static uk.co.novinet.web.GebTestUtils.checkboxValue
+import static uk.co.novinet.web.GebTestUtils.switchToMemberTabIfNecessaryAndAssertGridHasNRows
 
 class UpgradeToFullMembershipIT extends GebSpec {
 
@@ -31,13 +31,14 @@ class UpgradeToFullMembershipIT extends GebSpec {
             memberGridIdentityCheckedTds.find("input")[1].click()
             memberGridVerifiedOnTds[1].find("input").value(new SimpleDateFormat("dd/MM/yyyy").format(new Date()))
             memberGridVerifiedByTds[1].find("input").value("RG")
-            memberGridActionButtonTds.find("button")[1].click()
+            memberGridActionButtonTds.find("button").last().click()
             waitFor { toastSuccess.text() == "Updated successfully" }
 
         then: "we set their group to 'Registered'"
-            memberGridGroupSelectTds.find("select").value("Registered")
-            memberGridActionButtonTds.find("button")[0].click()
-            waitFor { toastSuccess.text() == "Updated successfully" }
+            memberGridGroupSelectTds.find("select")[1].value("Registered")
+            waitFor { memberGridGroupSelectTds.find("select")[1].value() == "Registered" }
+            memberGridActionButtonTds.find("button").last().click()
+            waitFor(10) { toastSuccess.text() == "Updated successfully" }
 
         and: "member receives email saying they are now a full member"
             checkboxValue(memberGridHmrcLetterCheckedTds[1].find("input")) == true

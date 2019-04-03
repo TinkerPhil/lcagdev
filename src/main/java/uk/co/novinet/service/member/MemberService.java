@@ -156,6 +156,8 @@ public class MemberService {
 
         LOGGER.info("Created sql: {}", sql);
 
+        Member memberBeforeUpdate = getMemberById(memberId);
+
         int result = jdbcTemplate.update(
                 sql,
                 name,
@@ -188,10 +190,8 @@ public class MemberService {
                 memberId
         );
 
-        Member existingMember = getMemberById(memberId);
-
-        if (result == 1 && shouldSendFullMembershipEmail(group, existingMember)) {
-            mailSenderService.sendUpgradedToFullMembershipEmail(existingMember);
+        if (result == 1 && shouldSendFullMembershipEmail(group, memberBeforeUpdate.getGroup())) {
+            mailSenderService.sendUpgradedToFullMembershipEmail(memberBeforeUpdate);
         }
 
         LOGGER.info("Update result: {}", result);
@@ -205,8 +205,8 @@ public class MemberService {
         return stream(additionalGroups).map(string -> String.valueOf(MyBbAuthority.fromFriendlyName(string.trim()).getId())).collect(Collectors.joining(","));
     }
 
-    private boolean shouldSendFullMembershipEmail(String newGroup, Member existingMember) {
-        MyBbAuthority currentMyBbAuthority = MyBbAuthority.fromFriendlyName(existingMember.getGroup());
+    private boolean shouldSendFullMembershipEmail(String newGroup, String oldGroup) {
+        MyBbAuthority currentMyBbAuthority = MyBbAuthority.fromFriendlyName(oldGroup);
         return currentMyBbAuthority.isPreRegisteredGroup() && MyBbAuthority.fromFriendlyName(newGroup) == MyBbAuthority.REGISTERED;
     }
 

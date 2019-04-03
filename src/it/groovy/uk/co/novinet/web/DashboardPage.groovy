@@ -42,6 +42,7 @@ class DashboardPage extends Page {
         memberGridVerifiedOnTds { memberGrid.find("td[aria-describedby=member-grid_verifiedOn]") }
         memberGridContributionAmountTds { memberGrid.find("td[aria-describedby=member-grid_contributionAmount]") }
         memberGridGroupSelectTds { memberGrid.find("td[aria-describedby=member-grid_group]") }
+        memberGridAdditionalGroupsSelectTds { memberGrid.find("td[aria-describedby=member-grid_additionalGroups]") }
         memberGridActionButtonTds { memberGrid.find("td[aria-describedby=member-grid_action]") }
 
         // payments grid
