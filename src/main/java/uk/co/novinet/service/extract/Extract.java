@@ -1,5 +1,7 @@
 package uk.co.novinet.service.extract;
 
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
+
 public class Extract {
 
     private String type;
@@ -102,4 +104,9 @@ public class Extract {
     public void setExtraField2(String extraField2) {        this.extraField2 = extraField2;    }
     public String getExtraValue2() {        return extraValue2;    }
     public void setExtraValue2(String extraValue2) {        this.extraValue2 = extraValue2;    }
+
+    @Override
+    public String toString() {
+        return reflectionToString(this);
+    }
 }

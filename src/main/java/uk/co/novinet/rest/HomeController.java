@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import uk.co.novinet.auth.MyBbAuthority;
+import uk.co.novinet.service.audit.Audit;
 
 import java.util.HashMap;
 
@@ -19,6 +20,7 @@ public class HomeController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
     @GetMapping("/")
+    @Audit
     public ModelAndView get() {
         return new ModelAndView("home", new HashMap<String, Object>() {{
             put("mybbAuthorityJqGridOpts", buildMyBbAuthorityJqGridOpts());

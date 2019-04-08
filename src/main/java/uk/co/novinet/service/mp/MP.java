@@ -195,4 +195,9 @@ public class MP {
     public void setAdminSig(String adminSig) {
         this.adminSig = adminSig;
     }
+
+    @Override
+    public String toString() {
+        return reflectionToString(this);
+    }
 }

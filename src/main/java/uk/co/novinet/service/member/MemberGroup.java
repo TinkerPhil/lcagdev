@@ -1,5 +1,7 @@
 package uk.co.novinet.service.member;
 
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
+
 public class MemberGroup {
     private Long id;
     private String groupName;
@@ -23,5 +25,10 @@ public class MemberGroup {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    @Override
+    public String toString() {
+        return reflectionToString(this);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.member.MemberMpCampaign;
 import uk.co.novinet.service.member.MemberMpCampaignService;
 
@@ -29,6 +30,7 @@ public class MemberMpCampaignController {
     @CrossOrigin
     @GetMapping(path = "/membermpcampaign")
     @ResponseBody
+    @Audit
     public DataContainer getMps(MemberMpCampaign member,
             @RequestParam(value = "page", required = false) Long current,
             @RequestParam(value = "rows", required = false) Long rowCount,
@@ -42,6 +44,7 @@ public class MemberMpCampaignController {
     @CrossOrigin
     @PostMapping(path = "/membermpcampaign/update")
     @ResponseBody
+    @Audit
     public ResponseEntity update(
             @RequestParam("id") Long id,
             @RequestParam(value = "allowEmailShareStatus", required = false) String allowEmailShareStatus,

@@ -24,7 +24,7 @@ import static uk.co.novinet.service.PersistenceUtils.*;
 
 @Service
 public class PaymentDao {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemberService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentDao.class);
 
     private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
         put("id", "bt.id");

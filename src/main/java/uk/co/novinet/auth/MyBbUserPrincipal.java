@@ -35,6 +35,10 @@ public class MyBbUserPrincipal implements UserDetails {
         return authorities;
     }
 
+    public Member getMember() {
+        return member;
+    }
+
     @Override
     public String getPassword() {
         return member.getPasswordDetails().getPasswordHash();

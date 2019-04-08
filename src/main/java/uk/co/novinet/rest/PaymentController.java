@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.payments.BankTransaction;
 import uk.co.novinet.service.payments.ImportOutcome;
 import uk.co.novinet.service.payments.PaymentDao;
@@ -32,6 +33,7 @@ public class PaymentController {
 
     @CrossOrigin
     @GetMapping(path = "/payment")
+    @Audit
     public DataContainer getPayments(BankTransaction bankTransaction,
                                     @RequestParam(value = "page", required = false) Long current,
                                     @RequestParam(value = "rows", required = false) Long rowCount,
@@ -43,6 +45,7 @@ public class PaymentController {
 
     @CrossOrigin
     @PostMapping(path = "/payment/upload")
+    @Audit
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
             ImportOutcome importOutcome = paymentService.importTransactions(IOUtils.toString(file.getInputStream(), bankExportCharacterEncoding));
@@ -55,6 +58,7 @@ public class PaymentController {
 
     @CrossOrigin
     @PostMapping(path = "/payment/assignToMember")
+    @Audit
     public ResponseEntity assignToMember(AssignToMemberRequest assignToMemberRequest) {
         paymentService.assignToMember(assignToMemberRequest.getMemberId(), assignToMemberRequest.getPaymentId());
         return ResponseEntity.ok().build();
@@ -80,6 +84,7 @@ public class PaymentController {
 
     @CrossOrigin
     @PostMapping(path = "/payment/update")
+    @Audit
     public ResponseEntity update(
             @RequestParam("id") Long bankTransactionId,
             @RequestParam(value = "excludeFromMemberReconciliation", required = false) Boolean excludeFromMemberReconciliation

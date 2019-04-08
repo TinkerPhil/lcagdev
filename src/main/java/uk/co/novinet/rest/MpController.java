@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.mp.MpService;
 import uk.co.novinet.service.mp.MP;
 
@@ -20,6 +21,7 @@ public class MpController {
 
     @CrossOrigin
     @GetMapping(path = "/mp")
+    @Audit
     public DataContainer getMps(MP mp,
             @RequestParam(value = "page", required = false) Long current,
             @RequestParam(value = "rows", required = false) Long rowCount,
@@ -32,6 +34,7 @@ public class MpController {
 
     @CrossOrigin
     @PostMapping(path = "/mp/update")
+    @Audit
     public ResponseEntity update(
             @RequestParam("id") Long MpId,
             @RequestParam(value = "lastName", required = false) String lastName,
@@ -71,6 +74,7 @@ public class MpController {
 
     @CrossOrigin
     @PostMapping(path = "/mp/updateCampaign")
+    @Audit
     public ResponseEntity updateCampaign(
             @RequestParam("id") Long MpId,
             @RequestParam(value = "edmStatus", required = false) String edmStatus,

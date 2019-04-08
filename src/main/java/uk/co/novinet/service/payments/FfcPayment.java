@@ -3,6 +3,8 @@ package uk.co.novinet.service.payments;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
+
 public class FfcPayment {
     private Long id;
     private Long userId;
@@ -286,5 +288,10 @@ public class FfcPayment {
 
     public void setContributionAgreementSignatureDate(Instant contributionAgreementSignatureDate) {
         this.contributionAgreementSignatureDate = contributionAgreementSignatureDate;
+    }
+
+    @Override
+    public String toString() {
+        return reflectionToString(this);
     }
 }

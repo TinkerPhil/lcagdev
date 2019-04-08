@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.payments.FfcPayment;
 import uk.co.novinet.service.payments.FfcPaymentService;
 
@@ -22,6 +23,7 @@ public class FfcPaymentController {
 
     @CrossOrigin
     @GetMapping(path = "/ffcpayment")
+    @Audit
     public DataContainer getFfcPayment(FfcPayment ffcPayment,
                                         @RequestParam(value = "page", required = false) Long current,
                                         @RequestParam(value = "rows", required = false) Long rowCount,

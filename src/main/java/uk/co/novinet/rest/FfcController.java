@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.payments.FfcContribution;
 import uk.co.novinet.service.payments.PaymentDao;
 
@@ -21,12 +22,14 @@ public class FfcController {
 
     @CrossOrigin
     @GetMapping(path = "/litigationContributionTotal")
+    @Audit
     public BigDecimal getLitigationContributionTotal() {
         return paymentDao.getFfcTotalContributions();
     }
 
     @CrossOrigin
     @GetMapping(path = "/litigationContributions")
+    @Audit
     public List<FfcContribution> getLitigationContributions() {
         return paymentDao.getFfcContributions();
     }

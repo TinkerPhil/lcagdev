@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.MemberService;
 import uk.co.novinet.service.member.StatisticsService;
@@ -26,6 +27,7 @@ public class StatisticsController {
 
     @CrossOrigin
     @GetMapping(path = "/statistics")
+    @Audit
     public Statistics getMembers() {
         return statisticsService.buildStatistics();
     }

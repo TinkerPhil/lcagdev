@@ -227,4 +227,8 @@ public class MemberMpCampaign {
     public String getAdminSig() { return adminSig;}
     public void setAdminSig(String adminSig) { this.adminSig= adminSig; }
 
+    @Override
+    public String toString() {
+        return reflectionToString(this);
+    }
 }

@@ -1,6 +1,5 @@
 package uk.co.novinet.service.member;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +14,11 @@ import uk.co.novinet.service.enquiry.PasswordDetails;
 
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CollectionCertStoreParameters;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 
 import static com.google.common.primitives.Longs.asList;
 import static java.lang.Long.parseLong;

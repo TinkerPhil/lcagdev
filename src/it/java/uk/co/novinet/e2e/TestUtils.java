@@ -63,6 +63,7 @@ public class TestUtils {
 
         while (needToRetry && sqlRetryCounter < 60) {
             try {
+                runSqlScript("sql/create_audit_events_table.sql");
                 runSqlScript("sql/create_user_table.sql");
                 runSqlScript("sql/create_userFundingSummary_table.sql");
                 runSqlScript("sql/delete_all_users.sql");

@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.member.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ public class MemberController {
 
     @CrossOrigin
     @GetMapping(path = "/member")
+    @Audit
     public DataContainer getMembers(Member member,
             @RequestParam(value = "page", required = false) Long current,
             @RequestParam(value = "rows", required = false) Long rowCount,
@@ -42,12 +44,14 @@ public class MemberController {
 
     @CrossOrigin
     @GetMapping(path = "/member/emailAddresses")
+    @Audit
     public List<String> getMemberEmailAddresses(Member member) {
         return memberService.searchMembers(0, 10000, member, "emailAddress", "asc", "and").stream().map(m -> m.getEmailAddress()).collect(Collectors.toList());
     }
 
     @CrossOrigin
     @PostMapping(path = "/member/addNote")
+    @Audit
     public ResponseEntity addNote(@RequestParam("id") Long memberId, @RequestParam("notes") String notes) {
         Member member = memberService.getMemberById(memberId);
 
@@ -65,6 +69,7 @@ public class MemberController {
 
     @CrossOrigin
     @PostMapping(path = "/member/verify")
+    @Audit
     public ResponseEntity verify(@RequestParam("id") Long memberId, @RequestParam("verifiedBy") String verifiedBy) {
         Member member = memberService.getMemberById(memberId);
 
@@ -82,6 +87,7 @@ public class MemberController {
 
     @CrossOrigin
     @PostMapping(path = "/member/update")
+    @Audit
     public ResponseEntity update(
             @RequestParam("id") Long memberId,
             @RequestParam(value = "name", required = false) String name,
@@ -165,6 +171,7 @@ public class MemberController {
 
     @CrossOrigin
     @GetMapping(path = "/member/documents")
+    @Audit
     public MemberDocuments getDocuments(@RequestParam("memberId") Long memberId) {
         Member member = memberService.getMemberById(memberId);
         return new MemberDocuments(member, sftpService.getAllDocumentsForMember(member));
@@ -172,6 +179,7 @@ public class MemberController {
 
     @CrossOrigin
     @GetMapping(path = "/member/document/download")
+    @Audit
     public void downloadDocument(@RequestParam("path") String path, HttpServletResponse response) {
         try {
             response.setHeader("Content-Disposition", "attachment; filename=\"" + path.substring(path.lastIndexOf("/") + 1) + "\"");

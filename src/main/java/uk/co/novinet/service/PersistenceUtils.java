@@ -105,6 +105,10 @@ public class PersistenceUtils {
         return forumDatabaseTablePrefix + "bank_transactions";
     }
 
+    public static String auditEventTableName() {
+        return forumDatabaseTablePrefix + "audit_events";
+    }
+
     public static String userFundingSummaryTableName() {
         return forumDatabaseTablePrefix + "userFundingSummary";
     }

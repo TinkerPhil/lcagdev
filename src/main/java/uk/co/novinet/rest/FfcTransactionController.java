@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.payments.FfcPayment;
 import uk.co.novinet.service.payments.FfcPaymentService;
 import uk.co.novinet.service.payments.FfcTransactionService;
@@ -27,6 +28,7 @@ public class FfcTransactionController {
 
     @CrossOrigin
     @PostMapping(path = "/ffcUpload")
+    @Audit
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file) {
         try {
             ImportOutcome importOutcome = ffcTransactionService.importTransactions(IOUtils.toString(file.getInputStream(), ffcExportCharacterEncoding));

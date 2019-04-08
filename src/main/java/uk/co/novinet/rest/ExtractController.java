@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.extract.ExtractService;
 
 
@@ -19,6 +20,7 @@ public class ExtractController {
 
     @CrossOrigin
     @GetMapping(path = "/extract")
+    @Audit
     public String extract(
             @RequestParam(value = "extractType") String type,
             @RequestParam(value = "extractSpecial") String special,

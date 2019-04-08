@@ -1,5 +1,7 @@
 package uk.co.novinet.service.member;
 
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
+
 public class MemberCreationResult {
     private boolean memberAlreadyExisted;
     private Member member;
@@ -15,5 +17,10 @@ public class MemberCreationResult {
 
     public Member getMember() {
         return member;
+    }
+
+    @Override
+    public String toString() {
+        return reflectionToString(this);
     }
 }
