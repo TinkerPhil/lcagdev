@@ -3,7 +3,7 @@
 ./standup_all.sh
 
 echo "Running tests..."
-mvn test
+./mvnw test
 ERROR_CODE=$?
 
 echo "Removing all running containers"
