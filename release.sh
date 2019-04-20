@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-./mvnw clean verify && docker push dockernovinet/lcag-automation
+docker network create lcag-automation-network || true && ./mvnw clean verify && docker push dockernovinet/lcag-automation
