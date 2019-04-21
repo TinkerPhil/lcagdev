@@ -7,6 +7,7 @@ echo "Running tests..."
 ERROR_CODE=$?
 
 echo "Removing all running containers"
-docker rm -f $(docker ps -a -q)
+
+$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")/remove_all.sh
 
 exit $ERROR_CODE
