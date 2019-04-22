@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+DASHBOARD_HOST=${1:-"localhost"}
+DASHBOARD_PORT=${2:-"8282"}
+
 echo "Standing up lcag automation application"
 docker run -d \
     -e "SPRING_PROFILES_ACTIVE=prod" \
@@ -51,5 +54,5 @@ docker run -d \
     -p 8282:8282 -p 5005:5005 \
     -t dockernovinet/lcag-automation
 
-echo "Waiting for application status url to respond with 200"
-while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8282/status)" != "200" ]]; do sleep 5; done
+echo "Waiting for application status url to respond with 200. Status url: http://${DASHBOARD_HOST}:${DASHBOARD_PORT}/status"
+while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' ${DASHBOARD_HOST}:${DASHBOARD_PORT}/status)" != "200" ]]; do sleep 5; done
