@@ -7,19 +7,18 @@ import com.jcraft.jsch.SftpException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.SftpDocument;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import static java.lang.Integer.parseInt;
+import static uk.co.novinet.e2e.TestUtils.sftpHost;
+import static uk.co.novinet.e2e.TestUtils.sftpPort;
 
 public class TestSftpService {
 
@@ -27,8 +26,6 @@ public class TestSftpService {
 
     private String sftpUsername = "user";
     private String sftpPassword = "password";
-    private String sftpHost = "localhost";
-    private Integer sftpPort = 2222;
     private String sftpRootDirectory = "/upload";
 
     public void removeAllDocsForEmailAddress(String emailAddress) {
@@ -37,7 +34,7 @@ public class TestSftpService {
         ChannelSftp sftpChannel = null;
 
         try {
-            session = jsch.getSession(sftpUsername, sftpHost, sftpPort);
+            session = jsch.getSession(sftpUsername, sftpHost(), parseInt(sftpPort()));
             session.setPassword(sftpPassword);
 
             java.util.Properties config = new java.util.Properties();
@@ -106,7 +103,7 @@ public class TestSftpService {
         List<SftpDocument> sftpDocuments = new ArrayList<>();
 
         try {
-            session = jsch.getSession(sftpUsername, sftpHost, sftpPort);
+            session = jsch.getSession(sftpUsername, sftpHost(), parseInt(sftpPort()));
             session.setPassword(sftpPassword);
 
             java.util.Properties config = new java.util.Properties();
@@ -161,7 +158,7 @@ public class TestSftpService {
         ChannelSftp sftpChannel = null;
 
         try {
-            session = jsch.getSession(sftpUsername, sftpHost, sftpPort);
+            session = jsch.getSession(sftpUsername, sftpHost(), parseInt(sftpPort()));
             session.setPassword(sftpPassword);
 
             java.util.Properties config = new java.util.Properties();

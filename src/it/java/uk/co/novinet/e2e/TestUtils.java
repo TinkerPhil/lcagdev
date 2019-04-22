@@ -62,6 +62,14 @@ public class TestUtils {
         return System.getProperty("smtpHost", "localhost");
     }
 
+    public static String sftpHost() {
+        return System.getProperty("sftpHost", "localhost");
+    }
+
+    public static String sftpPort() {
+        return System.getProperty("sftpPort", "2222");
+    }
+
     public static String smtpPort() {
         return System.getProperty("smtpPort", "3025");
     }
