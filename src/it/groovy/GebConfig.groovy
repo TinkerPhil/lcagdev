@@ -1,10 +1,9 @@
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeDriverService
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.os.ExecutableFinder
 
-import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX
-import static org.apache.commons.lang3.SystemUtils.IS_OS_MAC
-import static org.apache.commons.lang3.SystemUtils.IS_OS_WINDOWS
+import static org.apache.commons.lang3.SystemUtils.*
 
 File findDriverExecutable() {
     def defaultExecutable = new ExecutableFinder().find("chromedriver")
@@ -29,5 +28,14 @@ driver = {
     ChromeDriverService.Builder serviceBuilder = new ChromeDriverService.Builder()
             .usingAnyFreePort()
             .usingDriverExecutable(findDriverExecutable())
-    new ChromeDriver(serviceBuilder.build())
+
+    if (System.getProperty("headlessChrome", "false") == "true") {
+        ChromeOptions chromeOptions = new ChromeOptions()
+        chromeOptions.addArguments("--headless")
+
+        return new ChromeDriver(serviceBuilder.build(), chromeOptions)
+    } else {
+        return new ChromeDriver(serviceBuilder.build())
+    }
+
 }
