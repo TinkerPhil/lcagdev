@@ -3,6 +3,8 @@ package uk.co.novinet.web
 import geb.spock.GebSpec
 import org.openqa.selenium.Keys
 
+import static uk.co.novinet.e2e.TestUtils.dashboardHost
+import static uk.co.novinet.e2e.TestUtils.dashboardPort
 import static uk.co.novinet.e2e.TestUtils.insertUser
 import static uk.co.novinet.e2e.TestUtils.setupDatabaseSchema
 import static uk.co.novinet.web.GebTestUtils.switchToMemberTabIfNecessaryAndAssertGridHasNRows

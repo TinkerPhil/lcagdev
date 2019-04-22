@@ -10,6 +10,8 @@
 
     <properties>
         <docker.image.prefix>dockernovinet</docker.image.prefix>
+        <dashboardHost>localhost</dashboardHost>
+        <dashboardPort>8282</dashboardPort>
     </properties>
 
     <!--docker login &#45;&#45;username=dockernovinet-->
@@ -143,7 +145,7 @@
                         </goals>
                         <configuration>
                             <executable>bash</executable>
-                            <commandlineArgs>standup_all.sh</commandlineArgs>
+                            <commandlineArgs>standup_all.sh ${dashboardHost} ${dashboardPort}</commandlineArgs>
                         </configuration>
                     </execution>
                     <execution>

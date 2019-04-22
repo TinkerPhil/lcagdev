@@ -2,6 +2,9 @@ package uk.co.novinet.web
 
 import geb.Page
 
+import static uk.co.novinet.e2e.TestUtils.dashboardHost
+import static uk.co.novinet.e2e.TestUtils.dashboardPort
+
 class DashboardPage extends Page {
     static url = "http://${dashboardHost()}:${dashboardPort()}"
 
