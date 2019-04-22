@@ -32,6 +32,7 @@ driver = {
     if (System.getProperty("headlessChrome", "false") == "true") {
         ChromeOptions chromeOptions = new ChromeOptions()
         chromeOptions.addArguments("--headless")
+        chromeOptions.addArguments("--no-sandbox")
 
         return new ChromeDriver(serviceBuilder.build(), chromeOptions)
     } else {
