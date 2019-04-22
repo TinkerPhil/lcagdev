@@ -48,7 +48,7 @@ class GuestVerificationIT extends GebSpec {
             addNoteButton.click()
 
         then: "we get a toast success message"
-            waitFor { toastSuccess.text() == "Updated successfully" }
+            waitFor(20) { toastSuccess.text() == "Updated successfully" }
 
         and: "modal closes"
             waitFor { documentVerificationModal.displayed == false }
