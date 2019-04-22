@@ -21,7 +21,7 @@ class UpgradeToFullMembershipIT extends GebSpec {
         given:
             assert getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 0
             insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
-            go("http://admin:lcag@localhost:8282")
+            go("http://admin:lcag@${dashboardHost()}:${dashboardPort()}")
             at DashboardPage
 
 

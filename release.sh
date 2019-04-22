@@ -6,7 +6,7 @@ function rmContainer {
 }
 
 
-rmContainer lcag-application ; \
+rmContainer lcag-dashboard ; \
     rmContainer lcag-sftp ; \
     rmContainer lcag-mysql ; \
     rmContainer lcag-mail ; \

@@ -23,7 +23,7 @@ class GuestVerificationIT extends GebSpec {
     def "add note"() {
         given:
             insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
-            go("http://admin:lcag@localhost:8282")
+            go("http://admin:lcag@${dashboardHost()}:${dashboardPort()}")
             at DashboardPage
 
         when: "when we click on the verification tab we can see the guest we're waiting to verify"
@@ -64,7 +64,7 @@ class GuestVerificationIT extends GebSpec {
         given:
             assert getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 0
             insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
-            go("http://admin:lcag@localhost:8282")
+            go("http://admin:lcag@${dashboardHost()}:${dashboardPort()}")
             at DashboardPage
 
         when: "wait for member grid to load and confirm it has the guest we inserted"
@@ -121,7 +121,7 @@ class GuestVerificationIT extends GebSpec {
             assert testSftpService.getAllDocumentsForEmailAddress(GUEST_EMAIL_ADDRESS).size() == 2
             assert getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 0
             insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
-            go("http://admin:lcag@localhost:8282")
+            go("http://admin:lcag@${dashboardHost()}:${dashboardPort()}")
             at DashboardPage
 
         when: "wait for member grid to load and confirm it has the guest we inserted"

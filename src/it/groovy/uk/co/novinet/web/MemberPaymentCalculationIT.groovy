@@ -35,7 +35,7 @@ class MemberPaymentCalculationIT {
         insertUserFundingContributionRow(2, "200.00", "0.00")
         insertUserFundingContributionRow(3, "300.00", "0.00")
 
-        def members = new JsonSlurper().parseText(getRequest("http://localhost:8282/member", "admin", "lcag")).rows
+        def members = new JsonSlurper().parseText(getRequest("http://${dashboardHost()}:${dashboardPort()}/member", "admin", "lcag")).rows
 
         assertEquals(1, members[0].id)
         assertEquals(100.00, members[0].contributionAmount)
@@ -54,7 +54,7 @@ class MemberPaymentCalculationIT {
         insertUserFundingContributionRow(3, "300.00", "0.00")
         insertUserFundingContributionRow(3, "300.00", "0.00")
 
-        def members = new JsonSlurper().parseText(getRequest("http://localhost:8282/member", "admin", "lcag")).rows
+        def members = new JsonSlurper().parseText(getRequest("http://${dashboardHost()}:${dashboardPort()}/member", "admin", "lcag")).rows
 
         assertEquals(1, members[0].id)
         assertEquals(200.00, members[0].contributionAmount)

@@ -46,7 +46,7 @@ class PaymentImportIT {
     void importsNewBankTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
     }
 
@@ -54,10 +54,10 @@ class PaymentImportIT {
     void doesNotReImportDuplicateTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
     }
 
@@ -65,10 +65,10 @@ class PaymentImportIT {
     void canImportSecondBatchOfDifferentTransactions() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_2.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_transactions_2.txt"))
         assertEquals(8, allBankTransactionRows().size())
 
         def transactions = allBankTransactionRows()
@@ -174,7 +174,7 @@ class PaymentImportIT {
     void importsBothTransactionsWhenThereAreTwoIdenticalTransactionsOnSameDay() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_2_identical_transactions.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_transactions_2_identical_transactions.txt"))
         assertEquals(2, allBankTransactionRows().size())
     }
 
@@ -184,7 +184,7 @@ class PaymentImportIT {
 
         insertUser(1, "roundabout23", "roundabout23@test.com", "Bert Cooper", 2)
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_transactions_1.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_transactions_1.txt"))
         assertEquals(4, allBankTransactionRows().size())
 
         def transactions = allBankTransactionRows()
@@ -211,11 +211,11 @@ class PaymentImportIT {
     void canImportTransactionFilesWithPartiallyOverlappingDates() throws Exception {
         assertEquals(0, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_overlapping_transaction_dates_1.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_overlapping_transaction_dates_1.txt"))
         sleep(2000)
         assertEquals(4, allBankTransactionRows().size())
 
-        uploadBankTransactionFile("http://localhost:8282/payment/upload", tempFile("santander_overlapping_transaction_dates_2.txt"))
+        uploadBankTransactionFile("http://${dashboardHost()}:${dashboardPort()}/payment/upload", tempFile("santander_overlapping_transaction_dates_2.txt"))
         sleep(2000)
         assertEquals(6, allBankTransactionRows().size())
 
@@ -306,7 +306,7 @@ class PaymentImportIT {
         insertBankTransaction(6, "1", "test", true, "100.00", "600", DATE_6, 1)
         insertBankTransaction(7, "1", "test", true, "100.00", "700", DATE_7, 0)
 
-        def json = new JsonSlurper().parseText(getRequest("http://localhost:8282/payment", "admin", "lcag"))
+        def json = new JsonSlurper().parseText(getRequest("http://${dashboardHost()}:${dashboardPort()}/payment", "admin", "lcag"))
 
         assertEquals(json.rows[0].date as Long, toUnixTimestamp(DATE_7))
         assertEquals(json.rows[1].date as Long, toUnixTimestamp(DATE_6))
@@ -329,7 +329,7 @@ class PaymentImportIT {
         insertBankTransaction(6, "1", "test", true, "100.00", "600", DATE_1, 5)
         insertBankTransaction(7, "1", "test", true, "100.00", "700", DATE_1, 6)
 
-        def json = new JsonSlurper().parseText(getRequest("http://localhost:8282/payment", "admin", "lcag"))
+        def json = new JsonSlurper().parseText(getRequest("http://${dashboardHost()}:${dashboardPort()}/payment", "admin", "lcag"))
 
         assertEquals(json.rows[0].id, 1)
         assertEquals(json.rows[1].id, 2)
@@ -352,7 +352,7 @@ class PaymentImportIT {
         insertBankTransaction(6, null, "test", true, "100.00", "600", DATE_1, 5)
         insertBankTransaction(7, "1", "test", true, "100.00", "700", DATE_1, 6)
 
-        def json = new JsonSlurper().parseText(getRequest("http://localhost:8282/payment", "admin", "lcag"))
+        def json = new JsonSlurper().parseText(getRequest("http://${dashboardHost()}:${dashboardPort()}/payment", "admin", "lcag"))
 
         assertEquals(json.rows[0].id, 5)
         assertEquals(json.rows[1].id, 6)
@@ -375,7 +375,7 @@ class PaymentImportIT {
         insertBankTransaction(6, "1", "test", true, "100.00", "600", DATE_2, 2)
         insertBankTransaction(7, "1", "test", true, "100.00", "700", DATE_2, 3)
 
-        def json = new JsonSlurper().parseText(getRequest("http://localhost:8282/payment", "admin", "lcag"))
+        def json = new JsonSlurper().parseText(getRequest("http://${dashboardHost()}:${dashboardPort()}/payment", "admin", "lcag"))
 
         assertEquals(json.rows[0].id, 4)
         assertEquals(json.rows[1].id, 5)
@@ -387,7 +387,7 @@ class PaymentImportIT {
     }
 
     def allBankTransactionRows() {
-        return new JsonSlurper().parseText(getRequest("http://localhost:8282/payment?rows=1000&sidx=date&sord=asc", "admin", "lcag")).rows
+        return new JsonSlurper().parseText(getRequest("http://${dashboardHost()}:${dashboardPort()}/payment?rows=1000&sidx=date&sord=asc", "admin", "lcag")).rows
     }
 
     File tempFile(filename) {

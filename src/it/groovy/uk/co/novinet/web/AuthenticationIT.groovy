@@ -29,7 +29,7 @@ class AuthenticationIT extends GebSpec {
         insertUser(9999, "user", "user@lcag.com", "user", mainGroup, additionalGroups as List, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
 
         expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == httpCode
+        assert getRequestStatusCode("http://${dashboardHost()}:${dashboardPort()}", "user", "lcag") == httpCode
 
         where:
         mainGroup                               | additionalGroups                                                           | httpCode
@@ -53,7 +53,7 @@ class AuthenticationIT extends GebSpec {
         insertUser(9999, "user", "user@lcag.com", "user", mainGroup, additionalGroups as List, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt")
 
         expect:
-        assert getRequestStatusCode("http://localhost:8282", "user", "lcag") == httpCode
+        assert getRequestStatusCode("http://${dashboardHost()}:${dashboardPort()}", "user", "lcag") == httpCode
 
         where:
         mainGroup                               | additionalGroups                                                                                 | httpCode

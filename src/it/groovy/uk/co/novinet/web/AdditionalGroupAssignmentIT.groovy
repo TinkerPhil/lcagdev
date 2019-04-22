@@ -18,7 +18,7 @@ class AdditionalGroupAssignmentIT extends GebSpec {
     def "can assign single additional group"() {
         given:
             insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
-            go("http://admin:lcag@localhost:8282")
+            go("http://admin:lcag@${dashboardHost()}:${dashboardPort()}")
             at DashboardPage
 
 
@@ -36,7 +36,7 @@ class AdditionalGroupAssignmentIT extends GebSpec {
     def "can assign 2 additional group"() {
         given:
             insertUser(1, "newguest", GUEST_EMAIL_ADDRESS, "John Smith", 8, true)
-            go("http://admin:lcag@localhost:8282")
+            go("http://admin:lcag@${dashboardHost()}:${dashboardPort()}")
             at DashboardPage
 
 

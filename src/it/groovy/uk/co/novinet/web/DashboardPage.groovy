@@ -3,7 +3,7 @@ package uk.co.novinet.web
 import geb.Page
 
 class DashboardPage extends Page {
-    static url = "http://localhost:8282"
+    static url = "http://${dashboardHost()}:${dashboardPort()}"
 
     static at = { title == "Loan Charge Action Group Membership Dashboard" }
 

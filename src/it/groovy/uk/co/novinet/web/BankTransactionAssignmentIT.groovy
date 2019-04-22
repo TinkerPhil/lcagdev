@@ -24,7 +24,7 @@ class BankTransactionAssignmentIT extends GebSpec {
             insertUnassignedBankTransactionRow()
             assert getEmails(MEMBER_EMAIL_ADDRESS, "Inbox").size() == 0
             insertUser(1, "newguest", MEMBER_EMAIL_ADDRESS, "John Smith", 2, true)
-            go("http://admin:lcag@localhost:8282")
+            go("http://admin:lcag@${dashboardHost()}:${dashboardPort()}")
             at DashboardPage
 
         and: "wait for member grid to load and confirm it has the guest we inserted"
@@ -58,7 +58,7 @@ class BankTransactionAssignmentIT extends GebSpec {
         given:
             insertUnassignedBankTransactionRow()
             assert getBankTransactionRows().get(0).excludeFromMemberReconciliation == false
-            go("http://admin:lcag@localhost:8282")
+            go("http://admin:lcag@${dashboardHost()}:${dashboardPort()}")
             at DashboardPage
 
         and: "wait for payments grid to load and confirm it has the transaction we inserted"

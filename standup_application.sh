@@ -46,7 +46,7 @@ docker run -d \
 	-e "SERVER_PORT=8282" \
 	-e "BANK_EXPORT_CHARACTER_ENCODING=iso-8859-1" \
 	-e "FFC_EXPORT_CHARACTER_ENCODING=iso-8859-1" \
-	--name lcag-application \
+	--name lcag-dashboard \
     --network lcag-automation-network \
     -p 8282:8282 -p 5005:5005 \
     -t dockernovinet/lcag-automation

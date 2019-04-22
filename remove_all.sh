@@ -6,7 +6,7 @@ function rmContainer {
 }
 
 echo "Removing all running containers"
-rmContainer lcag-application ; \
+rmContainer lcag-dashboard ; \
     rmContainer lcag-sftp ; \
     rmContainer lcag-mysql ; \
     rmContainer lcag-mail
