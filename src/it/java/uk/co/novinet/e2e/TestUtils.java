@@ -219,7 +219,6 @@ public class TestUtils {
         Statement statement = null;
 
         try {
-            System.out.println("Going to try connecting to dbUrl: " + dbUrl() + " with username: " + DB_USERNAME + ", password: " + DB_PASSWORD + "");
             connection = DriverManager.getConnection(dbUrl(), DB_USERNAME, DB_PASSWORD);
             statement = connection.createStatement();
             statement.executeUpdate(sql);
@@ -240,7 +239,6 @@ public class TestUtils {
         Statement statement = null;
 
         try {
-            System.out.println("Going to try connecting to dbUrl: " + dbUrl() + " with username: " + DB_USERNAME + ", password: " + DB_PASSWORD + "");
             connection = DriverManager.getConnection(dbUrl(), DB_USERNAME, DB_PASSWORD);
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from i7b0_users");
@@ -285,7 +283,6 @@ public class TestUtils {
         Statement statement = null;
 
         try {
-            System.out.println("Going to try connecting to dbUrl: " + dbUrl() + " with username: " + DB_USERNAME + ", password: " + DB_PASSWORD + "");
             connection = DriverManager.getConnection(dbUrl(), DB_USERNAME, DB_PASSWORD);
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("select * from i7b0_bank_transactions bt left outer join i7b0_users u on bt.user_id = u.uid");
@@ -330,7 +327,6 @@ public class TestUtils {
         Statement statement = null;
 
         try {
-            System.out.println("Going to try connecting to dbUrl: " + dbUrl() + " with username: " + DB_USERNAME + ", password: " + DB_PASSWORD + "");
             connection = DriverManager.getConnection(dbUrl(), DB_USERNAME, DB_PASSWORD);
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from i7b0_enquiry");
