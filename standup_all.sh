@@ -7,5 +7,5 @@ DASHBOARD_PORT=${2:-"8282"}
 
 ./standup_application.sh
 
-echo "Waiting for application status url to respond with 200"
+echo "Waiting for application status url to respond with 200. Status url: http://${DASHBOARD_HOST}:${DASHBOARD_PORT}/status"
 while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' ${DASHBOARD_HOST}:${DASHBOARD_PORT}/status)" != "200" ]]; do sleep 5; done
