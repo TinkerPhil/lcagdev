@@ -59,6 +59,10 @@ public class PersistenceUtils {
 
         String localDateTimeString = zonedDateTime.toOffsetDateTime().toString();
 
+        return removeOffset(localDateTimeString);
+    }
+
+    static long removeOffset(String localDateTimeString) {
         Matcher matcher = ISO8601_DATE_PATTERN.matcher(localDateTimeString);
 
         if (matcher.find()) {
@@ -67,7 +71,7 @@ public class PersistenceUtils {
             return ZonedDateTime.parse(utcDateString).toInstant().toEpochMilli() / 1000;
         }
 
-        throw new RuntimeException("Could not parse date: " + localDateTimeString);
+        return ZonedDateTime.parse(localDateTimeString).toEpochSecond();
     }
 
     public static Instant dateFromMyBbRow(ResultSet rs, String columnName) throws SQLException {
