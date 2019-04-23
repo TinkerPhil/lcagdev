@@ -19,6 +19,13 @@
 
     <packaging>war</packaging>
 
+    <scm>
+        <url>https://github.com/TinkerPhil/lcagdev</url>
+        <connection>scm:git:git://github.com/TinkerPhil/lcagdev.git</connection>
+        <developerConnection>scm:git:git@github.com:TinkerPhil/lcagdev.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <build>
         <plugins>
             <plugin>
