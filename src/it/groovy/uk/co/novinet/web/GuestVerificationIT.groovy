@@ -45,6 +45,11 @@ class GuestVerificationIT extends GebSpec {
 
         when: "we enter a note and click the add note button"
             notesInput.value("some note about something")
+            waitFor(20) {
+                $("div.toast.toast-info").displayed == false &&
+                        $("div.toast.toast-error").displayed == false &&
+                        $("div.toast.toast-success").displayed == false
+            }
             addNoteButton.click()
 
         then: "we get a toast success message"
