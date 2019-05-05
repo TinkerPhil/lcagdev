@@ -116,7 +116,11 @@ class GuestVerificationIT extends GebSpec {
 
         and: "new member receives email saying their docs have been verified"
             waitFor { getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 1 }
+<<<<<<< HEAD
             getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(1).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw NOTE: Although you have been verified, you will still be a Guest member until we receive your £150 and reconcile your payment. Regards, LCAG Membership Team")
+=======
+            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(0).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw NOTE: Although you have been verified, you will still be a Guest member until we receive your £150 and reconcile your payment. Regards, LCAG Membership Team")
+>>>>>>> More email changes - goodbye Richard Horsley
     }
 
     def "guest member verification flow when guest has 2 docs"() {
@@ -167,7 +171,12 @@ class GuestVerificationIT extends GebSpec {
 
         and: "new member receives email saying their docs have been verified"
             waitFor { getEmails(GUEST_EMAIL_ADDRESS, "Inbox").size() == 1 }
+<<<<<<< HEAD
             getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(1).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw NOTE: Although you have been verified, you will still be a Guest member until we receive your £150 and reconcile your payment. Regards, LCAG Membership Team")
+=======
+            //getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(0).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw Richard Horsley Membership Team.")
+            getEmails(GUEST_EMAIL_ADDRESS, "Inbox")[0].content.contains("Dear John Smith We have now verified your ID and scheme documentation (or Big Group account details if you are an existing Big Group member). You can access the forum here: http://forum.hmrcloancharge.info/ Your forum username is: " + getUserRows().get(0).getUsername() + " If you can’t remember your forum account details, please use the forgotten password facility and a new password will be sent to you: https://forum.hmrcloancharge.info/member.php?action=lostpw NOTE: Although you have been verified, you will still be a Guest member until we receive your £150 and reconcile your payment. Regards, LCAG Membership Team")
+>>>>>>> More email changes - goodbye Richard Horsley
 
         and: "the docs have been deleted"
             assert testSftpService.getAllDocumentsForEmailAddress(GUEST_EMAIL_ADDRESS).size() == 0
