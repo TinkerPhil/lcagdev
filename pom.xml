@@ -181,18 +181,21 @@
                     <drivers>
                         <driver>
                             <name>chromedriver</name>
-                            <version>2.45.0</version>
+                            <version>74.0.3729.6</version>
                             <platform>mac</platform>
+                            <url>https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_mac64.zip</url>
                         </driver>
                         <driver>
                             <name>chromedriver</name>
-                            <version>2.45.0</version>
+                            <version>74.0.3729.6</version>
                             <platform>linux</platform>
+                            <url>https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip</url>
                         </driver>
                         <driver>
                             <name>chromedriver</name>
-                            <version>2.45.0</version>
+                            <version>74.0.3729.6</version>
                             <platform>windows</platform>
+                            <url>https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_win32.zip</url>
                         </driver>
                     </drivers>
                 </configuration>
