@@ -203,10 +203,6 @@ class PaymentImportIT {
         waitForNEmailsToAppearInFolder(1, "Inbox", "roundabout23@test.com")
 
         assertEquals(1, TestUtils.getEmails("roundabout23@test.com", "Inbox").size())
-<<<<<<< HEAD
-=======
-        //assertEquals("Dear Bert Cooper, Your payment of £250 has now been received. Thank you, Richard Horsley Membership Team", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getContent().trim())
->>>>>>> More email changes - goodbye Richard Horsley
         assertEquals("Dear Bert Cooper, Your donation of £250 has now been received. If you are a newly joined full member, you will be upgraded to full membership as soon as we have reconciled the payment. Note there can be a lag of 1-2 days before this occurs so please be patient. If you are an existing full member making an additional donation, we THANK YOU for it. Thank you, LCAG Membership Team", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getContent().trim())
         assertEquals("Your payment has been received", TestUtils.getEmails("roundabout23@test.com", "Inbox")[0].getSubject().trim())
     }
