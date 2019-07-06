@@ -125,7 +125,6 @@ public class TestUtils {
             }
 
             insertUser(9999, "admin", "admin@lcag.com", "Administrators", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt");
-            insertUser(10000, "apiuser", "apiuser@lcag.com", "apiuser", 14, true, MyBbPasswordEncoder.hashPassword("apipassword", "salt"), "salt");
         }
     }
 
