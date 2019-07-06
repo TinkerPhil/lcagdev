@@ -1,22 +1,20 @@
-package uk.co.novinet.rest;
+package uk.co.novinet.rest.member;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import uk.co.novinet.rest.DataContainer;
 import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.payments.BankTransaction;
 import uk.co.novinet.service.payments.ImportOutcome;
 import uk.co.novinet.service.payments.PaymentDao;
 import uk.co.novinet.service.payments.PaymentService;
-
-import java.util.Date;
 
 @RestController
 public class PaymentController {
@@ -35,11 +33,11 @@ public class PaymentController {
     @GetMapping(path = "/payment")
     @Audit
     public DataContainer getPayments(BankTransaction bankTransaction,
-                                    @RequestParam(value = "page", required = false) Long current,
-                                    @RequestParam(value = "rows", required = false) Long rowCount,
-                                    @RequestParam(value = "searchPhrase", required = false) String searchPhrase,
-                                    @RequestParam(value = "sidx", required = false) String sortBy,
-                                    @RequestParam(value = "sord", required = false) String sortDirection) {
+                                     @RequestParam(value = "page", required = false) Long current,
+                                     @RequestParam(value = "rows", required = false) Long rowCount,
+                                     @RequestParam(value = "searchPhrase", required = false) String searchPhrase,
+                                     @RequestParam(value = "sidx", required = false) String sortBy,
+                                     @RequestParam(value = "sord", required = false) String sortDirection) {
         return retrieveData(current, rowCount, searchPhrase, sortBy, sortDirection, bankTransaction, "and");
     }
 

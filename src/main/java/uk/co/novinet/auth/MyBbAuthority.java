@@ -12,6 +12,7 @@ public enum MyBbAuthority {
     SUPER_MODERATORS("Super Moderators", 3, true, false, false, true),
     ADMINISTRATORS("Administrators", 4, true, false, false, true),
     LCAG_DASHBOARD_ADMINISTRATOR("LCAG Dashboard Administrator", 13, true, false, false, true),
+    LCAG_DASHBOARD_API_USER("LCAG Dashboard API User", 13, true, false, false, true),
     LCAG_FFC_CONTRIBUTOR("LCAG FFC Contributor", 9, false, false, false, false),
     GUESTS("Guests", 1, false, true, false, false),
     AWAITING_ACTIVIATION("Awaiting Activation", 5, false, true, true, false);

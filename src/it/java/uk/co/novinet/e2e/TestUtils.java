@@ -1,12 +1,20 @@
 package uk.co.novinet.e2e;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
+import org.apache.http.auth.AuthenticationException;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.HttpEntityWrapper;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -15,6 +23,7 @@ import org.codemonkey.simplejavamail.TransportStrategy;
 import org.codemonkey.simplejavamail.email.Email;
 import org.jsoup.Jsoup;
 import uk.co.novinet.auth.MyBbPasswordEncoder;
+import uk.co.novinet.rest.member.MinimalMember;
 import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.enquiry.Enquiry;
 import uk.co.novinet.service.payments.BankTransaction;
@@ -116,6 +125,7 @@ public class TestUtils {
             }
 
             insertUser(9999, "admin", "admin@lcag.com", "Administrators", 4, true, MyBbPasswordEncoder.hashPassword("lcag", "salt"), "salt");
+            insertUser(10000, "apiuser", "apiuser@lcag.com", "apiuser", 14, true, MyBbPasswordEncoder.hashPassword("apipassword", "salt"), "salt");
         }
     }
 
@@ -192,6 +202,17 @@ public class TestUtils {
                 "', 0, 0, '', '', '', " + group + ", '" + additionalGroups.stream().map(Object::toString).collect(joining(",")) + "', 0, '', " + unixTime() + ", 0, 0, 0, '', '0', '', '', '', '', 'all', '', 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, " +
                 "'linear', 1, 1, 1, 1, 1, 1, 0, 0, 0, '', '', '', 0, 0, '', '', 0, 0, 0, '0', '', '', '', 0, 0, 0, '', '', '', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, " +
                 "1, '', 0, '" + name + "', '" + (hasCompletedMembershipForm ? "1" : "0") + "', 'aaaaaaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbb');");
+    }
+
+    public static CloseableHttpResponse createMemberViaApi(String name, String emailAddress, String phoneNumber, String username, String password) throws IOException, AuthenticationException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost post = new HttpPost("http://" + dashboardHost() + ":" + dashboardPort() + "/api/member");
+        post.setHeader("Accept", "application/json");
+        post.setHeader("Content-type", "application/json");
+        UsernamePasswordCredentials creds = new UsernamePasswordCredentials(username, password);
+        post.addHeader(new BasicScheme().authenticate(creds, post, null));
+        post.setEntity(new StringEntity(new ObjectMapper().writeValueAsString(new MinimalMember(null, name, emailAddress, phoneNumber))));
+        return httpclient.execute(post);
     }
 
     public static void insertEnqiry(
@@ -604,7 +625,7 @@ public class TestUtils {
         }
     }
 
-    static String uploadBankTransactionFile(String url, File file) throws IOException {
+    public static String uploadBankTransactionFile(String url, File file) throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url);
         post.setHeader("Accept", "application/json");

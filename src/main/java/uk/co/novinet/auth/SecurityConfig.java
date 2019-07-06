@@ -26,12 +26,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authenticationProvider(authProvider)
                 .httpBasic().and().authorizeRequests()
                 .antMatchers("/status").permitAll()
+                .antMatchers("/error").permitAll()
+                .antMatchers("/api/**").hasAnyAuthority(LCAG_DASHBOARD_API_USER.getFriendlyName())
                 .antMatchers("/**").hasAnyAuthority(
-                        ADMINISTRATORS.getFriendlyName(),
-                        LCAG_DASHBOARD_ADMINISTRATOR.getFriendlyName(),
-                        MODERATORS.getFriendlyName(),
-                        SUPER_MODERATORS.getFriendlyName())
-                .and().csrf().disable().headers().frameOptions().disable();
+                    ADMINISTRATORS.getFriendlyName(),
+                    LCAG_DASHBOARD_ADMINISTRATOR.getFriendlyName(),
+                    MODERATORS.getFriendlyName(),
+                    SUPER_MODERATORS.getFriendlyName()
+                ).and().csrf().disable().headers().frameOptions().disable();
     }
 
 }

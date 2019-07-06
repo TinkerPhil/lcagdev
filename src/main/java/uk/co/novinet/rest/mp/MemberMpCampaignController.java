@@ -1,4 +1,4 @@
-package uk.co.novinet.rest;
+package uk.co.novinet.rest.mp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.co.novinet.rest.DataContainer;
 import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.member.MemberMpCampaign;
 import uk.co.novinet.service.member.MemberMpCampaignService;
@@ -32,12 +33,12 @@ public class MemberMpCampaignController {
     @ResponseBody
     @Audit
     public DataContainer getMps(MemberMpCampaign member,
-            @RequestParam(value = "page", required = false) Long current,
-            @RequestParam(value = "rows", required = false) Long rowCount,
-            @RequestParam(value = "searchPhrase", required = false) String searchPhrase,
-            @RequestParam(value = "sidx", required = false) String sortBy,
-            @RequestParam(value = "sord", required = false) String sortDirection,
-            @RequestParam(value = "operator", required = false) String operator) {
+                                @RequestParam(value = "page", required = false) Long current,
+                                @RequestParam(value = "rows", required = false) Long rowCount,
+                                @RequestParam(value = "searchPhrase", required = false) String searchPhrase,
+                                @RequestParam(value = "sidx", required = false) String sortBy,
+                                @RequestParam(value = "sord", required = false) String sortDirection,
+                                @RequestParam(value = "operator", required = false) String operator) {
         return retrieveData(current, rowCount, searchPhrase, sortBy, sortDirection, member, operator == null ? "and" : operator);
     }
 

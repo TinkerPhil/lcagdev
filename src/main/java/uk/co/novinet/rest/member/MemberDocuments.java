@@ -1,4 +1,4 @@
-package uk.co.novinet.rest;
+package uk.co.novinet.rest.member;
 
 import uk.co.novinet.service.member.Member;
 import uk.co.novinet.service.member.SftpDocument;

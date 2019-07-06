@@ -1,9 +1,10 @@
-package uk.co.novinet.rest;
+package uk.co.novinet.rest.ffc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import uk.co.novinet.rest.DataContainer;
 import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.payments.FfcPayment;
 import uk.co.novinet.service.payments.FfcPaymentService;
@@ -25,12 +26,12 @@ public class FfcPaymentController {
     @GetMapping(path = "/ffcpayment")
     @Audit
     public DataContainer getFfcPayment(FfcPayment ffcPayment,
-                                        @RequestParam(value = "page", required = false) Long current,
-                                        @RequestParam(value = "rows", required = false) Long rowCount,
-                                        @RequestParam(value = "searchPhrase", required = false) String searchPhrase,
-                                        @RequestParam(value = "sidx", required = false) String sortBy,
-                                        @RequestParam(value = "sord", required = false) String sortDirection,
-                                        @RequestParam(value = "operator", required = false) String operator) {
+                                       @RequestParam(value = "page", required = false) Long current,
+                                       @RequestParam(value = "rows", required = false) Long rowCount,
+                                       @RequestParam(value = "searchPhrase", required = false) String searchPhrase,
+                                       @RequestParam(value = "sidx", required = false) String sortBy,
+                                       @RequestParam(value = "sord", required = false) String sortDirection,
+                                       @RequestParam(value = "operator", required = false) String operator) {
         return retrieveData(current, rowCount, searchPhrase, sortBy, sortDirection, ffcPayment, operator == null ? "and" : operator);
     }
 

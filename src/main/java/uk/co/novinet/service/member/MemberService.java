@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import uk.co.novinet.auth.MyBbAuthority;
 import uk.co.novinet.service.PersistenceUtils;
 import uk.co.novinet.service.enquiry.Enquiry;
+import uk.co.novinet.service.enquiry.EnquiryDao;
 import uk.co.novinet.service.enquiry.MailSenderService;
 import uk.co.novinet.service.enquiry.PasswordDetails;
 
@@ -45,6 +46,9 @@ public class MemberService {
 
     @Autowired
     private MailSenderService mailSenderService;
+
+    @Autowired
+    private EnquiryDao enquiryDao;
 
     private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
         put("id", "u.uid");
@@ -269,6 +273,10 @@ public class MemberService {
         );
 
         LOGGER.info("Update result: {}", result);
+    }
+
+    public Enquiry createEnquiry(String name, String emailAddress, String phoneNumber) {
+        return enquiryDao.create(new Enquiry(emailAddress, name, phoneNumber));
     }
 
     public MemberCreationResult createForumUserIfNecessary(Enquiry enquiry) {

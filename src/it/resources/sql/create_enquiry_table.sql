@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `i7b0_enquiry` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(220) NOT NULL DEFAULT '',
   `email_address` varchar(220) NOT NULL DEFAULT '',
+  `phone_number` varchar(220) NOT NULL DEFAULT '',
   `mp_name` varchar(200) NOT NULL DEFAULT '',
   `mp_constituency` varchar(200) NOT NULL DEFAULT '',
   `mp_party` varchar(200) NOT NULL DEFAULT '',

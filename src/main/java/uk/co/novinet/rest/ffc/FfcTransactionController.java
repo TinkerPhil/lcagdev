@@ -1,4 +1,4 @@
-package uk.co.novinet.rest;
+package uk.co.novinet.rest.ffc;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uk.co.novinet.service.audit.Audit;
-import uk.co.novinet.service.payments.FfcPayment;
-import uk.co.novinet.service.payments.FfcPaymentService;
 import uk.co.novinet.service.payments.FfcTransactionService;
 import uk.co.novinet.service.payments.ImportOutcome;
 

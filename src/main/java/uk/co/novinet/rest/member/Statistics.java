@@ -1,4 +1,4 @@
-package uk.co.novinet.rest;
+package uk.co.novinet.rest.member;
 
 public class Statistics {
     private Double totalContributions;

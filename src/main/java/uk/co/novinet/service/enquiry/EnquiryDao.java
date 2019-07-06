@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import uk.co.novinet.service.member.MemberCreationResult;
 import uk.co.novinet.service.member.MemberService;
 
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static uk.co.novinet.service.PersistenceUtils.enquiryTableName;
+import static uk.co.novinet.service.PersistenceUtils.*;
 
 @Service
 public class EnquiryDao {
@@ -75,8 +76,29 @@ public class EnquiryDao {
                 resultSet.getBoolean("member_of_big_group"),
                 resultSet.getString("big_group_username"),
                 resultSet.getBoolean("has_been_processed"),
-                ""
+                resultSet.getString("phone_number")
         );
     }
 
+    public Enquiry create(Enquiry enquiry) {
+        String insertSql = "insert into " + enquiryTableName() + " (`id`, `name`, `phone_number`, `email_address`) values (?, ?, ?, ?)";
+
+        LOGGER.info("Going to execute insert sql: {}", insertSql);
+
+        Long nextAvailableId = findNextAvailableId("id", enquiryTableName());
+
+        int result = jdbcTemplate.update(insertSql,
+                nextAvailableId,
+                enquiry.getName(),
+                enquiry.getPhoneNumber(),
+                enquiry.getEmailAddress()
+        );
+
+        enquiry.setId(nextAvailableId);
+
+        LOGGER.info("Insertion result: {}", result);
+
+        return enquiry;
+
+    }
 }

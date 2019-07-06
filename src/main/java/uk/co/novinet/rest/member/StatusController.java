@@ -1,4 +1,4 @@
-package uk.co.novinet.rest;
+package uk.co.novinet.rest.member;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
