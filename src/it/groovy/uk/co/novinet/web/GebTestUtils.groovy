@@ -24,7 +24,7 @@ class GebTestUtils {
             browser.waitFor { browser.memberTab.click() }
         }
 
-        browser.waitFor(10) { browser.memberGridRows.size() == expectedNumberOfRows + 1 }
+        browser.waitFor(20) { browser.memberGridRows.size() == expectedNumberOfRows + 1 }
 
         return true
     }
