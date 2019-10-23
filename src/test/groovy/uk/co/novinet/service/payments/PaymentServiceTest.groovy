@@ -1,5 +1,6 @@
 package uk.co.novinet.service.payments
 
+import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 import uk.co.novinet.service.enquiry.MailSenderService
 import uk.co.novinet.service.member.Member
@@ -193,6 +194,15 @@ Balance: 4550.00 
         bankTransactions[4].reference == "ABC123"
         bankTransactions[4].transactionIndexOnDay == 0
         bankTransactions[4].excludeFromMemberReconciliation == false
+    }
+
+    def "imports all bank transactions in a batch of 346"() {
+        given:
+        ImportOutcome importOutcome = testObj.importTransactions(PaymentServiceTest.class.getResourceAsStream("/Statement.txt").getText("ISO-8859-1"))
+
+        expect:
+        importOutcome.importedTransactions == 346
+        importOutcome.totalTransactions == 346
     }
 
     private long time(String dateString) {

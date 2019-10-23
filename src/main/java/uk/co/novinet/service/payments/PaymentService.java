@@ -30,7 +30,7 @@ public class PaymentService {
     private static final Pattern TRANSACTION_PATTERN = Pattern.compile(
             "Date:.(?<date>\\d{2}/\\d{2}/\\d{4})\\s+" +
             "Description:(?<description>.+)\\s*" +
-            "Amount:.(?<amount>\\-?\\d+\\.\\d{2}).\\s*" +
+            "Amount:.(?<amount>\\-?\\d+\\.\\d{2}).([A-Z]+)?\\s*" +
             "Balance:.(?<balance>\\d+\\.\\d{2})"
     );
 
@@ -125,44 +125,54 @@ public class PaymentService {
     }
 
     List<BankTransaction> buildBankTransactions(String transactions) {
-        Matcher matcher = TRANSACTION_PATTERN.matcher(transactions);
-
+        String[] transactionChunks = transactions.split("\n\t+\n");
         List<BankTransaction> bankTransactions = new ArrayList<>();
+        int bankTransactionCount = 0;
 
-        Map<String, Integer> transactionsOnDayMap = new HashMap<>();
+        for (String transactionChunk : transactionChunks) {
+            Matcher matcher = TRANSACTION_PATTERN.matcher(transactionChunk);
 
-        while (matcher.find()) {
-            String date = matcher.group("date");
-            String description = matcher.group("description").replace(STRANGE_WHITESPACE_CHARACTER, ' ').trim();
-            String amount = matcher.group("amount");
-            String balance = matcher.group("balance");
+            Map<String, Integer> transactionsOnDayMap = new HashMap<>();
 
-            Integer numberOfTransactions = transactionsOnDayMap.get(date);
+            boolean foundTransactionInChunk = matcher.find();
 
-            int transactionIndexOnDay = numberOfTransactions == null ? 0 : numberOfTransactions + 1;
+            if (foundTransactionInChunk) {
+                bankTransactionCount++;
+                LOGGER.info("Building BankTransaction index: {}", bankTransactionCount);
+                String date = matcher.group("date");
+                String description = matcher.group("description").replace(STRANGE_WHITESPACE_CHARACTER, ' ').trim();
+                String amount = matcher.group("amount");
+                String balance = matcher.group("balance");
 
-            transactionsOnDayMap.put(date, transactionIndexOnDay);
+                Integer numberOfTransactions = transactionsOnDayMap.get(date);
 
-            try {
-                String reference = findInDescription(description, "reference");
-                Member member = exactMatchingMember(reference);
-                bankTransactions.add(new BankTransaction(
-                        0L,
-                        member == null ? null : member.getId(),
-                        member == null ? null : member.getUsername(),
-                        member == null ? null : member.getEmailAddress(),
-                        new SimpleDateFormat("dd/MM/yyyy").parse(date).toInstant(),
-                        description,
-                        new BigDecimal(amount),
-                        new BigDecimal(balance),
-                        findInDescription(description, "counterParty"),
-                        reference,
-                        transactionIndexOnDay,
-                        PaymentSource.SANTANDER,
-                        false,
-                        new BigDecimal(amount).compareTo(BigDecimal.ZERO) > 0));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
+                int transactionIndexOnDay = numberOfTransactions == null ? 0 : numberOfTransactions + 1;
+
+                transactionsOnDayMap.put(date, transactionIndexOnDay);
+
+                try {
+                    String reference = findInDescription(description, "reference");
+                    Member member = exactMatchingMember(reference);
+                    bankTransactions.add(new BankTransaction(
+                            0L,
+                            member == null ? null : member.getId(),
+                            member == null ? null : member.getUsername(),
+                            member == null ? null : member.getEmailAddress(),
+                            new SimpleDateFormat("dd/MM/yyyy").parse(date).toInstant(),
+                            description,
+                            new BigDecimal(amount),
+                            new BigDecimal(balance),
+                            findInDescription(description, "counterParty"),
+                            reference,
+                            transactionIndexOnDay,
+                            PaymentSource.SANTANDER,
+                            false,
+                            new BigDecimal(amount).compareTo(BigDecimal.ZERO) > 0));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                LOGGER.info("Could not find BankTransaction in transaction chunk: {}", transactionChunk);
             }
         }
 
