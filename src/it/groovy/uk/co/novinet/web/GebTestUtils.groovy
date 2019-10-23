@@ -5,9 +5,9 @@ import geb.Browser
 class GebTestUtils {
     static boolean switchToGuestVerificationTabIfNecessaryAndAssertGridHasNRows(Browser browser, int expectedNumberOfRows) {
         if (expectedNumberOfRows == 0) {
-            assert browser.guestsAwaitingVerificationTab.text() == "Guests Awaiting Verification"
+            browser.waitFor{ browser.guestsAwaitingVerificationTab.text() == "Guests Awaiting Verification" }
         } else {
-            assert browser.guestsAwaitingVerificationTab.text() == "Guests Awaiting Verification *"
+            browser.waitFor { browser.guestsAwaitingVerificationTab.text() == "Guests Awaiting Verification *" }
         }
 
         if (!browser.verificationGrid.displayed) {
@@ -24,7 +24,7 @@ class GebTestUtils {
             browser.waitFor { browser.memberTab.click() }
         }
 
-        browser.waitFor { browser.memberGridRows.size() == expectedNumberOfRows + 1 }
+        browser.waitFor(20) { browser.memberGridRows.size() == expectedNumberOfRows + 1 }
 
         return true
     }

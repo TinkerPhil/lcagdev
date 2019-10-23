@@ -39,7 +39,7 @@ class GuestVerificationIT extends GebSpec {
             addNoteButton.click()
 
         then: "we get a validation error and modal is still displayed"
-            waitFor { toastError.displayed }
+            waitFor(10) { toastError.displayed }
             assert toastError.text() == "Please enter a note"
             documentVerificationModal.displayed
 

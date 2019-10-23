@@ -31,7 +31,14 @@ class AdditionalGroupAssignmentIT extends GebSpec {
             waitFor { toastSuccess.text() == "Updated successfully" }
 
         then:
+        try {
             memberGridAdditionalGroupsSelectTds.find("select")[1].value() == ["LCAG FFC Contributor"]
+        }
+        catch(org.openqa.selenium.StaleElementReferenceException ex)
+        {
+            memberGridAdditionalGroupsSelectTds.find("select")[1].value() == ["LCAG FFC Contributor"]
+        }
+
     }
 
 
@@ -54,7 +61,13 @@ class AdditionalGroupAssignmentIT extends GebSpec {
             waitFor { toastSuccess.text() == "Updated successfully" }
 
         then:
+        try {
             memberGridAdditionalGroupsSelectTds.find("select")[1].value().containsAll(["LCAG FFC Contributor", "Moderators"])
+        }
+        catch(org.openqa.selenium.StaleElementReferenceException ex)
+        {
+            memberGridAdditionalGroupsSelectTds.find("select")[1].value().containsAll(["LCAG FFC Contributor", "Moderators"])
+        }
     }
 
 }
