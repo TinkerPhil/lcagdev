@@ -26,4 +26,9 @@ public class MyBbDaoAuthenticationProvider extends DaoAuthenticationProvider {
             }
         }
     }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return super.supports(authentication);
+    }
 }
