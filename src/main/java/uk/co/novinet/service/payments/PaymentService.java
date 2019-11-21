@@ -30,7 +30,7 @@ public class PaymentService {
     private static final Pattern TRANSACTION_PATTERN = Pattern.compile(
             "Date:.(?<date>\\d{2}/\\d{2}/\\d{4})\\s+" +
             "Description:(?<description>.+)\\s*" +
-            "Amount:.(?<amount>\\-?\\d+\\.\\d{2}).\\s*" +
+            "Amount:.(?<amount>\\-?\\d+\\.\\d{2}).([A-Z]+)?\\s*" +
             "Balance:.(?<balance>\\d+\\.\\d{2})"
     );
 

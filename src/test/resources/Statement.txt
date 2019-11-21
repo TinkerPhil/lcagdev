@@ -1,0 +1,1733 @@
+From: 21/10/2019 to 22/10/2019
+							
+Account: XXXX XXXX XXXX 0057
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 70531.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 150.00 	
+Balance: 70481.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 70331.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 70281.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 70231.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 70131.22 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 70081.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 69981.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 69781.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 69731.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 69531.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 69431.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 69331.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 69231.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 69181.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 69131.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 69031.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 68931.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 68831.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 68731.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 68631.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 68581.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 68531.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 68431.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 68381.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 68331.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 68281.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 68231.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 68131.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 68031.22 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 67931.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 67831.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 67781.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 67681.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 67631.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 67531.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 67481.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 67381.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 67281.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 67231.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 67181.22 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 67131.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 75.00 	
+Balance: 67031.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 66956.22 
+						
+Date: 22/10/2019
+Description: TRANSFER FROM MR MARTIN ROBERT ADAMS, REFERENCE Adams.mr                                  
+Amount: 100.00 	
+Balance: 66906.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 66806.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 66706.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 66506.22 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 66456.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 66356.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 66306.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 66256.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 66206.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 66156.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 66106.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 66056.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65956.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65906.22 
+						
+Date: 22/10/2019
+Description: TRANSFER FROM C.J. Sambrook Smith Camperstraat 1A. REF: 0015 2889 696 0515124             
+Amount: 41.67 	
+Balance: 65856.22 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65814.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65764.55 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 65714.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65614.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65564.55 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 	
+Balance: 65514.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 65464.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65364.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 65314.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 65214.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65114.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 65064.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 65014.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 64914.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 64714.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 64664.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 64614.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 64514.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 64464.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 64364.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 64314.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 64114.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 64014.55 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 	
+Balance: 63914.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 63864.55 
+						
+Date: 22/10/2019
+Description: TRANSFER FROM KEVIN BAILEY 8 FERRYSIDE ROA. REF: 0015 2889 696 0515009                    
+Amount: 50.72 	
+Balance: 63814.55 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 63763.83 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 	
+Balance: 63663.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 63613.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 63563.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 63463.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 63363.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 63313.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 63263.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 63213.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 63163.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 63113.83 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 63013.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 62913.83 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 62813.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 62713.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 62663.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 62463.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 62413.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 62363.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 62313.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 62213.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 62163.83 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 62063.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 61963.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 61863.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 61813.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 61713.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 61513.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 61463.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 61413.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 61363.83 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 	
+Balance: 61313.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 61263.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 61213.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 61163.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 61063.83 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 	
+Balance: 61013.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 60963.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 60763.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 60713.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 60513.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 60463.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 60413.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 60363.83 
+						
+Date: 22/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 	
+Balance: 60313.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 60263.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 60163.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 60063.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 59963.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 59863.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 59813.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 59763.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 59663.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 59463.83 
+						
+Date: 22/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 59413.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 59363.83 
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 59313.83 
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 	
+Balance: 59213.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 59163.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 58963.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 58913.83 
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 58863.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 58763.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 58663.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 58613.83 
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 58563.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 58463.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 58363.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 58313.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 58213.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 58163.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 58113.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 58013.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 57913.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 57813.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 57713.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 57513.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 57413.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 57313.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 57213.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 57163.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 57063.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 57013.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 56963.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 56863.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 56813.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 56713.83 
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 	
+Balance: 56663.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 56613.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 75.00 	
+Balance: 56513.83 
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 	
+Balance: 56438.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 56338.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 56288.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 56238.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 56188.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 56138.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 56038.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55988.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55938.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55888.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55838.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55788.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55738.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 55688.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55588.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55538.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 	
+Balance: 55488.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55288.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55238.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 101.00 	
+Balance: 55188.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55087.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 55037.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 	
+Balance: 54987.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 54887.83 
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 	
+Balance: 54837.83 
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 150.00 GBP	
+Balance: 54787.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 54637.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 54587.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 54537.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 54437.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 54387.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 54287.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 54187.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 54137.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 54037.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53937.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 53887.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53837.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 53787.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53737.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53687.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 53637.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53537.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 53487.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53387.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53337.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53287.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 53237.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT VIA FASTER PAYMENT TO GRAHAM MORTIMER REFERENCE OVERPAY REFUND , MANDATE NO 9
+Amount: -100.00 GBP	
+Balance: 53187.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 53287.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 53087.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 52987.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 52937.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 52837.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52737.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 52687.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 52587.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52487.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52437.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 52387.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52337.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 52287.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 52187.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52087.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 52037.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 51987.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 51937.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 51837.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 51737.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 51637.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT VIA FASTER PAYMENT TO MS V ANGELESKA REFERENCE PART REFUND , MANDATE NO 98   
+Amount: -900.00 GBP	
+Balance: 51437.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52337.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52287.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52237.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52187.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52137.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52087.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 52037.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 51987.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 51937.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 51887.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 51687.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 51637.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 51587.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 51387.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 51287.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 51237.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 51137.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 51037.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 50937.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 50837.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 50787.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 50687.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 50637.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 50587.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 50487.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 50437.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 50337.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 50237.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 50187.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 50087.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 49987.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 49887.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 GBP	
+Balance: 49837.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 49737.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 49687.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 49587.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 49537.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 49487.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 49437.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 49387.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 49187.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 49087.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 48987.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 48937.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 48837.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 48787.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 48737.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 48687.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 101.00 GBP	
+Balance: 48637.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 48536.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 48486.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 48436.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 48386.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 48286.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 48236.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 48136.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 100.00 GBP	
+Balance: 48036.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 47936.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 47886.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 47786.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 50.00 GBP	
+Balance: 47736.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 47686.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 47586.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 47536.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 47486.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 47286.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 47236.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 47186.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 47136.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 47086.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 47036.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 46986.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 46936.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 46836.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 1000.00 GBP	
+Balance: 46736.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 45736.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 45536.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 45486.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 45436.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 45386.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 45286.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 45086.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 45036.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 44936.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 44836.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 44786.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 44736.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 44536.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 200.00 GBP	
+Balance: 44486.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 44286.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 44186.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 44136.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 44086.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 44036.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 50.00 GBP	
+Balance: 43936.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 43886.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 43786.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 43686.83 GBP
+						
+Date: 21/10/2019
+Description:  FASTER PAYMENTS RECEIPT REF.xx FROM xx
+Amount: 100.00 GBP	
+Balance: 43586.83 GBP
+						
+Date: 21/10/2019
+Description: BILL PAYMENT FROM xx, REFERENCE xx
+Amount: 150.00 GBP	
+Balance: 43486.83 GBP
