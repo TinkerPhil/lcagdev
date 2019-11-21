@@ -33,6 +33,7 @@
     <script src="/js/lcag-mp-grid.js"></script>
     <script src="/js/lcag-mp-campaign-grid.js"></script>
     <script src="/js/lcag-mp-campaign-user-grid.js"></script>
+    <script src="/js/lcag-mp-rapport-grid.js"></script>
     <script src="/js/lcag-verification-grid.js"></script>
     <script src="/js/lcag-ffc-payment-grid.js"></script>
     <script src="/js/lcag-extract.js"></script>
@@ -126,8 +127,9 @@
                 <li role="presentation"><a id="guestsAwaitingVerificationTabHeader" href="#guestsAwaitingVerification" aria-controls="guestsAwaitingVerification" role="tab" data-toggle="tab">Guests Awaiting Verification</a></li>
                 <li role="presentation"><a href="#payments" aria-controls="payments" role="tab" data-toggle="tab">Payments</a></li>
                 <li role="presentation"><a href="#mp" aria-controls="mp" role="tab" data-toggle="tab">MP</a></li>
-                <li role="presentation"><a href="#mpcampaign" aria-controls="mpcampaign" role="tab" data-toggle="tab">MP Campaign</a></li>
-                <li role="presentation"><a href="#mpcampaignuser" aria-controls="mpcampaignuser" role="tab" data-toggle="tab">MP Campaign-user</a></li>
+                <li role="presentation"><a href="#mpcampaign" aria-controls="mpcampaign" role="tab" data-toggle="tab">MPC</a></li>
+                <li role="presentation"><a href="#mpcampaignuser" aria-controls="mpcampaignuser" role="tab" data-toggle="tab">MPC-User</a></li>
+                <li role="presentation"><a href="#mprapport" aria-controls="mprapport" role="tab" data-toggle="tab">MPC-Rapport</a></li>
                 <li role="presentation"><a href="#ffcpayment" aria-controls="ffcpayment" role="tab" data-toggle="tab">FFC payments</a></li>
                 <li role="presentation"><a href="#extract" aria-controls="extract" role="tab" data-toggle="tab">Extracts</a></li>
             </ul>
@@ -169,6 +171,12 @@
                         </table>
                     </div>
                 </div>
+                <div role="tabpanel" class="tab-pane" id="mprapport">
+                    <div>
+                        <table id="mp-rapport-grid">
+                        </table>
+                    </div>
+                </div>
                 <div role="tabpanel" class="tab-pane" id="ffcpayment">
                     <div>
                         <table id="ffc-payment-grid">
@@ -178,50 +186,6 @@
                 <div role="tabpanel" class="tab-pane" id="extract">
                     <div>
                         <table id="extract-page">
-                            <tr>
-                                <th>Type</th><td><select id="extractType"><option>MP</option><option>Member</option><option>Special</option></select></td>
-                                <td class="extractSpecial"><input type="text" id="extractSpecial"></td>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr><td colspan="4">&nbsp;</td></tr>
-                            <tr>
-                                <th>Columns</th><td colspan="3"><input type="text" id="extractColumns" value="*"></td>
-                            </tr>
-                            <tr><td colspan="4">&nbsp;</td></tr>
-                            <tr><th colspan="2">MP</th><th class="extractMember" colspan="2">Member</th></tr>
-                            <tr>
-                                <td>Name</td>                                   <td><input type="text" id="extractMpName"></td>
-                                <td class="extractMember">Name</td>             <td class="extractMember"><input type="text" id="extractName"></td>
-                            </tr>
-                            <tr>
-                                <td>Constituency</td>                           <td><input type="text" id="extractMpConstituency"></td>
-                                <td class="extractMember">e-mail</td>           <td class="extractMember"><input type="text" id="extractEmail"></td>
-                            </tr>
-                            <tr>
-                                <td>Party</td>                                  <td><input type="text" id="extractMpParty"></td>
-                                <td class="extractMember">Username</td>         <td class="extractMember"><input type="text" id="extractUsername"></td>
-                            </tr>
-                            <tr>
-                                <td>Tags</td>                                   <td><input type="text" id="extractMpTags"></td>
-                                <td class="extractMember">Tags</td>             <td class="extractMember"><input type="text" id="extractTags"></td>
-                            </tr>
-                            <tr><td colspan="4">&nbsp;</td></tr>
-                            <tr>
-                                <th>Extra Col 1</th><td>value</td>
-                                <th>Extra Col 2</th><td>value</td>
-                            </tr>
-                            <tr>
-                                <td><input type="text" id="extractField1"></td><td><input type="text" id="extractValue1"></td>
-                                <td><input type="text" id="extractField2"></td><td><input type="text" id="extractValue2"></td>
-                            </tr>
-
-                            <tr><td colspan="2">&nbsp;</td></tr>
-                            <tr><td align="center" colspan="2"><input type="button" value="Go" id="extractGo"></td></tr>
-                        </table>
-                        <br>
-                        <table width="100%">
-                            <tr><th>Results</th><td><input type="button" value="Copy" id="extractCopy"></td></tr>
-                            <tr><td colspan="2"><textarea style="-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; width: 100%; height: 150px;" id="extractResults">Hit Go to populate</textarea></td></tr>
                         </table>
                     </div>
                 </div>
@@ -243,6 +207,7 @@
             lcag.MpGrid.initialise();
             lcag.MpCampaignGrid.initialise();
             lcag.MpCampaignUserGrid.initialise();
+            lcag.MpRapportGrid.initialise();
             lcag.VerificationGrid.initialise();
             lcag.FfcPaymentGrid.initialise();
             lcag.ExtractPage.initialise();

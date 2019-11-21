@@ -10,7 +10,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 { name: "adminSig", label: "Administrator", width: 150, template: "string" },
                 { name: "campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignGrid.formatters.campaignNotes },
                 { name: "other", label: "", width: 500, formatter: lcag.MpCampaignGrid.formatters.other, search: false },
-                { name: "tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.tags },
+                { name: "tags", label: "Tags", width: 180, height: 200, template: "string", formatter: lcag.MpCampaignGrid.formatters.tags },
                 { name: "emails", label: "", width: 400, formatter: lcag.MpCampaignGrid.formatters.emails, search: false },
 //                { name: "constituency", label: "Constituency", width: 150, template: "string" },
                 { name: "constituency", label: "Constituency", width: 150, template: "string", formatter: lcag.MpCampaignGrid.formatters.constituency },
@@ -133,8 +133,7 @@ lcag.MpCampaignGrid = lcag.MpCampaignGrid || {
                 + '</table>';
         },
         "tags": function(cellvalue, options, row) {
-            return '<div class="input-group"><textarea id="tags_' + row.id + '" type="textarea" rows="3" cols="100" class="form-control">' + row.tags + '</textarea></div>';
-//            return '<div class="input-group"><input id="tags_' + row.id + '" type="text" class="form-control input-small" value="' + row.tags + '"></div>';
+            return '<div class="input-group"><textarea id="tags_' + row.id + '" type="textarea" rows="12" cols="180" class="form-control">' + row.tags + '</textarea></div>';
         },
         "constituency": function(cellvalue, options, row) {
             return '<a target="_blank" href="https://www.bbc.co.uk/news/politics/constituencies/'+row.pCon+ '">'+ row.constituency + '</a>';

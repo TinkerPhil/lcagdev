@@ -28,6 +28,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/status").permitAll()
                 .antMatchers("/error").permitAll()
                 .antMatchers("/api/**").hasAnyAuthority(LCAG_DASHBOARD_API_USER.getFriendlyName())
+
+//                .antMatchers("/js/lcag-extract.js").hasAnyAuthority(LCAG_DASHBOARD_EXTRACT_USER.getFriendlyName())
+
+//                .antMatchers("/js/lcag-member-grid.js").hasAnyAuthority(LCAG_DASHBOARD_MEMBER_USER.getFriendlyName())
+//                .antMatchers("/js/lcag-ffc-payment-grid.js").hasAnyAuthority(LCAG_DASHBOARD_MEMBER_USER.getFriendlyName())
+//                .antMatchers("/js/lcag-payments-grid.js").hasAnyAuthority(LCAG_DASHBOARD_MEMBER_USER.getFriendlyName())
+
+//                .antMatchers("/js/lcag-mp-campaign**.js").hasAnyAuthority(LCAG_DASHBOARD_MPC_USER.getFriendlyName())
+//                .antMatchers("/js/lcag-mp-grid.js").hasAnyAuthority(LCAG_DASHBOARD_MP_USER.getFriendlyName())
+//                .antMatchers("/js/lcag-mp-rapport-grid.js").hasAnyAuthority(LCAG_DASHBOARD_MPCD_USER.getFriendlyName())
+
                 .antMatchers("/**").hasAnyAuthority(
                     ADMINISTRATORS.getFriendlyName(),
                     LCAG_DASHBOARD_ADMINISTRATOR.getFriendlyName(),

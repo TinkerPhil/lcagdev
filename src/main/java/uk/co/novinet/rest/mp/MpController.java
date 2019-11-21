@@ -11,7 +11,6 @@ import uk.co.novinet.service.audit.Audit;
 import uk.co.novinet.service.mp.MpService;
 import uk.co.novinet.service.mp.MP;
 
-
 @RestController
 public class MpController {
 
@@ -40,13 +39,13 @@ public class MpController {
             @RequestParam("id") Long MpId,
             @RequestParam(value = "lastName", required = false) String lastName,
             @RequestParam(value = "firstName", required = false) String firstName,
-            @RequestParam(value = "mpName", required = false) String mpName,
+            //@RequestParam(value = "mpName", required = false) String mpName,
             @RequestParam(value = "party", required = false) String party,
             @RequestParam(value = "twitter", required = false) String twitter,
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "constituency", required = false) String constituency,
             @RequestParam(value = "constituencyAddress", required = false) String constituencyAddress,
-            @RequestParam(value = "edmStatus", required = false) String edmStatus,
+            //@RequestParam(value = "edmStatus", required = false) String edmStatus,
             @RequestParam(value = "edmUrl", required = false) String edmUrl,
             @RequestParam(value = "ministerialStatus", required = false) String ministerialStatus,
             @RequestParam(value = "url", required = false) String url,
@@ -57,14 +56,14 @@ public class MpController {
                 MpId,
                 lastName,
                 firstName,
-                mpName,
+                //mpName,
                 party,
                 twitter,
                 email,
                 constituency,
                 constituencyAddress,
-                edmStatus,
-                edmUrl,
+                //edmStatus,
+                //edmUrl,
                 ministerialStatus,
                 url,
                 majority,
@@ -87,6 +86,26 @@ public class MpController {
                 edmStatus,
                 tags,
                 campaignNotes
+        );
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/mp/updateRapport")
+    @Audit
+    public ResponseEntity updateRapport(
+            @RequestParam("id") Long MpId,
+            @RequestParam(value = "rapportVolunteer", required = false) String rapportVolunteer,
+            @RequestParam(value = "rapportContact", required = false) String rapportContact,
+            @RequestParam(value = "rapportNotes", required = false) String rapportNotes,
+            @RequestParam(value = "rapportTags", required= false) String rapportTags
+    ) {
+        mpService.updateRapport(
+                MpId,
+                rapportVolunteer,
+                rapportContact,
+                rapportNotes,
+                rapportTags
         );
         return new ResponseEntity(HttpStatus.OK);
     }

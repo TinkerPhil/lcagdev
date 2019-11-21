@@ -4,18 +4,26 @@ import static java.lang.String.format;
 
 public enum MyBbAuthority {
 
-    LCAG_GUESTS("LCAG Guests", 8, false, true, false, true),
+    // These strings MUST match the database entries in i7b0_usergroups!!!
+    GUESTS("Guests", 1, false, true, false, false),
     REGISTERED("Registered", 2, false, false, false, true),
-    SUSPENDED("Suspended", 12, false, true, true, true),
-    BANNED("Banned", 7, false, false, true, true),
-    MODERATORS("Moderators", 6, true, false, false, true),
     SUPER_MODERATORS("Super Moderators", 3, true, false, false, true),
     ADMINISTRATORS("Administrators", 4, true, false, false, true),
-    LCAG_DASHBOARD_ADMINISTRATOR("LCAG Dashboard Administrator", 13, true, false, false, true),
-    LCAG_DASHBOARD_API_USER("LCAG Dashboard API User", 13, true, false, false, true),
+    AWAITING_ACTIVIATION("Awaiting Activation", 5, false, true, true, false),
+    MODERATORS("Moderators", 6, true, false, false, true),
+    BANNED("Banned", 7, false, false, true, true),
+    LCAG_GUESTS("LCAG Guests", 8, false, true, false, true),
     LCAG_FFC_CONTRIBUTOR("LCAG FFC Contributor", 9, false, false, false, false),
-    GUESTS("Guests", 1, false, true, false, false),
-    AWAITING_ACTIVIATION("Awaiting Activation", 5, false, true, true, false);
+    SUSPENDED("Suspended", 12, false, true, true, true),
+    LCAG_DASHBOARD_ADMINISTRATOR("LCAG Dashboard Administrator", 13, true, false, false, true),
+    LCAG_DASHBOARD_API_USER("LCAG Dashboard API User", 14, true, false, false, true),
+    LCAG_DASHBOARD_EXTRACT_USER("LCAG Dash Extract", 15, true, false, false, true),
+    LCAG_DASHBOARD_MEMBER_USER("LCAG Dash Member", 16, true, false, false, true),
+    LCAG_DASHBOARD_MPC_USER("LCAG Dash MPC", 17, true, false, false, true),
+    LCAG_DASHBOARD_MP_USER("LCAG Dash MP", 18, true, false, false, true),
+    LCAG_DASHBOARD_MPCD_USER("LCAG Dash MPCD", 19, true, false, false, true),
+
+    UNKNOWN("UNNOWN", 99, false, false, false, false);
 
     private String friendlyName;
     private final long id;

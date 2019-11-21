@@ -49,25 +49,25 @@ public class MpService {
             Long id,
             String lastName,
             String firstName,
-            String mpName,
+            //String mpName,
             String party,
             String twitter,
             String email,
             String constituency,
             String constituencyAddress,
-            String edmStatus,
-            String edmUrl,
+            //String edmStatus,
+            //String edmUrl,
             String ministerialStatus,
             String url,
             Integer majority,
             String telNo
         ) {
         LOGGER.info("Going to update MP with id {}", id);
-        LOGGER.info( "mpId={}, lastName={}, firstName={}, mpName={}, party={}, twitter={}, email={}, constituency={}, "
-			+ "constituencyAddress={}, edmStatus={}, ministerialStatus={}, url={}, "
+        LOGGER.info( "mpId={}, lastName={}, firstName={}, party={}, twitter={}, email={}, constituency={}, "
+			+ "constituencyAddress={}, ministerialStatus={}, url={}, "
 			+ "telNo={}",
-			id, lastName, firstName, mpName, party, twitter, email, constituency,
-			constituencyAddress, edmStatus, ministerialStatus, url, majority,
+			id, lastName, firstName, party, twitter, email, constituency,
+			constituencyAddress, ministerialStatus, url, majority,
 			telNo
         );
 
@@ -82,12 +82,10 @@ public class MpService {
                 "m.email = ?, " +
                 "m.constituency = ?, " +
                 "m.constituencyAddress = ?, " +
-                "m.edmStatus = ?, " +
-                "m.edmUrl = ?, " +
                 "m.ministerialStatus = ?, " +
                 "m.url = ?, " +
                 "m.majority = ?, " +
-                "m.telNo = ?, " +
+                "m.telNo = ? " +
                 "where m.mpId = ?";
 
         LOGGER.info("Created sql: {}", sql);
@@ -96,14 +94,12 @@ public class MpService {
                 sql,
                 lastName,
                 firstName,
-                mpName,
+                lastName + ' ' + firstName,
                 party,
                 twitter,
                 email,
                 constituency,
                 constituencyAddress,
-                edmStatus,
-                edmUrl,
                 ministerialStatus,
                 url,
                 majority,
@@ -146,6 +142,41 @@ public class MpService {
         LOGGER.info("Update result: {}", result);
     }
 
+    public void updateRapport(
+            Long id,
+            String rapportVolunteer,
+            String rapportContact,
+            String rapportNotes,
+            String rapportTags
+    ) {
+        LOGGER.info("Going to update MP with id {}", id);
+        LOGGER.info( "mpId={}, rapportVolunteer={}, rapportContact={}, rapportNotes={}, rapportTags={}",
+                id, rapportVolunteer, rapportContact, rapportNotes, rapportTags
+        );
+
+        MP existingMP = getMpById(id);
+
+        String sql = "update " + mpRapportTableName() + " m " +
+                "set m.volunteer = ?, " +
+                "m.contact = ?, " +
+                "m.notes = ?, " +
+                "m.tags = ?" +
+                "where m.mpId = ?";
+
+        LOGGER.info("Created sql: {}", sql);
+
+        int result = jdbcTemplate.update(
+                sql,
+                rapportVolunteer,
+                rapportContact,
+                rapportNotes,
+                rapportTags,
+                id
+        );
+
+        LOGGER.info("Update result: {}", result);
+    }
+
 
     public MP getMpById(Long id) {
         return jdbcTemplate.queryForObject(buildMpTableSelect() + " where m.mpId = ?", new Object[] { id }, (rs, rowNum) -> buildMP(rs));
@@ -157,9 +188,14 @@ public class MpService {
                 "m.telNo, " +
                 "m.tags, " +
                 "m.campaignNotes, m.sharedCampaignEmails, m.privateCampaignEmails, " +
-                " mcv.signature as adminSig " +
+                "mcv.signature as adminSig, " +
+                "mr.volunteer AS rapportVolunteer, " +
+                "mr.contact AS rapportContact, " +
+                "mr.notes AS rapportNotes, " +
+                "mr.tags AS rapportTags " +
                 "from " + mpTableName() + " m " +
-                "left join " + mpCampaignVolunteerTableName() + " mcv on mcv.uid=m.uidAdministrator "
+                "left join " + mpCampaignVolunteerTableName() + " mcv on mcv.uid=m.uidAdministrator " +
+                "left join " + mpRapportTableName() + " mr on mr.mpId=m.mpId "
                 ;
     }
 
@@ -296,6 +332,23 @@ public class MpService {
             clauses.add("lower(mcv.signature) like ?");
             parameters.add(like(mp.getAdminSig()));
         }
+
+        if (mp.getRapportVolunteer() != null) {
+            clauses.add("lower(mr.volunteer) like ?");
+            parameters.add(like(mp.getRapportVolunteer()));
+        }
+        if (mp.getRapportContact() != null) {
+            clauses.add("lower(mr.contact) like ?");
+            parameters.add(like(mp.getRapportContact()));
+        }
+        if (mp.getRapportNotes() != null) {
+            clauses.add("lower(mr.notes) like ?");
+            parameters.add(like(mp.getRapportNotes()));
+        }
+        if (mp.getRapportTags() != null) {
+            clauses.add("lower(mr.tags) like ?");
+            parameters.add(like(mp.getRapportTags()));
+        }
         return PersistenceUtils.buildWhereClause(clauses, parameters, operator);
     }
 
@@ -321,7 +374,11 @@ public class MpService {
                 rs.getString("campaignNotes"),
                 rs.getString("sharedCampaignEmails"),
                 rs.getString("privateCampaignEmails"),
-                rs.getString("adminSig")
+                rs.getString("adminSig"),
+                rs.getString("rapportVolunteer"),
+                rs.getString("rapportContact"),
+                rs.getString("rapportNotes"),
+                rs.getString("rapportTags")
         );
     }
 }

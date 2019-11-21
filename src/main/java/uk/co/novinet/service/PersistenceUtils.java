@@ -138,6 +138,9 @@ public class PersistenceUtils {
     public static String mpTableName() {
         return forumDatabaseTablePrefix + "mpDetails";
     }
+    public static String mpRapportTableName() {
+        return forumDatabaseTablePrefix + "mpRapport";
+    }
     public static String mpCampaignVolunteerTableName() {
         return forumDatabaseTablePrefix + "mpCampaignVolunteers";
     }

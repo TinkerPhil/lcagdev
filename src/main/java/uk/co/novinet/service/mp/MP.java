@@ -24,6 +24,10 @@ public class MP {
     private String sharedCampaignEmails;
     private String privateCampaignEmails;
     private String adminSig;
+    private String rapportVolunteer;
+    private String rapportContact;
+    private String rapportNotes;
+    private String rapportTags;
 
     public MP() {}
 
@@ -48,7 +52,11 @@ public class MP {
         String campaignNotes,
         String sharedCampaignEmails,
         String privateCampaignEmails,
-        String adminSig
+        String adminSig,
+        String rapportVolunteer,
+        String rapportContact,
+        String rapportNotes,
+        String rapportTags
     ) {
 		this.id = id;
 		this.lastName = lastName;
@@ -71,6 +79,10 @@ public class MP {
 		this.sharedCampaignEmails = sharedCampaignEmails;
 		this.privateCampaignEmails = privateCampaignEmails;
 		this.adminSig = adminSig;
+        this.rapportVolunteer = rapportVolunteer;
+        this.rapportContact = rapportContact;
+		this.rapportNotes = rapportNotes;
+		this.rapportTags = rapportTags;
     }
 
     public Long getId() {
@@ -194,6 +206,29 @@ public class MP {
     }
     public void setAdminSig(String adminSig) {
         this.adminSig = adminSig;
+    }
+
+    public String getRapportVolunteer() {
+        return rapportVolunteer;
+    }
+    public void setRapportVolunteer(String rapportVolunteer) {
+        this.rapportVolunteer = rapportVolunteer;
+    }
+    public String getRapportContact() {
+        return rapportContact;
+    }
+    public void setRapportContact(String rapportContact) {
+        this.rapportContact = rapportContact;
+    }
+    public String getRapportNotes() {
+        return rapportNotes;
+    }
+    public void setRapportNotes(String rapportNotes) {
+        this.rapportNotes = rapportNotes;
+    }
+    public String getRapportTags() {return rapportTags;    }
+    public void setRapportTags(String rapportTags) {
+        this.rapportTags = rapportTags;
     }
 
     @Override

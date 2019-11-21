@@ -6,19 +6,20 @@ lcag.MpGrid = lcag.MpGrid || {
         $("#mp-grid").jqGrid({
             colModel: [
                 { name: "id", label: "ID", hidden: true },
-                { name: "lastName", label: "Last Name", width: 150, template: "string"/*, formatter: lcag.MpGrid.formatters.lastName */ },
-                { name: "firstName", label: "First Name", width: 150, template: "string"/*, formatter: lcag.MpGrid.formatters.firstName */ },
-                { name: "edmStatus", label: "EDM Status", width: 100, template: "string"/*, formatter: lcag.MpGrid.formatters.edmStatus */},
+                { name: "lastName", label: "Last Name", width: 150, template: "string", formatter: lcag.MpGrid.formatters.lastName },
+                { name: "firstName", label: "First Name", width: 150, template: "string", formatter: lcag.MpGrid.formatters.firstName },
+                //{ name: "edmStatus", label: "EDM Status", width: 100, template: "string"/*, formatter: lcag.MpGrid.formatters.edmStatus */},
 
-                { name: "party", label: "Party", width: 100, template: "string"/*, formatter: lcag.MpGrid.formatters.party */},
-                { name: "twitter", label: "Twitter", width: 150, template: "string"/*, formatter: lcag.MpGrid.formatters.twitter*/ },
-                { name: "email", label: "e-mail", width: 250, template: "string"/*, formatter: lcag.MpGrid.formatters.email */},
-                { name: "constituency", label: "Constituency", width: 200, template: "string"/*, formatter: lcag.MpGrid.formatters.constituency */},
-                { name: "constituencyAddress", label: "Constituency Address", width: 400, template: "string"/*, formatter: lcag.MpGrid.formatters.constituencyAddress */},
-                { name: "ministerialStatus", label: "Minister", width: 200, template: "string"/*, formatter: lcag.MpGrid.formatters.ministerialStatus, stype: "select", searchoptions: { sopt: ["eq", "ne" ], value: ":Any;1:Yes;0:No" } */},
-                { name: "url", label: "Url", width: 400, template: "string"/*, formatter: lcag.MpGrid.formatters.url */},
-                { name: "majority", label: "Majority", width: 90, template: "string"/*, formatter: lcag.MpGrid.formatters.majority */},
-                { name: "telNo", label: "Tel", width: 120, template: "string"/*, formatter: lcag.MpGrid.formatters.telNo */ }
+                { name: "party", label: "Party", width: 100, template: "string", formatter: lcag.MpGrid.formatters.party},
+                { name: "twitter", label: "Twitter", width: 150, template: "string", formatter: lcag.MpGrid.formatters.twitter},
+                { name: "email", label: "e-mail", width: 250, template: "string", formatter: lcag.MpGrid.formatters.email},
+                { name: "constituency", label: "Constituency", width: 200, template: "string", formatter: lcag.MpGrid.formatters.constituency },
+                { name: "constituencyAddress", label: "Constituency Address", width: 400, template: "string", formatter: lcag.MpGrid.formatters.constituencyAddress},
+                { name: "ministerialStatus", label: "Minister", width: 200, template: "string", formatter: lcag.MpGrid.formatters.ministerialStatus, stype: "select", searchoptions: { sopt: ["eq", "ne" ], value: ":Any;1:Yes;0:No" } },
+                { name: "url", label: "Url", width: 400, template: "string", formatter: lcag.MpGrid.formatters.url },
+                { name: "majority", label: "Majority", width: 90, template: "string", formatter: lcag.MpGrid.formatters.majority},
+                { name: "telNo", label: "Tel", width: 120, template: "string", formatter: lcag.MpGrid.formatters.telNo },
+                { name: "action", label: "", width: 90, formatter: lcag.MpGrid.formatters.action, search: false },
 
             ],
             datatype: function(postData) {
@@ -68,20 +69,17 @@ lcag.MpGrid = lcag.MpGrid || {
                           type: "POST",
                           url: lcag.Common.urlPrefix + "/mp/update",
                           data: (function() {
-                              //var grid = $("#mp-grid");
-                              //var row = grid.jqGrid("geGridParam", 'selRow');
                               var id = $(rowContext).data("row-id");
                               lcag.Common.alertPleaseWait();
                               return {
                                 "id": id,
-                                "lastName": grid.jqGrid('getCell', row, "lastName"),
+                                "lastName": $("#lastName_" + id).val(),
                                 "firstName": $("#firstName_" + id).val(),
                                 "party": $("#party_" + id).val(),
                                 "twitter": $("#twitter_" + id).val(),
                                 "email": $("#email_" + id).val(),
                                 "constituency": $("#constituency_" + id).val(),
                                 "constituencyAddress": $("#constituencyAddress_" + id).val(),
-                                "edmStatus": $("#edmStatus_" + id).val(),
                                 "ministerialStatus": $("#ministerialStatus_" + id).val(),
                                 "url": $("#url_" + id).val(),
                                 "majority": $("#majority_" + id).val(),
@@ -149,16 +147,6 @@ lcag.MpGrid = lcag.MpGrid || {
         },
         "constituencyAddress": function(cellvalue, options, row) {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="constituencyAddress_' + row.id + '" type="text" class="form-control" value="' + row.constituencyAddress + '"></div>';
-        },
-        "edmStatus": function(cellvalue, options, row) {
-            var val = cellvalue.substring(0,3).toUpperCase()
-            //return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="edmStatus_' + row.id + '" type="text" class="form-control" value="' + row.edmStatus + '"></div>';
-            return '<select id="edmStatus_' + row.id + '" class="form-control" >'
-                + '<option value="Not Asked"' + (val === 'NOT' ? 'selected="selected"' : '') + '>Not Asked</option>'
-                + '<option value="Signed" ' + (val === 'SIG' ? 'selected="selected"' : '') + '>Signed</option>'
-                + '<option value="Refused" ' + (val === 'REF' ? 'selected="selected"' : '') + '>Refused</option>'
-                + '<option value="No Point" ' + (val === 'NO ' ? 'selected="selected"' : '') + '>No Point</option>'
-                + '<option value="Sympathetic" ' + (val === 'SYM' ? 'selected="selected"' : '') + '>Sympathetic</option></select>';
         },
         "ministerialStatus": function(cellvalue, options, row) {
             var disabled = !(row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators");
