@@ -15,7 +15,7 @@ lcag.MpGrid = lcag.MpGrid || {
                 { name: "email", label: "e-mail", width: 250, template: "string", formatter: lcag.MpGrid.formatters.email},
                 { name: "constituency", label: "Constituency", width: 200, template: "string", formatter: lcag.MpGrid.formatters.constituency },
                 { name: "constituencyAddress", label: "Constituency Address", width: 400, template: "string", formatter: lcag.MpGrid.formatters.constituencyAddress},
-                { name: "ministerialStatus", label: "Minister", width: 200, template: "string", formatter: lcag.MpGrid.formatters.ministerialStatus, stype: "select", searchoptions: { sopt: ["eq", "ne" ], value: ":Any;1:Yes;0:No" } },
+                { name: "ministerialStatus", label: "Minister", width: 200, template: "string", formatter: lcag.MpGrid.formatters.ministerialStatus },
                 { name: "url", label: "Url", width: 400, template: "string", formatter: lcag.MpGrid.formatters.url },
                 { name: "majority", label: "Majority", width: 90, template: "string", formatter: lcag.MpGrid.formatters.majority},
                 { name: "telNo", label: "Tel", width: 120, template: "string", formatter: lcag.MpGrid.formatters.telNo },
@@ -149,9 +149,7 @@ lcag.MpGrid = lcag.MpGrid || {
             return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="constituencyAddress_' + row.id + '" type="text" class="form-control" value="' + row.constituencyAddress + '"></div>';
         },
         "ministerialStatus": function(cellvalue, options, row) {
-            var disabled = !(row.group == "LCAG Guests" || row.group == "Registered" || row.group == "Moderators");
-            console.log("row.group", row.group);
-            return '<select id="ministerialStatus_' + row.id + '" class="form-control" ' + (disabled ? 'disabled="disabled" ' : '') + '><option value="UNSET"' + (row.ministerialStatus == 'UNSET ' ? 'selected="selected"' : '') + '>Unset</option><option value="YES" ' + (row.ministerialStatus == 'YES' ? 'selected="selected"' : '') + '>Yes</option><option value="NO" ' + (row.ministerialStatus == 'NO' ? 'selected="selected"' : '') + '>No</option></select>';
+            return '<div class="input-group"><input ' + (row.status == 3 ? 'disabled="disabled"' : '') + ' id="ministerialStatus_' + row.id + '" type="text" class="form-control" value="' + row.ministerialStatus + '"></div>';
         },
 
         "url": function(cellvalue, options, row) {

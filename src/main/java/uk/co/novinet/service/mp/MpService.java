@@ -290,8 +290,8 @@ public class MpService {
         }
 
         if (mp.getMinisterialStatus() != null) {
-            clauses.add("m.ministerialStatus = ?");
-            parameters.add(mp.getMinisterialStatus());
+            clauses.add("lower(m.ministerialStatus) like ?");
+            parameters.add(like(mp.getMinisterialStatus()));
         }
 
         if (mp.getUrl() != null) {
@@ -300,13 +300,13 @@ public class MpService {
         }
 
         if (mp.getMajority() != null) {
-            clauses.add("m.majority = ?");
-            parameters.add(mp.getMajority());
+            clauses.add("convert(varchar, m.majority) like ?");
+            parameters.add(mp.getMajority().toString());
         }
 
         if (mp.getTelNo() != null) {
-            clauses.add("m.telNo = ?");
-            parameters.add(mp.getTelNo());
+            clauses.add("m.telNo like ?");
+            parameters.add(like(mp.getTelNo()));
         }
 
         if(mp.getTags() != null ) {
