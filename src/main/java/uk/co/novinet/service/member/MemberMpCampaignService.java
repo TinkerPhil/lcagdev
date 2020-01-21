@@ -67,7 +67,7 @@ public class MemberMpCampaignService {
             Integer involved
             ) {
         LOGGER.info("Going to update usersMpCampaign with id {}", id);
-        LOGGER.info("allowEmailShareStatus={}, sentInitialEmail=(), campaignNotes={}, telNo={}, tags={}, meetingNext={}, meetingCount={}, telephoneCount={}, writtenCount={}, involved={}",
+        LOGGER.info("allowEmailShareStatus={}, sentInitialEmail={}, campaignNotes={}, telNo={}, tags={}, meetingNext={}, meetingCount={}, telephoneCount={}, writtenCount={}, involved={}",
                 allowEmailShareStatus, sentInitialEmail, campaignNotes,
                 telNo,tags, meetingNext, meetingCount, telephoneCount,
                 writtenCount, involved

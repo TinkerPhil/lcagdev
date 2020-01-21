@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `i7b0_users` (
   `lastpost` int(10) unsigned NOT NULL DEFAULT '0',
   `website` varchar(200) NOT NULL DEFAULT '',
   `icq` varchar(10) NOT NULL DEFAULT '',
-  `yahoo` varchar(50) NOT NULL DEFAULT '',
+  `yahoo` varchar(50) NULL,
   `skype` varchar(75) NOT NULL DEFAULT '',
   `google` varchar(75) NOT NULL DEFAULT '',
   `birthday` varchar(15) NOT NULL DEFAULT '',
