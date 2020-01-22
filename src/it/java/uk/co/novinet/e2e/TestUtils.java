@@ -187,20 +187,26 @@ public class TestUtils {
     }
 
     public static void insertUser(int id, String username, String emailAddress, String name, int group, List<Integer> additionalGroups, boolean hasCompletedMembershipForm, String hashedPassword, String salt) {
-        runSqlUpdate("INSERT INTO `i7b0_users` (`uid`, `username`, `password`, `salt`, `loginkey`, `email`, `postnum`, `threadnum`, `avatar`, " +
-                "`avatardimensions`, `avatartype`, `usergroup`, `additionalgroups`, `displaygroup`, `usertitle`, `regdate`, `lastactive`, `lastvisit`, " +
-                "`lastpost`, `website`, `icq`,  `skype`, `google`, `birthday`, `birthdayprivacy`, `signature`, `allownotices`, `hideemail`, " +
-                "`subscriptionmethod`, `invisible`, `receivepms`, `receivefrombuddy`, `pmnotice`, `pmnotify`, `buddyrequestspm`, `buddyrequestsauto`, " +
-                "`threadmode`, `showimages`, `showvideos`, `showsigs`, `showavatars`, `showquickreply`, `showredirect`, `ppp`, `tpp`, `daysprune`, " +
-                "`dateformat`, `timeformat`, `timezone`, `dst`, `dstcorrection`, `buddylist`, `ignorelist`, `style`, `away`, `awaydate`, `returndate`, " +
-                "`awayreason`, `pmfolders`, `notepad`, `referrer`, `referrals`, `reputation`, `regip`, `lastip`, `language`, `timeonline`, `showcodebuttons`, " +
-                "`totalpms`, `unreadpms`, `warningpoints`, `moderateposts`, `moderationtime`, `suspendposting`, `suspensiontime`, `suspendsignature`, " +
-                "`suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, `usernotes`, `sourceeditor`, `name`, `has_completed_membership_form`, `token`, `claim_token`) " +
+        runSqlUpdate("INSERT INTO `i7b0_users` (" +
+                "`uid`, `username`, `password`, `salt`, `loginkey`, `email`, `postnum`, `threadnum`, `avatar`, `avatardimensions`, " +
+                "`avatartype`, `usergroup`, `additionalgroups`, `displaygroup`, `usertitle`, `regdate`, `lastactive`, `lastvisit`, `lastpost`, `website`, " +
+                "`icq`, `skype`, `google`, `birthday`, `birthdayprivacy`, `signature`, `allownotices`, `hideemail`, `subscriptionmethod`, `invisible`, " +
+                "`receivepms`, `receivefrombuddy`, `pmnotice`, `pmnotify`, `buddyrequestspm`, `buddyrequestsauto`, `threadmode`, `showimages`, `showvideos`, `showsigs`, " +
+                "`showavatars`, `showquickreply`, `showredirect`, `ppp`, `tpp`, `daysprune`, `dateformat`, `timeformat`, `timezone`, `dst`, " +
+                "`dstcorrection`, `buddylist`, `ignorelist`, `style`, `away`, `awaydate`, `returndate`, `awayreason`, `pmfolders`, `notepad`, " +
+                "`referrer`, `referrals`, `reputation`, `regip`, `lastip`, `language`, `timeonline`, `showcodebuttons`, `totalpms`, `unreadpms`, " +
+                "`warningpoints`, `moderateposts`, `moderationtime`, `suspendposting`, `suspensiontime`, `suspendsignature`, `suspendsigtime`, `coppauser`, `classicpostbit`, `loginattempts`, " +
+                "`usernotes`, `sourceeditor`, `name`, `has_completed_membership_form`, `token`, `claim_token`) " +
                 "VALUES (" +
-                id + ", '" + username + "', '" + hashedPassword + "', '" + salt + "', 'lvhLksjhHGcZIWgtlwNTJNr3bjxzCE2qgZNX6SBTBPbuSLx21u', '" + emailAddress +
-                "', 0, 0, '', '', '', " + group + ", '" + additionalGroups.stream().map(Object::toString).collect(joining(",")) + "', 0, '', " + unixTime() + ", 0, 0, 0, '', '0', '', '', '', 'all', '', 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, " +
-                "'linear', 1, 1, 1, 1, 1, 1, 0, 0, 0, '', '', '', 0, 0, '', '', 0, 0, 0, '0', '', '', '', 0, 0, 0, '', '', '', 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, " +
-                "1, '', 0, '" + name + "', '" + (hasCompletedMembershipForm ? "1" : "0") + "', 'aaaaaaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbb');");
+                id + ", '" + username + "', '" + hashedPassword + "', '" + salt + "', 'lvhLksjhHGcZIWgtlwNTJNr3bjxzCE2qgZNX6SBTBPbuSLx21u', '" + emailAddress + "', 0, 0, '', '', " +
+                "'', " + group + ", '" + additionalGroups.stream().map(Object::toString).collect(joining(",")) + "', 0, '', " + unixTime() + ", 0, 0, 0, '', " +
+                "'0', '', '', '', 'all', '', 1, 0, 0, 0, " +
+                "1, 0, 1, 1, 1, 0, 'linear', 1, 1, 1, " +
+                "1, 1, 1, 0, 0, 0, '', '', '', 0, " +
+                "0, '', '', 0, 0, 0, '0', '', '', '', " +
+                "0, 0, 0, '', '', '', 0, 1, 0, 0, " +
+                "0, 0, 0, 0, 0, 0, 0, 0, 0, 1, " +
+                "'', 0, '" + name + "', '" + (hasCompletedMembershipForm ? "1" : "0") + "', 'aaaaaaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbb');");
     }
 
     public static CloseableHttpResponse createMemberViaApi(String name, String emailAddress, String phoneNumber, String username, String password) throws IOException, AuthenticationException {
