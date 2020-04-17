@@ -28,29 +28,29 @@ public class MemberMpCampaignService {
     private JdbcTemplate jdbcTemplate;
 
     private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
-        put("id", "umc.uid");
-        put("name", "u.name");
-        put("mpName", "u.mp_name");
-        put("constituency", "u.mp_constituency");
-        put("email", "u.email");
-        put("adminUsername", "a.username");
-        put("adminName", "a.name");
-        put("adminSig", "mcv.signature");
-        put("allowEmailShareStatus", "umc.allowEmailShareStatus");
-        put("sentInitialEmail", "umc.sentInitialEmail");
-        put("meetingNext", "umc.meetingNext");
-        put("meetingCount", "umc.meetingCount");
-        put("telephoneCount", "umc.telephoneCount");
-        put("writtenCount", "umc.writtenCount");
-        put("involved", "umc.involved");
-        put("campaignNotes", "umc.campaignNotes");
-        put("telNo", "umc.telNo");
-        put("edmUrl", "m.edmUrl");
-        put("edmStatus", "m.edmStatus");
-        put("mpTelNo", "m.telNo");
-        put("mpEmail", "m.email");
-        put("mpTwitter", "m.twitter");
-        put("tags", "umc.tags");
+        put("u_id", "umc.uid");
+        put("u_name", "u.name");
+        put("u_mpName", "u.mp_name");
+        put("u_constituency", "u.mp_constituency");
+        put("u_email", "u.email");
+        put("u_adminUsername", "a.username");
+        put("u_adminName", "a.name");
+        put("u_adminSig", "mcv.signature");
+        put("u_allowEmailShareStatus", "umc.allowEmailShareStatus");
+        put("u_sentInitialEmail", "umc.sentInitialEmail");
+        put("u_meetingNext", "umc.meetingNext");
+        put("u_meetingCount", "umc.meetingCount");
+        put("u_telephoneCount", "umc.telephoneCount");
+        put("u_writtenCount", "umc.writtenCount");
+        put("u_involved", "umc.involved");
+        put("u_campaignNotes", "umc.campaignNotes");
+        put("u_telNo", "umc.telNo");
+        put("u_edmUrl", "m.edmUrl");
+        put("u_edmStatus", "m.edmStatus");
+        put("u_mpTelNo", "m.telNo");
+        put("u_mpEmail", "m.email");
+        put("u_mpTwitter", "m.twitter");
+        put("u_tags", "umc.tags");
     }};
 
     public void update(
