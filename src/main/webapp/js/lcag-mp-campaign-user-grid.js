@@ -5,22 +5,22 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
     initialise: function() {
         $("#mp-campaign-user-grid").jqGrid({
             colModel: [
-                { name: "u_id", label: "ID", width: 0, hidden: true },
-                { name: "u_email", label: "email", width: 150, formatter: lcag.MpCampaignUserGrid.formatters.u_email},
-                { name: "u_name", label: "Member", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.u_member_det},
-                { name: "u_mpName", label: "MP", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.u_mp_det},
-                { name: "u_campaignNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.u_campaignNotes },
-                { name: "u_meetingNext", label: "Next meeting", width: 150, align: "center", search: false, formatter: lcag.MpCampaignUserGrid.formatters.u_meetingNext },
-                { name: "u_meetingCount", label: "Meets", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.u_meetingCount },
-                { name: "u_telephoneCount", label: "Tel", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.u_telephoneCount },
-                { name: "u_writtenCount", label: "Writ", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.u_writtenCount },
-                { name: "u_involved", label: "Involved", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.u_involved },
-                { name: "u_tags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.u_tags },
-                { name: "u_allowEmailShareStatus", label: "Share e-mail", width: 100, template: "string" },
-                { name: "u_username", label: "Username", width: 150, template: "string" },
-                { name: "u_adminSig", label: "Admin Sig", width: 100, template: "string" },
-                { name: "u_constituency", label: "Constituency", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.u_constituency },
-                { name: "u_extra", label: "Extra", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.u_extra, search: false }
+                { name: "id", label: "ID", width: 0, hidden: true },
+                { name: "email", label: "email", width: 150, formatter: lcag.MpCampaignUserGrid.formatters.email},
+                { name: "name", label: "Member", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.member_det},
+                { name: "mpName", label: "MP", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.mp_det},
+                { name: "userNotes", label: "Notes", width: 300, height: 200, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.userNotes },
+                { name: "meetingNext", label: "Next meeting", width: 150, align: "center", search: false, formatter: lcag.MpCampaignUserGrid.formatters.meetingNext },
+                { name: "meetingCount", label: "Meets", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.meetingCount },
+                { name: "telephoneCount", label: "Tel", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.telephoneCount },
+                { name: "writtenCount", label: "Writ", width: 50, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.writtenCount },
+                { name: "involved", label: "Involved", width: 60, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.involved },
+                { name: "userTags", label: "Tags", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.userTags },
+                { name: "allowEmailShareStatus", label: "Share e-mail", width: 100, template: "string" },
+                { name: "username", label: "Username", width: 150, template: "string" },
+                { name: "adminSig", label: "Admin Sig", width: 100, template: "string" },
+                { name: "constituency", label: "Constituency", width: 150, template: "string", formatter: lcag.MpCampaignUserGrid.formatters.constituency },
+                { name: "extra", label: "Extra", width: 300, formatter: lcag.MpCampaignUserGrid.formatters.extra, search: false }
             ],
             datatype: function(postData) {
                     jQuery.ajax({
@@ -30,7 +30,6 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                         complete: function(response, status) {
                             if (status == "success") {
                                 lcag.MpCampaignUserGrid.grid = $("#mp-campaign-user-grid");
-                                //console.log("jsondata:", response.responseJSON);
                                 lcag.MpCampaignUserGrid.grid[0].addJSONData(response.responseJSON);
                             }
                         }
@@ -70,15 +69,15 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                               lcag.Common.alertPleaseWait();
                               return {
                                   "id": rowid,
-                                  "allowEmailShareStatus": $("#u_allowEmailShareStatus_"+rowid).val(),
-                                  "campaignNotes": $("#u_campaignNotes_" + rowid).val(),
-                                  "telNo": $("#u_telNo_" + rowid).val(),
-                                  "tags": $("#u_tags_" + rowid).val(),
-                                  "meetingNext": $("#u_meetingNext_" + rowid).val(),
-                                  "meetingCount": $("#u_meetingCount_" + rowid).val(),
-                                  "telephoneCount": $("#u_telephoneCount_" + rowid).val(),
-                                  "writtenCount": $("#u_writtenCount_" + rowid).val(),
-                                  "involved": $("#u_involved_" + rowid).val()
+                                  "allowEmailShareStatus": $("#allowEmailShareStatus_"+rowid).val(),
+                                  "userNotes": $("#userNotes_" + rowid).val(),
+                                  "userTelNo": $("#userTelNo_" + rowid).val(),
+                                  "userTags": $("#userTags_" + rowid).val(),
+                                  "meetingNext": $("#meetingNext_" + rowid).val(),
+                                  "meetingCount": $("#meetingCount_" + rowid).val(),
+                                  "telephoneCount": $("#telephoneCount_" + rowid).val(),
+                                  "writtenCount": $("#writtenCount_" + rowid).val(),
+                                  "involved": $("#involved_" + rowid).val()
                             };
                           })(),
                           success: function(e) {
@@ -116,7 +115,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
     },
 
 	formatters: {
-        "u_email": function(cellvalue, options, row) {
+        "email": function(cellvalue, options, row) {
             var shared = row.sharedCampaignEmails;
             var private = row.privateCampaignEmails;
             if( shared == null) {
@@ -137,14 +136,14 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                     + '<tr title="'+row.email+';'+shared+';'+private+'"><td><a href="mailto:'+row.email+'?cc='+shared+'&bcc='+private+'">Member+CC+BCC</a></td></tr>'
                 + '</table></div>';
         },
-        "u_campaignNotes": function(cellvalue, options, row) {
-            return '<div class="input-group"><textarea id="u_campaignNotes_' + row.id + '" rows="12" cols="200" class="form-control">' + row.campaignNotes + '</textarea></div>';
+        "userNotes": function(cellvalue, options, row) {
+            return '<div class="input-group"><textarea id="userNotes_' + row.id + '" rows="12" cols="200" class="form-control">' + row.userNotes + '</textarea></div>';
         },
 
-        "u_allowEmailShareStatus": function(cellvalue, options, row) {
+        "allowEmailShareStatus": function(cellvalue, options, row) {
             var val = cellvalue.substring(0,1).toUpperCase();
             return '<div class="input-group">'
-            + '<select id="u_allowEmailShareStatus_' + row.id + '" class="form-control">'
+            + '<select id="allowEmailShareStatus_' + row.id + '" class="form-control">'
                 + '<option value="Not Asked"' + (val === "N" ? ' selected="selected"' : '') + '>Not Asked</option>'
                 + '<option value="To Be Shared"' + (val === "T" ? ' selected="selected"' : '') + ' >To Be Shared</option>'
                 + '<option value="Private"' + (val === "P" ? ' selected="selected"' : '') + '>Private</option>'
@@ -155,54 +154,53 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
             + '</select>'
             + '</div>';
         },
-        "u_sentInitialEmail": function(cellvalue, options, row) {
+        "sentInitialEmail": function(cellvalue, options, row) {
             return '<div class="input-group">'
-                + '<select id="u_sentInitialEmail_' + row.id + '" class="form-control" >'
+                + '<select id="sentInitialEmail_' + row.id + '" class="form-control" >'
                 + '<option value="N"' + (row.sentInitialEmail == 'N' ? 'selected="selected"' : '') + '>No</option>'
               + '<option value="Y" ' + (row.sentInitialEmail == 'Y' ? 'selected="selected"' : '') + '>Yes</option></select>'
                 + '</div>';
         },
-        "u_meetingNext": function(cellvalue, options, row) {
+        "meetingNext": function(cellvalue, options, row) {
             var dateString = row.meetingNext == null ? "" : moment(row.meetingNext).format("DD/MM/YYYY");
             return '<table>'
-                    + '<tr title="'+dateString+'"><td><div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input  id="u_meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div></td></tr>'
+                    + '<tr title="'+dateString+'"><td><div class="input-group date"><div class="input-group-addon"><i class="fa fa-calendar"></i></div><input  id="meetingNext_' + row.id + '" type="text" class="form-control" value="' + dateString + '"></div></td></tr>'
                     + '<tr><td><br></td></tr>'
                     + '<tr><th title="" align="right"><button type="button" class="btn btn-default update-membermpcampaign-row-btn" data-row-id="' + row.id + '"><span class="fa fa-check fa-lg" aria-hidden="true"></span>&nbsp;Update</button></th></tr>'
                     + '</table>';
         },
-        "u_meetingCount": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="u_meetingCount_' + row.id + '" type="text" class="form-control" value="' + row.meetingCount + '"></div>';
+        "meetingCount": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="meetingCount_' + row.id + '" type="text" class="form-control" value="' + row.meetingCount + '"></div>';
         },
-        "u_telephoneCount": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="u_telephoneCount_' + row.id + '" type="text" class="form-control input-small" value="' + row.telephoneCount + '"></div>';
+        "telephoneCount": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="telephoneCount_' + row.id + '" type="text" class="form-control input-small" value="' + row.telephoneCount + '"></div>';
         },
-        "u_constituency": function(cellvalue, options, row) {
+        "constituency": function(cellvalue, options, row) {
             return '<a target="_blank" href="https://www.bbc.co.uk/news/politics/constituencies/'+row.pCon+ '">'+ row.constituency + '</a>';
         },
-        "u_writtenCount": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="u_writtenCount_' + row.id + '" type="text" class="form-control input-small" value="' + row.writtenCount + '"></div>';
+        "writtenCount": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="writtenCount_' + row.id + '" type="text" class="form-control input-small" value="' + row.writtenCount + '"></div>';
         },
-        "u_involved": function(cellvalue, options, row) {
-            return '<div class="input-group"><input id="u_involved_' + row.id + '" type="text" class="form-control input-small" value="' + row.involved + '"></div>';
+        "involved": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="involved_' + row.id + '" type="text" class="form-control input-small" value="' + row.involved + '"></div>';
         },
-        "u_tags": function(cellvalue, options, row) {
-            return '<div class="input-group"><textarea id="u_tags_' + row.id + '" rows="3" cols="100" class="form-control">' + row.tags + '</textarea></div>';
+        "userTags": function(cellvalue, options, row) {
+            return '<div class="input-group"><textarea id="userTags_' + row.id + '" rows="3" cols="100" class="form-control">' + row.userTags + '</textarea></div>';
         },
-        "u_member_det": function(cellvalue, options, row) {
+        "member_det": function(cellvalue, options, row) {
             var val = row.allowEmailShareStatus;
             if( val == null) { val="Not Asked";}
             return '<table>'
                 + '<tr title="'+row.name+'"><th>Name</th><td>'+row.name +'</td></tr>'
                 + '<tr title="'+row.username+' ('+row.usergroup+')"><th>Username</th><td>'+row.username +'  (' + row.usergroup+ ')</td></tr>'
                 + '<tr title="'+row.bigGroupUsername+'"><th>WTT Username</th><td>'+row.bigGroupUsername +'</td></tr>'
-                //+ '<tr title="'+row.lobbyingDayAttending+'"><th>Lobby Day</th><td>'+row.lobbyingDayAttending+'</td></tr>'
                 + '<tr title="'+row.schemes+'"><th>Schemes</th><td>'+row.schemes +'</td></tr>'
-                + '<tr title="'+row.telNo+'"><th>Tel No</th><td>'
-                + '<div class="input-group"><input id="u_telNo_' + row.id + '" width="150" type="text" class="form-control" value="' + row.telNo + '"></div>'
+                + '<tr title="'+row.userTelNo+'"><th>Tel No</th><td>'
+                + '<div class="input-group"><input id="userTelNo_' + row.id + '" width="150" type="text" class="form-control" value="' + row.userTelNo + '"></div>'
                 + '</td></tr>'
                 + '<tr title="'+row.adminName+' - '+row.adminUsername+'"><th>Administrator</th><td>'+row.adminSig+'</td></tr>'
                 + '<tr><th>Email Share</th><td>'
-                    + '<select id="u_allowEmailShareStatus_' + row.id + '" class="form-control">'
+                    + '<select id="allowEmailShareStatus_' + row.id + '" class="form-control">'
                         + '<option value="Not Asked"' + (val === "Not Asked" ? ' selected="selected"' : '') + '>***Not Asked***</option>'
                         + '<option value="To Be Shared"' + (val === "To Be Shared" ? ' selected="selected"' : '') + ' >To Be Shared</option>'
                         + '<option value="Private"' + (val === "Private" ? ' selected="selected"' : '') + '>Private</option>'
@@ -215,7 +213,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                 + '</td></tr>'
                 + '</table>';
         },
-        "u_mp_det": function(cellvalue, options, row) {
+        "mp_det": function(cellvalue, options, row) {
             var shared = row.sharedCampaignEmails;
             var private = row.privateCampaignEmails;
             var privateCount;
@@ -276,7 +274,7 @@ lcag.MpCampaignUserGrid = lcag.MpCampaignUserGrid || {
                     + '</tr>'
                 + '</table>';
         },
-        "u_extra": function(cellvalue, options, row) {
+        "extra": function(cellvalue, options, row) {
             return '<table style="border-spacing:5px; border-collapse:separate;">'
                 + '<tr title="'+row.parliamentaryEmail +'"><th>Parliamentary e-mail</th><td>'+row.parliamentaryEmail +'</td></tr>'
                 + '<tr title="'+row.constituencyEmail +'"><th>Constituency e-mail</th><td>'+row.constituencyEmail +'</td></tr>'

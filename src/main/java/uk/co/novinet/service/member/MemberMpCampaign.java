@@ -24,9 +24,9 @@ public class MemberMpCampaign {
     private String schemes;
     private String allowEmailShareStatus;
     private String sentInitialEmail;
-    private String campaignNotes;
-    private String telNo;
-    private String tags;
+    private String userNotes;
+    private String userTelNo;
+    private String userTags;
     private Date meetingNext;
     private Integer meetingCount;
     private Integer telephoneCount;
@@ -68,9 +68,9 @@ public class MemberMpCampaign {
             String schemes,
             String allowEmailShareStatus,
             String sentInitialEmail,
-            String campaignNotes,
-            String telNo,
-            String tags,
+            String userNotes,
+            String userTelNo,
+            String userTags,
             Date meetingNext,
             Integer meetingCount,
             Integer telephoneCount,
@@ -109,9 +109,9 @@ public class MemberMpCampaign {
         this.schemes = schemes;
         this.allowEmailShareStatus = allowEmailShareStatus;
         this.sentInitialEmail = sentInitialEmail;
-        this.setCampaignNotes(campaignNotes);
-        this.setTelNo(telNo);
-        this.setTags(tags);
+        this.setUserNotes(userNotes);
+        this.setUserTelNo(userTelNo);
+        this.setUserTags(userTags);
         this.meetingNext = meetingNext;
         this.meetingCount = meetingCount;
         this.telephoneCount = telephoneCount;
@@ -176,12 +176,12 @@ public class MemberMpCampaign {
     public void setAllowEmailShareStatus(String allowEmailShareStatus) { this.allowEmailShareStatus = allowEmailShareStatus; }
     public String getSentInitialEmail() { return sentInitialEmail;}
     public void setSentInitialEmail(String sentInitialEmail) { this.sentInitialEmail = sentInitialEmail; }
-    public String getCampaignNotes() { return campaignNotes;}
-    public void setCampaignNotes(String campaignNotes) { if(campaignNotes == null || campaignNotes.equals("null")) { campaignNotes = ""; } this.campaignNotes = campaignNotes; }
-    public String getTelNo() { return telNo;}
-    public void setTelNo(String telNo) { if(telNo== null || telNo.equals("null")) { telNo = ""; } this.telNo= telNo; }
-    public String getTags() { return tags;}
-    public void setTags(String tags) { if(tags== null || tags.equals("null")) { tags = ""; } this.tags= tags; }
+    public String getUserNotes() { return userNotes;}
+    public void setUserNotes(String userNotes) { if(userNotes == null || userNotes.equals("null")) { userNotes = ""; } this.userNotes = userNotes; }
+    public String getUserTelNo() { return userTelNo;}
+    public void setUserTelNo(String userTelNo) { if(userTelNo== null || userTelNo.equals("null")) { userTelNo = ""; } this.userTelNo= userTelNo; }
+    public String getUserTags() { return userTags;}
+    public void setUserTags(String userTags) { if(userTags== null || userTags.equals("null")) { userTags = ""; } this.userTags= userTags; }
     public Date getMeetingNext() { return meetingNext;}
     public void setMeetingNext(Date meetingNext) { this.meetingNext = meetingNext; }
     public void setMeetingNext(String meetingNext) throws Exception { System.out.println("Boo"); this.meetingNext = new SimpleDateFormat("yyyyMMdd").parse(meetingNext); }

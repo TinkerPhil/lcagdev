@@ -28,38 +28,38 @@ public class MemberMpCampaignService {
     private JdbcTemplate jdbcTemplate;
 
     private Map<String, String> FIELD_TO_COLUMN_TRANSLATIONS = new HashMap<String, String>() {{
-        put("u_id", "umc.uid");
-        put("u_name", "u.name");
-        put("u_mpName", "u.mp_name");
-        put("u_constituency", "u.mp_constituency");
-        put("u_email", "u.email");
-        put("u_adminUsername", "a.username");
-        put("u_adminName", "a.name");
-        put("u_adminSig", "mcv.signature");
-        put("u_allowEmailShareStatus", "umc.allowEmailShareStatus");
-        put("u_sentInitialEmail", "umc.sentInitialEmail");
-        put("u_meetingNext", "umc.meetingNext");
-        put("u_meetingCount", "umc.meetingCount");
-        put("u_telephoneCount", "umc.telephoneCount");
-        put("u_writtenCount", "umc.writtenCount");
-        put("u_involved", "umc.involved");
-        put("u_campaignNotes", "umc.campaignNotes");
-        put("u_telNo", "umc.telNo");
-        put("u_edmUrl", "m.edmUrl");
-        put("u_edmStatus", "m.edmStatus");
-        put("u_mpTelNo", "m.telNo");
-        put("u_mpEmail", "m.email");
-        put("u_mpTwitter", "m.twitter");
-        put("u_tags", "umc.tags");
+        put("id", "umc.uid");
+        put("name", "u.name");
+        put("mpName", "u.mp_name");
+        put("constituency", "u.mp_constituency");
+        put("email", "u.email");
+        put("adminUsername", "a.username");
+        put("adminName", "a.name");
+        put("adminSig", "mcv.signature");
+        put("allowEmailShareStatus", "umc.allowEmailShareStatus");
+        put("sentInitialEmail", "umc.sentInitialEmail");
+        put("meetingNext", "umc.meetingNext");
+        put("meetingCount", "umc.meetingCount");
+        put("telephoneCount", "umc.telephoneCount");
+        put("writtenCount", "umc.writtenCount");
+        put("involved", "umc.involved");
+        put("userNotes", "umc.campaignNotes");
+        put("userTelNo", "umc.telNo");
+        put("edmUrl", "m.edmUrl");
+        put("edmStatus", "m.edmStatus");
+        put("mpTelNo", "m.telNo");
+        put("mpEmail", "m.email");
+        put("mpTwitter", "m.twitter");
+        put("userTags", "umc.tags");
     }};
 
     public void update(
             Long id,
             String allowEmailShareStatus,
             String sentInitialEmail,
-            String campaignNotes,
-            String telNo,
-            String tags,
+            String userNotes,
+            String userTelNo,
+            String userTags,
             Date meetingNext,
             Integer meetingCount,
             Integer telephoneCount,
@@ -67,9 +67,9 @@ public class MemberMpCampaignService {
             Integer involved
             ) {
         LOGGER.info("Going to update usersMpCampaign with id {}", id);
-        LOGGER.info("allowEmailShareStatus={}, sentInitialEmail={}, campaignNotes={}, telNo={}, tags={}, meetingNext={}, meetingCount={}, telephoneCount={}, writtenCount={}, involved={}",
-                allowEmailShareStatus, sentInitialEmail, campaignNotes,
-                telNo,tags, meetingNext, meetingCount, telephoneCount,
+        LOGGER.info("allowEmailShareStatus={}, sentInitialEmail={}, userNotes={}, userTelNo={}, userTags={}, meetingNext={}, meetingCount={}, telephoneCount={}, writtenCount={}, involved={}",
+                allowEmailShareStatus, sentInitialEmail, userNotes,
+                userTelNo,userTags, meetingNext, meetingCount, telephoneCount,
                 writtenCount, involved
         );
 
@@ -99,10 +99,9 @@ public class MemberMpCampaignService {
                 sql,
                 allowEmailShareStatus,
                 sentInitialEmail,
-                campaignNotes,
-                telNo,
-                tags,
-//                meetingNext,
+                userNotes,
+                userTelNo,
+                userTags,
                 meetingNext == null ? meetingNext : sdf.format(meetingNext),
                 meetingCount,
                 telephoneCount,
@@ -181,9 +180,9 @@ public class MemberMpCampaignService {
         List<String> clauses = new ArrayList<>();
         List<Object> parameters = new ArrayList<>();
 
-        if (member.getCampaignNotes() != null) {
+        if (member.getUserNotes() != null) {
             clauses.add("lower(umc.campaignNotes) like ?");
-            parameters.add(like(member.getCampaignNotes()));
+            parameters.add(like(member.getUserNotes()));
         }
         if (member.getName() != null) {
             clauses.add("lower(u.name) like ?");
@@ -225,15 +224,15 @@ public class MemberMpCampaignService {
             clauses.add("DATE_FORMAT(umc.meetingNext, '%d/%m/%Y') like '%"+strDate+"%'");
             //parameters.add(like(strDate));
         }
-        if(member.getTags() != null ) {
-            String[] tags = member.getTags().split(" *, *");
+        if(member.getUserTags() != null ) {
+            String[] userTags = member.getUserTags().split(" *, *");
             String clause = "(";
-            for(int i = 0; i < tags.length; i++) {
+            for(int i = 0; i < userTags.length; i++) {
                 if( i > 0 ) {
                     clause = clause + " OR ";
                 }
                 clause = clause + "umc.tags like ?";
-                parameters.add(like(tags[i]));
+                parameters.add(like(userTags[i]));
             }
             clause = clause + ")";
             clauses.add(clause);
