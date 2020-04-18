@@ -4,7 +4,7 @@
 
     <groupId>uk.co.novinet</groupId>
     <artifactId>lcag-automation</artifactId>
-    <version>1.12-SNAPSHOT</version>
+    <version>1.13-SNAPSHOT</version>
 
     <properties>
         <docker.image.prefix>dockernovinet</docker.image.prefix>
