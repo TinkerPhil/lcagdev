@@ -56,6 +56,9 @@ public class MemberService {
         put("group", "ug.title");
         put("username", "u.username");
         put("name", "u.name");
+        put("userStatus", "u,userStatus");
+        put("userTwitter", "u,userTwitter");
+        put("userTelegram", "u,userTelegram");
         put("registrationDate", "u.regdate");
         put("hmrcLetterChecked", "u.hmrc_letter_checked");
         put("identificationChecked", "u.identification_checked");
@@ -89,6 +92,9 @@ public class MemberService {
     public void update(
             Long memberId,
             String name,
+            String userStatus,
+            String userTwitter,
+            String userTelegram,
             String group,
             String[] additionalGroups,
             boolean identificationChecked,
@@ -116,17 +122,20 @@ public class MemberService {
             String phoneNumber,
             Boolean sendEmailStatement) {
         LOGGER.info("Going to update user with id {}", memberId);
-        LOGGER.info("name={}, group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, " +
+        LOGGER.info("name={}, userStatus={}, userTwitter={}, userTelegram={}, group={}, identificationChecked={}, hmrcLetterChecked={}, agreedToContributeButNotPaid={}, mpName={}, mpEngaged={}, mpSympathetic={}, " +
                         "mpConstituency={}, mpParty={}, schemes={}, notes={}, industry={}, hasCompletedMembershipForm={}, howDidYouHearAboutLcag={}, " +
                         "memberOfBigGroup={}, bigGroupUsername={}, verifiedOn={}, verifiedBy={}, registeredForClaim={}, hasCompletedClaimParticipantForm={}, " +
                         "hasBeenSentClaimConfirmationEmail={}, hasOptedOutOfClaim={}",
-                name, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
+                name, userStatus, userTwitter, userTelegram, group, identificationChecked, hmrcLetterChecked, agreedToContributeButNotPaid, mpName, mpEngaged, mpSympathetic, mpConstituency, mpParty,
                 schemes, notes, industry, hasCompletedMembershipForm, howDidYouHearAboutLcag, verifiedOn, verifiedBy, registeredForClaim,
                 hasCompletedClaimParticipantForm, hasBeenSentClaimConfirmationEmail, hasOptedOutOfClaim
         );
 
         String sql = "update " + usersTableName() + " u " +
                 "set u.name = ?," +
+                "u.userStatus = ?," +
+                "u.userTwitter = ?," +
+                "u.userTelegram = ?," +
                 "u.usergroup = (select `gid` from " + userGroupsTableName() + " ug where ug.title = ?), " +
                 "u.additionalgroups = ?, " +
                 "u.identification_checked = ?, " +
@@ -162,6 +171,9 @@ public class MemberService {
         int result = jdbcTemplate.update(
                 sql,
                 name,
+                userStatus,
+                userTwitter,
+                userTelegram,
                 group,
                 toMyBbAuthorityIds(additionalGroups),
                 identificationChecked,
@@ -296,6 +308,12 @@ public class MemberService {
                     extractUsername(enquiry.getEmailAddress()),
                     enquiry.getName(),
                     null,
+                    null,
+                    null,
+                    null,
+                    new BigDecimal("0.00"),
+                    null,
+                    null,
                     emptyList(),
                     Instant.now(),
                     false,
@@ -332,6 +350,7 @@ public class MemberService {
 
             String insertSql = "insert into " + usersTableName() + " (" +
                     "`uid`, `username`, `password`, `salt`, `loginkey`, `email`, `postnum`, `threadnum`, `avatar`, `avatardimensions`, " +
+                    "`userStatus`, `userTwitter`, `userTelegram`, " +
                     "`avatartype`, `usergroup`, `additionalgroups`, `displaygroup`, `usertitle`, `regdate`, `lastactive`, `lastvisit`, `lastpost`, `website`, " +
                     "`icq`, `skype`, `google`, `birthday`, `birthdayprivacy`, `signature`, `allownotices`, `hideemail`, `subscriptionmethod`, `invisible`, " +
                     "`receivepms`, `receivefrombuddy`, `pmnotice`, `pmnotify`, `buddyrequestspm`, `buddyrequestsauto`, `threadmode`, `showimages`, `showvideos`, `showsigs`, " +
@@ -343,6 +362,7 @@ public class MemberService {
                     "`mp_sympathetic`, `schemes`, `industry`, `how_did_you_hear_about_lcag`, `member_of_big_group`, `big_group_username`) " +
                     "VALUES (" +
                     "?, ?, ?, ?, 'lvhLksjhHGcZIWgtlwNTJNr3bjxzCE2qgZNX6SBTBPbuSLx21u', ?, 0, 0, '', '', " +
+                    "'', '', '', " +
                     "'', 8, '', 0, '', ?, ?, ?, 0, '', " +
                     "'0', '', '', '', 'all', '', 1, 0, 0, 0, " +
                     "1, 0, 1, 1, 1, 0, 'linear', 1, 1, 1, " +
@@ -358,6 +378,9 @@ public class MemberService {
             int result = jdbcTemplate.update(insertSql,
                     nextAvailableId,
                     member.getUsername(),
+                    member.getUserStatus(),
+                    member.getUserTwitter(),
+                    member.getUserTelegram(),
                     member.getPasswordDetails().getPasswordHash(),
                     member.getPasswordDetails().getSalt(),
                     member.getEmailAddress(),
@@ -420,6 +443,7 @@ public class MemberService {
 
     private String buildUserTableSelect() {
         return "select u.uid, u.username, u.name, u.email, u.additionalgroups, u.salt, u.password, u.regdate, u.hmrc_letter_checked, u.identification_checked, u.agreed_to_contribute_but_not_paid, " +
+                "u.userStatus, u.userTwitter, u.userTelegram, u.userStatusActual, ufs.lastPayAmnt, ufs.lastPayDate, " +
                 "u.mp_name, u.mp_engaged, u.mp_sympathetic, u.mp_constituency, u.mp_party, u.schemes, u.notes, u.industry, u.token, u.has_completed_membership_form, " +
                 "u.how_did_you_hear_about_lcag, u.member_of_big_group, u.big_group_username, u.verified_on, u.verified_by, u.already_have_an_lcag_account_email_sent, " +
                 "u.registered_for_claim, u.has_completed_claim_participant_form, u.has_been_sent_claim_confirmation_email, u.opted_out_of_claim, " +
@@ -494,6 +518,16 @@ public class MemberService {
             parameters.add(member.getContributionAmount());
         }
 
+        if (member.getLastPayAmnt() != null) {
+            clauses.add("ufs.lastPayAmnt = ?");
+            parameters.add(member.getLastPayAmnt());
+        }
+        if (member.getLastPayDate() != null) {
+            clauses.add("ufs.lastPayDate like ?");
+            parameters.add(like(member.getLastPayDate()));
+        }
+
+
         return PersistenceUtils.buildHavingClause(clauses, parameters, operator);
     }
 
@@ -539,6 +573,25 @@ public class MemberService {
         if (member.getName() != null) {
             clauses.add("lower(u.name) like ?");
             parameters.add(like(member.getName()));
+        }
+
+        if (member.getUserStatus() != null) {
+            clauses.add("lower(u.userStatus) like ?");
+            parameters.add(like(member.getUserStatus()));
+        }
+        if (member.getUserStatusActual() != null) {
+            clauses.add("lower(u.userStatusActual) like ?");
+            parameters.add(like(member.getUserStatusActual()));
+        }
+
+        if (member.getUserTwitter() != null) {
+            clauses.add("lower(u.userTwitter) like ?");
+            parameters.add(like(member.getUserTwitter()));
+        }
+
+        if (member.getUserTelegram() != null) {
+            clauses.add("lower(u.userTelegram) like ?");
+            parameters.add(like(member.getUserTelegram()));
         }
 
         if (member.getEmailAddress() != null) {
@@ -685,6 +738,13 @@ public class MemberService {
                 rs.getString("email"),
                 rs.getString("username"),
                 rs.getString("name"),
+                rs.getString("userStatus"),
+                rs.getString("userTwitter"),
+                rs.getString("userTelegram"),
+                rs.getString("userStatusActual"),
+                rs.getBigDecimal("lastPayAmnt"),
+                rs.getString("lastPayDate"),
+
                 rs.getString("group"),
                 buildAdditionalGroupIds(rs.getString("additionalgroups")),
                 dateFromMyBbRow(rs, "regdate"),

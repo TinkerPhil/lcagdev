@@ -13,18 +13,24 @@ lcag.MemberGrid = lcag.MemberGrid || {
         $("#member-grid").jqGrid({
             colModel: [
                 { name: "id", label: "ID", hidden: true },
-                { name: "name", label: "Name", width: 150, template: "string", formatter: lcag.MemberGrid.formatters.name, frozen: true },
-                { name: "username", label: "Username", width: 150, template: "string", frozen: true },
-                { name: "emailAddress", label: "Email Address", width: 200, template: "string" },
-                { name: "phoneNumber", label: "Phone Number", width: 150, template: "string", formatter: lcag.MemberGrid.formatters.phoneNumber },
-
+                { name: "name", label: "Name", width: 120, template: "string", formatter: lcag.MemberGrid.formatters.name, frozen: true },
+                { name: "username", label: "Username", width: 120, template: "string", frozen: true },
+                { name: "emailAddress", label: "Email Address", width: 150, template: "string" },
+                { name: "phoneNumber", label: "Phone Number", width: 100, template: "string", formatter: lcag.MemberGrid.formatters.phoneNumber },
+                { name: "userTwitter", label: "Twitter", width: 120, template: "string", formatter: lcag.MemberGrid.formatters.userTwitter, frozen: true },
+                { name: "userTelegram", label: "Telegram", width: 120, template: "string", formatter: lcag.MemberGrid.formatters.userTelegram, frozen: true },
+                { name: "userStatus", label: "Status", width: 80, formatter: lcag.MemberGrid.formatters.userStatus },
+                { name: "userStatusActual", label: "Actual", width: 80, template: "string", frozen: true },
                 { name: "action", label: "", width: 90, formatter: lcag.MemberGrid.formatters.action, search: false },
+
                 { name: "hmrcLetterChecked", label: "HMRC Letter Checked", width: 59, formatter: lcag.MemberGrid.formatters.hmrcLetterChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "identificationChecked", label: "Identification Checked", width: 90, formatter: lcag.MemberGrid.formatters.identificationChecked, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "verifiedOn", label: "Verified On Date", width: 150, align: "center", sorttype: "date", formatter: lcag.MemberGrid.formatters.verifiedOn },
                 { name: "verifiedBy", label: "Verified By", width: 100, formatter: lcag.MemberGrid.formatters.verifiedBy },
                 { name: "agreedToContributeButNotPaid", label: "Agreed To Contribute But Not Paid", width: 59, formatter: lcag.MemberGrid.formatters.agreedToContributeButNotPaid, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "contributionAmount", label: "Contribution Amount", width: 120, align: "center", formatter: lcag.MemberGrid.formatters.contributionAmount },
+                { name: "lastPayAmnt", label: "Last", width: 120, align: "center", formatter: lcag.MemberGrid.formatters.lastPayAmnt },
+                { name: "lastPayDate", label: "Payment", width: 120, template: "string", frozen: true },
                 { name: "sendEmailStatement", label: "Send Email Statement", width: 59, formatter: lcag.MemberGrid.formatters.sendEmailStatement, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: ":Any;1:Yes;0:No" } },
                 { name: "group", label: "Group", width: 215, formatter: lcag.MemberGrid.formatters.group, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: mybbAuthorityJqGridOpts } },
                 { name: "additionalGroups", label: "Additional Groups", width: 215, formatter: lcag.MemberGrid.formatters.additionalGroups, stype: "select", searchoptions: { sopt: ["eq", "ne"], value: mybbAuthorityJqGridOpts } },
@@ -107,6 +113,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
                             return {
                                 "id": id,
                                 "name": $("#name_" + id).val(),
+                                "userStatus": $("#userStatus_" + id).val(),
+                                "userTwitter": $("#userTwitter_" + id).val(),
+                                "userTelegram": $("#userTelegram_" + id).val(),
                                 "identificationChecked": $("#identificationChecked_" + id).prop("checked"),
                                 "hmrcLetterChecked": $("#hmrcLetterChecked_" + id).prop("checked"),
                                 "agreedToContributeButNotPaid": $("#agreedToContributeButNotPaid_" + id).prop("checked"),
@@ -186,6 +195,15 @@ lcag.MemberGrid = lcag.MemberGrid || {
         "phoneNumber": function(cellvalue, options, row) {
             return '<div class="input-group"><input id="phoneNumber_' + row.id + '" type="text" class="form-control" value="' + row.phoneNumber + '"></div>';
         },
+        "userStatus": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="userStatus_' + row.id + '" type="text" class="form-control" value="' + row.userStatus + '"></div>';
+        },
+        "userTwitter": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="userTwitter_' + row.id + '" type="text" class="form-control" value="' + row.userTwitter + '"></div>';
+        },
+        "userTelegram": function(cellvalue, options, row) {
+            return '<div class="input-group"><input id="userTelegram_' + row.id + '" type="text" class="form-control" value="' + row.userTelegram + '"></div>';
+        },
         "registrationDate": function(cellvalue, options, row) {
             return moment.unix(row.registrationDate).format("DD/MM/YYYY HH:mm");
         },
@@ -204,6 +222,9 @@ lcag.MemberGrid = lcag.MemberGrid || {
         },
         "contributionAmount": function(cellvalue, options, row) {
             return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input disabled="disabled" id="contributionAmount_' + row.id + '" type="text" value="' + (row.contributionAmount == null ? "0.00" : parseFloat(Math.round(row.contributionAmount * 100) / 100).toFixed(2)) + '" class="form-control"></div></div>';
+        },
+        "lastPayAmnt": function(cellvalue, options, row) {
+            return '<div class="input-group"><div class="input-group"><div class="input-group-addon">£</div><input disabled="disabled" id="lastPayAmnt_' + row.id + '" type="text" value="' + (row.lastPayAmnt == null ? "0.00" : parseFloat(Math.round(row.lastPayAmnt * 100) / 100).toFixed(2)) + '" class="form-control"></div></div>';
         },
         "agreedToContributeButNotPaid": function(cellvalue, options, row) {
             return '<input id="agreedToContributeButNotPaid_' + row.id + '" type="checkbox" ' + (row.agreedToContributeButNotPaid ? ' checked="checked"' : '') + '" data-row-id="' + row.id + '" />';

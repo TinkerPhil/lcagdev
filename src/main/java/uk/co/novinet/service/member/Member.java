@@ -17,6 +17,12 @@ public class Member {
     private String emailAddress;
     private String username;
     private String name;
+    private String userStatus;
+    private String userTwitter;
+    private String userTelegram;
+    private String userStatusActual;
+    private BigDecimal lastPayAmnt;
+    private String lastPayDate;
     private String group;
     private List<Long> additionalGroupIds;
     private Instant registrationDate;
@@ -57,6 +63,12 @@ public class Member {
             String emailAddress,
             String username,
             String name,
+            String userStatus,
+            String userTwitter,
+            String userTelegram,
+            String userStatusActual,
+            BigDecimal lastPayAmnt,
+            String lastPayDate,
             String group,
             List<Long> additionalGroupIds,
             Instant registrationDate,
@@ -92,6 +104,12 @@ public class Member {
         this.id = id;
         this.emailAddress = emailAddress;
         this.username = username;
+        this.userStatus = userStatus;
+        this.userTwitter = userTwitter;
+        this.userTelegram = userTelegram;
+        this.userStatusActual = userStatusActual;
+        this.lastPayAmnt = lastPayAmnt;
+        this.lastPayDate = lastPayDate;
         this.group = group;
         this.additionalGroupIds = additionalGroupIds;
         this.registrationDate = registrationDate;
@@ -145,6 +163,13 @@ public class Member {
 
     public String getName() {
         return name;
+    }
+    public String getUserStatus() { return userStatus; }
+    public String getUserTwitter() {
+        return userTwitter;
+    }
+    public String getUserTelegram() {
+        return userTelegram;
     }
 
     public String getGroup() {
@@ -205,6 +230,15 @@ public class Member {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public void setUserStatus(String userStatus) {
+        this.userStatus = userStatus;
+    }
+    public void setUserTwitter(String userTwitter) {
+        this.userTwitter = userTwitter;
+    }
+    public void setUserTelegram(String userTelegram) {
+        this.userTelegram = userTelegram;
     }
 
     public void setGroup(String group) {
@@ -271,12 +305,26 @@ public class Member {
         this.industry = industry;
     }
 
-    public BigDecimal getContributionAmount() {
-        return contributionAmount;
+    public BigDecimal getContributionAmount() { return contributionAmount; }
+
+    public String getUserStatusActual() { return userStatusActual; }
+    public BigDecimal getLastPayAmnt() {
+        return lastPayAmnt;
     }
+    public String getLastPayDate() { return lastPayDate; }
 
     public void setContributionAmount(BigDecimal contributionAmount) {
         this.contributionAmount = contributionAmount;
+    }
+
+    public void setUserStatusActual(String userStatusActual) {
+        this.userStatusActual = userStatusActual;
+    }
+    public void setLastPayAmnt(BigDecimal lastPayAmnt) {
+        this.lastPayAmnt = lastPayAmnt;
+    }
+    public void setLastPayDate(String lastPayDate) {
+        this.lastPayDate = lastPayDate;
     }
 
     public String getToken() {
