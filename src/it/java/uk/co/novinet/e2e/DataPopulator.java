@@ -14,22 +14,28 @@ public class DataPopulator {
 
         while (needToRetry && sqlRetryCounter < 20) {
             try {
-                runSqlScript("sql/drop_user_table.sql");
-                runSqlScript("sql/drop_enquiry_table.sql");
-                runSqlScript("sql/create_user_table.sql");
-                runSqlScript("sql/create_audit_events_table.sql");
-                runSqlScript("sql/create_userFundingSummary_table.sql");
-                runSqlScript("sql/create_mp_details_table.sql");
-                runSqlScript("sql/create_mpDetails_table.sql");
-                runSqlScript("sql/create_mpCampaignVolunteers_table.sql");
-                runSqlScript("sql/create_mpCampaignUsers_table.sql");
-                runSqlScript("sql/create_ffc_contributions_table.sql");
-                runSqlScript("sql/create_enquiry_table.sql");
-                runSqlScript("sql/create_usergroups_table.sql");
-                runSqlScript("sql/populate_usergroups_table.sql");
-                runSqlScript("sql/create_bank_transaction_table.sql");
-                runSqlScript("sql/create_bank_transaction_infull_table.sql");
-                runSqlScript("sql/populate_bank_transaction_table.sql");
+                String [] mySqls = {
+                    "sql/drop_user_table.sql",
+                    "sql/drop_enquiry_table.sql",
+                    "sql/create_user_table.sql",
+                    "sql/create_audit_events_table.sql",
+                    "sql/create_userFundingSummary_table.sql",
+                    "sql/create_mp_details_table.sql",
+                    "sql/create_mpDetails_table.sql",
+                    "sql/create_mpCampaignVolunteers_table.sql",
+                    "sql/create_mpCampaignUsers_table.sql",
+                    "sql/create_ffc_contributions_table.sql",
+                    "sql/create_enquiry_table.sql",
+                    "sql/create_usergroups_table.sql",
+                    "sql/populate_usergroups_table.sql",
+                    "sql/create_bank_transaction_table.sql",
+                    "sql/create_bank_transaction_infull_table.sql",
+                    "sql/populate_bank_transaction_table.sql"
+                };
+                for( String sql: mySqls) {
+                    System.out.println( "Running " + sql);
+                    runSqlScript(sql);
+                }
                 needToRetry = false;
             } catch (Exception e) {
                 e.printStackTrace();
