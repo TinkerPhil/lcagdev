@@ -105,6 +105,13 @@ public class MailListenerService {
                         continue;
                     }
 
+                    if( enquiry.getName().contains("''")) {
+                        LOGGER.info("Invalid user name", enquiry.getName());
+                        LOGGER.info("Skipping...");
+                        restoreOriginalMessageFlags(message, originalSeenFlagState);
+                        continue;
+                    }
+
                     LOGGER.info("Found enquiry: {}", enquiry);
 
                     MemberCreationResult memberCreationResult = memberService.createForumUserIfNecessary(enquiry);

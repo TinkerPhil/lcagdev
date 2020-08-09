@@ -37,6 +37,11 @@ public class EnquiryTableListenerService {
 
             for (Enquiry enquiry : enquiries) {
                 LOGGER.info("Processing enquiry: {}", enquiry);
+                if( enquiry.getName().contains("//")) {
+                    enquiryDao.markAsProcessed(enquiry.getId());
+                    LOGGER.info("Skipping email from: {} as their name is invalid", enquiry.getName());
+                    continue;
+                }
 
                 MemberCreationResult memberCreationResult = memberService.createForumUserIfNecessary(enquiry);
                 Member member = memberCreationResult.getMember();
