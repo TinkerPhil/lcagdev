@@ -219,7 +219,7 @@ public class PaymentService {
 
     public void assignToMember(Long memberId, Long paymentId) {
         paymentDao.updateMemberId(paymentId, memberId);
-        paymentDao.updateEmailSent(false, memberId);
+        paymentDao.updateEmailSent(false, paymentId);
     }
 
     public void update(Long bankTransactionId, Boolean excludeFromMemberReconciliation) {
